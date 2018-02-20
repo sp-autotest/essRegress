@@ -8,11 +8,16 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.testng.annotations.*;
+import pages.SearchPage;
+import ru.yandex.qatools.allure.annotations.Description;
+import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
 
 import java.util.concurrent.TimeUnit;
 
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
+import static com.codeborne.selenide.Selenide.open;
+import static pages.Page.Sleep;
 import static pages.Page.stringIntoInt;
 
 
@@ -82,6 +87,26 @@ public class EssTest {
         getWebDriver().quit();
     }
 
+    @DataProvider
+    public Object[][] parseLocaleData() {
+        return new Object[][]{
+                {"русский", "RUB"},
+                {"english", "USD"},
+                {"русский", "CNY"}
+        };
+    }
 
-
+    @Stories("Первая группа тестов")
+    @Title("Тест-кейс «Бронирование и оплата»")
+    @Description("Карта VISA;\n" +
+            "Hаправление перелета: туда-обратно;\n" +
+            "Состав бронирования авиаперелета, билеты: 2 взрослых-2 детских-1 младенец;\n" +
+            "Дополнительные услуги: «Полетная страховка», «Медицинская страховка» (Спортивная), «Аренда автомобиля»")
+    @Test(priority = 1, dataProvider = "parseLocaleData")
+    public void bookingAndPayment(String locale, String currency) {
+        SearchPage searchPg = new SearchPage();
+        open(Values.host);
+        searchPg.selectLocale(locale);
+        Sleep(2);
+    }
 }
