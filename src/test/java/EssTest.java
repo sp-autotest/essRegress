@@ -109,4 +109,5 @@ public class EssTest {
         searchPg.selectLocale(locale);
         Sleep(2);
     }
+
 }
