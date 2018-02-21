@@ -19,7 +19,7 @@ import static com.codeborne.selenide.Selenide.$$;
  */
 public class PassengerPage extends Page {
 
-    @Step("Действие 3")
+    @Step("Действие 3, информация о пассажирах")
     public void step3() {
         checkPageAppear();
         ElementsCollection cards = $$(byXpath("//div[@class='passenger-card']"));

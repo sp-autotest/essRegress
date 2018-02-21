@@ -8,6 +8,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.testng.annotations.*;
+import pages.ChoosePage;
 import pages.PassengerPage;
 import pages.SearchPage;
 import ru.yandex.qatools.allure.annotations.Description;
@@ -39,12 +40,6 @@ public class EssTest {
         browserHight = stringIntoInt(res.substring(res.indexOf("x")+1));//взять высоту браузера из строки с разрешением
         System.out.println("Browser = " + browserName);//вывести в лог значение имени браузера
         System.out.println("Resolution = " + res);//вывести в лог значение разрешения
-
-        String area = System.getProperty("area", "RC");//получить имя площадки из дженкинса, при неудаче площадка=RC
-        if (area.equals("NF")) {//если площадка=dev
-        }
-        if (area.equals("RC")) {//если площадка=uat
-        }
     }
 
     @BeforeMethod
@@ -111,8 +106,10 @@ public class EssTest {
         searchPg.step2();
         PassengerPage passengerPg = new PassengerPage();
         passengerPg.step3();
+        ChoosePage choosePg = new ChoosePage();
+        choosePg.step4();
 
-        Sleep(55);
+        Sleep(5);
     }
 
 }

@@ -4,7 +4,9 @@ import ru.yandex.qatools.allure.annotations.Step;
 
 import java.io.IOException;
 
-import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
+import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selectors.byXpath;
+import static com.codeborne.selenide.Selenide.$;
 import static listeners.ScreenShoter.makeScreenshot;
 
 /**
@@ -59,6 +61,11 @@ public class Page {
             }
         }catch (NumberFormatException ne) {System.out.println("Error string to int parsing"); }
         return a;
+    }
+
+    public static void waitPlane() {
+        Sleep(3);
+        $(byXpath("//svg[contains(@class,'circle-preloader--plane')]")).shouldNotBe(visible);
     }
 
 }

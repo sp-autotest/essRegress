@@ -1,13 +1,9 @@
 package pages;
 
 import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.SelenideElement;
 import ru.yandex.qatools.allure.annotations.Step;
-
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
-
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
@@ -19,7 +15,7 @@ import static com.codeborne.selenide.Selenide.$$;
 public class SearchPage extends Page {
 
 
-    @Step("Действие 1")
+    @Step("Действие 1, поиск рейсов")
     public void step1(String locale) {
         selectLocale(locale);
         setFrom("MOW");
@@ -35,7 +31,7 @@ public class SearchPage extends Page {
         clickSearchButton();
     }
 
-    @Step("Действие 2")
+    @Step("Действие 2, выбор рейсов")
     public void step2() {
         selectRandomFlight("туда");
         clickBuyButton();
