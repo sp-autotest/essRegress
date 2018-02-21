@@ -8,6 +8,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.testng.annotations.*;
+import pages.PassengerPage;
 import pages.SearchPage;
 import ru.yandex.qatools.allure.annotations.Description;
 import ru.yandex.qatools.allure.annotations.Stories;
@@ -102,12 +103,16 @@ public class EssTest {
             "Hаправление перелета: туда-обратно;\n" +
             "Состав бронирования авиаперелета, билеты: 2 взрослых-2 детских-1 младенец;\n" +
             "Дополнительные услуги: «Полетная страховка», «Медицинская страховка» (Спортивная), «Аренда автомобиля»")
-    @Test(priority = 1, dataProvider = "parseLocaleData")
+    @Test(priority = 1, dataProvider = "parseLocaleData", description = "Бронирование и оплата ")
     public void bookingAndPayment(String locale, String currency) {
         SearchPage searchPg = new SearchPage();
         open(Values.host);
-        searchPg.selectLocale(locale);
-        Sleep(2);
+        searchPg.step1(locale);
+        searchPg.step2();
+        PassengerPage passengerPg = new PassengerPage();
+        passengerPg.step3();
+
+        Sleep(55);
     }
 
 }

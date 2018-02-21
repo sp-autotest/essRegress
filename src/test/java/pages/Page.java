@@ -44,6 +44,10 @@ public class Page {
         return tag.toString();
     }
 
+    public static int getRandomNumberLimit (int limit) {
+        return (int)(Math.random()*limit);
+    }
+
     public static int stringIntoInt (String s) {
         int a=0;
         String s1 = s.replace(" ", "");
