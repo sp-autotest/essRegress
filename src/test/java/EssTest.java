@@ -8,10 +8,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.testng.annotations.*;
-import pages.ChoosePage;
-import pages.PassengerPage;
-import pages.PlacePage;
-import pages.SearchPage;
+import pages.*;
 import ru.yandex.qatools.allure.annotations.Description;
 import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
@@ -90,6 +87,7 @@ public class EssTest {
         return new Object[][]{
                 {"русский", "RUB"},
                 {"english", "USD"},
+                {"español", "EUR"},
                 {"русский", "CNY"}
         };
     }
@@ -110,6 +108,8 @@ public class EssTest {
         new PassengerPage().step3();
         new PlacePage().clickPay();
         new ChoosePage().step4(currency);
+        EssPage essPg = new EssPage();
+        essPg.step6(locale);
 
         Sleep(5);
     }

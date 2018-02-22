@@ -1,5 +1,6 @@
 package pages;
 
+import config.Values;
 import ru.yandex.qatools.allure.annotations.Step;
 import soap.SoapRequest;
 
@@ -7,6 +8,7 @@ import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.url;
+import static config.Values.pnr;
 
 
 /**
@@ -28,6 +30,9 @@ public class ChoosePage extends Page {
     @Step("Подождать страницу выбора стенда")
     private void checkChoosePage(){
         $("h1").shouldBe(exactText("Вход в тестовую среду системы ЕПР"));
+        int start = url().indexOf("&PNR") + 5;
+        pnr = url().substring(start, start + 6);
+        System.out.println("PNR = " + pnr);
     }
 
     @Step("Выбрать стенд")
@@ -40,9 +45,6 @@ public class ChoosePage extends Page {
 
     @Step("Смена валюты")
     private void changeCurrency(String currency) {
-        int start = url().indexOf("&PNR") + 5;
-        String pnr = url().substring(start, start + 6);
-        System.out.println("PNR = " + pnr);
         new SoapRequest().changeCurrency();
 
     }

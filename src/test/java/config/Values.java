@@ -13,8 +13,12 @@ public class Values {
             {"4154810047474554", "12", "2019", "314", "TEST TEST"}, //0 - Visa
     };
 
-    public static String flight[][] = {
-            {"MOW", "PRG", "SU2010", "22 марта 2018", "08:55", "09:45"}, //0 - Visa
+    public static String text[][] = {
+            {"Полетная страховка", "Flight insurance", "", "", ""},
+            {"Медицинская страховка", "Medical insurance", "", "", ""},
+            {"ТРАНСПОРТ", "TRANSPORT", "", "", ""},
+            {"ПРОЖИВАНИЕ", "ACCOMMODATION", "", "", ""},
+
     };
 
 
