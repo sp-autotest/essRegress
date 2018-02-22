@@ -1,9 +1,17 @@
 package pages;
 
 import com.codeborne.selenide.ElementsCollection;
+import org.openqa.selenium.NoSuchElementException;
 import ru.yandex.qatools.allure.annotations.Step;
+import struct.Flight;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
@@ -14,14 +22,17 @@ import static com.codeborne.selenide.Selenide.$$;
  */
 public class SearchPage extends Page {
 
+    List<Flight> flightList = new ArrayList<Flight>();
+    String dateThere = addOneMonthAndDays(0);
+    String dateBack = addOneMonthAndDays(2);
 
     @Step("Действие 1, поиск рейсов")
     public void step1(String locale) {
         selectLocale(locale);
         setFrom("MOW");
         setTo("PRG");
-        setThere(addOneMonthAndDays(0));
-        setBack (addOneMonthAndDays(2));
+        setThere(dateThere);
+        setBack (dateBack);
         clickPassengers();
         addAdult();
         addChild();
@@ -32,12 +43,15 @@ public class SearchPage extends Page {
     }
 
     @Step("Действие 2, выбор рейсов")
-    public void step2() {
+    public List<Flight> step2() {
+
         selectRandomFlight("туда");
         clickBuyButton();
         selectRandomFlight("обратно");
         clickBuyButton();
+        saveFlightData();
         clickPassengersButton();
+        return flightList;
     }
 
 
@@ -113,7 +127,9 @@ public class SearchPage extends Page {
         Sleep(2);
         ElementsCollection headers = $$(byXpath("//div[@class='row flight-search__header']"));
         ElementsCollection flights = headers.get(i).$$(byXpath("following-sibling::*"));
-        flights.get(getRandomNumberLimit(flights.size())).click();
+        int limit = flights.size();
+        //if (limit>10) limit = 3;
+        flights.get(getRandomNumberLimit(limit)).click();
     }
 
     @Step("Нажать \"Купить\"")
@@ -126,7 +142,6 @@ public class SearchPage extends Page {
         $(byXpath("//a[@class='next__button']")).shouldBe(visible).click();
     }
 
-
     private static String addOneMonthAndDays(int days)
     {
         Calendar cal = Calendar.getInstance();
@@ -134,6 +149,54 @@ public class SearchPage extends Page {
         cal.add(Calendar.MONTH, 1);
         cal.add(Calendar.DAY_OF_MONTH, days);
         return new java.text.SimpleDateFormat("ddMMyyyy").format(cal.getTime());
+    }
+
+    private void saveFlightData() {
+        Flight f;
+        String d = "";
+        ElementsCollection groups = $$(byXpath("//div[@class='flight-search flight-search--active']"));
+        for (int m=0; m<2; m++) {
+            ElementsCollection flights = groups.get(m).$$(byXpath("descendant::div[@class='row flight-search__flights']"));
+            for (int i = 0; i < flights.size(); i++) {
+                ElementsCollection el = flights.get(i).$$(byXpath("child::*"));
+                if (el.size() < 3) {
+                    String transfer = flights.get(i).$(byXpath("descendant::div[@class='flight-search__transfer']/span")).getText();
+                    String[] arr = transfer.split(" "); //заносим информацию о пересадке в массив
+                    int minutes = stringIntoInt(arr[1])*60; //переводим часы ожидания в минуты
+                    if (arr.length>3) minutes = minutes + stringIntoInt(arr[3]); //добавляем минуты ожидания, если указаны
+                    flightList.get(flightList.size() - 1).transfer = minutes*60000; //сохраняем время ожидания в милисекундах
+                    continue;
+                }
+                f = new Flight();
+                f.from = flights.get(i).$(byXpath("descendant::div[@class='time-destination__from']/div[@class='time-destination__airport']")).getText();
+                if (f.from.equals("SVO")|f.from.equals("VKO")) f.from = "MOW";
+                f.to = flights.get(i).$(byXpath("descendant::div[@class='time-destination__to']/div[@class='time-destination__airport']")).getText();
+                if (f.to.equals("SVO")|f.to.equals("VKO")) f.to = "MOW";
+                f.number = flights.get(i).$(byXpath("descendant::div[@class='flight-search__plane-number']")).getText();
+                d = (m==0) ? dateThere : dateBack;
+                d = d + " " + flights.get(i).$(byXpath("descendant::div[@class='time-destination__from']/div[@class='time-destination__time']")).getText();
+                f.start = stringToDate(d);
+                d = (m==0) ? dateThere : dateBack;
+                d = d + " " + flights.get(i).$(byXpath("descendant::div[@class='time-destination__to']/div[@class='time-destination__time']")).getText();
+                f.end = stringToDate(d);
+                //если f.end < f.start, то f.end + 24 часа
+                //f.transfer = 0;
+                flightList.add(f);
+            }
+        }
+        for(Flight fl : flightList) {
+            System.out.println(fl.from + " / " + fl.to + " / " + fl.number + " [" + fl.start + "] [" + fl.end + "] " + fl.transfer);
+        }
+    }
+
+    private Date stringToDate(String d) {
+        Date parsingDate=null;
+        try {
+            parsingDate = new SimpleDateFormat("ddMMyyyy HH:mm").parse(d);
+        }catch (ParseException e) {
+            System.out.println("Parsing date error");
+        }
+        return parsingDate;
     }
 
 }

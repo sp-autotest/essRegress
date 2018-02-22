@@ -114,6 +114,8 @@ public class PassengerPage extends Page {
     @Step("Нажать \"Продолжить\"")
     private void clickContinueButton() {
         $(byXpath("//a[@class='next__button']")).shouldBe(visible).click();
+        waitPlane();
+        waitPlane();
     }
 
 }

@@ -10,11 +10,13 @@ import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.testng.annotations.*;
 import pages.ChoosePage;
 import pages.PassengerPage;
+import pages.PlacePage;
 import pages.SearchPage;
 import ru.yandex.qatools.allure.annotations.Description;
 import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
-
+import struct.Flight;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
@@ -100,14 +102,14 @@ public class EssTest {
             "Дополнительные услуги: «Полетная страховка», «Медицинская страховка» (Спортивная), «Аренда автомобиля»")
     @Test(priority = 1, dataProvider = "parseLocaleData", description = "Бронирование и оплата ")
     public void bookingAndPayment(String locale, String currency) {
-        SearchPage searchPg = new SearchPage();
+        //List<Flight> flightList =  new ArrayList<Flight>();
         open(Values.host);
+        SearchPage searchPg = new SearchPage();
         searchPg.step1(locale);
-        searchPg.step2();
-        PassengerPage passengerPg = new PassengerPage();
-        passengerPg.step3();
-        ChoosePage choosePg = new ChoosePage();
-        choosePg.step4();
+        List<Flight> flightList = searchPg.step2();
+        new PassengerPage().step3();
+        new PlacePage().clickPay();
+        new ChoosePage().step4(currency);
 
         Sleep(5);
     }
