@@ -37,23 +37,16 @@ public class SoapRequest {
     private static void callSoapWebService(int n) throws Exception {
         String host = RequestsData.request[n][2];
         String request = RequestsData.request[n][3];
-/*        StringBuilder sRequest = new StringBuilder();
-        if (n == 1) sRequest.append(request);
         if (n > 1) {
             int t = request.indexOf("BinarySecurityToken><");
             String r1 = request.substring(0, t+20);
             String r2 = request.substring(t+20);
-
-            sRequest.append(r1);
-            sRequest.append(token);
-            sRequest.append(r2);
-
             request = r1.concat(token).concat(r2);
             //request = request.replaceFirst("BinarySecurityToken><", "BinarySecurityToken>"+token+"<");
         }
 
-        System.out.println(sRequest);
-*/
+        System.out.println(request);
+
         URL url = null;
         try {
             url = new URL(host);

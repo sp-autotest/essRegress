@@ -1,15 +1,20 @@
 package pages;
 
 import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.SelenideElement;
 import config.Values;
 import ru.yandex.qatools.allure.annotations.Step;
-
+import struct.Flight;
+import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.Locale;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
+import static config.Values.ln;
 import static config.Values.text;
+import static org.testng.AssertJUnit.assertTrue;
+
 
 /**
  * Created by mycola on 22.02.2018.
@@ -17,20 +22,30 @@ import static config.Values.text;
 public class EssPage extends Page {
 
     @Step("Действие 6, проверка формы ESS")
-    public void step6(String locale) {
-        int l = getLanguageNumber(locale);
+    public void step6() {
         checkPageAppear();
         checkFlight();
         checkNumber();
         checkDateTime();
         checkPrice();
-        checkFlightInsurance(l);
-        checkMedicalInsurance(l);
+        checkFlightInsurance();
+        checkMedicalInsurance();
         checkCart();
         checkNextButton();
-        checkTransport(l);
-        checkDwelling(l);
+        checkTransport();
+        checkDwelling();
         checkTimer();
+    }
+
+    @Step("Действие 7, проверка данных в блоке «Перелет»")
+    public void step7(List<Flight> flightList) {
+        ElementsCollection flights = $$(byXpath("//div[@class='cart__item-details']"));
+        checkPriceData();
+        for (int i = 0; i < flights.size(); i++) {
+            checkFlightData(i+1, flightList, flights);
+            checkNumberData(i+1, flightList, flights);
+            checkDateData(i+1, flightList, flights);
+        }
     }
 
     private void checkPageAppear(){
@@ -58,13 +73,13 @@ public class EssPage extends Page {
     }
 
     @Step("Блок полетной страховки")
-    private void checkFlightInsurance(int loc){
-        $(byXpath("//div[contains(text(),'" + text[0][loc] + "')]")).shouldBe(visible);
+    private void checkFlightInsurance(){
+        $(byXpath("//div[contains(text(),'" + text[0][ln] + "')]")).shouldBe(visible);
     }
 
     @Step("Блок медицинской страховки")
-    private void checkMedicalInsurance(int loc){
-        $(byXpath("//div[contains(text(),'" + text[1][loc] + "')][contains(@class,'icon-medicial')]")).shouldBe(visible);
+    private void checkMedicalInsurance(){
+        $(byXpath("//div[contains(text(),'" + text[1][ln] + "')][contains(@class,'icon-medicial')]")).shouldBe(visible);
     }
 
     @Step("Блок корзины")
@@ -78,18 +93,47 @@ public class EssPage extends Page {
     }
 
     @Step("Транспорт")
-    private void checkTransport(int loc){
-        $("#left-column-transport").shouldBe(visible).shouldBe(exactText(text[2][loc]));
+    private void checkTransport(){
+        $("#left-column-transport").shouldBe(visible).shouldBe(exactText(text[2][ln]));
     }
 
     @Step("Проживание")
-    private void checkDwelling(int loc){
-        $(byXpath("//div[@class='cart__item']")).shouldBe(visible).shouldBe(exactText(text[3][loc]));
+    private void checkDwelling(){
+        $(byXpath("//div[@class='cart__item']")).shouldBe(visible).shouldBe(exactText(text[3][ln]));
     }
 
     @Step("Таймер")
     private void checkTimer(){
         $(byXpath("//div[@class='cart__item-counter-time']")).shouldBe(visible);
+    }
+
+    @Step("Проверка данных о стоимости")
+    private void checkPriceData(){
+        String price = $(byXpath("//div[@class='cart__item-price']")).getText().replace(" ", "");
+        assertTrue("Стоимость не совпадает c указанной при бронировании", price.equals(Values.price));
+    }
+
+    @Step("Проверка данных о {0}-м маршруте")
+    private void checkFlightData(int i, List<Flight> flightList, ElementsCollection flights){
+        String flight = flights.get(i-1).$(byXpath("descendant::div[@class='cart__item-details-item']")).getText().trim();
+        assertTrue("Маршрут не совпадает с забронированным", flight.equals(flightList.get(i-1).from+" → "+flightList.get(i-1).to));
+    }
+
+    @Step("Проверка данных о номере {0}-го рейса")
+    private void checkNumberData(int i, List<Flight> flightList, ElementsCollection flights){
+        String number = flights.get(i-1).$(byXpath("descendant::div[@class='cart__item-details-model']")).getText().trim();
+        assertTrue("Номер рейса не совпадает с забронированным", number.equals(flightList.get(i-1).number));
+    }
+
+    @Step("Проверка данных о дате {0}-го авиаперелета")
+    private void checkDateData(int i, List<Flight> flightList, ElementsCollection flights){
+        String date = flights.get(i-1).$(byXpath("descendant::div[@class='h-color--gray h-mt--4']")).getText().replace(" ", "");
+        date = date.substring(0, date.indexOf("("));
+        //System.out.println("Страница = " + date);
+        String dd = new SimpleDateFormat(Values.lang[ln][3], new Locale(Values.lang[ln][2])).format(flightList.get(i-1).start);
+        dd = dd + new SimpleDateFormat("HH:mm").format(flightList.get(i-1).end);
+        //System.out.println("Локаль   = " + dd);
+        assertTrue("Дата авиаперелета не совпадает с забронированной", date.equals(dd));
     }
 
 }

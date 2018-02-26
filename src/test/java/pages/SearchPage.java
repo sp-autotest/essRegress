@@ -1,22 +1,21 @@
 package pages;
 
 import com.codeborne.selenide.ElementsCollection;
-import org.openqa.selenium.NoSuchElementException;
+import config.Values;
 import ru.yandex.qatools.allure.annotations.Step;
 import struct.Flight;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
-import static com.codeborne.selenide.Condition.enabled;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
+import static config.Values.lang;
+import static config.Values.ln;
 
 /**
  * Created by mycola on 20.02.2018.
@@ -28,8 +27,8 @@ public class SearchPage extends Page {
     String dateBack = addOneMonthAndDays(2);
 
     @Step("Действие 1, поиск рейсов")
-    public void step1(String locale) {
-        selectLocale(locale);
+    public void step1() {
+        selectLocale();
         setFrom("MOW");
         setTo("PRG");
         setThere(dateThere);
@@ -45,7 +44,6 @@ public class SearchPage extends Page {
 
     @Step("Действие 2, выбор рейсов")
     public List<Flight> step2() {
-
         selectRandomFlight("туда");
         clickBuyButton();
         selectRandomFlight("обратно");
@@ -57,9 +55,9 @@ public class SearchPage extends Page {
 
 
     @Step("Выбрать язык: {0}")
-    private void selectLocale(String locale) {
+    private void selectLocale() {
         $(byXpath("//div[@class='header__select-items']")).shouldBe(visible).click();
-        $(byXpath("//div[text()='" + locale + "']")).shouldBe(visible).click();
+        $(byXpath("//div[text()='" + lang[ln][1] + "']")).shouldBe(visible).click();
     }
 
     @Step("Выбрать город вылета: {0}")
@@ -158,8 +156,9 @@ public class SearchPage extends Page {
     }
 
     private void saveFlightData() {
+        Values.price = $(byXpath("//div[@class='cart__item-price js-popover']")).getText().replace(" ", "");
         Flight f;
-        String d = "";
+        String d;
         ElementsCollection groups = $$(byXpath("//div[@class='flight-search flight-search--active']"));
         for (int m=0; m<2; m++) {
             ElementsCollection flights = groups.get(m).$$(byXpath("descendant::div[@class='row flight-search__flights']"));
@@ -185,8 +184,6 @@ public class SearchPage extends Page {
                 d = (m==0) ? dateThere : dateBack;
                 d = d + " " + flights.get(i).$(byXpath("descendant::div[@class='time-destination__to']/div[@class='time-destination__time']")).getText();
                 f.end = stringToDate(d);
-                //если f.end < f.start, то f.end + 24 часа
-                //f.transfer = 0;
                 flightList.add(f);
             }
         }

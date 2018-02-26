@@ -72,7 +72,7 @@ public class RequestsData {
                     "</ns4:MessageData>\n" +
                     "</ns4:MessageHeader>\n" +
                     "<ns8:Security xmlns:ns8=\"http://schemas.xmlsoap.org/ws/2002/12/secext\" xmlns:ns7=\"http://webservices.sabre.com/sabreXML/2003/07\" xmlns:ns6=\"http://www.w3.org/2000/09/xmldsig#\" xmlns:ns5=\"http://www.w3.org/1999/xlink\" xmlns:ns4=\"http://www.ebxml.org/namespaces/messageHeader\">\n" +
-                    "<ns8:BinarySecurityToken></ns8:BinarySecurityToken>" +
+                    "<ns8:BinarySecurityToken></ns8:BinarySecurityToken>\n" +
                     "</ns8:Security>\n" +
                     "</soap:Header>\n" +
                     "<soap:Body>\n" +
@@ -88,7 +88,7 @@ public class RequestsData {
             "OTA",
             "https://sws-crt.cert.sabre.com/",
             "<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n" +
-                    "\t<soap:Header>\n" +
+                    "<soap:Header>\n" +
                     "\t\t<ns4:MessageHeader xmlns:ns8=\"http://schemas.xmlsoap.org/ws/2002/12/secext\" xmlns:ns7=\"http://webservices.sabre.com/sabreXML/2003/07\" xmlns:ns6=\"http://www.w3.org/2000/09/xmldsig#\" xmlns:ns5=\"http://www.w3.org/1999/xlink\" xmlns:ns4=\"http://www.ebxml.org/namespaces/messageHeader\">\n" +
                     "\t\t\t<ns4:From>\n" +
                     "\t\t\t\t<ns4:PartyId>99999</ns4:PartyId>\n" +

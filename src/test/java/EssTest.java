@@ -12,6 +12,7 @@ import pages.*;
 import ru.yandex.qatools.allure.annotations.Description;
 import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
+import soap.SoapRequest;
 import struct.Flight;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -19,6 +20,7 @@ import java.util.concurrent.TimeUnit;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.Selenide.open;
 import static pages.Page.Sleep;
+import static pages.Page.getLanguageNumber;
 import static pages.Page.stringIntoInt;
 
 
@@ -85,12 +87,15 @@ public class EssTest {
     @DataProvider
     public Object[][] parseLocaleData() {
         return new Object[][]{
-            {"русский", "RUB"},
-            {"english", "USD"},
-            {"español", "EUR"},
-            {"deutsch", "RUB"},
-            {"italiano", "EUR"},
-            //{"中文", "USD"}
+            {"Русский", "RUB"},
+            {"Итальянский", "EUR"},
+            {"Немецкий", "RUB"},
+            {"Французский", "EUR"},
+            {"Английский", "USD"},
+            {"Испанский", "EUR"},
+            {"Китайский", "USD"},
+            {"Японский", "USD"},
+            {"Корейский", "RUB"},
         };
     }
 
@@ -103,16 +108,18 @@ public class EssTest {
     @Test(priority = 1, dataProvider = "parseLocaleData", description = "Бронирование и оплата ")
     public void bookingAndPayment(String locale, String currency) {
         //List<Flight> flightList =  new ArrayList<Flight>();
+        //new SoapRequest().changeCurrency();
+        Values.ln = getLanguageNumber(locale);
         open(Values.host);
         SearchPage searchPg = new SearchPage();
-        searchPg.step1(locale);
+        searchPg.step1();
         List<Flight> flightList = searchPg.step2();
         new PassengerPage().step3();
         new PlacePage().clickPay();
         new ChoosePage().step4(currency);
         EssPage essPg = new EssPage();
-        essPg.step6(locale);
-
+        essPg.step6();
+        essPg.step7(flightList);
         Sleep(5);
     }
 

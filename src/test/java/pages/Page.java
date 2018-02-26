@@ -1,9 +1,8 @@
 package pages;
 
+import config.Values;
 import ru.yandex.qatools.allure.annotations.Step;
-
 import java.io.IOException;
-
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
@@ -69,16 +68,10 @@ public class Page {
     }
 
     public static int getLanguageNumber(String language) {
-        if (language.equals("русский")) return 0;
-        if (language.equals("english")) return 1;
-        if (language.equals("deutsch")) return 2;
-        if (language.equals("español")) return 3;
-        if (language.equals("italiano")) return 4;
-        if (language.equals("le français")) return 5;
-        if (language.equals("中文")) return 6; //китай
-        if (language.equals("한국어")) return 7; //корея
-        if (language.equals("日本語")) return 8; //япония
-        return -1;
+        for (int i=0; i<9; i++) {
+            if (Values.lang[i][0].equals(language)) return i;
+        }
+        return 0;
     }
 
 }
