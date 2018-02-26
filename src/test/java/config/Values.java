@@ -22,16 +22,16 @@ public class Values {
             {"Испанский", "español", "es", "ddMMMyyyy,HH:mm→"},
             {"Итальянский", "italiano", "it", "ddMMMyyyy,HH:mm→"},
             {"Французский", "le français", "fr", "ddMMMyyyy,HH:mm→"},
-            {"Китайский", "中文", "zh", "ddMMMyyyy,HH:mm→"},
+            {"Китайский", "中文", "zh", "ddM月yyyy,HH:mm→"},
             {"Корейский", "한국어", "ko", "ddMMMyyyy,HH:mm→"},
             {"Японский", "日本語", "ja", "ddMMMMyyyy,HH:mm→"},
     };
 
     public static String text[][] = {
-        {"Полетная страховка", "Flight insurance", "Flugversicherung", "Seguro de vuelo", "Assicurazione sul volo", "Assurance vol"},
-        {"Медицинская страховка", "Medical insurance", "Krankenversicherung", "Seguro médico", "Assicurazione medica", "Assurance médicale"},
-        {"ТРАНСПОРТ", "TRANSPORT", "Transport", "Transporte", "Trasporto", "Transport"},
-        {"ПРОЖИВАНИЕ", "ACCOMMODATION", "UNTERKUNFT", "Alojamiento", "ALLOGGIO", "Hébergement"},
+        {"Полетная страховка", "Flight insurance", "Flugversicherung", "Seguro de vuelo", "Assicurazione sul volo", "Assurance vol", "飞行保险", "항공 보험", "フライト保険"},
+        {"Медицинская страховка", "Medical insurance", "Krankenversicherung", "Seguro médico", "Assicurazione medica", "Assurance médicale", "医疗保险", "의료 보험", "医療保険"},
+        {"ТРАНСПОРТ", "TRANSPORT", "Transport", "Transporte", "Trasporto", "Transport", "交通", "운송", "輸送"},
+        {"ПРОЖИВАНИЕ", "ACCOMMODATION", "UNTERKUNFT", "Alojamiento", "ALLOGGIO", "Hébergement", "住宿", "숙박", "宿泊設備"},
     };
 
 }

@@ -120,7 +120,6 @@ public class EssTest {
         EssPage essPg = new EssPage();
         essPg.step6();
         essPg.step7(flightList);
-        Sleep(5);
     }
 
 }
