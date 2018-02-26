@@ -10,14 +10,14 @@ public class Values {
     public static String host = "https://afl-test.test.aeroflot.ru/sb/app/ru-ru";
 
     public static String card[][] = {
-            {"4154810047474554", "12", "2019", "314", "TEST TEST"}, //0 - Visa
+        {"4154810047474554", "12", "2019", "314", "TEST TEST"}, //0 - Visa
     };
 
     public static String text[][] = {
-            {"Полетная страховка", "Flight insurance", "", "", ""},
-            {"Медицинская страховка", "Medical insurance", "", "", ""},
-            {"ТРАНСПОРТ", "TRANSPORT", "", "", ""},
-            {"ПРОЖИВАНИЕ", "ACCOMMODATION", "", "", ""},
+        {"Полетная страховка", "Flight insurance", "Flugversicherung", "Seguro de vuelo", "Assicurazione sul volo", "Assurance vol"},
+        {"Медицинская страховка", "Medical insurance", "Krankenversicherung", "Seguro médico", "Assicurazione medica", "Assurance médicale"},
+        {"ТРАНСПОРТ", "TRANSPORT", "Transport", "Transporte", "Trasporto", "Transport"},
+        {"ПРОЖИВАНИЕ", "ACCOMMODATION", "UNTERKUNFT", "Alojamiento", "ALLOGGIO", "Hébergement"},
 
     };
 

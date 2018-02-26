@@ -85,10 +85,12 @@ public class EssTest {
     @DataProvider
     public Object[][] parseLocaleData() {
         return new Object[][]{
-                {"русский", "RUB"},
-                {"english", "USD"},
-                {"español", "EUR"},
-                {"русский", "CNY"}
+            {"русский", "RUB"},
+            {"english", "USD"},
+            {"español", "EUR"},
+            {"deutsch", "RUB"},
+            {"italiano", "EUR"},
+            //{"中文", "USD"}
         };
     }
 

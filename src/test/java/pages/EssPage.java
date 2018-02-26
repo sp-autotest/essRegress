@@ -5,9 +5,7 @@ import com.codeborne.selenide.SelenideElement;
 import config.Values;
 import ru.yandex.qatools.allure.annotations.Step;
 
-import static com.codeborne.selenide.Condition.exist;
-import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
@@ -20,19 +18,19 @@ public class EssPage extends Page {
 
     @Step("Действие 6, проверка формы ESS")
     public void step6(String locale) {
+        int l = getLanguageNumber(locale);
         checkPageAppear();
         checkFlight();
         checkNumber();
         checkDateTime();
         checkPrice();
-        checkFlightInsurance(0);
-        checkMedicalInsurance(0);
+        checkFlightInsurance(l);
+        checkMedicalInsurance(l);
         checkCart();
         checkNextButton();
-        checkTransport();
-        checkDwelling();
+        checkTransport(l);
+        checkDwelling(l);
         checkTimer();
-
     }
 
     private void checkPageAppear(){
@@ -66,7 +64,7 @@ public class EssPage extends Page {
 
     @Step("Блок медицинской страховки")
     private void checkMedicalInsurance(int loc){
-        $(byXpath("//div[contains(text(),'" + text[1][loc] + "')]")).shouldBe(visible);
+        $(byXpath("//div[contains(text(),'" + text[1][loc] + "')][contains(@class,'icon-medicial')]")).shouldBe(visible);
     }
 
     @Step("Блок корзины")
@@ -80,13 +78,13 @@ public class EssPage extends Page {
     }
 
     @Step("Транспорт")
-    private void checkTransport(){
-        $("#left-column-transport").shouldBe(visible);
+    private void checkTransport(int loc){
+        $("#left-column-transport").shouldBe(visible).shouldBe(exactText(text[2][loc]));
     }
 
     @Step("Проживание")
-    private void checkDwelling(){
-        $(byXpath("//div[@class='cart__item']")).shouldBe(visible);
+    private void checkDwelling(int loc){
+        $(byXpath("//div[@class='cart__item']")).shouldBe(visible).shouldBe(exactText(text[3][loc]));
     }
 
     @Step("Таймер")

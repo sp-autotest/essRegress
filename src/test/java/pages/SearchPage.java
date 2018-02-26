@@ -12,6 +12,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import static com.codeborne.selenide.Condition.enabled;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
@@ -134,7 +135,12 @@ public class SearchPage extends Page {
 
     @Step("Нажать \"Купить\"")
     private void clickBuyButton() {
-        $(byXpath("//a[contains(@class,'button--small-padding')]")).shouldBe(visible).click();
+        ElementsCollection buttons = $$(byXpath("//a[contains(@class,'button--small-padding')][@aria-disabled='false']"));
+        if (buttons.size()>0) {
+            buttons.get(0).shouldBe(visible).click();
+        } else {
+            $(byXpath("//a[contains(@class,'button--small-padding')]")).shouldBe(visible).click();
+        }
     }
 
     @Step("Нажать \"Указать пассажиров\"")

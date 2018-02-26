@@ -68,4 +68,17 @@ public class Page {
         $(byXpath("//svg[contains(@class,'circle-preloader--plane')]")).shouldNotBe(visible);
     }
 
+    public static int getLanguageNumber(String language) {
+        if (language.equals("русский")) return 0;
+        if (language.equals("english")) return 1;
+        if (language.equals("deutsch")) return 2;
+        if (language.equals("español")) return 3;
+        if (language.equals("italiano")) return 4;
+        if (language.equals("le français")) return 5;
+        if (language.equals("中文")) return 6; //китай
+        if (language.equals("한국어")) return 7; //корея
+        if (language.equals("日本語")) return 8; //япония
+        return -1;
+    }
+
 }
