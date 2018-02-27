@@ -86,20 +86,20 @@ public class EssTest {
     @DataProvider
     public Object[][] parseLocaleData() {
         return new Object[][]{
-                {"Русский", "RUB"},
-                {"Английский", "USD"},
-                {"Немецкий", "RUB"},
-                {"Испанский", "EUR"},
+                {"Русский",     "RUB"},
+                {"Английский",  "USD"},
+                {"Немецкий",    "RUB"},
+                {"Испанский",   "EUR"},
                 {"Итальянский", "EUR"},
                 {"Французский", "EUR"},
-                {"Китайский", "USD"},
-                {"Корейский", "RUB"},
-                {"Японский", "USD"},
+                {"Китайский",   "USD"},
+                {"Корейский",   "RUB"},
+                {"Японский",    "USD"},
         };
     }
 
     @Stories("Первая группа тестов")
-    @Title("Тест-кейс «Тестирование ESS»")
+    @Title("Тестирование ESS")
     @Description("Карта VISA;\n" +
             "Hаправление перелета: туда-обратно;\n" +
             "Состав бронирования авиаперелета, билеты: 2 взрослых-2 детских-1 младенец;\n" +
@@ -119,6 +119,7 @@ public class EssTest {
         EssPage essPg = new EssPage();
         essPg.step6();
         essPg.step7(flightList);
+        essPg.step8();
     }
 
 }

@@ -49,6 +49,12 @@ public class EssPage extends Page {
         }
     }
 
+    @Step("Действие 8, проверка данных в блоке «Страховка»")
+    public void step8() {
+        checkFlyInsuranceInCard();
+        checkPriceOfFlyInsurance();
+    }
+
     private void checkPageAppear(){
         $(byXpath("//div[@class='cart__item-title']")).shouldBe(visible).shouldBe(text(Values.pnr)).click();
     }
@@ -149,5 +155,27 @@ public class EssPage extends Page {
         System.out.println("duration = " + duration);
         assertTrue("Длительность авиаперелета не совпадает с забронированной", duration.equals(flightList.get(i-1).duration));
     }
+
+    @Step("Полетная страховка в корзине")
+    private void checkFlyInsuranceInCard(){
+        $("#left-column-insurance-block").$(byXpath("descendant::div[@class='cart__item-priceondemand-item-title']"))
+                .shouldBe(exist).shouldBe(visible).shouldBe(exactText(text[0][ln]));
+    }
+
+    @Step("Проверка общей суммы полетной страховки")
+    private  void checkPriceOfFlyInsurance(){
+        String summ = $("#left-column-insurance-block").$(byXpath("descendant::" +
+                "div[@class='cart__item-priceondemand-item-price']")).getText().trim();
+        int s = stringIntoInt(summ.substring(0, summ.length()-1).replace(" ", ""));
+        System.out.println("Summ = " + s);
+        String price = $(byXpath("//div[@class='frame__heading frame__heading--icon frame__heading--icon-safe']/span")).getText();
+        price = price.substring(0, price.indexOf("a")).trim();
+        if (price.indexOf(" ")>0) price = price.substring(price.indexOf(" "));
+        System.out.println("Price = " + price);
+        int p = stringIntoInt(price);
+        System.out.println("price = " + p);
+        assertTrue("Общая сумма страховки не равняется сумме страховок каждого пассажира", s == p*5);
+    }
+
 
 }
