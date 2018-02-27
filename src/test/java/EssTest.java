@@ -58,7 +58,6 @@ public class EssTest {
                 break;
             case "firefox":
                 myWebDriver = new FirefoxDriver();
-                myWebDriver.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
                 break;
             case "ie":
                 myWebDriver = new InternetExplorerDriver();
@@ -87,20 +86,20 @@ public class EssTest {
     @DataProvider
     public Object[][] parseLocaleData() {
         return new Object[][]{
-            {"Русский", "RUB"},
-            {"Итальянский", "EUR"},
-            {"Немецкий", "RUB"},
-            {"Французский", "EUR"},
-            {"Английский", "USD"},
-            {"Испанский", "EUR"},
-            {"Китайский", "USD"},
-            {"Японский", "USD"},
-            {"Корейский", "RUB"},
+                {"Русский", "RUB"},
+                {"Английский", "USD"},
+                {"Немецкий", "RUB"},
+                {"Испанский", "EUR"},
+                {"Итальянский", "EUR"},
+                {"Французский", "EUR"},
+                {"Китайский", "USD"},
+                {"Корейский", "RUB"},
+                {"Японский", "USD"},
         };
     }
 
     @Stories("Первая группа тестов")
-    @Title("Тест-кейс «Бронирование и оплата»")
+    @Title("Тест-кейс «Тестирование ESS»")
     @Description("Карта VISA;\n" +
             "Hаправление перелета: туда-обратно;\n" +
             "Состав бронирования авиаперелета, билеты: 2 взрослых-2 детских-1 младенец;\n" +

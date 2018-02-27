@@ -25,6 +25,7 @@ public class SearchPage extends Page {
     List<Flight> flightList = new ArrayList<Flight>();
     String dateThere = addOneMonthAndDays(0);
     String dateBack = addOneMonthAndDays(2);
+    String duration = "";
 
     @Step("Действие 1, поиск рейсов")
     public void step1() {
@@ -111,7 +112,7 @@ public class SearchPage extends Page {
 
     @Step("Нажать \"Найти\"")
     private void clickSearchButton() {
-        $(byXpath("//a[contains(@class,'button--tell')]")).shouldBe(visible).click();
+        $(byXpath("//a[contains(@class,'button--wide')]")).shouldBe(visible).click();
     }
 
     @Step("Выбрать рейс {0}")
@@ -133,11 +134,12 @@ public class SearchPage extends Page {
 
     @Step("Нажать \"Купить\"")
     private void clickBuyButton() {
-        ElementsCollection buttons = $$(byXpath("//a[contains(@class,'button--small-padding')][@aria-disabled='false']"));
+        saveDuration();
+        ElementsCollection buttons = $$(byXpath("//a[contains(@class,'button--bordered')][@aria-disabled='false']"));
         if (buttons.size()>0) {
             buttons.get(0).shouldBe(visible).click();
         } else {
-            $(byXpath("//a[contains(@class,'button--small-padding')]")).shouldBe(visible).click();
+            $(byXpath("//a[contains(@class,'button--bordered')]")).shouldBe(visible).click();
         }
     }
 
@@ -184,11 +186,14 @@ public class SearchPage extends Page {
                 d = (m==0) ? dateThere : dateBack;
                 d = d + " " + flights.get(i).$(byXpath("descendant::div[@class='time-destination__to']/div[@class='time-destination__time']")).getText();
                 f.end = stringToDate(d);
+                f.duration = duration.substring(0, duration.indexOf(" "));
+                duration = duration.substring(duration.indexOf(" ")+1);
                 flightList.add(f);
             }
         }
         for(Flight fl : flightList) {
-            System.out.println(fl.from + " / " + fl.to + " / " + fl.number + " [" + fl.start + "] [" + fl.end + "] " + fl.transfer);
+            System.out.println(fl.from + " / " + fl.to + " / " + fl.number + " / " + fl.duration +
+                    " [" + fl.start + "] [" + fl.end + "] " + fl.transfer);
         }
     }
 
@@ -201,5 +206,27 @@ public class SearchPage extends Page {
         }
         return parsingDate;
     }
+
+    private void saveDuration() {
+        String temp;
+        $(byXpath("//a[contains(@class,'modal__close')]")).shouldBe(visible);
+        ElementsCollection dur = $$(byXpath("//div[@class='flight__date']"));
+        for (int i=1; i<dur.size(); i=i+2) {
+            temp = dur.get(i).$(byXpath("descendant::span[2]")).getText();
+            if (temp.indexOf("：")>0) {
+                temp = temp.substring(temp.indexOf("：") + 2);
+            } else {
+                temp = temp.substring(temp.indexOf(":") + 2);
+            }
+            temp = temp.substring(0, temp.length() - 3);
+            for (int c = 0; c < temp.length(); c++) {
+                if (Character.isDigit(temp.charAt(c))) {
+                    duration = duration + temp.charAt(c);
+                }
+            }
+            duration = duration + " ";
+        }
+    }
+
 
 }

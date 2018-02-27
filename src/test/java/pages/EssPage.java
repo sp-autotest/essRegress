@@ -45,6 +45,7 @@ public class EssPage extends Page {
             checkFlightData(i+1, flightList, flights);
             checkNumberData(i+1, flightList, flights);
             checkDateData(i+1, flightList, flights);
+            checkDurationData(i+1, flightList, flights);
         }
     }
 
@@ -129,11 +130,24 @@ public class EssPage extends Page {
     private void checkDateData(int i, List<Flight> flightList, ElementsCollection flights){
         String date = flights.get(i-1).$(byXpath("descendant::div[@class='h-color--gray h-mt--4']")).getText().replace(" ", "");
         date = date.substring(0, date.indexOf("("));
-        System.out.println("Site   = " + date);
         String dd = new SimpleDateFormat(Values.lang[ln][3], new Locale(Values.lang[ln][2])).format(flightList.get(i-1).start);
         dd = dd + new SimpleDateFormat("HH:mm").format(flightList.get(i-1).end);
         System.out.println("Locale = " + dd);
         assertTrue("Дата авиаперелета не совпадает с забронированной", date.equals(dd));
+    }
+
+    @Step("Проверка данных о длительности {0}-го авиаперелета")
+    private void checkDurationData(int i, List<Flight> flightList, ElementsCollection flights){
+        String duration = "";
+        String time = flights.get(i-1).$(byXpath("descendant::div[@class='h-color--gray h-mt--4']")).getText();
+        time = time.substring(time.indexOf("("), time.indexOf(")")-1);
+        for (int c = 0; c < time.length(); c++) {
+            if (Character.isDigit(time.charAt(c))) {
+                duration = duration + time.charAt(c);
+            }
+        }
+        System.out.println("duration = " + duration);
+        assertTrue("Длительность авиаперелета не совпадает с забронированной", duration.equals(flightList.get(i-1).duration));
     }
 
 }
