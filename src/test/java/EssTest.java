@@ -120,6 +120,7 @@ public class EssTest {
         essPg.step6();
         essPg.step7(flightList);
         essPg.step8();
+        essPg.step9();
     }
 
 }
