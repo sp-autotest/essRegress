@@ -227,5 +227,8 @@ public class EssPage extends Page {
         assertTrue("Общая сумма заказа некорректна", summ == stringIntoInt(totalPrice.substring(0, totalPrice.length()-1)));
     }
 
-
+    @Step("Нажать кнопку «Транспорт»")
+    public void clickTransportButton() {
+        $(byXpath("//a[@class='next__button']")).shouldBe(visible).click();
+    }
 }

@@ -121,6 +121,8 @@ public class EssTest {
         essPg.step7(flightList);
         essPg.step8();
         essPg.step9();
+        TransportPage transportPg = new TransportPage();
+        transportPg.step10();
     }
 
 }
