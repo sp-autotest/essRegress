@@ -109,6 +109,7 @@ public class EssTest {
         //List<Flight> flightList =  new ArrayList<Flight>();
         //new SoapRequest().changeCurrency();
         Values.ln = getLanguageNumber(locale);
+        Values.ticket = 1;
         open(Values.host);
         SearchPage searchPg = new SearchPage();
         searchPg.step1();

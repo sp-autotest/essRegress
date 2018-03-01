@@ -8,7 +8,7 @@ public class Values {
     public static String pnr = null;
     public static String price = null;
     public static int ln = 0;
-    public static int ticket = 1;
+    public static int ticket;
     public static String email = "tafl@software-provider.ru";
     public static String host = "https://afl-test.test.aeroflot.ru/sb/app/ru-ru";
 

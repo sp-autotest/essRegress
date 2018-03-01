@@ -30,7 +30,7 @@ public class ChoosePage extends Page {
 
     @Step("Действие 13, выбор стенда")
     public void step13() {
-        checkChoosePage();
+        $("h1").shouldBe(exactText("Вход в тестовую среду системы ЕПР"));
         System.out.println("URL = " + url());
         clickEnvironment();
         checkEprPageAppear();

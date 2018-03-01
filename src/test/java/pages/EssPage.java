@@ -12,9 +12,7 @@ import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
-import static config.Values.ln;
-import static config.Values.text;
-import static config.Values.ticket;
+import static config.Values.*;
 import static org.testng.AssertJUnit.assertTrue;
 
 
@@ -66,7 +64,7 @@ public class EssPage extends Page {
     }
 
     private void checkPageAppear(){
-        $(byXpath("//div[@class='cart__item-title']")).shouldBe(visible).shouldBe(text(Values.pnr)).click();
+        $(byXpath("//div[@class='cart__item-title']")).shouldBe(visible).shouldBe(text(pnr)).click();
     }
 
     @Step("Маршрут")
@@ -121,8 +119,9 @@ public class EssPage extends Page {
 
     @Step("Таймер")
     private void checkTimer(){
-        $("#left-column-insurance-block").click();
+        //$("#left-column-insurance-block").click();
         $(byXpath("//div[@class='cart__item-counter-time']")).shouldBe(visible);
+        //$(byXpath("//div[@class='cart__item-title']")).shouldBe(text(pnr)).click();
     }
 
     @Step("Проверка данных о стоимости")

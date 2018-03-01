@@ -104,6 +104,7 @@ public class TransportPage extends Page {
     @Step("Нажать кнопку «Арендовать»")
     private void clickRentButton(){
         $("#button_down_price").click();
+        Sleep(2);
     }
 
     @Step("Проверка кнопки «В заказе»")
@@ -183,7 +184,5 @@ public class TransportPage extends Page {
         System.out.println("Total price = " + totalPrice);
         assertTrue("Общая сумма заказа некорректна", summ == stringIntoInt(totalPrice.substring(0, totalPrice.length()-1)));
     }
-
-
 
 }
