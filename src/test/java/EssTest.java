@@ -123,6 +123,7 @@ public class EssTest {
         essPg.step9();
         TransportPage transportPg = new TransportPage();
         transportPg.step10();
+        transportPg.step11();
     }
 
 }

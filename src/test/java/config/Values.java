@@ -8,6 +8,7 @@ public class Values {
     public static String pnr = null;
     public static String price = null;
     public static int ln = 0;
+    public static int ticket = 1;
     public static String email = "tafl@software-provider.ru";
     public static String host = "https://afl-test.test.aeroflot.ru/sb/app/ru-ru";
 
@@ -16,7 +17,7 @@ public class Values {
     };
 
     public static String lang[][] = {
-            {"Русский", "русский", "ru", "ddMMMMyyyy,HH:mm→"},
+            {"Русский", "русский", "ru", "ddMMM.yyyy,HH:mm→"},
             {"Английский", "english", "en", "ddMMMyyyy,HH:mm→"},
             {"Немецкий", "deutsch", "de", "ddMMMyyyy,HH:mm→"},
             {"Испанский", "español", "es", "ddMMMyyyy,HH:mm→"},
@@ -36,8 +37,9 @@ public class Values {
         {"Добавить в заказ", "Add to your order", "Ihrer Bestellung hinzufügen", "Añadir a su pedido", "Aggiungi all`ordine", "Ajouter à votre commande", "添加到您的订单", "주문에 추가", "注文に追加する"},
         {"В заказе", "In the order", "In der Bestellung", "En el pedido", "Nell`ordine", "Dans la commande", "订单中", "주문", "注文内容"},
         {"АКПП", "Automatic transmission", "Automatikgetriebe", "Transmisión automática", "Cambio automatico", "Transmission automatique", "自动挡", "자동", "オートマチックトランスミッション"},
-        {"", "", "", "", "", "", "", "", ""},
-        {"", "", "", "", "", "", "", "", ""}
+        {"Изменить выбранные опции", "Change selected options", "Ausgewählte Optionen ändern", "Cambiar las opciones seleccionadas", "Cambia opzioni selezionate", "Modifier les options sélectionnées", "更改选定选项", "선택한 옵션 변경", "選択したオプションを変更"},
+        {"Изменить время или место", "Change time or place", "Zeit oder Ort ändern", "Cambiar hora o lugar", "Cambia ora o luogo", "Modifier l`heure ou l`endroit", "更改时间或地点", "시간/위치 변경", "時間または場所の変更"},
+        {"Изменить страховку", "Change insurance", "Versicherung ändern", "Cambiar seguro", "Cambia assicurazione", "Modifier l`assurance", "更改保险", "보험 변경", "保険の変更"}
     };
 
 }

@@ -16,6 +16,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static config.Values.lang;
 import static config.Values.ln;
+import static config.Values.ticket;
 
 /**
  * Created by mycola on 20.02.2018.
@@ -91,18 +92,21 @@ public class SearchPage extends Page {
     private void addAdult() {
         $$(byXpath("//div[@class='input-counter']")).get(0).
                 $(byXpath("div[@class='input-counter__plus']")).shouldBe(visible).click();
+        ticket++;
     }
 
     @Step("Добавить ребенка")
     private void addChild() {
         $$(byXpath("//div[@class='input-counter']")).get(1).
                 $(byXpath("div[@class='input-counter__plus']")).shouldBe(visible).click();
+        ticket++;
     }
 
     @Step("Добавить младенца")
     private void addInfant() {
         $$(byXpath("//div[@class='input-counter']")).get(2).
                 $(byXpath("div[@class='input-counter__plus']")).shouldBe(visible).click();
+        ticket++;
     }
 
     @Step("Нажать \"Закрыть\"")

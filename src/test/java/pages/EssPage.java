@@ -14,6 +14,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static config.Values.ln;
 import static config.Values.text;
+import static config.Values.ticket;
 import static org.testng.AssertJUnit.assertTrue;
 
 
@@ -145,6 +146,7 @@ public class EssPage extends Page {
     private void checkDateData(int i, List<Flight> flightList, ElementsCollection flights){
         String date = flights.get(i-1).$(byXpath("descendant::div[@class='h-color--gray h-mt--4']")).getText().replace(" ", "");
         date = date.substring(0, date.indexOf("("));
+        System.out.println("Site = " + date);
         String dd = new SimpleDateFormat(Values.lang[ln][3], new Locale(Values.lang[ln][2])).format(flightList.get(i-1).start);
         dd = dd + new SimpleDateFormat("HH:mm").format(flightList.get(i-1).end);
         System.out.println("Locale = " + dd);
@@ -183,7 +185,7 @@ public class EssPage extends Page {
         System.out.println("Price = " + price);
         int p = stringIntoInt(price);
         System.out.println("price = " + p);
-        assertTrue("Общая сумма страховки не равняется сумме страховок каждого пассажира", s == p*5);
+        assertTrue("Общая сумма страховки не равняется сумме страховок каждого пассажира", s == p*ticket);
     }
 
 
@@ -209,7 +211,7 @@ public class EssPage extends Page {
                 .shouldBe(visible).shouldBe(exactText(text[6][ln]));
     }
 
-    @Step("Проверка что общая сумма заказа включает в себя стоимость услуг страхования")
+    @Step("Проверка общей суммы заказа (включает в себя стоимость услуг страхования)")
     private void checkTotalAndInsurensPrices(){
         String itemPrice;
         String flyPrice = $(byXpath("//div[@class='cart__item-price']")).getText().replace(" ", "");
@@ -230,5 +232,6 @@ public class EssPage extends Page {
     @Step("Нажать кнопку «Транспорт»")
     public void clickTransportButton() {
         $(byXpath("//a[@class='next__button']")).shouldBe(visible).click();
+        waitPlane();
     }
 }
