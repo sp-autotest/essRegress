@@ -121,6 +121,7 @@ public class EssPage extends Page {
 
     @Step("Таймер")
     private void checkTimer(){
+        $("#left-column-insurance-block").click();
         $(byXpath("//div[@class='cart__item-counter-time']")).shouldBe(visible);
     }
 
@@ -185,6 +186,8 @@ public class EssPage extends Page {
         System.out.println("Price = " + price);
         int p = stringIntoInt(price);
         System.out.println("price = " + p);
+        System.out.println("ticket = " + ticket);
+        System.out.println("price * ticket = " + p*ticket);
         assertTrue("Общая сумма страховки не равняется сумме страховок каждого пассажира", s == p*ticket);
     }
 

@@ -115,7 +115,8 @@ public class EssTest {
         List<Flight> flightList = searchPg.step2();
         new PassengerPage().step3();
         new PlacePage().clickPay();
-        new ChoosePage().step4(currency);
+        ChoosePage choosePg = new ChoosePage();
+        choosePg.step4(currency);
         EssPage essPg = new EssPage();
         essPg.step6();
         essPg.step7(flightList);
@@ -124,6 +125,8 @@ public class EssTest {
         TransportPage transportPg = new TransportPage();
         transportPg.step10();
         transportPg.step11();
+        transportPg.step12();
+        choosePg.step13();
     }
 
 }

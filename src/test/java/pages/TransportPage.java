@@ -46,6 +46,12 @@ public class TransportPage extends Page {
         checkTotalPrices();
     }
 
+    @Step("Действие 12, Нажать Оплатить в корзине")
+    public void step12() {
+        $(byXpath("//a[@class='cart__item-counter-link']")).click();
+        waitPlane();
+    }
+
     @Step("Проверка перехода в раздел «Транспорт»")
     private void checkTransportBlock(){
         $(byXpath("//div[@id='left-column-transport'][contains(@class,'--active')]")).
@@ -148,7 +154,7 @@ public class TransportPage extends Page {
         return p;
     }
 
-    @Step("Проверка пересчета стоимости:\n- без доп. услуг {1}\n- страховка {0}\n- всего {2}")
+    @Step("Проверка пересчета стоимости: без доп. услуг {1}, страховка {0}, всего {2}")
     private void checkAllPrice(int insurance, int before, int after){
         assertTrue("Стоимость пересчитана неверно", after == before + insurance);
     }
@@ -177,5 +183,7 @@ public class TransportPage extends Page {
         System.out.println("Total price = " + totalPrice);
         assertTrue("Общая сумма заказа некорректна", summ == stringIntoInt(totalPrice.substring(0, totalPrice.length()-1)));
     }
+
+
 
 }

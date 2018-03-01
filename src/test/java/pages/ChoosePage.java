@@ -9,6 +9,7 @@ import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.url;
 import static config.Values.pnr;
+import static org.testng.AssertJUnit.assertTrue;
 
 
 /**
@@ -27,12 +28,26 @@ public class ChoosePage extends Page {
         clickEnvironment();
     }
 
+    @Step("Действие 13, выбор стенда")
+    public void step13() {
+        checkChoosePage();
+        System.out.println("URL = " + url());
+        clickEnvironment();
+        checkEprPageAppear();
+    }
+
     @Step("Подождать страницу выбора стенда")
     private void checkChoosePage(){
         $("h1").shouldBe(exactText("Вход в тестовую среду системы ЕПР"));
         int start = url().indexOf("&PNR") + 5;
         pnr = url().substring(start, start + 6);
         System.out.println("PNR = " + pnr);
+    }
+
+    @Step("Проверить переход на платёжную страницу ЕПР")
+    private void checkEprPageAppear(){
+        String epr = "https://pay.test.aeroflot.ru/test-" + env.toLowerCase() + "/aeropayment/epr/payment2.html";
+        assertTrue("URL платежной страницы ЕПР не соответствует эталону", url().contains(epr));
     }
 
     @Step("Выбрать стенд")
