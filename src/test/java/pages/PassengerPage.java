@@ -4,9 +4,12 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import config.Values;
 import ru.yandex.qatools.allure.annotations.Step;
+import struct.Passenger;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.visible;
@@ -19,8 +22,10 @@ import static com.codeborne.selenide.Selenide.$$;
  */
 public class PassengerPage extends Page {
 
+    List<Passenger> passengerList = new ArrayList<Passenger>();
+
     @Step("Действие 3, информация о пассажирах")
-    public void step3() {
+    public List<Passenger> step3() {
         checkPageAppear();
         ElementsCollection cards = $$(byXpath("//div[@class='passenger-card']"));
         int count = getPassengersCount();
@@ -29,6 +34,7 @@ public class PassengerPage extends Page {
         setPhone();
         setTerms();
         clickContinueButton();
+        return passengerList;
     }
 
     private void checkPageAppear(){
@@ -49,44 +55,56 @@ public class PassengerPage extends Page {
 
     @Step("Заполнить данные для {1}-го пассажира")
     private void fillPassengerData(SelenideElement card, int i){
-        setRandomGender(card);
-        setRandomLastName(card);
-        setRandomFirstName(card);
-        setDOB(card, i);
-        setRandomNumber(card);
+        Passenger p = new Passenger();
+        p.gender = setRandomGender(card);
+        p.lastname = setRandomLastName(card);
+        p.firstname = setRandomFirstName(card);
+        p.dob = setDOB(card, i);
+        p.number = setRandomNumber(card);
         clickUnlimitedLink(card);
+        passengerList.add(p);
     }
 
     @Step("Указать пол")
-    private void setRandomGender(SelenideElement card){
+    private int setRandomGender(SelenideElement card){
         ElementsCollection gender = card.$$(byXpath("descendant::div[@class='passenger-card__gender']/a"));
-        gender.get(getRandomNumberLimit(gender.size())).click();
+        int g = getRandomNumberLimit(gender.size());
+        gender.get(g).click();
+        return g;
     }
 
     @Step("Указать фамилию")
-    private void setRandomLastName(SelenideElement card){
-        card.$$(byXpath("descendant::input[@type='text']")).get(0).setValue(getRandomString(8));
+    private String setRandomLastName(SelenideElement card){
+        String lastName = getRandomString(8);
+        card.$$(byXpath("descendant::input[@type='text']")).get(0).setValue(lastName);
+        return lastName;
     }
 
     @Step("Указать имя")
-    private void setRandomFirstName(SelenideElement card){
-        card.$$(byXpath("descendant::input[@type='text']")).get(1).setValue(getRandomString(4));
+    private String setRandomFirstName(SelenideElement card){
+        String firstName = getRandomString(4);
+        card.$$(byXpath("descendant::input[@type='text']")).get(1).setValue(firstName);
+        return firstName;
     }
 
     @Step("Указать день рождения")
-    private void setDOB(SelenideElement card, int i){
+    private String setDOB(SelenideElement card, int i){
         int delta=0;
         if (i == 1) delta = -438;
         if (i == 2) delta = -415;
         if (i == 3) delta = -66;
         if (i == 4) delta = -100;
         if (i == 5) delta = -8;
-        card.$$(byXpath("descendant::input[@type='text']")).get(3).setValue(addMonthsFromToday(delta));
+        String dob = addMonthsFromToday(delta);
+        card.$$(byXpath("descendant::input[@type='text']")).get(3).setValue(dob);
+        return dob;
     }
 
     @Step("Указать номер")
-    private void setRandomNumber(SelenideElement card){
-        card.$$(byXpath("descendant::input[@type='text']")).get(4).setValue(getRandomNumberString(6));
+    private String setRandomNumber(SelenideElement card){
+        String number = getRandomNumberString(6);
+        card.$$(byXpath("descendant::input[@type='text']")).get(4).setValue(number);
+        return number;
     }
 
     @Step("Кликнуть \"Бессрочно\"")
@@ -102,8 +120,9 @@ public class PassengerPage extends Page {
 
     @Step("Указать телефон")
     private void setPhone(){
+        String phone = getRandomNumberString(10);
         SelenideElement block = $(byXpath("//div[contains(@class,'--icon-contacts')]/following-sibling::div"));
-        block.$$(byXpath("descendant::input[@type='text']")).get(1).setValue(getRandomNumberString(10));
+        block.$$(byXpath("descendant::input[@type='text']")).get(1).setValue(phone);
     }
 
     @Step("Согласиться с правилами")

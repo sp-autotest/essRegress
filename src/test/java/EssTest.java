@@ -14,6 +14,8 @@ import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
 import soap.SoapRequest;
 import struct.Flight;
+import struct.Passenger;
+
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -114,7 +116,7 @@ public class EssTest {
         SearchPage searchPg = new SearchPage();
         searchPg.step1();
         List<Flight> flightList = searchPg.step2();
-        new PassengerPage().step3();
+        List<Passenger> passList = new PassengerPage().step3();
         new PlacePage().clickPay();
         ChoosePage choosePg = new ChoosePage();
         choosePg.step4(currency);
@@ -128,6 +130,8 @@ public class EssTest {
         transportPg.step11();
         transportPg.step12();
         choosePg.step13();
+        new EprPage().step14(flightList, passList);
+
     }
 
 }

@@ -2,7 +2,12 @@ package pages;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import config.Values;
+import org.openqa.selenium.interactions.Actions;
 import ru.yandex.qatools.allure.annotations.Step;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 import static com.codeborne.selenide.Condition.enabled;
 import static com.codeborne.selenide.Condition.exactText;
@@ -10,6 +15,7 @@ import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
+import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static config.Values.ln;
 import static config.Values.text;
 import static org.testng.AssertJUnit.assertTrue;
@@ -19,7 +25,6 @@ import static org.testng.AssertJUnit.assertTrue;
  */
 public class TransportPage extends Page {
     int allPrice = 0;
-    String allEuroPrice = "";
 
     @Step("Действие 10, Нажать на кнопку «Транспорт»")
     public void step10() {
@@ -36,7 +41,7 @@ public class TransportPage extends Page {
         addInsurance();
         checkAllPrice(getInsurancePrice(), beforePrice, getCarPrice());
         allPrice = getAllCarPrice();
-        allEuroPrice = getEuroAllCarPrice();
+        Values.price.transport = getEuroAllCarPrice();
         clickRentButton();
         checkTranspotrPriceInCard();
         checkRentButtonName();
@@ -44,6 +49,7 @@ public class TransportPage extends Page {
         checkTimeButton();
         checkInsuranceButton();
         checkTotalPrices();
+        saveTransportData();
     }
 
     @Step("Действие 12, Нажать Оплатить в корзине")
@@ -173,6 +179,10 @@ public class TransportPage extends Page {
         String itemPrice;
         String flyPrice = $(byXpath("//div[@class='cart__item-price']")).getText().replace(" ", "");
         int summ = stringIntoInt(flyPrice.substring(0, flyPrice.length()-1));
+
+        Actions actions = new Actions(getWebDriver());
+        actions.moveToElement($("#left-column-insurance-block").toWebElement(),1,1).build().perform();
+        Sleep(1);
         ElementsCollection items = $("#left-column-insurance-block").$$(byXpath("descendant::div[@class='cart__item-priceondemand-item-price']"));
         for (int i=0; i<items.size(); i++) {
             itemPrice = items.get(i).getText().replace(" ", "");
@@ -183,6 +193,28 @@ public class TransportPage extends Page {
         String totalPrice = $("#cart-total-incarts").$(byXpath("descendant::div[@class='cart__item-price']")).getText().replace(" ", "");
         System.out.println("Total price = " + totalPrice);
         assertTrue("Общая сумма заказа некорректна", summ == stringIntoInt(totalPrice.substring(0, totalPrice.length()-1)));
+    }
+
+    private void saveTransportData(){
+        Values.auto.name = $(byXpath("//div[@class='auto-card__title']")).getText();
+        System.out.println("Auto = " + Values.auto.name);
+        ElementsCollection ec = $$(byXpath("//div[@class='auto-selected__rent-element-text']"));
+        for(int i = 0; i<ec.size(); i++) System.out.println("Auto = " + ec.get(i).getText());
+        Values.auto.receiveLocation = ec.get(0).getText();
+        String receiveDate = ec.get(1).getText() + ec.get(2).getText();
+        try {
+            Values.auto.receiveDate = new SimpleDateFormat("dd.MM.yyyyHH:mm").parse(receiveDate);
+        }catch (ParseException e) {
+            System.out.println("Parsing date error");
+        }
+        Values.auto.returnLocation = ec.get(3).getText();
+        String returnDate = ec.get(4).getText() + ec.get(5).getText();
+        try {
+            Values.auto.returnDate = new SimpleDateFormat("dd.MM.yyyyHH:mm").parse(returnDate);
+        }catch (ParseException e) {
+            System.out.println("Parsing date error");
+        }
+
     }
 
 }

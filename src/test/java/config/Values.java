@@ -1,14 +1,19 @@
 package config;
 
+import struct.Auto;
+import struct.Price;
+
 /**
  * Created by mycola on 20.02.2018.
  */
 public class Values {
 
-    public static String pnr = null;
-    public static String price = null;
     public static int ln = 0;
     public static int ticket;
+    public static String pnr = null;
+    public static Price price = new Price();
+    public static Auto auto = new Auto();
+
     public static String email = "tafl@software-provider.ru";
     public static String host = "https://afl-test.test.aeroflot.ru/sb/app/ru-ru";
 

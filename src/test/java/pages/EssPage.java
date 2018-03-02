@@ -127,7 +127,7 @@ public class EssPage extends Page {
     @Step("Проверка данных о стоимости")
     private void checkPriceData(){
         String price = $(byXpath("//div[@class='cart__item-price']")).getText().replace(" ", "");
-        assertTrue("Стоимость не совпадает c указанной при бронировании", price.equals(Values.price));
+        assertTrue("Стоимость не совпадает c указанной при бронировании", price.equals(Values.price.fly));
     }
 
     @Step("Проверка данных о {0}-м маршруте")
@@ -177,7 +177,8 @@ public class EssPage extends Page {
     private  void checkPriceOfFlyInsurance(){
         String summ = $("#left-column-insurance-block").$(byXpath("descendant::" +
                 "div[@class='cart__item-priceondemand-item-price']")).getText().trim();
-        int s = stringIntoInt(summ.substring(0, summ.length()-1).replace(" ", ""));
+        Values.price.iflight = summ.substring(0, summ.length()-1).replace(" ", "");
+        int s = stringIntoInt(Values.price.iflight);
         System.out.println("Summ = " + s);
         String price = $(byXpath("//div[@class='frame__heading frame__heading--icon frame__heading--icon-safe']/span")).getText();
         price = price.substring(0, price.indexOf("a")).trim();
@@ -202,9 +203,10 @@ public class EssPage extends Page {
         String price = $("#medInsTEAM_SPORTS").$(byXpath("descendant::div[@class='tile__price']")).getText();
         SelenideElement p = $(byXpath("//div[@class='cart__item-priceondemand-item-title']" +
                 "[contains(text(),'" + text[4][ln] + "')]")).shouldBe(visible);
-        String leftPrice = p.$(byXpath("following-sibling::div[@class='cart__item-priceondemand-item-price']")).getText().replace(" ", "");
-        System.out.println("Med price = " + leftPrice);
-        assertTrue("Стоимость страхования в корзине не совпадает с указанной в блоке", price.equals(leftPrice));
+        Values.price.imedical = p.$(byXpath("following-sibling::div[@class='cart__item-priceondemand-item-price']")).getText().replace(" ", "");
+        System.out.println("Med price = " + Values.price.imedical);
+        assertTrue("Стоимость страхования в корзине не совпадает с указанной в блоке", price.equals(Values.price.imedical));
+        Values.price.imedical = Values.price.imedical.substring(0, Values.price.imedical.length()-1);
     }
 
     @Step("Проверка кнопки «В заказе»")
