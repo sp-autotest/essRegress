@@ -133,7 +133,8 @@ public class EssTest {
         new EprPage().step14(flightList, passList);
         PaymentPage paymentPg = new PaymentPage();
         paymentPg.step15();
-
+        paymentPg.step16();
+        Sleep(3);
 
     }
 

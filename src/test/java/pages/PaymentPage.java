@@ -2,7 +2,6 @@ package pages;
 
 import config.Values;
 import ru.yandex.qatools.allure.annotations.Step;
-
 import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
 import static org.testng.AssertJUnit.assertTrue;
@@ -17,6 +16,16 @@ public class PaymentPage extends Page {
         new EprPage().clickPayButton();
         checkTotalPrice();
         checkTransportPrice();
+    }
+
+    @Step("Действие 16, ввод реквизитов карточки и оплата")
+    public void step16() {
+        setPan();
+        setOwner();
+        setMonth();
+        setYear();
+        setCVC();
+        clickPayButton();
     }
 
     @Step("Проверка стоимости на оплату(без аренды авто)")
@@ -48,6 +57,36 @@ public class PaymentPage extends Page {
         comment = comment.substring(0, comment.length()-1).replace(".", ",");
         System.out.println(comment);
         assertTrue("Стоимость аренды авто в комментарии некорректна", comment.equals(Values.price.transport));
+    }
+
+    @Step("Заполнить поле \"Номер карты\"")
+    private void setPan() {
+        $("#pan_main").setValue(Values.card[0][0]);
+    }
+
+    @Step("Заполнить поле \"Владелец карты\"")
+    private void setOwner() {
+        $("#cardholder_main").setValue(Values.card[0][4]);
+    }
+
+    @Step("Заполнить поле \"Месяц\"")
+    private void setMonth() {
+        $("#exp_month_main").selectOptionByValue(Values.card[0][1]);
+    }
+
+    @Step("Заполнить поле \"Год\"")
+    private void setYear() {
+        $("#exp_year_main").selectOptionByValue(Values.card[0][2]);
+    }
+
+    @Step("Заполнить поле \"CVC\"")
+    private void setCVC() {
+        $("#cvc_main").setValue(Values.card[0][3]);
+    }
+
+    @Step("Нажать кнопку \"Заплатить\"")
+    private void clickPayButton() {
+        $("#cardButton").click();
     }
 
 
