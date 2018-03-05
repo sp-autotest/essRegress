@@ -131,6 +131,9 @@ public class EssTest {
         transportPg.step12();
         choosePg.step13();
         new EprPage().step14(flightList, passList);
+        PaymentPage paymentPg = new PaymentPage();
+        paymentPg.step15();
+
 
     }
 

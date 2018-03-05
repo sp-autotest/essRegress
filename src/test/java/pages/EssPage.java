@@ -230,7 +230,8 @@ public class EssPage extends Page {
         Sleep(3);
         String totalPrice = $("#cart-total-incarts").$(byXpath("descendant::div[@class='cart__item-price']")).getText().replace(" ", "");
         System.out.println("Total price = " + totalPrice);
-        assertTrue("Общая сумма заказа некорректна", summ == stringIntoInt(totalPrice.substring(0, totalPrice.length()-1)));
+        Values.price.total = totalPrice.substring(0, totalPrice.length()-1);
+        assertTrue("Общая сумма заказа некорректна", summ == stringIntoInt(Values.price.total));
     }
 
     @Step("Нажать кнопку «Транспорт»")
