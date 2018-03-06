@@ -115,10 +115,8 @@ public class ResultPage extends Page {
 
         ElementsCollection docs = row.$$(byXpath("child::div[5]/div/a"));
         System.out.println("docs = " + docs.size());
-        assertTrue("Количество приложенных документов не соответствует количеству пассажиров", docs.size() == ticket);
-        for (int i=0; i<docs.size(); i++) {
-            assertTrue("Название ваучера некорректно", docs.get(i).getText().contains(text[15][ln]));
-        }
+        assertTrue("Количество приложенных документов не один", docs.size() == 1);
+        assertTrue("Название ваучера некорректно", docs.get(0).getText().contains(text[15][ln]));
     }
 
     @Step("Проверка оплаченной стоимости (без транспорта)")
