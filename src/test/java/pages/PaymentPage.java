@@ -2,8 +2,10 @@ package pages;
 
 import config.Values;
 import ru.yandex.qatools.allure.annotations.Step;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
+import static config.Values.ln;
 import static org.testng.AssertJUnit.assertTrue;
 
 /**
@@ -26,6 +28,7 @@ public class PaymentPage extends Page {
         setYear();
         setCVC();
         clickPayButton();
+        checkPaySuccessfull();
     }
 
     @Step("Проверка стоимости на оплату(без аренды авто)")
@@ -88,6 +91,14 @@ public class PaymentPage extends Page {
     private void clickPayButton() {
         $("#cardButton").click();
     }
+
+    @Step("Проверить сообщение об успешной оплате")
+    private void checkPaySuccessfull() {
+        String text = $(byXpath("//div[contains(@translate,'paymentSuccessful')]")).shouldBe(visible).getText();
+        System.out.println("SUCCESS = " + text);
+        assertTrue("Сообщение об успешной оплате отсутствует", text.equals(Values.text[11][ln]));
+    }
+
 
 
 }

@@ -134,8 +134,7 @@ public class EssTest {
         PaymentPage paymentPg = new PaymentPage();
         paymentPg.step15();
         paymentPg.step16();
-        Sleep(3);
-
+        new ResultPage().step17();
     }
 
 }

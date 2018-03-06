@@ -138,7 +138,7 @@ public class EprPage extends Page {
         assertTrue("Общая стоимость всех страховок некорректна", stringIntoInt(price) == allPrice);
     }
 
-        @Step("Проверка данных транспортной услуги")
+    @Step("Проверка данных транспортной услуги")
     public void checkTransport(){
         SelenideElement row = $(byXpath("//div[@data-toggle-id='toggle-TRANSPORT']"));
         String name = row.$(byXpath("descendant::div[@ng-bind='item.details.carName']")).getText();
