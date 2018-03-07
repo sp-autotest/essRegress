@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
@@ -58,6 +59,9 @@ public class SearchPage extends Page {
 
     @Step("Выбрать язык: {0}")
     private void selectLocale() {
+        if (getWebDriver().manage().window().getSize().getWidth() < 1280) {
+            $(byXpath("//div[@class='header__menu-icon']/..")).shouldBe(visible).click();
+        }
         $(byXpath("//div[@class='header__select-items']")).shouldBe(visible).click();
         $(byXpath("//div[text()='" + lang[ln][1] + "']")).shouldBe(visible).click();
     }

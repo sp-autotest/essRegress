@@ -130,7 +130,9 @@ public class EssPage extends Page {
     @Step("Проверка данных о стоимости")
     private void checkPriceData(){
         String price = $(byXpath("//div[@class='cart__item-price']")).getText().replace(" ", "");
-        assertTrue("Стоимость не совпадает c указанной при бронировании", price.equals(Values.price.fly));
+        assertTrue("Стоимость не совпадает c указанной при бронировании" +
+                "\nОжидалось: " + Values.price.fly +"\nФактически: " + price,
+                price.equals(Values.price.fly));
     }
 
     @Step("Проверка данных о {0}-м маршруте")
