@@ -1,12 +1,15 @@
 package pages;
 
+import com.codeborne.selenide.ElementsCollection;
 import config.Values;
 import ru.yandex.qatools.allure.annotations.Step;
 import soap.SoapRequest;
 
 import static com.codeborne.selenide.Condition.exactText;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.WebDriverRunner.url;
 import static config.Values.pnr;
 import static org.testng.AssertJUnit.assertTrue;
@@ -52,9 +55,8 @@ public class ChoosePage extends Page {
 
     @Step("Выбрать стенд")
     private void clickEnvironment() {
-        $(byXpath("//div[contains(text(),'Cтенд ЕПР TEST-RC (realease candidate) с перенаправлением на витрину ESS')]")).click();
-        //временно, нужно решить проблему с <BR> в тексте
-        //$(byXpath("//span[contains(text(),'TEST-RC')][contains(text(),'ESS')]")).shouldBe(visible).click();
+        ElementsCollection buttons = $$(byXpath("//span[text()='TEST-" + env + "']"));
+        buttons.get(1).click();
         waitPlane();
     }
 

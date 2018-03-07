@@ -67,9 +67,6 @@ public class EssPage extends Page {
 
     private void checkPageAppear(){
         $(byXpath("//div[@class='cart__item-title']")).shouldBe(visible).shouldBe(text(pnr)).click();
-        Actions actions = new Actions(getWebDriver());
-        actions.moveToElement($(byXpath("//div[@class='img header__logo']")).toWebElement(),1,1).build().perform();
-        Sleep(1);
     }
 
     @Step("Маршрут")
@@ -124,9 +121,10 @@ public class EssPage extends Page {
 
     @Step("Таймер")
     private void checkTimer(){
-        //$("#left-column-insurance-block").click();
+        Actions actions = new Actions(getWebDriver());
+        actions.moveToElement($(byXpath("//div[@class='img header__logo']")).toWebElement(),1,1).build().perform();
+        Sleep(1);
         $(byXpath("//div[@class='cart__item-counter-time']")).shouldBe(visible);
-        //$(byXpath("//div[@class='cart__item-title']")).shouldBe(text(pnr)).click();
     }
 
     @Step("Проверка данных о стоимости")
