@@ -121,9 +121,9 @@ public class EssPage extends Page {
 
     @Step("Таймер")
     private void checkTimer(){
-        Actions actions = new Actions(getWebDriver());
+        /*Actions actions = new Actions(getWebDriver());
         actions.moveToElement($(byXpath("//div[@class='img header__logo']")).toWebElement(),1,1).build().perform();
-        Sleep(1);
+        Sleep(1);*/
         $(byXpath("//div[@class='cart__item-counter-time']")).shouldBe(visible);
     }
 
