@@ -3,6 +3,7 @@ package pages;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import config.Values;
+import org.openqa.selenium.interactions.Actions;
 import ru.yandex.qatools.allure.annotations.Step;
 import struct.Flight;
 import java.text.SimpleDateFormat;
@@ -12,6 +13,7 @@ import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
+import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static config.Values.*;
 import static org.testng.AssertJUnit.assertTrue;
 
@@ -65,6 +67,9 @@ public class EssPage extends Page {
 
     private void checkPageAppear(){
         $(byXpath("//div[@class='cart__item-title']")).shouldBe(visible).shouldBe(text(pnr)).click();
+        Actions actions = new Actions(getWebDriver());
+        actions.moveToElement($(byXpath("//div[@class='img header__logo']")).toWebElement(),1,1).build().perform();
+        Sleep(1);
     }
 
     @Step("Маршрут")

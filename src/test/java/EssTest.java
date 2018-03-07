@@ -7,6 +7,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.opera.OperaDriver;
+import org.openqa.selenium.opera.OperaOptions;
 import org.testng.annotations.*;
 import pages.*;
 import ru.yandex.qatools.allure.annotations.Description;
@@ -63,6 +65,11 @@ public class EssTest {
                 break;
             case "ie":
                 myWebDriver = new InternetExplorerDriver();
+                break;
+            case "opera":
+                OperaOptions oOptions = new OperaOptions();
+                oOptions.setBinary("C:\\Program Files\\Opera\\launcher.exe");
+                myWebDriver = new OperaDriver(oOptions);
                 break;
         }
 
