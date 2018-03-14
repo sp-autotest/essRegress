@@ -24,10 +24,10 @@ public class ChoosePage extends Page {
 
 
     @Step("Действие 4, выбор стенда")
-    public void step4(String currency) {
+    public void step4() {
         checkChoosePage();
         System.out.println("URL = " + url());
-        //if (!currency.equals("RUB")) changeCurrency(currency);
+        if (!Values.cur.equals("RUB")) changeCurrency();
         clickEnvironment();
     }
 
@@ -60,10 +60,9 @@ public class ChoosePage extends Page {
         waitPlane();
     }
 
-    @Step("Смена валюты")
-    private void changeCurrency(String currency) {
+    @Step("Действие 5, смена валюты")
+    private void changeCurrency() {
         new SoapRequest().changeCurrency();
-
     }
 
 

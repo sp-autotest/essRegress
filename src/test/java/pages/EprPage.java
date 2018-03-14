@@ -27,18 +27,20 @@ public class EprPage extends Page {
 
     @Step("Действие 14, проверка данных на странице оплаты")
     public void step14(List<Flight> flyList, List<Passenger> passList) {
-
+        screenShot("Скриншот");
         ElementsCollection passengers = $$(byXpath("//div[contains(@ng-repeat,'passenger')]"));
         for (int i = 0; i < passengers.size(); i++) {
             checkPassengerName(i + 1, passList.get(i), passengers.get(i));
         }
 
         ElementsCollection flights = $$(byXpath("//div[@class='flight__row']"));
+        flights.get(0).scrollTo();
+        screenShot("Скриншот");
         for (int i = 0; i < flights.size(); i++) {
             checkFlight(i + 1, flyList.get(i), flights.get(i));
         }
-
         checkFlyInsurance(passList);
+        screenShot("Скриншот");
         checkMedicalInsurance(passList);
         checkAllInsurancePrice();
         checkTransport();
@@ -100,9 +102,9 @@ public class EprPage extends Page {
     @Step("Проверка полетной страховки")
     public void checkFlyInsurance(List<Passenger> passList){
         SelenideElement row = $(byXpath("//div[@data-toggle-id='toggle-safe']/descendant::div[@role='row'][1]"));
+        row.scrollTo();
         String insurance = row.getText();
-        String price = row.$(byXpath("descendant::span[contains(@class,'__item-price')]")).getText().replace(" ", "");
-        price = price.substring(0, price.length()-1);
+        String price = row.$(byXpath("descendant::span[contains(@class,'__item-price')]")).getText().replaceAll("\\D+","");
         System.out.println("fly insurance = " + price);
         String fullName;
         for (int i=0; i<passList.size(); i++){
@@ -115,9 +117,9 @@ public class EprPage extends Page {
     @Step("Проверка медицинской страховки")
     public void checkMedicalInsurance(List<Passenger> passList){
         SelenideElement row = $(byXpath("//div[@data-toggle-id='toggle-safe']/descendant::div[@role='row'][2]"));
+        row.scrollTo();
         String insurance = row.getText();
-        String price = row.$(byXpath("descendant::span[contains(@class,'__item-price')]")).getText().replace(" ", "");
-        price = price.substring(0, price.length()-1);
+        String price = row.$(byXpath("descendant::span[contains(@class,'__item-price')]")).getText().replaceAll("\\D+","");
         System.out.println("med insurance = " + price);
         String fullName;
         for (int i=0; i<passList.size(); i++){
@@ -131,8 +133,7 @@ public class EprPage extends Page {
     @Step("Проверка общей стоимости всех страховок")
     public void checkAllInsurancePrice() {
         String price = $(byXpath("//div[@data-toggle-id='toggle-safe']/descendant::" +
-                "div[@class='checkout-item__left-container']")).getText().replace(" ", "");
-        price = price.substring(0, price.length()-1);
+                "div[@class='checkout-item__left-container']")).getText().replaceAll("\\D+","");
         System.out.println("all insurances= " + price);
         int allPrice = stringIntoInt(Values.price.iflight) + stringIntoInt(Values.price.imedical);
         assertTrue("Общая стоимость всех страховок некорректна", stringIntoInt(price) == allPrice);
@@ -141,6 +142,7 @@ public class EprPage extends Page {
     @Step("Проверка данных транспортной услуги")
     public void checkTransport(){
         SelenideElement row = $(byXpath("//div[@data-toggle-id='toggle-TRANSPORT']"));
+        row.scrollTo();
         String name = row.$(byXpath("descendant::div[@ng-bind='item.details.carName']")).getText();
         System.out.println(name);
         assertTrue("Название авто отличается от забронированного", Values.auto.name.equals(name));
@@ -163,10 +165,9 @@ public class EprPage extends Page {
         System.out.println(returnDate);
         assertTrue("Дата возврата отличается от забронированной", Values.auto.returnDate.equals(stringToDate(returnDate)));
 
-        String price = row.$(byXpath("descendant::span[contains(@class,'__item-price')]")).getText().replace(" ", "");
-        price = price.substring(0, price.length()-1);
+        String price = row.$(byXpath("descendant::span[contains(@class,'__item-price')]")).getText().replaceAll("\\D+","");
         System.out.println(price);
-        assertTrue("Стоимость аренды автомобиля отличается от забронированной", Values.price.transport.equals(price.replace(".",",")));
+        assertTrue("Стоимость аренды автомобиля отличается от забронированной", Values.price.transport.equals(price));
     }
 
     private Date stringToDate(String d) {

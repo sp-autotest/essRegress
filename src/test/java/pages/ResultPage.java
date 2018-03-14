@@ -31,8 +31,11 @@ public class ResultPage extends Page {
     public void step17() {
         checkPageAppear();
         ElementsCollection services = $$(byXpath("//div[@id='frame-additionalServices']/descendant::div[@role='row']"));
+        services.get(0).scrollTo();
         checkFlyInsurance(services.get(0));
+        services.get(1).scrollTo();
         checkMedicalInsurance(services.get(1));
+        services.get(2).scrollTo();
         checkTransport(services.get(2));
         checkTotalPrice();
     }
@@ -46,16 +49,19 @@ public class ResultPage extends Page {
 
     @Step("Проверка полетной страховки")
     public void checkFlyInsurance(SelenideElement row){
-        String passengers = row.$(byXpath("child::div[2]")).getText().replaceAll("\\D+","");
+        ElementsCollection docs = row.$$(byXpath("child::div[4]/div/a"));
+        for (int i=0; i<docs.size(); i++) {
+            Values.docs = Values.docs + docs.get(i).getText() + ", ";
+        }
+        String passengers = row.$(byXpath("child::div[2]")).scrollTo().getText().replaceAll("\\D+","");
         System.out.println("passengers = " + passengers);
         assertTrue("Количество пассажиров в полетной страховке отличается от количества билетов", ticket == stringIntoInt(passengers));
 
         String price = row.$(byXpath("child::div[3]")).getText().replaceAll("\\D+","");
-        price = price.substring(0, price.length()-2);
+        if (Values.cur.equals("RUB")) price = price.substring(0, price.length()-2);
         System.out.println("fly insurance = " + price);
         assertTrue("Стоимость полетной страховки отличается от забронированной", Values.price.iflight.equals(price));
 
-        ElementsCollection docs = row.$$(byXpath("child::div[4]/div/a"));
         System.out.println("docs = " + docs.size());
         assertTrue("Количество приложенных документов не соответствует количеству пассажиров", docs.size() == ticket*2);
         for (int i=0; i<docs.size(); i=i+2) {
@@ -66,16 +72,19 @@ public class ResultPage extends Page {
 
     @Step("Проверка медицинской страховки")
     public void checkMedicalInsurance(SelenideElement row){
+        ElementsCollection docs = row.$$(byXpath("child::div[4]/div/a"));
+        for (int i=0; i<docs.size(); i++) {
+            Values.docs = Values.docs + docs.get(i).getText() + ", ";
+        }
         String passengers = row.$(byXpath("child::div[2]")).getText().replaceAll("\\D+","");
         System.out.println("passengers = " + passengers);
         assertTrue("Количество пассажиров в медицинской страховке отличается от количества билетов", ticket == stringIntoInt(passengers));
 
         String price = row.$(byXpath("child::div[3]")).getText().replaceAll("\\D+","");
-        price = price.substring(0, price.length()-2);
+        if (Values.cur.equals("RUB")) price = price.substring(0, price.length()-2);
         System.out.println("med insurance = " + price);
         assertTrue("Стоимость медицинской страховки отличается от забронированной", Values.price.imedical.equals(price));
 
-        ElementsCollection docs = row.$$(byXpath("child::div[4]/div/a"));
         System.out.println("docs = " + docs.size());
         assertTrue("Количество приложенных документов не соответствует количеству пассажиров", docs.size() == ticket*2);
         for (int i=0; i<docs.size(); i=i+2) {
@@ -86,6 +95,10 @@ public class ResultPage extends Page {
 
     @Step("Проверка транспортной услуги")
     public void checkTransport(SelenideElement row){
+        ElementsCollection docs = row.$$(byXpath("child::div[5]/div/a"));
+        for (int i=0; i<docs.size(); i++) {
+            Values.docs = Values.docs + docs.get(i).getText() + ", ";
+        }
         String name = row.$(byXpath("child::div[1]")).getText();
         System.out.println("Auto = " + name);
         assertTrue("Название авто отличается от забронированного", auto.name.equals(name));
@@ -109,11 +122,10 @@ public class ResultPage extends Page {
         assertTrue("Дата возврата отличается от забронированной", auto.returnDate.equals(stringToDate(returnDate)));
 
         String price = row.$(byXpath("child::div[4]")).getText().replaceAll("\\D+","");
-        price = price.substring(0, price.length()-2);
+        if (Values.cur.equals("RUB")) price = price.substring(0, price.length()-2);
         System.out.println("Auto = " + price);
         assertTrue("Стоимость аренды автомобиля отличается от забронированной", Values.price.nationalTransport.equals(price));
 
-        ElementsCollection docs = row.$$(byXpath("child::div[5]/div/a"));
         System.out.println("docs = " + docs.size());
         assertTrue("Количество приложенных документов не один", docs.size() == 1);
         assertTrue("Название ваучера некорректно", docs.get(0).getText().contains(text[15][ln]));
@@ -122,8 +134,8 @@ public class ResultPage extends Page {
     @Step("Проверка оплаченной стоимости (без транспорта)")
     private void checkTotalPrice(){
         ElementsCollection texts= $$(byXpath("//div[@class='col--16 col--stack-below-mobile']"));
-        String totalPrice = texts.get(1).getText().replaceAll("\\D+","");
-        totalPrice = totalPrice.substring(0, totalPrice.length()-2);
+        String totalPrice = texts.get(1).scrollTo().getText().replaceAll("\\D+","");
+        if (Values.cur.equals("RUB")) totalPrice = totalPrice.substring(0, totalPrice.length()-2);
         System.out.println("Total price = " + totalPrice);
         assertTrue("Оплаченная стоимость не совпадает с забронированной", Values.price.total.equals(totalPrice));
     }

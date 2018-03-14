@@ -166,7 +166,7 @@ public class SearchPage extends Page {
     }
 
     private void saveFlightData() {
-        Values.price.fly = $(byXpath("//div[@class='cart__item-price js-popover']")).getText().replace(" ", "");
+        Values.price.fly = $(byXpath("//div[@class='cart__item-price js-popover']")).getText().replaceAll("\\D+","");
         Flight f;
         String d;
         ElementsCollection groups = $$(byXpath("//div[@class='flight-search flight-search--active']"));

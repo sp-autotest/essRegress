@@ -45,11 +45,11 @@ public class PassengerPage extends Page {
         return $$(byXpath("//div[@class='passenger-card']")).size();
     }
 
-    private static String addMonthsFromToday(int monts)
+    private static String addMonthsFromToday(int months)
     {
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
-        cal.add(Calendar.MONTH, monts);
+        cal.add(Calendar.MONTH, months);
         return new java.text.SimpleDateFormat("ddMMyyyy").format(cal.getTime());
     }
 

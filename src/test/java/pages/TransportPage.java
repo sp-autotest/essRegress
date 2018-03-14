@@ -25,12 +25,12 @@ import static org.testng.AssertJUnit.assertTrue;
  * Created by mycola on 28.02.2018.
  */
 public class TransportPage extends Page {
-    //int allPrice = 0;
 
     @Step("Действие 10, Нажать на кнопку «Транспорт»")
     public void step10() {
         new EssPage().clickTransportButton();
         checkTransportBlock();
+        screenShot("Скриншот");
         checkCarFilter();
         checkSelectedCars();
     }
@@ -38,12 +38,15 @@ public class TransportPage extends Page {
     @Step("Действие 11, Арендовать автомобиль")
     public void step11() {
         selectCar();
+        screenShot("Скриншот");
         int beforePrice = getCarPrice();
         addInsurance();
+        screenShot("Скриншот");
         checkAllPrice(getInsurancePrice(), beforePrice, getCarPrice());
         price.nationalTransport = getAllCarPrice();
         price.transport = getEuroAllCarPrice();
         clickRentButton();
+        screenShot("Скриншот");
         checkTranspotrPriceInCard();
         checkRentButtonName();
         checkOptionsButton();
@@ -63,7 +66,7 @@ public class TransportPage extends Page {
     private void checkTransportBlock(){
         $(byXpath("//div[@id='left-column-transport'][contains(@class,'--active')]")).
                 shouldBe(visible).shouldBe(exactText(text[2][ln]));
-        $("#frame-cars").shouldBe(visible);
+        $("#frame-cars").shouldBe(visible).scrollTo();
     }
 
     @Step("Проверка наличия фильтра для поиска автомобиля")
@@ -95,7 +98,6 @@ public class TransportPage extends Page {
     @Step("Выбрать автомобиль")
     private void selectCar(){
         Sleep(1);
-        //ElementsCollection cars = $$(byXpath("//a[@class='auto-card__img ']"));
         ElementsCollection cars = $$(byXpath("//a[@class='auto-card__button']"));
         for (int i=0; i<cars.size(); i++) {
             if (cars.get(i).isDisplayed()){
@@ -107,7 +109,9 @@ public class TransportPage extends Page {
 
     @Step("Добавить страховку SPCDW")
     private void addInsurance(){
-        $("#insurance-options-SPCDW").$(byXpath("descendant::div[@class='_button-group']")).click();
+        SelenideElement ins = $("#insurance-options-SPCDW");
+        ins.scrollTo();
+        ins.$(byXpath("descendant::div[@class='_button-group']")).click();
     }
 
     @Step("Нажать кнопку «Арендовать»")
@@ -140,62 +144,69 @@ public class TransportPage extends Page {
     }
 
     private int getInsurancePrice(){
-        String p = $("#insurance-options-SPCDW").$(byXpath("descendant::div[@class='tile__price']")).getText();
-        p = p.substring(0, p.length()-1);
+        String p = $("#insurance-options-SPCDW").$(byXpath("descendant::div[@class='tile__price']")).getText().replaceAll("\\D+","");
         System.out.println("Car insurence price ="+p);
         return stringIntoInt(p);
     }
 
     private int getCarPrice(){
-        String p = $(byXpath("//div[@id='button_down_price']/itm")).getText().replace(" ", "");
+        String p = $(byXpath("//div[@id='button_down_price']/itm")).getText().replaceAll("\\D+","");
         System.out.println("Car price="+p);
         return stringIntoInt(p);
     }
 
     private String getAllCarPrice(){
-        String p = $(byXpath("//div[@id='button_down_allprice']/itm")).getText().replace(" ", "");
+        String p = $(byXpath("//div[@id='button_down_allprice']/itm")).getText().replaceAll("\\D+","");
         System.out.println("All car price ="+p);
         return p;
     }
 
     private String getEuroAllCarPrice(){
-        String p = $(byXpath("//div[@id='button_down_allprice']/span/itmsub")).getText();
+        String p = $(byXpath("//div[@id='button_down_allprice']/span/itmsub")).getText().replaceAll("\\D+","");
         System.out.println("Euro All car price ="+p);
         return p;
     }
 
     @Step("Проверка пересчета стоимости: без доп. услуг {1}, страховка {0}, всего {2}")
     private void checkAllPrice(int insurance, int before, int after){
-        assertTrue("Стоимость пересчитана неверно", after == before + insurance);
+        assertTrue("Стоимость пересчитана неверно\n" +
+                "Ожидалось: " + (before + insurance) +
+                "\nФактически: " + after,
+                after == before + insurance);
     }
 
     @Step("Проверка стоимости аренды автомобиля в корзине")
     private void checkTranspotrPriceInCard() {
-        String leftPrice = $("#left-column-transport").$(byXpath("descendant::div[@class='cart__item-priceondemand-item-price']")).getText().replace(" ", "");
-        leftPrice = leftPrice.substring(0, leftPrice.length()-1);
+        String leftPrice = $("#left-column-transport").$(byXpath("descendant::div[@class='cart__item-priceondemand-item-price']")).getText().replaceAll("\\D+","");
         System.out.println("Transport price = " + leftPrice);
-        assertTrue("Стоимость страхования в корзине не совпадает с указанной в блоке", price.nationalTransport.equals(leftPrice));
+        assertTrue("Стоимость страхования в корзине не совпадает с указанной в блоке" +
+                "\nОжидалось: " + price.nationalTransport +
+                "\nФакически: " + leftPrice,
+                price.nationalTransport.equals(leftPrice));
     }
 
     @Step("Проверка общей суммы заказа (включает в себя стоимость транспортных услуг)")
     private void checkTotalPrices(){
         String itemPrice;
-        String flyPrice = $(byXpath("//div[@class='cart__item-price']")).getText().replace(" ", "");
-        int summ = stringIntoInt(flyPrice.substring(0, flyPrice.length()-1));
-
+        String flyPrice = $(byXpath("//div[@class='cart__item-price']")).getText().replaceAll("\\D+","");
+        int summ = stringIntoInt(flyPrice);
         Actions actions = new Actions(getWebDriver());
         actions.moveToElement($("#left-column-insurance-block").toWebElement(),1,1).build().perform();
         Sleep(1);
         ElementsCollection items = $("#left-column-insurance-block").$$(byXpath("descendant::div[@class='cart__item-priceondemand-item-price']"));
         for (int i=0; i<items.size(); i++) {
-            itemPrice = items.get(i).getText().replace(" ", "");
+            itemPrice = items.get(i).getText().replaceAll("\\D+","");
             System.out.println("Item[" + (i+1) + "] price = " + itemPrice);
-            summ = summ + stringIntoInt(itemPrice.substring(0, itemPrice.length()-1));
+            summ = summ + stringIntoInt(itemPrice);
         }
-        summ = summ + stringIntoInt(price.nationalTransport);
-        String totalPrice = $("#cart-total-incarts").$(byXpath("descendant::div[@class='cart__item-price']")).getText().replace(" ", "");
+        String transportPrice = $("#left-column-transport").$(byXpath("descendant::div[@class='cart__item-priceondemand-item-price']")).getText().replaceAll("\\D+","");
+        summ = summ + stringIntoInt(transportPrice);
+        String totalPrice = $("#cart-total-incarts").$(byXpath("descendant::div[@class='cart__item-price']")).getText().replaceAll("\\D+","");
         System.out.println("Total price = " + totalPrice);
-        assertTrue("Общая сумма заказа некорректна", summ == stringIntoInt(totalPrice.substring(0, totalPrice.length()-1)));
+        assertTrue("Общая сумма заказа некорректна" +
+                "\nОжидалось: " + summ +
+                "\nФактически: " + totalPrice,
+                summ == stringIntoInt(totalPrice));
     }
 
     private void saveTransportData(){

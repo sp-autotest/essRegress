@@ -1,5 +1,6 @@
 package listeners;
 
+import config.Values;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
@@ -7,6 +8,7 @@ import org.testng.ITestResult;
 import java.io.IOException;
 
 import static listeners.ScreenShoter.makeScreenshot;
+import static pages.Page.resultat;
 
 /**
  * Created by mycola on 20.02.2018.
@@ -17,7 +19,9 @@ public class AllureOnEventListener implements ITestListener {
     public void onTestStart(ITestResult result) {}
 
     @Override
-    public void onTestSuccess(ITestResult result) {}
+    public void onTestSuccess(ITestResult result) {
+        resultat();
+    }
 
     @Override
     public void onTestFailure(ITestResult result) {
@@ -26,6 +30,7 @@ public class AllureOnEventListener implements ITestListener {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        resultat();
     }
 
     @Override
@@ -35,6 +40,7 @@ public class AllureOnEventListener implements ITestListener {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        resultat();
     }
 
     @Override
@@ -44,6 +50,7 @@ public class AllureOnEventListener implements ITestListener {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        resultat();
     }
 
     @Override

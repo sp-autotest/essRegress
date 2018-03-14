@@ -11,6 +11,8 @@ public class Values {
     public static int ln = 0;
     public static int ticket;
     public static String pnr = null;
+    public static String cur = null;
+    public static String docs = null;
     public static Price price = new Price();
     public static Auto auto = new Auto();
 
@@ -18,8 +20,8 @@ public class Values {
     public static String host = "https://afl-test.test.aeroflot.ru/sb/app/ru-ru";
 
     public static String card[][] = {
-        //{"4154810047474554", "12", "2019", "314", "TEST TEST"}, //0 - Visa
-        {"2202000000000002", "12", "2019", "123", "TEST TEST"}, //1 - МИР
+        {"4154810047474554", "12", "2019", "314", "TEST TEST"}, //0 - Visa
+        //{"2202000000000002", "12", "2019", "123", "TEST TEST"}, //1 - МИР
     };
 
     public static String lang[][] = {

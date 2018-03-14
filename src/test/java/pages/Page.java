@@ -29,6 +29,29 @@ public class Page {
         }
     }
 
+    @Step("Результат")
+    public static void resultat(){
+        logPNR(Values.pnr);
+        logCardNumber(Values.card[0][0]);
+        logDocuments(Values.docs);
+    }
+
+    @Step("PNR: {0}")
+    public static void logPNR(String pnr){}
+
+    @Step("Номер карты: {0}")
+    public static void logCardNumber(String number){}
+
+    @Step("Документы:")
+    public static void logDocuments(String doc){
+        for (String retval : doc.split(", ")) {
+            logDoc(retval);
+        }
+    }
+
+    @Step("{0}")
+    public static void logDoc(String doc){}
+
     public static String getRandomString(int l) {
         StringBuilder tag = new StringBuilder();
         for (int i = 0; i < l; i++) {

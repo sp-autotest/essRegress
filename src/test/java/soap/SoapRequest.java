@@ -24,8 +24,11 @@ public class SoapRequest {
         try {
 
             callSoapWebService(1);
-            Sleep(1);
             callSoapWebService(2);
+            callSoapWebService(3);
+            callSoapWebService(4);
+            callSoapWebService(5);
+            callSoapWebService(6);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -38,14 +41,19 @@ public class SoapRequest {
         String host = RequestsData.request[n][2];
         String request = RequestsData.request[n][3];
         if (n > 1) {
-            int t = request.indexOf("BinarySecurityToken><");
-            String r1 = request.substring(0, t+20);
-            String r2 = request.substring(t+20);
+            int t = request.indexOf("BinarySecurityToken><")+20;
+            String r1 = request.substring(0, t);
+            String r2 = request.substring(t);
             request = r1.concat(token).concat(r2);
-            //request = request.replaceFirst("BinarySecurityToken><", "BinarySecurityToken>"+token+"<");
+        }
+        if (n == 2) {
+            request = request.replaceFirst(">AAA<", ">AAA" + modifyPCC(Values.cur) + "<");
+        }
+        if (n == 5) {
+            request = request.replaceFirst("HostCommand>", "HostCommand>" + command(Values.cur));
+            //System.out.println(request);
         }
 
-        System.out.println(request);
 
         URL url = null;
         try {
@@ -62,8 +70,9 @@ public class SoapRequest {
         connection.setRequestProperty("Content-Length", String.valueOf(request.length()));
         connection.setRequestProperty("Content-Type", "text/xml;charset=UTF-8");
         connection.setRequestProperty("Connection", "Keep-Alive");
-        connection.setRequestProperty("SoapAction", RequestsData.request[n][1]);
-        //connection.setRequestProperty("User-Agent", "Apache-HttpClient/4.1.1 (java 1.5)");
+        connection.setRequestProperty("host", "sws-crt.cert.sabre.com");
+        connection.setRequestProperty("SOAPAction", RequestsData.request[n][1]);
+        connection.setRequestProperty("User-Agent", "Apache-HttpClient/4.1.1 (java 1.5)");
         connection.setDoOutput(true);
         PrintWriter pw = null;
         try {
@@ -97,7 +106,7 @@ public class SoapRequest {
             e1.printStackTrace();
         }
 
-        System.out.print(n + ". Response SOAP Message");
+        System.out.print(n + ". Response");
         System.out.println(": " + respond);
 
 
@@ -105,9 +114,30 @@ public class SoapRequest {
             Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().
                     parse(new ByteArrayInputStream(respond.getBytes()));
             token = document.getElementsByTagName("wsse:BinarySecurityToken").item(0).getTextContent();
-            System.out.println("BinarySecurityToken = " + token);
+            //System.out.println("BinarySecurityToken = " + token);
         }
     }
 
+    private static String modifyPCC(String cur){
+        String pcc = null;
+        switch (cur) {
+            case "RUB":
+                pcc = "DSU";
+                break;
+            case "EUR":
+                pcc = "UDN";
+                break;
+            case "USD":
+                pcc = "DSV";
+                break;
+            case "JPY":
+                pcc = "DNA";
+                break;
+        }
+        return pcc;
+    }
 
+    private static String command(String cur){
+        return "WPM"+cur+"&#135;N01.01/02.01/03.01/04.01/05.01&#135;P2ADT/2CNN/1INF&#135;RQ";
+    }
 }

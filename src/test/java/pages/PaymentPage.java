@@ -33,13 +33,11 @@ public class PaymentPage extends Page {
 
     @Step("Проверка стоимости на оплату(без аренды авто)")
     private void checkTotalPrice() {
-        String price = $(byXpath("//div[@class='cart__item-price ng-binding']")).getText().replace(" ", "");
-        price = price.substring(0, price.length()-1);
+        String price = $(byXpath("//div[@class='cart__item-price ng-binding']")).getText().replaceAll("\\D+","");
         System.out.println(price);
         assertTrue("Стоимость «К ОПЛАТЕ ВСЕГО» некорректна", price.equals(Values.price.total));
 
-        String now = $(byXpath("//div[contains(@translate,'now2')]/following-sibling::div")).getText().replace(" ", "");
-        now = now.substring(0, now.length()-1);
+        String now = $(byXpath("//div[contains(@translate,'now2')]/following-sibling::div")).getText().replaceAll("\\D+","");
         System.out.println(now);
         assertTrue("Стоимость «К оплате сейчас» некорректна", now.equals(Values.price.total));
 
@@ -50,14 +48,12 @@ public class PaymentPage extends Page {
 
     @Step("Проверка стоимости аренды автомобиля")
     private void checkTransportPrice() {
-        String inplace = $(byXpath("//div[contains(@translate,'onSite')]/following-sibling::div")).getText().replace(" ", "");
-        inplace = inplace.substring(0, inplace.length()-1).replace(".", ",");
+        String inplace = $(byXpath("//div[contains(@translate,'onSite')]/following-sibling::div")).getText().replaceAll("\\D+","");
         System.out.println("«На месте» = " + inplace);
         System.out.println("«Transport» = " + Values.price.transport);
         assertTrue("Стоимость «На месте» некорректна", inplace.equals(Values.price.transport));
 
-        String comment = $(byXpath("//div[@class='order-price__table-data-price ng-binding']")).getText().replace(" ", "");
-        comment = comment.substring(0, comment.length()-1).replace(".", ",");
+        String comment = $(byXpath("//div[@class='order-price__table-data-price ng-binding']")).getText().replaceAll("\\D+","");
         System.out.println(comment);
         assertTrue("Стоимость аренды авто в комментарии некорректна", comment.equals(Values.price.transport));
     }

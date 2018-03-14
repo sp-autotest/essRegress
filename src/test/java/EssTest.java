@@ -29,7 +29,7 @@ import static pages.Page.stringIntoInt;
 
 
 @Listeners({AllureOnEventListener.class})  //"слушатель" для Allure-отчета
-@Title("UralAir Test Suite")
+@Title("Aeroflot Test Suite")
 public class EssTest {
 
 
@@ -79,12 +79,7 @@ public class EssTest {
 
     @AfterMethod
     public void stop() {
-        try {
-            getWebDriver().close();
-            getWebDriver().quit();  //закрыть браузер
-        } catch (Exception e) {
-            System.err.println("Невозможно закрыть браузер после теста");
-        }
+        getWebDriver().quit();
     }
 
     @AfterClass
@@ -95,19 +90,22 @@ public class EssTest {
     @DataProvider
     public Object[][] parseLocaleData() {
         return new Object[][]{
-                {"Русский",     "RUB"},
-                {"Английский",  "USD"},
-                {"Немецкий",    "RUB"},
-                {"Испанский",   "EUR"},
-                {"Итальянский", "EUR"},
-                {"Французский", "EUR"},
-                {"Китайский",   "USD"},
-                {"Корейский",   "RUB"},
-                {"Японский",    "USD"},
+            {"Французский", "EUR"},
+            {"Испанский",   "EUR"},
+            {"Итальянский", "EUR"},
+            {"Японский",    "USD"},
+            {"Китайский",   "USD"},
+            {"Английский",  "USD"},
+            {"Корейский",   "RUB"},
+            {"Русский",     "RUB"},
+            {"Немецкий",    "RUB"},
+            {"Русский",     "CNY"},
+            {"Китайский",   "CNY"},
+            {"Немецкий",    "CNY"},
         };
     }
 
-    @Stories("Первая группа тестов")
+    @Stories("Раздел 2 регресса")
     @Title("Тестирование ESS")
     @Description("Карта VISA;\n" +
             "Hаправление перелета: туда-обратно;\n" +
@@ -115,9 +113,9 @@ public class EssTest {
             "Дополнительные услуги: «Полетная страховка», «Медицинская страховка» (Спортивная), «Аренда автомобиля»")
     @Test(priority = 1, dataProvider = "parseLocaleData", description = "Бронирование и оплата ")
     public void bookingAndPayment(String locale, String currency) {
-        //List<Flight> flightList =  new ArrayList<Flight>();
-        //new SoapRequest().changeCurrency();
         Values.ln = getLanguageNumber(locale);
+        Values.cur = currency;
+        Values.docs = null;
         Values.ticket = 1;
         open(Values.host);
         SearchPage searchPg = new SearchPage();
@@ -126,7 +124,7 @@ public class EssTest {
         List<Passenger> passList = new PassengerPage().step3();
         new PlacePage().clickPay();
         ChoosePage choosePg = new ChoosePage();
-        choosePg.step4(currency);
+        choosePg.step4();
         EssPage essPg = new EssPage();
         essPg.step6();
         essPg.step7(flightList);

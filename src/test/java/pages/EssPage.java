@@ -26,6 +26,7 @@ public class EssPage extends Page {
     @Step("Действие 6, проверка формы ESS")
     public void step6() {
         checkPageAppear();
+        screenShot("Скриншот");
         checkFlight();
         checkNumber();
         checkDateTime();
@@ -36,13 +37,13 @@ public class EssPage extends Page {
         checkNextButton();
         checkTransport();
         checkDwelling();
-        checkTimer();
+//        checkTimer();
     }
 
     @Step("Действие 7, проверка данных в блоке «Перелет»")
     public void step7(List<Flight> flightList) {
         ElementsCollection flights = $$(byXpath("//div[@class='cart__item-details']"));
-        checkPriceData();
+//        checkPriceData();
         for (int i = 0; i < flights.size(); i++) {
             checkFlightData(i+1, flightList, flights);
             checkNumberData(i+1, flightList, flights);
@@ -60,9 +61,11 @@ public class EssPage extends Page {
     @Step("Действие 9, проверка добавления Медицинской страховки")
     public void step9() {
         clickAddMedicalButton();
+        screenShot("Скриншот");
         checkPriceOfMedicalInsurance();
         checkMedicalButtonName();
         checkTotalAndInsurensPrices();
+        screenShot("Скриншот");
     }
 
     private void checkPageAppear(){
@@ -129,7 +132,7 @@ public class EssPage extends Page {
 
     @Step("Проверка данных о стоимости")
     private void checkPriceData(){
-        String price = $(byXpath("//div[@class='cart__item-price']")).getText().replace(" ", "");
+        String price = $(byXpath("//div[@class='cart__item-price']")).getText().replaceAll("\\D+","");
         assertTrue("Стоимость не совпадает c указанной при бронировании" +
                 "\nОжидалось: " + Values.price.fly +"\nФактически: " + price,
                 price.equals(Values.price.fly));
@@ -182,12 +185,12 @@ public class EssPage extends Page {
     private  void checkPriceOfFlyInsurance(){
         String summ = $("#left-column-insurance-block").$(byXpath("descendant::" +
                 "div[@class='cart__item-priceondemand-item-price']")).getText().trim();
-        Values.price.iflight = summ.substring(0, summ.length()-1).replace(" ", "");
+        Values.price.iflight = summ.replaceAll("\\D+","");
         int s = stringIntoInt(Values.price.iflight);
         System.out.println("Summ = " + s);
         String price = $(byXpath("//div[@class='frame__heading frame__heading--icon frame__heading--icon-safe']/span")).getText();
-        price = price.substring(0, price.indexOf("a")).trim();
-        if (price.indexOf(" ")>0) price = price.substring(price.indexOf(" "));
+        price = price.substring(0, price.indexOf("a")).trim().replaceAll("\\D+","");
+        //if (price.indexOf(" ")>0) price = price.substring(price.indexOf(" "));
         System.out.println("Price = " + price);
         int p = stringIntoInt(price);
         System.out.println("price = " + p);
@@ -199,43 +202,44 @@ public class EssPage extends Page {
 
     @Step("Нажать кнопку «Добавить в заказ»")
     private void clickAddMedicalButton(){
-        $("#medInsTEAM_SPORTS").$(byXpath("descendant::a[contains(@class,'button--micro-padding')]"))
+        SelenideElement ins = $("#medInsTEAM_SPORTS");
+        ins.scrollTo();
+        ins.$(byXpath("descendant::a[contains(@class,'button--micro-padding')]"))
                 .shouldBe(visible).shouldBe(exactText(text[5][ln])).click();
     }
 
     @Step("Проверка стоимости медицинской страховки")
     private void checkPriceOfMedicalInsurance() {
-        String price = $("#medInsTEAM_SPORTS").$(byXpath("descendant::div[@class='tile__price']")).getText();
+        String price = $("#medInsTEAM_SPORTS").$(byXpath("descendant::div[@class='tile__price']")).getText().replaceAll("\\D+","");
         SelenideElement p = $(byXpath("//div[@class='cart__item-priceondemand-item-title']" +
                 "[contains(text(),'" + text[4][ln] + "')]")).shouldBe(visible);
-        Values.price.imedical = p.$(byXpath("following-sibling::div[@class='cart__item-priceondemand-item-price']")).getText().replace(" ", "");
+        Values.price.imedical = p.$(byXpath("following-sibling::div[@class='cart__item-priceondemand-item-price']")).getText().replaceAll("\\D+","");
         System.out.println("Med price = " + Values.price.imedical);
         assertTrue("Стоимость страхования в корзине не совпадает с указанной в блоке", price.equals(Values.price.imedical));
-        Values.price.imedical = Values.price.imedical.substring(0, Values.price.imedical.length()-1);
     }
 
     @Step("Проверка кнопки «В заказе»")
     private void checkMedicalButtonName(){
         $("#medInsTEAM_SPORTS").$(byXpath("descendant::a[contains(@class,'button--micro-padding')]"))
-                .shouldBe(visible).shouldBe(exactText(text[6][ln]));
+                .shouldBe(visible).shouldBe(exactText(text[6][ln])).scrollTo();
     }
 
     @Step("Проверка общей суммы заказа (включает в себя стоимость услуг страхования)")
     private void checkTotalAndInsurensPrices(){
         String itemPrice;
-        String flyPrice = $(byXpath("//div[@class='cart__item-price']")).getText().replace(" ", "");
-        int summ = stringIntoInt(flyPrice.substring(0, flyPrice.length()-1));
+        String flyPrice = $(byXpath("//div[@class='cart__item-price']")).scrollTo().getText().replaceAll("\\D+","");
+        int summ = stringIntoInt(flyPrice);
         System.out.println("Fly price = " + flyPrice);
         ElementsCollection items = $("#left-column-insurance-block").$$(byXpath("descendant::div[@class='cart__item-priceondemand-item-price']"));
         for (int i=0; i<items.size(); i++) {
-            itemPrice = items.get(i).getText().replace(" ", "");
-            summ = summ + stringIntoInt(itemPrice.substring(0, itemPrice.length()-1));
+            itemPrice = items.get(i).getText().replaceAll("\\D+","");
+            summ = summ + stringIntoInt(itemPrice);
             System.out.println("Item[" + (i+1) + "] price = " + itemPrice);
         }
         Sleep(3);
-        String totalPrice = $("#cart-total-incarts").$(byXpath("descendant::div[@class='cart__item-price']")).getText().replace(" ", "");
+        String totalPrice = $("#cart-total-incarts").$(byXpath("descendant::div[@class='cart__item-price']")).getText().replaceAll("\\D+","");
         System.out.println("Total price = " + totalPrice);
-        Values.price.total = totalPrice.substring(0, totalPrice.length()-1);
+        Values.price.total = totalPrice;
         assertTrue("Общая сумма заказа некорректна", summ == stringIntoInt(Values.price.total));
     }
 
