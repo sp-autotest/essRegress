@@ -19,6 +19,7 @@ import struct.Passenger;
 import java.util.List;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.Selenide.open;
+import static pages.Page.Sleep;
 import static pages.Page.getLanguageNumber;
 import static pages.Page.stringIntoInt;
 
@@ -129,7 +130,9 @@ public class EssTest {
         essPg.step9("COMMON_SPORT");
         TransportPage transportPg = new TransportPage();
         transportPg.step10(test);
+        transportPg.checkAeroexpressPassengersList();
 
+        Sleep(10);
     }
 
     @Stories("Раздел 2 регрессионных испытаний")

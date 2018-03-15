@@ -14,9 +14,7 @@ import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
-import static config.Values.ln;
-import static config.Values.price;
-import static config.Values.text;
+import static config.Values.*;
 import static org.testng.AssertJUnit.assertTrue;
 
 /**
@@ -59,6 +57,14 @@ public class TransportPage extends Page {
         checkInsuranceButton();
         checkTotalPrices();
         saveTransportData();
+    }
+
+    @Step("Действие 11, Проверка выпадающего списка выбора пассажиров")
+    public void checkAeroexpressPassengersList() {
+        dropdownClick();
+        checkAeroexpressTikets();
+        checkAeroexpressPrice();
+        checkAeroexpressPricesIsNotAdded();
     }
 
     @Step("Действие 12, Нажать Оплатить в корзине")
@@ -250,6 +256,45 @@ public class TransportPage extends Page {
             service = "Aeroexpress";
         }
         $("#left-column-transport").$(byXpath("descendant::div[contains(text(),'"+ service +"')]")).shouldNotBe(exist);
+    }
+
+    @Step("Развернуть выпадающий список выбора пассажиров")
+    private void dropdownClick(){
+        $("#countTickets_").shouldBe(visible).click();
+    }
+
+    @Step("Проверить количество билетов, выбранных для поездки")
+    private void checkAeroexpressTikets(){
+        int count = stringIntoInt($("#countTickets_").getText().replaceAll("\\D+",""));
+        assertTrue("Количество билетов Аэроэкспресс, выбранных для поездки, отличается от количества пассажиров" +
+                        "\nОжидалось: " + ticket +
+                        "\nФактически: " + count,
+                        count == ticket);
+    }
+
+    @Step("Проверить общую стоимость для всех пассажиров")
+    private void checkAeroexpressPrice(){
+        int summ = 0;
+        String price = $(byXpath("//div[contains(@class,'js-price')]")).getText().replaceAll("\\D+","");
+        SelenideElement d = $(byXpath("//div[@class='dropdown__items']"));
+        ElementsCollection prices = d.$$(byXpath("descendant::div[@class='h-display--inline']/span"));
+        for (int i=0; i<prices.size(); i++) {
+            summ = summ + stringIntoInt(prices.get(i).getText().replaceAll("\\D+",""));
+        }
+        assertTrue("Общая стоимость Аэроэкспресс не равна сумме для всех пассажиров" +
+                        "\nОжидалось: " + summ +
+                        "\nФактически: " + price,
+                        summ == stringIntoInt(price));
+    }
+
+    @Step("Стоимость поездки на Аэроэкспрессе не добавлена в корзину")
+    private void checkAeroexpressPricesIsNotAdded() {
+        int summ = stringIntoInt(price.fly) + stringIntoInt(price.iflight) + stringIntoInt(price.imedical);
+        String totalPrice = $("#cart-total-incarts").$(byXpath("descendant::div[@class='cart__item-price']")).getText().replaceAll("\\D+","");
+        assertTrue("Сумма \"Всего к оплате\" не корректна" +
+                        "\nОжидалось: " + summ +
+                        "\nФактически: " + totalPrice,
+                        summ == stringIntoInt(totalPrice));
     }
 
 }
