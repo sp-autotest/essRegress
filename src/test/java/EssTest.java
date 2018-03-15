@@ -9,6 +9,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.opera.OperaDriver;
 import org.openqa.selenium.opera.OperaOptions;
+import org.testng.ITestContext;
 import org.testng.annotations.*;
 import pages.*;
 import ru.yandex.qatools.allure.annotations.Description;
@@ -105,21 +106,48 @@ public class EssTest {
         };
     }
 
-    @Stories("Раздел 2 регресса")
+    @Stories("Раздел 1 регрессионных испытаний")
     @Title("Тестирование ESS")
-    @Description("Карта VISA;\n" +
-            "Hаправление перелета: туда-обратно;\n" +
-            "Состав бронирования авиаперелета, билеты: 2 взрослых, 2 детских, 1 младенец;\n" +
-            "Дополнительные услуги: «Полетная страховка», «Медицинская страховка» (Спортивная), «Аренда автомобиля»")
-    @Test(priority = 1, dataProvider = "parseLocaleData", description = "Бронирование и оплата ")
-    public void bookingAndPayment(String locale, String currency) {
+    @Description("Карта VISA;\nНаправление перелета: туда-обратно;\n" +
+            "Состав бронирования авиаперелета, билеты: 2 взрослых;\n" +
+            "Дополнительные услуги: «Полетная страховка», «Медицинская страховка» (классическая), «Отель»")
+    @Test(priority = 1, dataProvider = "parseLocaleData", description = "Раздел 1", enabled = false)
+    public void section1(String locale, String currency) {
+        int test = 1;
         Values.ln = getLanguageNumber(locale);
         Values.cur = currency;
         Values.docs = null;
         Values.ticket = 1;
         open(Values.host);
         SearchPage searchPg = new SearchPage();
-        searchPg.step1();
+        searchPg.step1(test);
+        List<Flight> flightList = searchPg.step2();
+        List<Passenger> passList = new PassengerPage().step3();
+        new PlacePage().clickPay();
+        ChoosePage choosePg = new ChoosePage();
+        choosePg.step4();
+        EssPage essPg = new EssPage();
+        essPg.step6();
+        essPg.step7(flightList);
+        essPg.step8();
+
+    }
+
+    @Stories("Раздел 2 регрессионных испытаний")
+    @Title("Тестирование ESS")
+    @Description("Карта VISA;\nHаправление перелета: туда-обратно;\n" +
+            "Состав бронирования авиаперелета, билеты: 2 взрослых, 2 детских, 1 младенец;\n" +
+            "Дополнительные услуги: «Полетная страховка», «Медицинская страховка» (Спортивная), «Аренда автомобиля»")
+    @Test(priority = 2, dataProvider = "parseLocaleData", description = "Раздел 2", enabled = true)
+    public void section2(String locale, String currency) {
+        int test = 2;
+        Values.ln = getLanguageNumber(locale);
+        Values.cur = currency;
+        Values.docs = null;
+        Values.ticket = 1;
+        open(Values.host);
+        SearchPage searchPg = new SearchPage();
+        searchPg.step1(test);
         List<Flight> flightList = searchPg.step2();
         List<Passenger> passList = new PassengerPage().step3();
         new PlacePage().clickPay();

@@ -37,7 +37,7 @@ public class EssPage extends Page {
         checkNextButton();
         checkTransport();
         checkDwelling();
-//        checkTimer();
+        checkTimer();
     }
 
     @Step("Действие 7, проверка данных в блоке «Перелет»")

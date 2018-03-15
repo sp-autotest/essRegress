@@ -44,9 +44,11 @@ public class Page {
 
     @Step("Документы:")
     public static void logDocuments(String doc){
-        for (String retval : doc.split(", ")) {
-            logDoc(retval);
-        }
+        try {
+            for (String retval : doc.split(", ")) {
+                logDoc(retval);
+            }
+        }catch (NullPointerException ex) {System.out.println("The step of parsing documents is not achieved"); }
     }
 
     @Step("{0}")

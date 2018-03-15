@@ -30,7 +30,7 @@ public class SearchPage extends Page {
     String duration = "";
 
     @Step("Действие 1, поиск рейсов")
-    public void step1() {
+    public void step1(int test) {
         selectLocale();
         setFrom("MOW");
         setTo("PRG");
@@ -38,9 +38,11 @@ public class SearchPage extends Page {
         setBack (dateBack);
         clickPassengers();
         addAdult();
-        addChild();
-        addChild();
-        addInfant();
+        if (test == 2) {
+            addChild();
+            addChild();
+            addInfant();
+        }
         clickPassengers();
         clickSearchButton();
     }
@@ -136,7 +138,7 @@ public class SearchPage extends Page {
         ElementsCollection headers = $$(byXpath("//div[@class='row flight-search__header']"));
         ElementsCollection flights = headers.get(i).$$(byXpath("following-sibling::*"));
         int limit = flights.size();
-        //if (limit>10) limit = 3;
+        if (limit>10) limit = 3;
         flights.get(getRandomNumberLimit(limit)).click();
     }
 
