@@ -58,12 +58,12 @@ public class EssPage extends Page {
         checkPriceOfFlyInsurance();
     }
 
-    @Step("Действие 9, проверка добавления Медицинской страховки")
-    public void step9() {
-        clickAddMedicalButton();
+    @Step("Действие 9, проверка добавления Медицинской страховки {0}")
+    public void step9(String type) {
+        clickAddMedicalButton(type);
         screenShot("Скриншот");
-        checkPriceOfMedicalInsurance();
-        checkMedicalButtonName();
+        checkPriceOfMedicalInsurance(type);
+        checkMedicalButtonName(type);
         checkTotalAndInsurensPrices();
         screenShot("Скриншот");
     }
@@ -201,26 +201,32 @@ public class EssPage extends Page {
 
 
     @Step("Нажать кнопку «Добавить в заказ»")
-    private void clickAddMedicalButton(){
-        SelenideElement ins = $("#medInsTEAM_SPORTS");
+    private void clickAddMedicalButton(String type){
+        SelenideElement ins = $("#medIns" + type);
         ins.scrollTo();
         ins.$(byXpath("descendant::a[contains(@class,'button--micro-padding')]"))
                 .shouldBe(visible).shouldBe(exactText(text[5][ln])).click();
     }
 
     @Step("Проверка стоимости медицинской страховки")
-    private void checkPriceOfMedicalInsurance() {
-        String price = $("#medInsTEAM_SPORTS").$(byXpath("descendant::div[@class='tile__price']")).getText().replaceAll("\\D+","");
+    private void checkPriceOfMedicalInsurance(String type) {
+        SelenideElement box = $("#medIns" + type);
+        String price = box.$(byXpath("descendant::div[@class='tile__price']")).getText().replaceAll("\\D+","");
+        String name = box.$(byXpath("descendant::div[@class='tile__title']")).getText();
+        System.out.println("Type of medical insurance = " + name);
         SelenideElement p = $(byXpath("//div[@class='cart__item-priceondemand-item-title']" +
-                "[contains(text(),'" + text[4][ln] + "')]")).shouldBe(visible);
+                "[contains(text(),'" + name + "')]")).shouldBe(visible);
         Values.price.imedical = p.$(byXpath("following-sibling::div[@class='cart__item-priceondemand-item-price']")).getText().replaceAll("\\D+","");
         System.out.println("Med price = " + Values.price.imedical);
-        assertTrue("Стоимость страхования в корзине не совпадает с указанной в блоке", price.equals(Values.price.imedical));
+        assertTrue("Стоимость страхования в корзине не совпадает с указанной в блоке" +
+                "\nОжидалось: " + price +
+                "\nФактически: " + Values.price.imedical,
+                price.equals(Values.price.imedical));
     }
 
     @Step("Проверка кнопки «В заказе»")
-    private void checkMedicalButtonName(){
-        $("#medInsTEAM_SPORTS").$(byXpath("descendant::a[contains(@class,'button--micro-padding')]"))
+    private void checkMedicalButtonName(String type){
+        $("#medIns" + type).$(byXpath("descendant::a[contains(@class,'button--micro-padding')]"))
                 .shouldBe(visible).shouldBe(exactText(text[6][ln])).scrollTo();
     }
 

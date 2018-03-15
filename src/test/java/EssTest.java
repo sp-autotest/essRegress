@@ -9,22 +9,16 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.opera.OperaDriver;
 import org.openqa.selenium.opera.OperaOptions;
-import org.testng.ITestContext;
 import org.testng.annotations.*;
 import pages.*;
 import ru.yandex.qatools.allure.annotations.Description;
 import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
-import soap.SoapRequest;
 import struct.Flight;
 import struct.Passenger;
-
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.Selenide.open;
-import static pages.Page.Sleep;
 import static pages.Page.getLanguageNumber;
 import static pages.Page.stringIntoInt;
 
@@ -73,7 +67,6 @@ public class EssTest {
                 myWebDriver = new OperaDriver(oOptions);
                 break;
         }
-
         WebDriverRunner.setWebDriver(myWebDriver); //запуск браузера
         myWebDriver.manage().window().setSize(new Dimension(browserWidth, browserHight));
     }
@@ -118,6 +111,9 @@ public class EssTest {
         Values.cur = currency;
         Values.docs = null;
         Values.ticket = 1;
+        System.out.println("=========================================================="+
+        "\n\t\t*** AUTOTEST *** : section" + test + ", " + Values.lang[Values.ln][2].toUpperCase()+
+        ", " + currency + "\n==========================================================");
         open(Values.host);
         SearchPage searchPg = new SearchPage();
         searchPg.step1(test);
@@ -130,6 +126,7 @@ public class EssTest {
         essPg.step6();
         essPg.step7(flightList);
         essPg.step8();
+        essPg.step9("COMMON_SPORT");
 
     }
 
@@ -145,6 +142,9 @@ public class EssTest {
         Values.cur = currency;
         Values.docs = null;
         Values.ticket = 1;
+        System.out.println("=========================================================="+
+        "\n\t\t*** AUTOTEST *** : section" + test + ", " + Values.lang[Values.ln][2].toUpperCase()+
+        ", " + currency + "\n==========================================================");
         open(Values.host);
         SearchPage searchPg = new SearchPage();
         searchPg.step1(test);
@@ -157,7 +157,7 @@ public class EssTest {
         essPg.step6();
         essPg.step7(flightList);
         essPg.step8();
-        essPg.step9();
+        essPg.step9("TEAM_SPORTS");
         TransportPage transportPg = new TransportPage();
         transportPg.step10();
         transportPg.step11();
