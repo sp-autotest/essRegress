@@ -52,7 +52,9 @@ public class Values {
             {"Ваше бронирование успешно оплачено", "Your reservation is successfully paid", "Ihre Reservierung wurde erfolgreich bezahlt", "Su reserva se ha pagado correctamente", "La prenotazione è stata pagata correttamente", "Votre réservation a été payée avec succès", "您的预定已经付款成功", "예약에 대해 결제가 성공적으로 이루어졌습니다", "ご予約のお支払いは正常に行われました"},
             {"Электронная квитанция", "Electronic receipt", "Elektronischer Beleg", "Recibo electrónico", "Ricevuta elettronica", "Reçu électronique", "电子收据", "전자 확인증", "電子受領書"},
             {"Полис", "Policy", "Policen", "de póliza", "Polizza", "Politique", "保单号", "정책", "保険"},
-            {"Ваучер", "Voucher", "Beleg", "de vale", "Voucher", "Bon", "优惠券编号", "우처", "バウチャー"}
+            {"Ваучер", "Voucher", "Beleg", "de vale", "Voucher", "Bon", "优惠券编号", "우처", "バウチャー"},
+            {"Билеты на аэроэкспресс", "Aeroexpress tickets", "Aeroexpress-Tickets", "Billetes Aeroexpress", "Biglietti Aeroexpress", "Billets Aeroexpress", "Aeroexpress 票", "Aeroexpress 항공권", "Aeroexpress 乗車券"}
+
     };
 
 }

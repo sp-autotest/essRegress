@@ -9,9 +9,7 @@ import ru.yandex.qatools.allure.annotations.Step;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-import static com.codeborne.selenide.Condition.enabled;
-import static com.codeborne.selenide.Condition.exactText;
-import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
@@ -27,12 +25,19 @@ import static org.testng.AssertJUnit.assertTrue;
 public class TransportPage extends Page {
 
     @Step("Действие 10, Нажать на кнопку «Транспорт»")
-    public void step10() {
+    public void step10(int test) {
         new EssPage().clickTransportButton();
         checkTransportBlock();
-        screenShot("Скриншот");
-        checkCarFilter();
-        checkSelectedCars();
+        if (test == 1) {
+            screenShot("Скриншот");
+            checkAeroexpressForm();
+            checkAeroexpressInCard();
+        }
+        if (test == 2) {
+            checkCarFilter();
+            screenShot("Скриншот");
+            checkSelectedCars();
+        }
     }
 
     @Step("Действие 11, Арендовать автомобиль")
@@ -66,11 +71,11 @@ public class TransportPage extends Page {
     private void checkTransportBlock(){
         $(byXpath("//div[@id='left-column-transport'][contains(@class,'--active')]")).
                 shouldBe(visible).shouldBe(exactText(text[2][ln]));
-        $("#frame-cars").shouldBe(visible).scrollTo();
     }
 
     @Step("Проверка наличия фильтра для поиска автомобиля")
     private void checkCarFilter(){
+        $("#frame-cars").shouldBe(visible).scrollTo();
         $(byXpath("//select[@name='stationReceive']")).shouldBe(visible).shouldBe(enabled);
         $(byXpath("//select[@name='stationReturn']")).shouldBe(visible).shouldBe(enabled);
         $("#dateStartCars").shouldBe(visible).shouldBe(enabled);
@@ -228,7 +233,23 @@ public class TransportPage extends Page {
         }catch (ParseException e) {
             System.out.println("Parsing date error");
         }
+    }
 
+    @Step("Проверка отображения формы «Билеты на аэроэкспресс")
+    private void checkAeroexpressForm(){
+        SelenideElement h = $(byXpath("//div[@class='axpholder']")).shouldBe(exist).shouldBe(visible);
+        h.$(byXpath("descendant::h2")).shouldBe(exactText(text[16][ln]));
+    }
+
+    @Step("Проверка отсутствия услуги «Аэроэкспресс» в корзине")
+    private void checkAeroexpressInCard(){
+        String service = "";
+        if (ln == 0) {
+            service = "Аэроэкспресс";
+        }else {
+            service = "Aeroexpress";
+        }
+        $("#left-column-transport").$(byXpath("descendant::div[contains(text(),'"+ service +"')]")).shouldNotBe(exist);
     }
 
 }

@@ -127,6 +127,8 @@ public class EssTest {
         essPg.step7(flightList);
         essPg.step8();
         essPg.step9("COMMON_SPORT");
+        TransportPage transportPg = new TransportPage();
+        transportPg.step10(test);
 
     }
 
@@ -159,7 +161,7 @@ public class EssTest {
         essPg.step8();
         essPg.step9("TEAM_SPORTS");
         TransportPage transportPg = new TransportPage();
-        transportPg.step10();
+        transportPg.step10(test);
         transportPg.step11();
         transportPg.step12();
         choosePg.step13();
