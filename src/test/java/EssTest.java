@@ -19,7 +19,6 @@ import struct.Passenger;
 import java.util.List;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.Selenide.open;
-import static pages.Page.Sleep;
 import static pages.Page.getLanguageNumber;
 import static pages.Page.stringIntoInt;
 
@@ -125,16 +124,17 @@ public class EssTest {
         choosePg.step4();
         EssPage essPg = new EssPage();
         essPg.step6();
-      /*  essPg.step7(flightList);
+     /*   essPg.step7(flightList);
         essPg.step8();
         essPg.step9("COMMON_SPORT");
         TransportPage transportPg = new TransportPage();
         transportPg.step10(test);
         transportPg.checkAeroexpressPassengersList();//шаг 11
         transportPg.checkAeroexpressLogic();//шаг 12
-       */ ResidencePage residencePg = new ResidencePage();
-        residencePg.clickResidenceButton();//шаг 15
-        residencePg.checkHotelFilter();//шаг 16
+       */ HotelPage hotelPg = new HotelPage();
+        hotelPg.clickResidenceButton();//шаг 15
+        hotelPg.checkHotelFilter();//шаг 16
+        hotelPg.checkHotelLogic(flightList);//шаг 17
 
 
 
