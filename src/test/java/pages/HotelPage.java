@@ -1,9 +1,13 @@
 package pages;
 
+import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import ru.yandex.qatools.allure.annotations.Step;
 import struct.Flight;
+import struct.Passenger;
+
 import java.text.SimpleDateFormat;
 import java.util.List;
 import static com.codeborne.selenide.Condition.visible;
@@ -61,6 +65,14 @@ public class HotelPage extends Page {
         clickHotelSearchButton();
     }
 
+    @Step("Действие 18, Проверка использования данных пассажиров при бронировании")
+    public void checkPassengersData(List<Passenger> passList) {
+        ElementsCollection pass = $$(byXpath("//div[@class='js-travellers-list']/div"));
+        for (int i=0; i<pass.size(); i++) {
+            checkPassengerName(i+1, pass.get(i), passList);
+        }
+    }
+
     @Step("Проверить совпадение автоматической даты вселения с датой прилета")
     private void checkStartHotelDate(String start) {
         String minHotel = $(byXpath("//input[@name='hotel_min_date']")).getValue();
@@ -82,7 +94,7 @@ public class HotelPage extends Page {
     @Step("Проверить количество проживающих")
     private void checkResidentsNumber() {
         int n = $$(byXpath("//div[@class='js-travellers-list']/div")).size();
-        assertTrue("Не соответствует количество номеров\nОжидалось: 1\nФактически: " + n, n == 1);
+        assertTrue("Не соответствует количество проживающих\nОжидалось: 1\nФактически: " + n, n == 1);
     }
 
     @Step("Проверить количество номеров")
@@ -99,5 +111,22 @@ public class HotelPage extends Page {
         $(byXpath("//a[@data-check-id='button-hotel']")).click();
         waitPlane();
     }
+
+    @Step("Проверить Имя/Фамилию {0}-го пассажмра")
+    private void checkPassengerName(int i, SelenideElement pass, List<Passenger> passList) {
+        String name = pass.getText();
+        System.out.println("Name = " + name);
+        String bookname = "";
+        boolean found = false;
+        for (Passenger p : passList) {
+            bookname = (p.lastname + " " + p.firstname).toUpperCase();
+            if (bookname.equals(name)){
+                found = true;
+                break;
+            }
+        }
+        assertTrue(name + ", указанный при бронировании отеля, отсутствует среди пассажиров", found);
+    }
+
 
 }
