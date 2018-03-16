@@ -125,14 +125,19 @@ public class EssTest {
         choosePg.step4();
         EssPage essPg = new EssPage();
         essPg.step6();
-        essPg.step7(flightList);
+      /*  essPg.step7(flightList);
         essPg.step8();
         essPg.step9("COMMON_SPORT");
         TransportPage transportPg = new TransportPage();
         transportPg.step10(test);
-        transportPg.checkAeroexpressPassengersList();
+        transportPg.checkAeroexpressPassengersList();//шаг 11
+        transportPg.checkAeroexpressLogic();//шаг 12
+       */ ResidencePage residencePg = new ResidencePage();
+        residencePg.clickResidenceButton();//шаг 15
+        residencePg.checkHotelFilter();//шаг 16
 
-        Sleep(10);
+
+
     }
 
     @Stories("Раздел 2 регрессионных испытаний")

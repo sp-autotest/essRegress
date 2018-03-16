@@ -73,6 +73,12 @@ public class TransportPage extends Page {
         waitPlane();
     }
 
+    @Step("Действие 12, Проверка логики отображения информации об Аэроэкспресс")
+    public void checkAeroexpressLogic() {
+
+    }
+
+
     @Step("Проверка перехода в раздел «Транспорт»")
     private void checkTransportBlock(){
         $(byXpath("//div[@id='left-column-transport'][contains(@class,'--active')]")).
