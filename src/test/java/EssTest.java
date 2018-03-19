@@ -138,7 +138,7 @@ public class EssTest {
         hotelPg.checkHotelLogic(flightList);//шаг 17
         hotelPg.checkPassengersData(passList);//шаг 18
         hotelPg.checkFiltration();//шаг 19
-
+        hotelPg.checkSorting();//шаг 20
     }
 
     @Stories("Раздел 2 регрессионных испытаний")

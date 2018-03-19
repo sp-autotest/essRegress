@@ -83,6 +83,18 @@ public class HotelPage extends Page {
         checkHotelFilterByStars();
     }
 
+    @Step("Действие 20, Проверка возможности сортировки")
+    public void checkSorting() {
+        System.out.println("sort by price");
+        checkDecreasingPrice();
+        clickSortByPriceButton();
+        checkAscendingPrice();
+        System.out.println("sort by stars");
+        checkDecreasingStars();
+        clickSortByStarsButton();
+        checkAscendingStars();
+    }
+
     @Step("Проверить совпадение автоматической даты вселения с датой прилета")
     private void checkStartHotelDate(String start) {
         String minHotel = $(byXpath("//input[@name='hotel_min_date']")).getValue();
@@ -119,7 +131,6 @@ public class HotelPage extends Page {
         JavascriptExecutor executor = (JavascriptExecutor)getWebDriver();
         executor.executeScript("arguments[0].click();", checkbox);
     }
-
 
     @Step("Нажать кнопку «Найти отель»")
     private void clickHotelSearchButton() {
@@ -160,8 +171,8 @@ public class HotelPage extends Page {
     private void checkHotelFilterByPrice(){
         float from = Float.parseFloat($("#hotel_min_price-value").getValue().replace(" ",""));
         float to = Float.parseFloat($("#hotel_max_price-value").getValue().replace(" ",""));
-        System.out.println("От = " + from);
-        System.out.println("До = " + to);
+        System.out.println("From = " + from);
+        System.out.println("To = " + to);
 
         clickHotelSearchButton();
         ElementsCollection hotels = $$(byXpath("//div[@id='hotel-search-result']/div"));
@@ -182,16 +193,27 @@ public class HotelPage extends Page {
         SelenideElement chb;
         for (int i=1; i<6; i++) {
             chb = $("#stars"+i);
-            if (chb.isSelected()&i!=4) clickStarsCheckbox(chb); //снять галки с чекбокса кроме четырех звезд
+            if (i!=4) clearStarsCheckbox(chb); //снять галки с чекбокса кроме четырех звезд
         }
 
     }
 
-    @Step("Кликнуть чекбокс со звездами")
-    private void clickStarsCheckbox(SelenideElement chb) {
-        WebElement checkbox = chb.toWebElement();
-        JavascriptExecutor executor = (JavascriptExecutor)getWebDriver();
-        executor.executeScript("arguments[0].click();", checkbox);
+    @Step("Установить галку в чекбоксе со звездами")
+    private void setStarsCheckbox(SelenideElement chb) {
+        if (!chb.isSelected()) {
+            WebElement checkbox = chb.toWebElement();
+            JavascriptExecutor executor = (JavascriptExecutor) getWebDriver();
+            executor.executeScript("arguments[0].click();", checkbox);
+        }
+    }
+
+    @Step("Снять галку в чекбоксе со звездами")
+    private void clearStarsCheckbox(SelenideElement chb) {
+        if (chb.isSelected()) {
+            WebElement checkbox = chb.toWebElement();
+            JavascriptExecutor executor = (JavascriptExecutor) getWebDriver();
+            executor.executeScript("arguments[0].click();", checkbox);
+        }
     }
 
     @Step("Проверить звездность найденных отелей")
@@ -206,5 +228,102 @@ public class HotelPage extends Page {
             assertTrue("Звездность " + s + " отеля №" + i + " не равна 4", s == 4);
         }
     }
+
+    @Step("Проверить сортировку по убыванию цены")
+    private void checkDecreasingPrice(){
+        ElementsCollection hotels = $$(byXpath("//div[@id='hotel-search-result']/div"));
+        String price = hotels.get(0).$(byXpath("descendant::div[@class='hotel-card__button-allprice']")).getText();
+        price = price.substring(0, price.indexOf(" "));
+        System.out.println("hotel all price1 = " + price);
+        float max = Float.parseFloat(price);
+        float next;
+        for (int i=1; i<hotels.size(); i++) {
+            hotels.get(i).scrollTo();
+            price = hotels.get(i).$(byXpath("descendant::div[@class='hotel-card__button-allprice']")).getText();
+            price = price.substring(0, price.indexOf(" "));
+            System.out.println("hotel all price"+(i+1)+" = " + price);
+            next = Float.parseFloat(price);
+            assertTrue("Сортировка некорректна, стоимость следующего отеля выше: " + next, max>=next);
+            max = next;
+        }
+    }
+
+    @Step("Проверить сортировку по возрастанию цены")
+    private void checkAscendingPrice(){
+        ElementsCollection hotels = $$(byXpath("//div[@id='hotel-search-result']/div"));
+        String price = hotels.get(0).$(byXpath("descendant::div[@class='hotel-card__button-allprice']")).getText();
+        price = price.substring(0, price.indexOf(" "));
+        System.out.println("hotel all price1 = " + price);
+        float min = Float.parseFloat(price);
+        float next;
+        for (int i=1; i<hotels.size(); i++) {
+            hotels.get(i).scrollTo();
+            price = hotels.get(i).$(byXpath("descendant::div[@class='hotel-card__button-allprice']")).getText();
+            price = price.substring(0, price.indexOf(" "));
+            System.out.println("hotel all price"+(i+1)+" = " + price);
+            next = Float.parseFloat(price);
+            assertTrue("Сортировка некорректна, стоимость следующего отеля ниже: " + next, min<=next);
+            min = next;
+        }
+    }
+
+    @Step("Нажать кнопку сортировки по цене")
+    private void clickSortByPriceButton(){
+        $(byXpath("//button[@data-order-by='Price']")).click();
+        waitPlane();
+    }
+
+    @Step("Нажать кнопку сортировки по звездности")
+    private void clickSortByStarsButton(){
+        $(byXpath("//button[@data-order-by='Category']")).click();
+        waitPlane();
+    }
+
+    @Step("Проверить сортировку по убыванию звездности")
+    private void checkDecreasingStars(){
+        /*установка фильтров в подходящее значение для теста сортировки по звездности*/
+        $(byXpath("//div[@id='shown_stars']/..")).click(); //кликнуть по выпадающему списку звезд
+        clearStarsCheckbox($("#stars5"));
+        clearStarsCheckbox($("#stars4"));
+        clearStarsCheckbox($("#stars3"));
+        setStarsCheckbox($("#stars2"));
+        setStarsCheckbox($("#stars1"));
+        SelenideElement ball = $$(byXpath("//div[@class='range-slider']/div")).get(2);
+        int decile = (int) ($(byXpath("//div[@class='range-slider']")).getSize().width/1.1);
+        Actions actions = new Actions(getWebDriver());
+        actions.dragAndDropBy(ball.toWebElement(), -decile, 0).perform();
+        clickHotelSearchButton();
+        /*конец установки фильтров*/
+
+        clickSortByStarsButton();
+        ElementsCollection hotels = $$(byXpath("//div[@id='hotel-search-result']/div"));
+        int max = hotels.get(0).$$(byXpath("descendant::div[@class='stars-item stars-item--mark']")).size();
+        int next;
+        System.out.println("hotel stars1 = " + max);
+        for (int i=1; i<hotels.size(); i++) {
+            hotels.get(i).scrollTo();
+            next = hotels.get(i).$$(byXpath("descendant::div[@class='stars-item stars-item--mark']")).size();
+            System.out.println("hotel stars"+(i+1)+" = " + next);
+            assertTrue("Сортировка некорректна, звездность следующего отеля выше: " + next, max>=next);
+            max = next;
+        }
+    }
+
+    @Step("Проверить сортировку по возрастанию звездности")
+    private void checkAscendingStars(){
+        ElementsCollection hotels = $$(byXpath("//div[@id='hotel-search-result']/div"));
+        int min = hotels.get(0).$$(byXpath("descendant::div[@class='stars-item stars-item--mark']")).size();
+        int next;
+        System.out.println("hotel stars1 = " + min);
+        for (int i=1; i<hotels.size(); i++) {
+            hotels.get(i).scrollTo();
+            next = hotels.get(i).$$(byXpath("descendant::div[@class='stars-item stars-item--mark']")).size();
+            System.out.println("hotel stars"+(i+1)+" = " + next);
+            assertTrue("Сортировка некорректна, звездность следующего отеля ниже: " + next, min<=next);
+            min = next;
+        }
+    }
+
+
 
 }
