@@ -4,6 +4,7 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import ru.yandex.qatools.allure.annotations.Step;
 import struct.Flight;
 import struct.Passenger;
@@ -62,6 +63,7 @@ public class HotelPage extends Page {
         checkEndHotelDate(new SimpleDateFormat("yyyy-MM-dd").format(flightList.get(1).start));
         checkResidentsNumber();
         checkRoomCount();
+        clickHotelCheckbox();
         clickHotelSearchButton();
     }
 
@@ -71,6 +73,14 @@ public class HotelPage extends Page {
         for (int i=0; i<pass.size(); i++) {
             checkPassengerName(i+1, pass.get(i), passList);
         }
+    }
+
+    @Step("Действие 19, Проверка возможности фильтрации")
+    public void checkFiltration() {
+        setPriceFilter();
+        checkHotelFilterByPrice();
+        setStarsFilter();
+        checkHotelFilterByStars();
     }
 
     @Step("Проверить совпадение автоматической даты вселения с датой прилета")
@@ -103,13 +113,19 @@ public class HotelPage extends Page {
         assertTrue("Не соответствует количество номеров\nОжидалось: 1\nФактически: " + n, n == 1);
     }
 
-    @Step("Нажать кнопку «Найти отель»")
-    private void clickHotelSearchButton() {
+    @Step("Отметить чекбокс «Я принимаю...»")
+    private void clickHotelCheckbox() {
         WebElement checkbox = $("#hotel-checkbox").toWebElement();
         JavascriptExecutor executor = (JavascriptExecutor)getWebDriver();
         executor.executeScript("arguments[0].click();", checkbox);
+    }
+
+
+    @Step("Нажать кнопку «Найти отель»")
+    private void clickHotelSearchButton() {
         $(byXpath("//a[@data-check-id='button-hotel']")).click();
         waitPlane();
+        $(byXpath("//h1[contains(text(),'" + text[17][ln] + "')]")).shouldBe(visible);
     }
 
     @Step("Проверить Имя/Фамилию {0}-го пассажмра")
@@ -125,8 +141,70 @@ public class HotelPage extends Page {
                 break;
             }
         }
-        assertTrue(name + ", указанный при бронировании отеля, отсутствует среди пассажиров", found);
+        assertTrue("Имя <" + name + ">, указанное при бронировании отеля, отсутствует среди пассажиров", found);
     }
 
+    @Step("Установить фильтр цены")
+    private void setPriceFilter() {
+        ElementsCollection balls = $$(byXpath("//div[@class='range-slider']/div"));
+        int center = (int) ($(byXpath("//div[@class='range-slider']")).getSize().width/2.5);
+        int decile = $(byXpath("//div[@class='range-slider']")).getSize().width/6;
+        System.out.println("center = " + center);
+        System.out.println("decile = " + decile);
+        Actions actions = new Actions(getWebDriver());
+        actions.dragAndDropBy(balls.get(0).toWebElement(), center, 0).perform();
+        actions.dragAndDropBy(balls.get(2).toWebElement(), -decile, 0).perform();
+    }
+
+    @Step("Проверить цены найденных отелей")
+    private void checkHotelFilterByPrice(){
+        float from = Float.parseFloat($("#hotel_min_price-value").getValue().replace(" ",""));
+        float to = Float.parseFloat($("#hotel_max_price-value").getValue().replace(" ",""));
+        System.out.println("От = " + from);
+        System.out.println("До = " + to);
+
+        clickHotelSearchButton();
+        ElementsCollection hotels = $$(byXpath("//div[@id='hotel-search-result']/div"));
+        for (int i=0; i<hotels.size(); i++) {
+            float price = Float.parseFloat(hotels.get(i).$(byXpath("descendant::" +
+                    "div[@class='hotel-card__button-price']")).getText().replaceAll("\\s|a|\\$|€|¥",""));
+            System.out.println("hotel price"+i+" = " + price);
+            assertTrue("Цена " + price + "отеля №" + i + " не входит в фильтр" +
+                            "\nОт: " + from +
+                            "\nДо: " + to,
+                            (from<=price)&(price<=to));
+        }
+    }
+
+    @Step("Установить фильтр звездности")
+    private void setStarsFilter() {
+        $(byXpath("//div[@id='shown_stars']/..")).click(); //кликнуть по выпадающему списку звезд
+        SelenideElement chb;
+        for (int i=1; i<6; i++) {
+            chb = $("#stars"+i);
+            if (chb.isSelected()&i!=4) clickStarsCheckbox(chb); //снять галки с чекбокса кроме четырех звезд
+        }
+
+    }
+
+    @Step("Кликнуть чекбокс со звездами")
+    private void clickStarsCheckbox(SelenideElement chb) {
+        WebElement checkbox = chb.toWebElement();
+        JavascriptExecutor executor = (JavascriptExecutor)getWebDriver();
+        executor.executeScript("arguments[0].click();", checkbox);
+    }
+
+    @Step("Проверить звездность найденных отелей")
+    private void checkHotelFilterByStars(){
+        clickHotelSearchButton();
+        ElementsCollection hotels = $$(byXpath("//div[@id='hotel-search-result']/div"));
+        for (int i=0; i<hotels.size(); i++) {
+            hotels.get(i).scrollTo();
+            ElementsCollection stars = hotels.get(i).$$(byXpath("descendant::div[@class='stars-item stars-item--mark']"));
+            int s = stars.size();
+            System.out.println("hotel stars"+i+" = " + s);
+            assertTrue("Звездность " + s + " отеля №" + i + " не равна 4", s == 4);
+        }
+    }
 
 }
