@@ -1,5 +1,6 @@
 package pages;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.JavascriptExecutor;
@@ -8,13 +9,9 @@ import org.openqa.selenium.interactions.Actions;
 import ru.yandex.qatools.allure.annotations.Step;
 import struct.Flight;
 import struct.Passenger;
-
 import java.text.SimpleDateFormat;
 import java.util.List;
-
-import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selectors.byClassName;
 import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
@@ -88,6 +85,7 @@ public class HotelPage extends Page {
 
     @Step("Действие 20, Проверка возможности сортировки")
     public void checkSorting() {
+        System.out.println("20. Checking the sorting");
         System.out.println("sort by price");
         checkDecreasingPrice();
         clickSortByPriceButton();
@@ -100,20 +98,44 @@ public class HotelPage extends Page {
 
     @Step("Действие 21, Выбор отеля для аренды")
     public void selectHotel() {
-        System.out.print("Select hotel: ");
-        SelenideElement hotel = null;
+        System.out.print("21. Select hotel: ");
+        $(byXpath("//div[@id='shown_stars']/..")).click(); //кликнуть по выпадающему списку звезд
+        setStarsCheckbox($("#stars5")); //отметить галкой 5-ти звездные отели в фильтре
+        clickHotelSearchButton();//найти
+        ElementsCollection hotels = null;
         String name = "";
+        int n = 0;
         for (int i=0; i<20; i++) {
             Sleep(1);
-            hotel = $(byXpath("//*[@id='hotel-search-result']/div/div/a"));
-            name = hotel.getText();
+            hotels = $$(byXpath("//*[@id='hotel-search-result']/div/div/a"));
+            n = getRandomNumberLimit(hotels.size());
+            name = hotels.get(n).getText();
             if (name.length()>0) break;
-            System.out.println(i);
         }
         System.out.println(name);
-        hotel.click();
+        hotels.get(n).click();
         waitPlane();
-        $(byXpath("//h1[@class='modal__header-title']")).shouldBe(visible).shouldBe(exactText(name));
+        $(byXpath("//h1[@class='modal__header-title']")).shouldBe(visible);
+    }
+
+    @Step("Действие 22, Выбор типа номера")
+    public int selectRoomType() {
+        System.out.println("22. Select type of room");
+        ElementsCollection rooms = $$(byXpath("//li[@class='hotel-room']"));
+        int sel = getRandomNumberLimit(rooms.size());
+        String price = rooms.get(sel).$(byXpath("descendant::div[@class='hotel-room__buy-price']")).shouldBe(visible).getText();
+        System.out.println("Room price = " + price);
+        return sel;
+    }
+
+    @Step("Действие 23, Нажать кнопку «Забронировать»")
+    public void clickBookButton(int room) {
+        System.out.println("23. Click botton \"Book\"");
+        ElementsCollection rooms = $$(byXpath("//li[@class='hotel-room']"));
+        rooms.get(room).$(byXpath("descendant::div[@class='hotel-room__buy-button-wrapper']")).shouldBe(visible).click();
+        checkHotelFormAppear();
+        checkHotelCartPrice();
+        checkRentButtonName();
     }
 
     @Step("Проверить совпадение автоматической даты вселения с датой прилета")
@@ -345,6 +367,21 @@ public class HotelPage extends Page {
         }
     }
 
+    @Step("Проверить стоимость выбранного отеля в корзине")
+    private void checkHotelCartPrice(){
+        String p = $(byXpath("//div[@class='hotel-selected__card-order-price']")).innerHtml();
+        p = p.substring(0, p.indexOf(" "));
+        p = p.replaceAll("\\D+","");
+        System.out.println("Hotel price = " + p);
+        SelenideElement hotel = $(byXpath("//div[text()='" + text[3][ln] + "']")).shouldBe(visible);
+        String cartPrice = hotel.$(byXpath("following::div[@class='cart__item-pricelist-item-price']")).getText().replaceAll("\\D+","");
+        System.out.println("Hotel cart price = " + cartPrice);
+    }
 
+    @Step("Проверка кнопки «В заказе»")
+    private void checkRentButtonName(){
+        $(byXpath("//div[@class='hotel-selected__card-order-text']")).
+                shouldBe(visible).shouldBe(Condition.text(text[6][ln]));
+    }
 
 }
