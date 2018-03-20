@@ -11,7 +11,10 @@ import struct.Passenger;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
+
+import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selectors.byClassName;
 import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
@@ -93,6 +96,24 @@ public class HotelPage extends Page {
         checkDecreasingStars();
         clickSortByStarsButton();
         checkAscendingStars();
+    }
+
+    @Step("Действие 21, Выбор отеля для аренды")
+    public void selectHotel() {
+        System.out.print("Select hotel: ");
+        SelenideElement hotel = null;
+        String name = "";
+        for (int i=0; i<20; i++) {
+            Sleep(1);
+            hotel = $(byXpath("//*[@id='hotel-search-result']/div/div/a"));
+            name = hotel.getText();
+            if (name.length()>0) break;
+            System.out.println(i);
+        }
+        System.out.println(name);
+        hotel.click();
+        waitPlane();
+        $(byXpath("//h1[@class='modal__header-title']")).shouldBe(visible).shouldBe(exactText(name));
     }
 
     @Step("Проверить совпадение автоматической даты вселения с датой прилета")

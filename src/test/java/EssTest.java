@@ -19,7 +19,6 @@ import struct.Passenger;
 import java.util.List;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.Selenide.open;
-import static pages.Page.Sleep;
 import static pages.Page.getLanguageNumber;
 import static pages.Page.stringIntoInt;
 
@@ -139,6 +138,7 @@ public class EssTest {
         hotelPg.checkPassengersData(passList);//шаг 18
         hotelPg.checkFiltration();//шаг 19
         hotelPg.checkSorting();//шаг 20
+        hotelPg.selectHotel();//шаг 21
     }
 
     @Stories("Раздел 2 регрессионных испытаний")

@@ -3,6 +3,8 @@ package pages;
 import config.Values;
 import ru.yandex.qatools.allure.annotations.Step;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
@@ -14,9 +16,10 @@ import static listeners.ScreenShoter.makeScreenshot;
 public class Page {
 
     public static void Sleep(int time){
-        try{
-            Thread.sleep(time*1000);
-        } catch(InterruptedException e) {
+        try {
+            TimeUnit.SECONDS.sleep(time);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
