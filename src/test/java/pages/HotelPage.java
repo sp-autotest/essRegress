@@ -33,6 +33,7 @@ public class HotelPage extends Page {
 
     @Step("Действие 15, Нажать кнопку «Проживание»")
     public void clickResidenceButton() {
+        System.out.println("15. Click Accommodation");
         $(byXpath("//div[text()='" + text[3][ln] + "']")).shouldBe(visible).click();
         waitPlane();
         checkHotelFormAppear();
@@ -40,6 +41,7 @@ public class HotelPage extends Page {
 
     @Step("Действие 16, Проверка фильтра поиска отелей")
     public void checkHotelFilter() {
+        System.out.println("16. Check exist of hotel filter");
         $("#dateStartHotel").shouldBe(visible);//поле даты заезда
         $("#dateEndHotel").shouldBe(visible);//поле даты выезда
         $("#shown_stars").shouldBe(visible);//поле выбора звездности
@@ -59,6 +61,7 @@ public class HotelPage extends Page {
 
     @Step("Действие 17, Проверка логики отображения информации в блоке «Проживание»")
     public void checkHotelLogic(List<Flight> flightList) {
+        System.out.println("17. Check logic in Accommodation block");
         checkStartHotelDate(new SimpleDateFormat("yyyy-MM-dd").format(flightList.get(0).end));
         checkEndHotelDate(new SimpleDateFormat("yyyy-MM-dd").format(flightList.get(1).start));
         checkResidentsNumber();
@@ -69,6 +72,7 @@ public class HotelPage extends Page {
 
     @Step("Действие 18, Проверка использования данных пассажиров при бронировании")
     public void checkPassengersData(List<Passenger> passList) {
+        System.out.println("18. Check passengers data");
         ElementsCollection pass = $$(byXpath("//div[@class='js-travellers-list']/div"));
         for (int i=0; i<pass.size(); i++) {
             checkPassengerName(i+1, pass.get(i), passList);
@@ -77,6 +81,7 @@ public class HotelPage extends Page {
 
     @Step("Действие 19, Проверка возможности фильтрации")
     public void checkFiltration() {
+        System.out.println("19. Check filtering");
         setPriceFilter();
         checkHotelFilterByPrice();
         setStarsFilter();

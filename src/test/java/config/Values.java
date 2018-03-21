@@ -54,7 +54,11 @@ public class Values {
             {"Полис", "Policy", "Policen", "de póliza", "Polizza", "Politique", "保单号", "정책", "保険"},
             {"Ваучер", "Voucher", "Beleg", "de vale", "Voucher", "Bon", "优惠券编号", "우처", "バウチャー"},
             {"Билеты на аэроэкспресс", "Aeroexpress tickets", "Aeroexpress-Tickets", "Billetes Aeroexpress", "Biglietti Aeroexpress", "Billets Aeroexpress", "Aeroexpress 票", "Aeroexpress 항공권", "Aeroexpress 乗車券"},
-            {"Бронирование отеля в Праге", "Hotel reservations in Prague", "Hotelreservierungen in Prague", "Reservas de hotel en Prague", "Prenotazioni in hotel a Prague", "Réservations d`hôtel à Prague", "在 Prague 预订宾馆", "Prague에서 호텔 예약", "Pragueでのホテルのご予約"}
+            {"Бронирование отеля в Праге", "Hotel reservations in Prague", "Hotelreservierungen in Prague", "Reservas de hotel en Prague", "Prenotazioni in hotel a Prague", "Réservations d`hôtel à Prague", "在 Prague 预订宾馆", "Prague에서 호텔 예약", "Pragueでのホテルのご予約"},
+            {"Белорусский вокзал", "Belorussky Rail Terminal", "Weißrussischen Bahnhof", "Terminal de ferrocarril Belorussky", "Terminal ferroviario Belorussky", "Terminus de la gare de Biélorussie", "白俄罗斯站", "벨로루스키역 터미널", "ベロルスキー鉄道ターミナル"},
+            {"Шереметьево", "Sheremetyevo", "Sheremetyevo", "Sheremetiévo", "Sheremetyevo", "Chérémétiévo", "谢列梅捷沃", "셰레메티예보", "シェレメティエブ"},
+            {"Киевский вокзал", "Kievsky Rail Terminal", "Kiewer Bahnhof", "Terminal de ferrocarril Kievsky", "Terminal ferroviario Kievsky", "Terminus de la gare de Kiev", "基辅火车站", "키옙스키역 터미널", "キエフスキー鉄道ターミナル"},
+            {"Внуково", "Vnukovo", "Vnukovo", "Vnukovo", "Vnukovo", "Vnoukovo", "尤努科沃", "브누코보", "ヴヌーコヴォ"}
 
     };
 

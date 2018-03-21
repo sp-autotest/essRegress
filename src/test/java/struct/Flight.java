@@ -8,7 +8,9 @@ import java.util.Date;
  */
 public class Flight {
     public String from; //откуда
+    public String from_orig; //откуда
     public String to; //куда
+    public String to_orig; //куда
     public String number; //номер рейса
     public String duration; //длительность перелета
     public Date start; //дата и время вылета

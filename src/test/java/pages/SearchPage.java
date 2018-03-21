@@ -185,9 +185,11 @@ public class SearchPage extends Page {
                     continue;
                 }
                 f = new Flight();
-                f.from = flights.get(i).$(byXpath("descendant::div[@class='time-destination__from']/div[@class='time-destination__airport']")).getText();
+                f.from_orig = flights.get(i).$(byXpath("descendant::div[@class='time-destination__from']/div[@class='time-destination__airport']")).getText();
+                f.from = f.from_orig;
                 if (f.from.equals("SVO")|f.from.equals("VKO")) f.from = "MOW";
-                f.to = flights.get(i).$(byXpath("descendant::div[@class='time-destination__to']/div[@class='time-destination__airport']")).getText();
+                f.to_orig = flights.get(i).$(byXpath("descendant::div[@class='time-destination__to']/div[@class='time-destination__airport']")).getText();
+                f.to = f.to_orig;
                 if (f.to.equals("SVO")|f.to.equals("VKO")) f.to = "MOW";
                 f.number = flights.get(i).$(byXpath("descendant::div[@class='flight-search__plane-number']")).getText();
                 d = (m==0) ? dateThere : dateBack;

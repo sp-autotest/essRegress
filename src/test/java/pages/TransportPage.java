@@ -5,9 +5,11 @@ import com.codeborne.selenide.SelenideElement;
 import config.Values;
 import org.openqa.selenium.interactions.Actions;
 import ru.yandex.qatools.allure.annotations.Step;
+import struct.Flight;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.byXpath;
@@ -40,6 +42,7 @@ public class TransportPage extends Page {
 
     @Step("Действие 11, Арендовать автомобиль")
     public void step11() {
+        System.out.println("11. Rent Auto");
         selectCar();
         screenShot("Скриншот");
         int beforePrice = getCarPrice();
@@ -61,6 +64,7 @@ public class TransportPage extends Page {
 
     @Step("Действие 11, Проверка выпадающего списка выбора пассажиров")
     public void checkAeroexpressPassengersList() {
+        System.out.println("11. Check dropdown list in Aeroexpress");
         dropdownClick();
         checkAeroexpressTikets();
         checkAeroexpressPrice();
@@ -69,13 +73,46 @@ public class TransportPage extends Page {
 
     @Step("Действие 12, Нажать Оплатить в корзине")
     public void step12() {
+        System.out.println("12. Click Pay in cart");
         $(byXpath("//a[@class='cart__item-counter-link']")).click();
         waitPlane();
     }
 
     @Step("Действие 12, Проверка логики отображения информации об Аэроэкспресс")
-    public void checkAeroexpressLogic() {
-
+    public void checkAeroexpressLogic(List<Flight> flightList) {
+        System.out.println("12. Check Aeroexpress logic");
+        ElementsCollection directions = $$(byXpath("//div[@class='aeroexpress-select__direction-name']"));
+        String dir;
+        /*Туда*/
+        switch (flightList.get(0).from_orig) {
+            case "SVO":
+                dir = directions.get(0).getText();
+                assertTrue("Направление \"Из города\" некорректно\nОжидалось: " + text[18][ln] + "\nФактически: " + dir, dir.equals(text[18][ln]));
+                dir = directions.get(1).getText();
+                assertTrue("Направление \"В аэропорт\" некорректно\nОжидалось: " + text[19][ln] + "\nФактически: " + dir, dir.equals(text[19][ln]));
+                break;
+            case "VKO":
+                dir = directions.get(0).getText();
+                assertTrue("Направление \"Из города\" некорректно\nОжидалось: " + text[20][ln] + "\nФактически: " + dir, dir.equals(text[20][ln]));
+                dir = directions.get(1).getText();
+                assertTrue("Направление \"В аэропорт\" некорректно\nОжидалось: " + text[21][ln] + "\nФактически: " + dir, dir.equals(text[21][ln]));
+                break;
+        }
+        /*Обратно*/
+        switch (flightList.get(flightList.size()-1).to_orig) {
+            case "SVO":
+                dir = directions.get(2).getText();
+                assertTrue("Направление \"Из аэропорта\" некорректно\nОжидалось: " + text[19][ln] + "\nФактически: " + dir, dir.equals(text[19][ln]));
+                dir = directions.get(3).getText();
+                assertTrue("Направление \"В город\" некорректно\nОжидалось: " + text[18][ln] + "\nФактически: " + dir, dir.equals(text[18][ln]));
+                break;
+            case "VKO":
+                dir = directions.get(2).getText();
+                assertTrue("Направление \"Из аэропорта\" некорректно\nОжидалось: " + text[21][ln] + "\nФактически: " + dir, dir.equals(text[21][ln]));
+                dir = directions.get(3).getText();
+                assertTrue("Направление \"В город\" некорректно\nОжидалось: " + text[20][ln] + "\nФактически: " + dir, dir.equals(text[20][ln]));
+                break;
+        }
     }
 
 

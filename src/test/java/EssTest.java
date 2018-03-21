@@ -128,9 +128,9 @@ public class EssTest {
         essPg.step8();
         essPg.step9("COMMON_SPORT");
         TransportPage transportPg = new TransportPage();
-        transportPg.step10(test);
+        transportPg.step10(test);//шаг 10
         transportPg.checkAeroexpressPassengersList();//шаг 11
-        transportPg.checkAeroexpressLogic();//шаг 12
+        transportPg.checkAeroexpressLogic(flightList);//шаг 12
         HotelPage hotelPg = new HotelPage();
         hotelPg.clickResidenceButton();//шаг 15
         hotelPg.checkHotelFilter();//шаг 16
