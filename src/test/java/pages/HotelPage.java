@@ -3,14 +3,20 @@ package pages;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import config.Values;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import ru.yandex.qatools.allure.annotations.Step;
 import struct.Flight;
 import struct.Passenger;
+
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
@@ -34,7 +40,7 @@ public class HotelPage extends Page {
     @Step("Действие 15, Нажать кнопку «Проживание»")
     public void clickResidenceButton() {
         System.out.println("15. Click Accommodation");
-        $(byXpath("//div[text()='" + text[3][ln] + "']")).shouldBe(visible).click();
+        $(byXpath("//div[@class='cart__item-title'][contains(text(),'" + text[3][ln] + "')]")).shouldBe(visible).click();
         waitPlane();
         checkHotelFormAppear();
     }
@@ -73,10 +79,11 @@ public class HotelPage extends Page {
     @Step("Действие 18, Проверка использования данных пассажиров при бронировании")
     public void checkPassengersData(List<Passenger> passList) {
         System.out.println("18. Check passengers data");
-        ElementsCollection pass = $$(byXpath("//div[@class='js-travellers-list']/div"));
-        for (int i=0; i<pass.size(); i++) {
-            checkPassengerName(i+1, pass.get(i), passList);
-        }
+        ElementsCollection info = $$(byXpath("//div[@class='hotel-selected__room-guest-info']/div"));
+        int n = checkPassengerName(info.get(0), passList);
+        checkPassengerDob(info.get(1), passList.get(n).dob);
+        checkEmail();
+        checkPhone();
     }
 
     @Step("Действие 19, Проверка возможности фильтрации")
@@ -187,21 +194,37 @@ public class HotelPage extends Page {
         $(byXpath("//h1[contains(text(),'" + text[17][ln] + "')]")).shouldBe(visible);
     }
 
-    @Step("Проверить Имя/Фамилию {0}-го пассажмра")
-    private void checkPassengerName(int i, SelenideElement pass, List<Passenger> passList) {
-        String name = pass.getText();
+    @Step("Проверить Имя/Фамилию пассажира")
+    private int checkPassengerName(SelenideElement pass, List<Passenger> passList) {
+        String name = pass.getText().trim();
         System.out.println("Name = " + name);
         String bookname = "";
         boolean found = false;
+        int i = 0;
         for (Passenger p : passList) {
             bookname = (p.lastname + " " + p.firstname).toUpperCase();
             if (bookname.equals(name)){
                 found = true;
                 break;
             }
+            i++;
         }
         assertTrue("Имя <" + name + ">, указанное при бронировании отеля, отсутствует среди пассажиров", found);
+        return i;
     }
+
+    @Step("Проверить дату рождения пассажира")
+    private void checkPassengerDob(SelenideElement info, String dob) {
+        String date = info.getText().trim();
+        System.out.println("Date on site = " + date);
+        System.out.println("Date in save = " + dob);
+        String datef = new java.text.SimpleDateFormat("ddMMyyyy").format(stringToDate(date));
+        assertTrue("Дата рождения пассажира не совпадает с забронированной" +
+                 "\nОжидалось: " + dob +
+                 "\nФактически: " + datef,
+                 dob.equals(datef));
+    }
+
 
     @Step("Установить фильтр цены")
     private void setPriceFilter() {
@@ -319,12 +342,14 @@ public class HotelPage extends Page {
     private void clickSortByPriceButton(){
         $(byXpath("//button[@data-order-by='Price']")).click();
         waitPlane();
+        $(byXpath("//h1[contains(text(),'" + text[17][ln] + "')]")).shouldBe(visible);
     }
 
     @Step("Нажать кнопку сортировки по звездности")
     private void clickSortByStarsButton(){
         $(byXpath("//button[@data-order-by='Category']")).click();
         waitPlane();
+        $(byXpath("//h1[contains(text(),'" + text[17][ln] + "')]")).shouldBe(visible);
     }
 
     @Step("Проверить сортировку по убыванию звездности")
@@ -387,6 +412,26 @@ public class HotelPage extends Page {
     private void checkRentButtonName(){
         $(byXpath("//div[@class='hotel-selected__card-order-text']")).
                 shouldBe(visible).shouldBe(Condition.text(text[6][ln]));
+    }
+
+    private Date stringToDate(String d) {
+        Date parsingDate=null;
+        try {
+            parsingDate = new SimpleDateFormat("dd MMMM yyyy", new Locale(Values.lang[ln][2])).parse(d);
+        }catch (ParseException e) {
+            System.out.println("Parsing date error");
+        }
+        return parsingDate;
+    }
+
+    @Step("Проверка Email бронирования")
+    private void checkEmail(){
+        $("#mail-contents-inserted-value").shouldBe(visible).shouldBe(Condition.text(Values.email));
+    }
+
+    @Step("Проверка номера телефона бронирования")
+    private void checkPhone(){
+        $("#phone-contents-inserted-value").shouldBe(visible).shouldBe(Condition.text(Values.phone));
     }
 
 }

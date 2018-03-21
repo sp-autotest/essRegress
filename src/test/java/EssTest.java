@@ -135,12 +135,12 @@ public class EssTest {
         hotelPg.clickResidenceButton();//шаг 15
         hotelPg.checkHotelFilter();//шаг 16
         hotelPg.checkHotelLogic(flightList);//шаг 17
-        hotelPg.checkPassengersData(passList);//шаг 18
         hotelPg.checkFiltration();//шаг 19
         hotelPg.checkSorting();//шаг 20
         hotelPg.selectHotel();//шаг 21
         int room = hotelPg.selectRoomType();//шаг 22
         hotelPg.clickBookButton(room);//шаг 23
+        hotelPg.checkPassengersData(passList);//шаг 18
     }
 
     @Stories("Раздел 2 регрессионных испытаний")

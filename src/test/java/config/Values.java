@@ -16,6 +16,7 @@ public class Values {
     public static Price price = new Price();
     public static Auto auto = new Auto();
 
+    public static String phone = "";
     public static String email = "tafl@software-provider.ru";
     public static String host = "https://afl-test.test.aeroflot.ru/sb/app/ru-ru";
 

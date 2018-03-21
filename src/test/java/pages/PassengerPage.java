@@ -123,6 +123,7 @@ public class PassengerPage extends Page {
         String phone = getRandomNumberString(10);
         SelenideElement block = $(byXpath("//div[contains(@class,'--icon-contacts')]/following-sibling::div"));
         block.$$(byXpath("descendant::input[@type='text']")).get(1).setValue(phone);
+        Values.phone = phone;
     }
 
     @Step("Согласиться с правилами")
