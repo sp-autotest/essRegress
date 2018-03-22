@@ -146,7 +146,7 @@ public class EssTest {
         new EprPage().checkDataOnPayPage("26", flightList, passList, test);//шаг 26
         PaymentPage paymentPg = new PaymentPage();
         paymentPg.checkPaymentForm1();//шаг 27
-        paymentPg.setCardDetails("28");//шаг 28*/
+        paymentPg.setCardDetails("28");//шаг 28
     }
 
     @Stories("Раздел 2 регрессионных испытаний")

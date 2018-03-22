@@ -189,8 +189,9 @@ public class EssPage extends Page {
         int s = stringIntoInt(Values.price.iflight);
         System.out.println("Summ = " + s);
         String price = $(byXpath("//div[@class='frame__heading frame__heading--icon frame__heading--icon-safe']/span")).getText();
-        price = price.substring(0, price.indexOf("a")).trim().replaceAll("\\D+","");
-        //if (price.indexOf(" ")>0) price = price.substring(price.indexOf(" "));
+        //price = price.substring(0, price.indexOf("a")).trim().replaceAll("\\D+","");
+        if (price.indexOf(" ")>0) price = price.substring(0, price.indexOf(" "));
+        price = price.replaceAll("\\D+","");
         System.out.println("Price = " + price);
         int p = stringIntoInt(price);
         System.out.println("price = " + p);
@@ -222,6 +223,7 @@ public class EssPage extends Page {
                 "\nОжидалось: " + price +
                 "\nФактически: " + Values.price.imedical,
                 price.equals(Values.price.imedical));
+        Sleep(3);
     }
 
     @Step("Проверка кнопки «В заказе»")

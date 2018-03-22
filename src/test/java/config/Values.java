@@ -17,7 +17,10 @@ public class Values {
     public static Price price = new Price();
     public static Auto auto = new Auto();
     public static Hotel hotel = new Hotel();
-
+    public static String currencyChange = "link"; //параметр определяет метод смены валюты.
+                                                  //Возможные значения:
+                                                  //    link - с помощью подмены параметров в линке
+                                                  //    soap - с помощью soap-запросов
     public static String phone = "";
     public static String email = "tafl@software-provider.ru";
     public static String host = "https://afl-test.test.aeroflot.ru/sb/app/ru-ru";
@@ -28,15 +31,15 @@ public class Values {
     };
 
     public static String lang[][] = {
-            {"Русский", "русский", "ru", "ddMMM.yyyy,HH:mm→"},
-            {"Английский", "english", "en", "ddMMMyyyy,HH:mm→"},
-            {"Немецкий", "deutsch", "de", "ddMMMyyyy,HH:mm→"},
-            {"Испанский", "español", "es", "ddMMMyyyy,HH:mm→"},
-            {"Итальянский", "italiano", "it", "ddMMMyyyy,HH:mm→"},
-            {"Французский", "le français", "fr", "ddMMMyyyy,HH:mm→"},
-            {"Китайский", "中文", "zh", "ddM月yyyy,HH:mm→"},
-            {"Корейский", "한국어", "ko", "ddMMMyyyy,HH:mm→"},
-            {"Японский", "日本語", "ja", "ddMMMMyyyy,HH:mm→"},
+        {"Русский", "русский", "ru", "ddMMM.yyyy,HH:mm→", "Россия"},
+        {"Английский", "english", "en", "ddMMMyyyy,HH:mm→", "Russia"},
+        {"Немецкий", "deutsch", "de", "ddMMMyyyy,HH:mm→", "Russland"},
+        {"Испанский", "español", "es", "ddMMMyyyy,HH:mm→", "Rusia"},
+        {"Итальянский", "italiano", "it", "ddMMMyyyy,HH:mm→", "Russia"},
+        {"Французский", "le français", "fr", "ddMMMyyyy,HH:mm→", "Russie"},
+        {"Китайский", "中文", "zh", "ddM月yyyy,HH:mm→", "俄罗斯"},
+        {"Корейский", "한국어", "ko", "ddMMMyyyy,HH:mm→", "러시아"},
+        {"Японский", "日本語", "ja", "ddMMMMyyyy,HH:mm→", "ロシア"},
     };
 
     public static String text[][] = {

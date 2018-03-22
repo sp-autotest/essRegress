@@ -144,9 +144,11 @@ public class HotelPage extends Page {
     public int selectRoomType() {
         System.out.println("\t22. Select type of room");
         ElementsCollection rooms = $$(byXpath("//li[@class='hotel-room']"));
+
+        //реализовать выбор нештрафного отеля
         int sel = getRandomNumberLimit(rooms.size());
-        String price = rooms.get(sel).$(byXpath("descendant::div[@class='hotel-room__buy-price']")).shouldBe(visible).getText();
-        System.out.println("Room price = " + price);
+        //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
         return sel;
     }
 
@@ -154,6 +156,20 @@ public class HotelPage extends Page {
     public void clickBookButton(int room) {
         System.out.println("\t23. Click botton \"Book\"");
         ElementsCollection rooms = $$(byXpath("//li[@class='hotel-room']"));
+        SelenideElement textprice = rooms.get(room).$(byXpath("descendant::div[@class='hotel-room__buy-price']")).shouldBe(visible);
+        System.out.println("Room text price = " + textprice.getText());
+        String price = "";
+        if (Values.cur.equals("RUB")) {
+            price = textprice.innerHtml();
+            price = price.substring(0, price.indexOf("<"));
+        } else {
+            price = textprice.getText();
+            price = price.substring(price.indexOf("/"));
+            price = price.substring(0, price.indexOf(","));
+        }
+        price = price.replaceAll("\\D+","");
+        System.out.println("Room price = " + price);
+        Values.price.hotel = price;
         rooms.get(room).$(byXpath("descendant::div[@class='hotel-room__buy-button-wrapper']")).shouldBe(visible).click();
         checkHotelFormAppear();
         checkHotelCartPrice();
@@ -268,7 +284,7 @@ public class HotelPage extends Page {
         ElementsCollection hotels = $$(byXpath("//div[@id='hotel-search-result']/div"));
         for (int i=0; i<hotels.size(); i++) {
             float price = Float.parseFloat(hotels.get(i).$(byXpath("descendant::" +
-                    "div[@class='hotel-card__button-price']")).getText().replaceAll("\\s|a|\\$|€|¥",""));
+                    "div[@class='hotel-card__button-price']")).getText().replaceAll("\\s|a|\\$|€|¥|CNY",""));
             System.out.println("hotel price"+i+" = " + price);
             assertTrue("Цена " + price + "отеля №" + i + " не входит в фильтр" +
                             "\nОт: " + from +
@@ -428,7 +444,6 @@ public class HotelPage extends Page {
         String totalPrice = $("#cart-total-incarts").$(byXpath("descendant::div[@class='cart__item-price']")).getText().replaceAll("\\D+","");
         System.out.println("Total price = " + totalPrice);
         Values.price.total = totalPrice;
-        Values.price.hotel = p;
     }
 
     @Step("Проверка кнопки «В заказе»")

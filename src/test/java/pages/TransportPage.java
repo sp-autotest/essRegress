@@ -333,12 +333,12 @@ public class TransportPage extends Page {
 
     @Step("Стоимость поездки на Аэроэкспрессе не добавлена в корзину")
     private void checkAeroexpressPricesIsNotAdded() {
-        int summ = stringIntoInt(price.fly) + stringIntoInt(price.iflight) + stringIntoInt(price.imedical);
+        //int summ = stringIntoInt(price.fly) + stringIntoInt(price.iflight) + stringIntoInt(price.imedical);
         String totalPrice = $("#cart-total-incarts").$(byXpath("descendant::div[@class='cart__item-price']")).getText().replaceAll("\\D+","");
         assertTrue("Сумма \"Всего к оплате\" не корректна" +
-                        "\nОжидалось: " + summ +
+                        "\nОжидалось: " + Values.price.total +
                         "\nФактически: " + totalPrice,
-                        summ == stringIntoInt(totalPrice));
+                        totalPrice.equals(Values.price.total));
     }
 
 }

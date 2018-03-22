@@ -27,7 +27,7 @@ public class ChoosePage extends Page {
     public void step4() {
         checkChoosePage();
         System.out.println("URL = " + url());
-        if (!Values.cur.equals("RUB")) changeCurrency();
+        if ((!Values.cur.equals("RUB"))&(Values.currencyChange.equals("soap"))) changeCurrency();
         clickEnvironment();
     }
 

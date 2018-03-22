@@ -16,6 +16,10 @@ import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
+import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.WebDriverRunner.url;
+import static config.Values.lang;
+import static config.Values.ln;
 
 /**
  * Created by mycola on 21.02.2018.
@@ -27,6 +31,7 @@ public class PassengerPage extends Page {
     @Step("Действие 3, информация о пассажирах")
     public List<Passenger> step3() {
         checkPageAppear();
+        if ((!Values.cur.equals("RUB"))&(Values.currencyChange.equals("link"))) currencyChange(Values.cur);
         ElementsCollection cards = $$(byXpath("//div[@class='passenger-card']"));
         int count = getPassengersCount();
         for (int i=0;i<count;i++) fillPassengerData(cards.get(i),i+1);
@@ -61,6 +66,8 @@ public class PassengerPage extends Page {
         p.firstname = setRandomFirstName(card);
         p.dob = setDOB(card, i);
         p.number = setRandomNumber(card);
+        setNationality(card);
+        setСountry(card);
         clickUnlimitedLink(card);
         passengerList.add(p);
     }
@@ -98,6 +105,18 @@ public class PassengerPage extends Page {
         String dob = addMonthsFromToday(delta);
         card.$$(byXpath("descendant::input[@type='text']")).get(3).setValue(dob);
         return dob;
+    }
+
+    @Step("Указать гражданство")
+    private void setNationality(SelenideElement card){
+        SelenideElement el = card.$$(byXpath("descendant::input[@role='listbox']")).get(0);
+        while(!el.getValue().equals(lang[ln][4])) el.setValue(lang[ln][4]);
+    }
+
+    @Step("Указать страну выдачи")
+    private void setСountry(SelenideElement card){
+        SelenideElement el = card.$$(byXpath("descendant::input[@role='listbox']")).get(1);
+        while(!el.getValue().equals(lang[ln][4])) el.setValue(lang[ln][4]);
     }
 
     @Step("Указать номер")
@@ -138,4 +157,26 @@ public class PassengerPage extends Page {
         waitPlane();
     }
 
+    @Step("Действие 4, смена валюты на: {0}")
+    private void currencyChange(String currency) {
+        String cur = "";
+        if (!currency.equals("RUB")) {
+            switch (currency) {
+                case "USD":
+                    cur = "us";
+                    break;
+                case "EUR":
+                    cur = "fr";
+                    break;
+                case "CNY":
+                    cur = "cn";
+                    break;
+            }
+            String link = url();
+            link = link.replaceFirst("app/ru", "app/" + cur);
+            System.out.println("New link = " + link);
+            open(link);
+            checkPageAppear();
+        }
+    }
 }
