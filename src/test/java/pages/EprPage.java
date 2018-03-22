@@ -18,6 +18,7 @@ import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static config.Values.ln;
+import static java.lang.Math.abs;
 import static org.testng.AssertJUnit.assertTrue;
 
 /**
@@ -185,7 +186,8 @@ public class EprPage extends Page {
 //        assertTrue("Звездность отеля отличается от забронированной", name.contains(" " + Values.hotel.star + "*"));
         assertTrue("Дата заселения отличается от забронированной", Values.hotel.accDate.equals(sTd(sDate)));
         assertTrue("Дата выезда отличается от забронированной", Values.hotel.depDate.equals(sTd(eDate)));
-        assertTrue("Стоимость проживания отличается от забронированной", Values.price.hotel.equals(price));
+        int delta = abs(stringIntoInt(price)-stringIntoInt(Values.price.hotel));
+        assertTrue("Стоимость проживания отличается от забронированной", delta <= 2);
     }
 
     private Date stringToDate(String d) {
