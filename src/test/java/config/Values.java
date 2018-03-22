@@ -1,6 +1,7 @@
 package config;
 
 import struct.Auto;
+import struct.Hotel;
 import struct.Price;
 
 /**
@@ -15,6 +16,7 @@ public class Values {
     public static String docs = null;
     public static Price price = new Price();
     public static Auto auto = new Auto();
+    public static Hotel hotel = new Hotel();
 
     public static String phone = "";
     public static String email = "tafl@software-provider.ru";
