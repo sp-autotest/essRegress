@@ -141,6 +141,12 @@ public class EssTest {
         int room = hotelPg.selectRoomType();//шаг 22
         hotelPg.clickBookButton(room);//шаг 23
         hotelPg.checkPassengersData(passList);//шаг 18
+        hotelPg.clickPayInCart();//шаг 24
+        choosePg.chooseTestStend("25");//шаг 25
+        new EprPage().checkDataOnPayPage("26", flightList, passList, test);//шаг 26
+        PaymentPage paymentPg = new PaymentPage();
+        paymentPg.checkPaymentForm1();//шаг 27
+        paymentPg.setCardDetails("28");//шаг 28*/
     }
 
     @Stories("Раздел 2 регрессионных испытаний")
@@ -175,11 +181,11 @@ public class EssTest {
         transportPg.step10(test);
         transportPg.step11();
         transportPg.step12();
-        choosePg.step13();
-        new EprPage().step14(flightList, passList);
+        choosePg.chooseTestStend("13");//шаг 13
+        new EprPage().checkDataOnPayPage("14", flightList, passList, test);//шаг 14
         PaymentPage paymentPg = new PaymentPage();
-        paymentPg.step15();
-        paymentPg.step16();
+        paymentPg.checkPaymentForm2();//шаг 15
+        paymentPg.setCardDetails("16");//шаг 16
         new ResultPage().step17();
     }
 

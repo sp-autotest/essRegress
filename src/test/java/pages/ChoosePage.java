@@ -31,8 +31,9 @@ public class ChoosePage extends Page {
         clickEnvironment();
     }
 
-    @Step("Действие 13, выбор стенда")
-    public void step13() {
+    @Step("Действие {0}, выбор стенда")
+    public void chooseTestStend (String n) {
+        System.out.println("\t" + n + ". Choose Test Stend");
         $("h1").shouldBe(exactText("Вход в тестовую среду системы ЕПР"));
         System.out.println("URL = " + url());
         clickEnvironment();

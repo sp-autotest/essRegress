@@ -39,7 +39,7 @@ public class HotelPage extends Page {
 
     @Step("Действие 15, Нажать кнопку «Проживание»")
     public void clickResidenceButton() {
-        System.out.println("15. Click Accommodation");
+        System.out.println("\t15. Click Accommodation");
         $(byXpath("//div[@class='cart__item-title'][contains(text(),'" + text[3][ln] + "')]")).shouldBe(visible).click();
         waitPlane();
         checkHotelFormAppear();
@@ -47,7 +47,7 @@ public class HotelPage extends Page {
 
     @Step("Действие 16, Проверка фильтра поиска отелей")
     public void checkHotelFilter() {
-        System.out.println("16. Check exist of hotel filter");
+        System.out.println("\t16. Check exist of hotel filter");
         $("#dateStartHotel").shouldBe(visible);//поле даты заезда
         $("#dateEndHotel").shouldBe(visible);//поле даты выезда
         $("#shown_stars").shouldBe(visible);//поле выбора звездности
@@ -63,11 +63,20 @@ public class HotelPage extends Page {
         $(byXpath("//button[@data-order-by='Price']")).shouldBe(visible);//кнопка Сортировка по цене
         $(byXpath("//button[@data-order-by='Distance']")).shouldBe(visible);//кнопка Сортировка по удаленности от центра
         $(byXpath("//button[@data-order-by='Category']")).shouldBe(visible);//кнопка Сортировка по звездности
+        String d1 = $(byXpath("//input[@name='hotel_min_date']")).getValue();
+        String d2 = $(byXpath("//input[@name='hotel_max_date']")).getValue();
+        System.out.println("booking period = " + d1 + " - " + d2);
+        try {
+            Values.hotel.accDate = new SimpleDateFormat("yyyy-MM-dd").parse(d1);
+            Values.hotel.depDate = new SimpleDateFormat("yyyy-MM-dd").parse(d2);
+        }catch (ParseException e) {
+            System.out.println("Parsing date error");
+        }
     }
 
     @Step("Действие 17, Проверка логики отображения информации в блоке «Проживание»")
     public void checkHotelLogic(List<Flight> flightList) {
-        System.out.println("17. Check logic in Accommodation block");
+        System.out.println("\t17. Check logic in Accommodation block");
         checkStartHotelDate(new SimpleDateFormat("yyyy-MM-dd").format(flightList.get(0).end));
         checkEndHotelDate(new SimpleDateFormat("yyyy-MM-dd").format(flightList.get(1).start));
         checkResidentsNumber();
@@ -78,7 +87,7 @@ public class HotelPage extends Page {
 
     @Step("Действие 18, Проверка использования данных пассажиров при бронировании")
     public void checkPassengersData(List<Passenger> passList) {
-        System.out.println("18. Check passengers data");
+        System.out.println("\t18. Check passengers data");
         ElementsCollection info = $$(byXpath("//div[@class='hotel-selected__room-guest-info']/div"));
         int n = checkPassengerName(info.get(0), passList);
         checkPassengerDob(info.get(1), passList.get(n).dob);
@@ -88,7 +97,7 @@ public class HotelPage extends Page {
 
     @Step("Действие 19, Проверка возможности фильтрации")
     public void checkFiltration() {
-        System.out.println("19. Check filtering");
+        System.out.println("\t19. Check filtering");
         setPriceFilter();
         checkHotelFilterByPrice();
         setStarsFilter();
@@ -97,7 +106,7 @@ public class HotelPage extends Page {
 
     @Step("Действие 20, Проверка возможности сортировки")
     public void checkSorting() {
-        System.out.println("20. Checking the sorting");
+        System.out.println("\t20. Checking the sorting");
         System.out.println("sort by price");
         checkDecreasingPrice();
         clickSortByPriceButton();
@@ -110,10 +119,11 @@ public class HotelPage extends Page {
 
     @Step("Действие 21, Выбор отеля для аренды")
     public void selectHotel() {
-        System.out.print("21. Select hotel: ");
+        System.out.print("\t21. Select hotel: ");
         $(byXpath("//div[@id='shown_stars']/..")).click(); //кликнуть по выпадающему списку звезд
         setStarsCheckbox($("#stars5")); //отметить галкой 5-ти звездные отели в фильтре
         clickHotelSearchButton();//найти
+        clickSortByStarsButton();//отсортировать по убыванию звездности
         ElementsCollection hotels = null;
         String name = "";
         int n = 0;
@@ -124,7 +134,7 @@ public class HotelPage extends Page {
             name = hotels.get(n).getText();
             if (name.length()>0) break;
         }
-        System.out.println(name);
+        System.out.println(name);//вывести в лог имя отеля
         hotels.get(n).click();
         waitPlane();
         $(byXpath("//h1[@class='modal__header-title']")).shouldBe(visible);
@@ -132,7 +142,7 @@ public class HotelPage extends Page {
 
     @Step("Действие 22, Выбор типа номера")
     public int selectRoomType() {
-        System.out.println("22. Select type of room");
+        System.out.println("\t22. Select type of room");
         ElementsCollection rooms = $$(byXpath("//li[@class='hotel-room']"));
         int sel = getRandomNumberLimit(rooms.size());
         String price = rooms.get(sel).$(byXpath("descendant::div[@class='hotel-room__buy-price']")).shouldBe(visible).getText();
@@ -142,12 +152,21 @@ public class HotelPage extends Page {
 
     @Step("Действие 23, Нажать кнопку «Забронировать»")
     public void clickBookButton(int room) {
-        System.out.println("23. Click botton \"Book\"");
+        System.out.println("\t23. Click botton \"Book\"");
         ElementsCollection rooms = $$(byXpath("//li[@class='hotel-room']"));
         rooms.get(room).$(byXpath("descendant::div[@class='hotel-room__buy-button-wrapper']")).shouldBe(visible).click();
         checkHotelFormAppear();
         checkHotelCartPrice();
         checkRentButtonName();
+        saveHotelData();
+        screenShot("Скриншот");
+    }
+
+    @Step("Действие 24, Нажать Оплатить в корзине")
+    public void clickPayInCart() {
+        System.out.println("\t24. Click Pay in cart");
+        $(byXpath("//a[@class='cart__item-counter-link']")).click();
+        waitPlane();
     }
 
     @Step("Проверить совпадение автоматической даты вселения с датой прилета")
@@ -406,6 +425,10 @@ public class HotelPage extends Page {
         SelenideElement hotel = $(byXpath("//div[text()='" + text[3][ln] + "']")).shouldBe(visible);
         String cartPrice = hotel.$(byXpath("following::div[@class='cart__item-pricelist-item-price']")).getText().replaceAll("\\D+","");
         System.out.println("Hotel cart price = " + cartPrice);
+        String totalPrice = $("#cart-total-incarts").$(byXpath("descendant::div[@class='cart__item-price']")).getText().replaceAll("\\D+","");
+        System.out.println("Total price = " + totalPrice);
+        Values.price.total = totalPrice;
+        Values.price.hotel = p;
     }
 
     @Step("Проверка кнопки «В заказе»")
@@ -432,6 +455,12 @@ public class HotelPage extends Page {
     @Step("Проверка номера телефона бронирования")
     private void checkPhone(){
         $("#phone-contents-inserted-value").shouldBe(visible).shouldBe(Condition.text(Values.phone));
+    }
+
+    private void saveHotelData(){
+        Values.hotel.name = $(byXpath("//a[@class='hotel-selected__card-title']")).getText();
+        Values.hotel.star = $$(byXpath("//div[@class='hotel-selected__card-stars']" +
+                "/descendant::div[@class='stars-item stars-item--mark']")).size();
     }
 
 }

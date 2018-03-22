@@ -26,6 +26,7 @@ public class TransportPage extends Page {
 
     @Step("Действие 10, Нажать на кнопку «Транспорт»")
     public void step10(int test) {
+        System.out.println("\t10. Click Transport button");
         new EssPage().clickTransportButton();
         checkTransportBlock();
         if (test == 1) {
@@ -42,7 +43,7 @@ public class TransportPage extends Page {
 
     @Step("Действие 11, Арендовать автомобиль")
     public void step11() {
-        System.out.println("11. Rent Auto");
+        System.out.println("\t11. Rent Auto");
         selectCar();
         screenShot("Скриншот");
         int beforePrice = getCarPrice();
@@ -64,7 +65,7 @@ public class TransportPage extends Page {
 
     @Step("Действие 11, Проверка выпадающего списка выбора пассажиров")
     public void checkAeroexpressPassengersList() {
-        System.out.println("11. Check dropdown list in Aeroexpress");
+        System.out.println("\t11. Check dropdown list in Aeroexpress");
         dropdownClick();
         checkAeroexpressTikets();
         checkAeroexpressPrice();
@@ -73,14 +74,14 @@ public class TransportPage extends Page {
 
     @Step("Действие 12, Нажать Оплатить в корзине")
     public void step12() {
-        System.out.println("12. Click Pay in cart");
+        System.out.println("\t12. Click Pay in cart");
         $(byXpath("//a[@class='cart__item-counter-link']")).click();
         waitPlane();
     }
 
     @Step("Действие 12, Проверка логики отображения информации об Аэроэкспресс")
     public void checkAeroexpressLogic(List<Flight> flightList) {
-        System.out.println("12. Check Aeroexpress logic");
+        System.out.println("\t12. Check Aeroexpress logic");
         ElementsCollection directions = $$(byXpath("//div[@class='aeroexpress-select__direction-name']"));
         String dir;
         /*Туда*/

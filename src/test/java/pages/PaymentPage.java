@@ -13,15 +13,24 @@ import static org.testng.AssertJUnit.assertTrue;
  */
 public class PaymentPage extends Page {
 
-    @Step("Действие 15, проверка формы оплаты")
-    public void step15() {
+    @Step("Действие 27, проверка формы оплаты")
+    public void checkPaymentForm1() {
+        System.out.println("\t27. Checking Payment form");
         new EprPage().clickPayButton();
-        checkTotalPrice();
+        checkTotalPrice1();
+    }
+
+    @Step("Действие 15, проверка формы оплаты")
+    public void checkPaymentForm2() {
+        System.out.println("\t15. Checking Payment form");
+        new EprPage().clickPayButton();
+        checkTotalPrice2();
         checkTransportPrice();
     }
 
-    @Step("Действие 16, ввод реквизитов карточки и оплата")
-    public void step16() {
+    @Step("Действие {0}, ввод реквизитов карточки и оплата")
+    public void setCardDetails(String n) {
+        System.out.println("\t" + n + ". Filling bank card details and click Pay");
         setPan();
         setOwner();
         setMonth();
@@ -32,7 +41,17 @@ public class PaymentPage extends Page {
     }
 
     @Step("Проверка стоимости на оплату(без аренды авто)")
-    private void checkTotalPrice() {
+    private void checkTotalPrice1() {
+        String price = $(byXpath("//div[@class='cart__item-price ng-binding']")).getText().replaceAll("\\D+","");
+        System.out.println(price);
+        assertTrue("Стоимость «К ОПЛАТЕ ВСЕГО» некорректна", price.equals(Values.price.total));
+        String button = $(byXpath("//span[contains(@ng-bind-html,'payAmountText')]")).getText().replaceAll("\\D+","");
+        System.out.println(button);
+        assertTrue("Стоимость «Заплатить» на кнопке некорректна", button.equals(Values.price.total));
+    }
+
+    @Step("Проверка стоимости на оплату(без аренды авто)")
+    private void checkTotalPrice2() {
         String price = $(byXpath("//div[@class='cart__item-price ng-binding']")).getText().replaceAll("\\D+","");
         System.out.println(price);
         assertTrue("Стоимость «К ОПЛАТЕ ВСЕГО» некорректна", price.equals(Values.price.total));

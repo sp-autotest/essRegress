@@ -25,8 +25,9 @@ import static org.testng.AssertJUnit.assertTrue;
  */
 public class EprPage extends Page {
 
-    @Step("Действие 14, проверка данных на странице оплаты")
-    public void step14(List<Flight> flyList, List<Passenger> passList) {
+    @Step("Действие {0}, проверка данных на странице оплаты")
+    public void checkDataOnPayPage(String n, List<Flight> flyList, List<Passenger> passList, int test) {
+        System.out.println("\t" + n + ". Checking data on Pay page");
         screenShot("Скриншот");
         ElementsCollection passengers = $$(byXpath("//div[contains(@ng-repeat,'passenger')]"));
         for (int i = 0; i < passengers.size(); i++) {
@@ -43,7 +44,8 @@ public class EprPage extends Page {
         screenShot("Скриншот");
         checkMedicalInsurance(passList);
         checkAllInsurancePrice();
-        checkTransport();
+        if (test == 1) checkAccommodation();
+        if (test == 2) checkTransport();
     }
 
     @Step("Проверка фамилии и имени {0}-го пассажира")
@@ -100,7 +102,7 @@ public class EprPage extends Page {
     }
 
     @Step("Проверка полетной страховки")
-    public void checkFlyInsurance(List<Passenger> passList){
+    private void checkFlyInsurance(List<Passenger> passList){
         SelenideElement row = $(byXpath("//div[@data-toggle-id='toggle-safe']/descendant::div[@role='row'][1]"));
         row.scrollTo();
         String insurance = row.getText();
@@ -115,7 +117,7 @@ public class EprPage extends Page {
     }
 
     @Step("Проверка медицинской страховки")
-    public void checkMedicalInsurance(List<Passenger> passList){
+    private void checkMedicalInsurance(List<Passenger> passList){
         SelenideElement row = $(byXpath("//div[@data-toggle-id='toggle-safe']/descendant::div[@role='row'][2]"));
         row.scrollTo();
         String insurance = row.getText();
@@ -131,7 +133,7 @@ public class EprPage extends Page {
     }
 
     @Step("Проверка общей стоимости всех страховок")
-    public void checkAllInsurancePrice() {
+    private void checkAllInsurancePrice() {
         String price = $(byXpath("//div[@data-toggle-id='toggle-safe']/descendant::" +
                 "div[@class='checkout-item__left-container']")).getText().replaceAll("\\D+","");
         System.out.println("all insurances= " + price);
@@ -140,7 +142,7 @@ public class EprPage extends Page {
     }
 
     @Step("Проверка данных транспортной услуги")
-    public void checkTransport(){
+    private void checkTransport(){
         SelenideElement row = $(byXpath("//div[@data-toggle-id='toggle-TRANSPORT']"));
         row.scrollTo();
         String name = row.$(byXpath("descendant::div[@ng-bind='item.details.carName']")).getText();
@@ -170,10 +172,36 @@ public class EprPage extends Page {
         assertTrue("Стоимость аренды автомобиля отличается от забронированной", Values.price.transport.equals(price));
     }
 
+    @Step("Проверка данных услуги проживания")
+    private void checkAccommodation(){
+        SelenideElement row = $(byXpath("//div[@data-toggle-id='toggle-Hotel']"));
+        row.scrollTo();
+        String name = row.$$(byXpath("descendant::div[@ng-bind='categoryItem.details.name']")).get(1).getText();
+        String sDate = row.$(byXpath("descendant::div[@ng-bind='categoryItem.details.dateFrom']")).getText();
+        String eDate = row.$(byXpath("descendant::div[@ng-bind='categoryItem.details.dateTo']")).getText();
+        String price = row.$(byXpath("descendant::span[contains(@class,'__item-price')]")).getText().replaceAll("\\D+","");
+        System.out.println("Cheking accommodation service: \n"+name+"\n"+sDate+"\n"+eDate+"\n"+price);
+        assertTrue("Название отеля отличается от забронированного", name.contains(Values.hotel.name));
+//        assertTrue("Звездность отеля отличается от забронированной", name.contains(" " + Values.hotel.star + "*"));
+        assertTrue("Дата заселения отличается от забронированной", Values.hotel.accDate.equals(sTd(sDate)));
+        assertTrue("Дата выезда отличается от забронированной", Values.hotel.depDate.equals(sTd(eDate)));
+        assertTrue("Стоимость проживания отличается от забронированной", Values.price.hotel.equals(price));
+    }
+
     private Date stringToDate(String d) {
         Date parsingDate=null;
         try {
             parsingDate = new SimpleDateFormat("dd MMMM yyyy, HH:mm", new Locale(Values.lang[ln][2])).parse(d);
+        }catch (ParseException e) {
+            System.out.println("Parsing date error");
+        }
+        return parsingDate;
+    }
+
+    private Date sTd(String d) {
+        Date parsingDate=null;
+        try {
+            parsingDate = new SimpleDateFormat("dd MMMM yyyy", new Locale(Values.lang[ln][2])).parse(d);
         }catch (ParseException e) {
             System.out.println("Parsing date error");
         }
