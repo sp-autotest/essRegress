@@ -32,7 +32,7 @@ public class Page {
         }
     }
 
-    @Step("Результат")
+    @Step("Запись результатов")
     public static void resultat(){
         logPNR(Values.pnr);
         logCardNumber(Values.card[0][0]);

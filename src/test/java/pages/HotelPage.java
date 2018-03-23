@@ -80,8 +80,8 @@ public class HotelPage extends Page {
     @Step("Действие 17, Проверка логики отображения информации в блоке «Проживание»")
     public void checkHotelLogic(List<Flight> flightList) {
         System.out.println("\t17. Check logic in Accommodation block");
-        checkStartHotelDate(new SimpleDateFormat("yyyy-MM-dd").format(flightList.get(0).end));
-        checkEndHotelDate(new SimpleDateFormat("yyyy-MM-dd").format(flightList.get(1).start));
+        checkStartHotelDate(new SimpleDateFormat("yyyy-MM-d").format(flightList.get(0).end));
+        checkEndHotelDate(new SimpleDateFormat("yyyy-MM-d").format(flightList.get(1).start));
         checkResidentsNumber();
         checkRoomCount();
         clickHotelCheckbox();

@@ -27,8 +27,8 @@ import static org.testng.AssertJUnit.assertTrue;
  */
 public class ResultPage extends Page {
 
-    @Step("Действие 17, проверка страницы результатов оплаты")
-    public void step17() {
+    @Step("Действие {0}, проверка страницы результатов оплаты")
+    public void checkServicesData(String n, int test) {
         checkPageAppear();
         ElementsCollection services = $$(byXpath("//div[@id='frame-additionalServices']/descendant::div[@role='row']"));
         services.get(0).scrollTo();
@@ -36,7 +36,8 @@ public class ResultPage extends Page {
         services.get(1).scrollTo();
         checkMedicalInsurance(services.get(1));
         services.get(2).scrollTo();
-        checkTransport(services.get(2));
+        if (test == 1) checkHotel(services.get(2));
+        if (test == 2) checkTransport(services.get(2));
         checkTotalPrice();
     }
 
@@ -48,7 +49,7 @@ public class ResultPage extends Page {
     }
 
     @Step("Проверка полетной страховки")
-    public void checkFlyInsurance(SelenideElement row){
+    private void checkFlyInsurance(SelenideElement row){
         ElementsCollection docs = row.$$(byXpath("child::div[4]/div/a"));
         for (int i=0; i<docs.size(); i++) {
             Values.docs = Values.docs + docs.get(i).getText() + ", ";
@@ -71,10 +72,10 @@ public class ResultPage extends Page {
     }
 
     @Step("Проверка медицинской страховки")
-    public void checkMedicalInsurance(SelenideElement row){
+    private void checkMedicalInsurance(SelenideElement row){
         ElementsCollection docs = row.$$(byXpath("child::div[4]/div/a"));
-        for (int i=0; i<docs.size(); i++) {
-            Values.docs = Values.docs + docs.get(i).getText() + ", ";
+        for (SelenideElement doc : docs) {
+            Values.docs = Values.docs + doc.getText() + ", ";
         }
         String passengers = row.$(byXpath("child::div[2]")).getText().replaceAll("\\D+","");
         System.out.println("passengers = " + passengers);
@@ -94,10 +95,10 @@ public class ResultPage extends Page {
     }
 
     @Step("Проверка транспортной услуги")
-    public void checkTransport(SelenideElement row){
+    private void checkTransport(SelenideElement row){
         ElementsCollection docs = row.$$(byXpath("child::div[5]/div/a"));
-        for (int i=0; i<docs.size(); i++) {
-            Values.docs = Values.docs + docs.get(i).getText() + ", ";
+        for (SelenideElement doc : docs) {
+            Values.docs = Values.docs + doc.getText() + ", ";
         }
         String name = row.$(byXpath("child::div[1]")).getText();
         System.out.println("Auto = " + name);
@@ -131,7 +132,39 @@ public class ResultPage extends Page {
         assertTrue("Название ваучера некорректно", docs.get(0).getText().contains(text[15][ln]));
     }
 
-    @Step("Проверка оплаченной стоимости (без транспорта)")
+    @Step("Проверка услуги проживания")
+    private void checkHotel(SelenideElement row){
+        ElementsCollection docs = row.$$(byXpath("child::div[5]/div/a"));
+        for (SelenideElement doc : docs) {
+            Values.docs = Values.docs + doc.getText() + ", ";
+        }
+        String name = row.$(byXpath("child::div[1]")).getText();
+        System.out.println("Hotel = " + name);
+        assertTrue("Название отеля отличается от забронированного", hotel.name.equals(name));
+
+        String sDate = row.$(byXpath("child::div[2]")).getText();
+        int s = row.$(byXpath("child::div[2]/span")).getText().length()+1;
+        sDate = sDate.substring(s);
+        System.out.println("Hotel start = " + sDate);
+        assertTrue("Дата заселения отличается от забронированной", hotel.accDate.equals(sTd(sDate)));
+
+        String eDate = row.$(byXpath("child::div[3]")).getText();
+        s = row.$(byXpath("child::div[3]/span")).getText().length()+1;
+        eDate = eDate.substring(s);
+        System.out.println("Hotel end = " + eDate);
+        assertTrue("Дата выезда отличается от забронированной", hotel.depDate.equals(sTd(eDate)));
+
+        String price = row.$(byXpath("child::div[4]")).getText().replaceAll("\\D+","");
+        if (Values.cur.equals("RUB")) price = price.substring(0, price.length()-2);
+        System.out.println("Hotel price = " + price);
+        assertTrue("Стоимость проживания отличается от забронированной", Values.price.hotel.equals(price));
+
+        System.out.println("docs = " + docs.size());
+        //assertTrue("Количество приложенных документов не один", docs.size() == 1);
+        //assertTrue("Название ваучера некорректно", docs.get(0).getText().contains(text[15][ln]));
+    }
+
+    @Step("Проверка оплаченной стоимости")
     private void checkTotalPrice(){
         ElementsCollection texts= $$(byXpath("//div[@class='col--16 col--stack-below-mobile']"));
         String totalPrice = texts.get(1).scrollTo().getText().replaceAll("\\D+","");
@@ -144,6 +177,16 @@ public class ResultPage extends Page {
         Date parsingDate=null;
         try {
             parsingDate = new SimpleDateFormat("d MMMM yyyy, HH:mm", new Locale(Values.lang[ln][2])).parse(d);
+        }catch (ParseException e) {
+            System.out.println("Parsing date error");
+        }
+        return parsingDate;
+    }
+
+    private Date sTd(String d) {
+        Date parsingDate=null;
+        try {
+            parsingDate = new SimpleDateFormat("d MMMM yyyy", new Locale(Values.lang[ln][2])).parse(d);
         }catch (ParseException e) {
             System.out.println("Parsing date error");
         }

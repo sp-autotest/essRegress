@@ -147,6 +147,7 @@ public class EssTest {
         PaymentPage paymentPg = new PaymentPage();
         paymentPg.checkPaymentForm1();//шаг 27
         paymentPg.setCardDetails("28");//шаг 28
+        new ResultPage().checkServicesData("29", test);//шаг 29
     }
 
     @Stories("Раздел 2 регрессионных испытаний")
@@ -186,7 +187,7 @@ public class EssTest {
         PaymentPage paymentPg = new PaymentPage();
         paymentPg.checkPaymentForm2();//шаг 15
         paymentPg.setCardDetails("16");//шаг 16
-        new ResultPage().step17();
+        new ResultPage().checkServicesData("17", test);//шаг 17
     }
 
 }
