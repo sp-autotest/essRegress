@@ -40,7 +40,7 @@ public class PaymentPage extends Page {
         checkPaySuccessfull();
     }
 
-    @Step("Проверка стоимости на оплату(без аренды авто)")
+    @Step("Проверка стоимости на оплату")
     private void checkTotalPrice1() {
         String price = $(byXpath("//div[@class='cart__item-price ng-binding']")).getText().replaceAll("\\D+","");
         System.out.println(price);

@@ -40,7 +40,10 @@ public class HotelPage extends Page {
     @Step("Действие 15, Нажать кнопку «Проживание»")
     public void clickResidenceButton() {
         System.out.println("\t15. Click Accommodation");
-        $(byXpath("//div[@class='cart__item-title'][contains(text(),'" + text[3][ln] + "')]")).shouldBe(visible).click();
+        //$(byXpath("//div[@class='cart__item-title'][contains(text(),'" + text[3][ln] + "')]")).shouldBe(visible).click();
+        SelenideElement acc = $(byXpath("//div[@class='cart__item']")).shouldBe(visible);
+        Sleep(1);
+        acc.click();
         waitPlane();
         checkHotelFormAppear();
     }

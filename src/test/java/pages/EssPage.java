@@ -3,7 +3,6 @@ package pages;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import config.Values;
-import org.openqa.selenium.interactions.Actions;
 import ru.yandex.qatools.allure.annotations.Step;
 import struct.Flight;
 import java.text.SimpleDateFormat;
@@ -13,7 +12,6 @@ import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
-import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static config.Values.*;
 import static org.testng.AssertJUnit.assertTrue;
 
@@ -124,9 +122,6 @@ public class EssPage extends Page {
 
     @Step("Таймер")
     private void checkTimer(){
-        /*Actions actions = new Actions(getWebDriver());
-        actions.moveToElement($(byXpath("//div[@class='img header__logo']")).toWebElement(),1,1).build().perform();
-        Sleep(1);*/
         $(byXpath("//div[@class='cart__item-counter-time']")).shouldBe(visible);
     }
 
@@ -189,10 +184,7 @@ public class EssPage extends Page {
         int s = stringIntoInt(Values.price.iflight);
         System.out.println("Summ = " + s);
         String price = $(byXpath("//div[@class='frame__heading frame__heading--icon frame__heading--icon-safe']/span")).getText();
-        //price = price.substring(0, price.indexOf("a")).trim().replaceAll("\\D+","");
-        if (price.indexOf(" ")>0) price = price.substring(0, price.indexOf(" "));
-        price = price.replaceAll("\\D+","");
-        System.out.println("Price = " + price);
+        price = price.substring(0, price.indexOf("(")).replaceAll("\\D+","");
         int p = stringIntoInt(price);
         System.out.println("price = " + p);
         System.out.println("ticket = " + ticket);
