@@ -98,13 +98,13 @@ public class EssTest {
             {"Немецкий",    "CNY"},
         };
     }
-
+/*
     @Stories("Раздел 1 регрессионных испытаний")
-    @Title("Тестирование ESS")
+    @Title("Тестирование ESS, раздел 1")
     @Description("Карта VISA;\nНаправление перелета: туда-обратно;\n" +
             "Состав бронирования авиаперелета, билеты: 2 взрослых;\n" +
             "Дополнительные услуги: «Полетная страховка», «Медицинская страховка» (классическая), «Отель»")
-    @Test(priority = 1, dataProvider = "parseLocaleData", description = "Раздел 1", enabled = false)
+    @Test(priority = 1, dataProvider = "parseLocaleData", description = "Раздел 1", enabled = true)
     public void section1(String locale, String currency) {
         int test = 1;
         Values.ln = getLanguageNumber(locale);
@@ -148,10 +148,10 @@ public class EssTest {
         paymentPg.checkPaymentForm1();//шаг 27
         paymentPg.setCardDetails("28");//шаг 28
         new ResultPage().checkServicesData("29", test);//шаг 29
-    }
+    }*/
 
     @Stories("Раздел 2 регрессионных испытаний")
-    @Title("Тестирование ESS")
+    @Title("Тестирование ESS, раздел 2")
     @Description("Карта VISA;\nHаправление перелета: туда-обратно;\n" +
             "Состав бронирования авиаперелета, билеты: 2 взрослых, 2 детских, 1 младенец;\n" +
             "Дополнительные услуги: «Полетная страховка», «Медицинская страховка» (Спортивная), «Аренда автомобиля»")

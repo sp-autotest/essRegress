@@ -60,6 +60,7 @@ public class ResultPage extends Page {
 
         String price = row.$(byXpath("child::div[3]")).getText().replaceAll("\\D+","");
         if (Values.cur.equals("RUB")) price = price.substring(0, price.length()-2);
+        if (Values.cur.equals("CNY")) price = price.substring(0, price.length()-2);
         System.out.println("fly insurance = " + price);
         assertTrue("Стоимость полетной страховки отличается от забронированной", Values.price.iflight.equals(price));
 
@@ -83,6 +84,7 @@ public class ResultPage extends Page {
 
         String price = row.$(byXpath("child::div[3]")).getText().replaceAll("\\D+","");
         if (Values.cur.equals("RUB")) price = price.substring(0, price.length()-2);
+        if (Values.cur.equals("CNY")) price = price.substring(0, price.length()-2);
         System.out.println("med insurance = " + price);
         assertTrue("Стоимость медицинской страховки отличается от забронированной", Values.price.imedical.equals(price));
 
@@ -124,6 +126,7 @@ public class ResultPage extends Page {
 
         String price = row.$(byXpath("child::div[4]")).getText().replaceAll("\\D+","");
         if (Values.cur.equals("RUB")) price = price.substring(0, price.length()-2);
+        if (Values.cur.equals("CNY")) price = price.substring(0, price.length()-2);
         System.out.println("Auto = " + price);
         assertTrue("Стоимость аренды автомобиля отличается от забронированной", Values.price.nationalTransport.equals(price));
 
@@ -169,6 +172,7 @@ public class ResultPage extends Page {
         ElementsCollection texts= $$(byXpath("//div[@class='col--16 col--stack-below-mobile']"));
         String totalPrice = texts.get(1).scrollTo().getText().replaceAll("\\D+","");
         if (Values.cur.equals("RUB")) totalPrice = totalPrice.substring(0, totalPrice.length()-2);
+        if (Values.cur.equals("CNY")) totalPrice = totalPrice.substring(0, totalPrice.length()-2);
         System.out.println("Total price = " + totalPrice);
         assertTrue("Оплаченная стоимость не совпадает с забронированной", Values.price.total.equals(totalPrice));
     }
