@@ -25,8 +25,8 @@ import static config.Values.ticket;
 public class SearchPage extends Page {
 
     List<Flight> flightList = new ArrayList<Flight>();
-    String dateThere = addOneMonthAndDays(0);
-    String dateBack = addOneMonthAndDays(2);
+    String dateThere = addMonthAndDays(1,0);
+    String dateBack = addMonthAndDays(1,2);
     String duration = "";
 
     @Step("Действие 1, поиск рейсов")
@@ -34,6 +34,10 @@ public class SearchPage extends Page {
         selectLocale();
         setFrom("MOW");
         setTo("PRG");
+        if (test == 1) {
+            dateThere = addMonthAndDays(0,2);
+            dateBack = addMonthAndDays(0,3);
+        }
         setThere(dateThere);
         setBack (dateBack);
         clickPassengers();
@@ -158,11 +162,11 @@ public class SearchPage extends Page {
         $(byXpath("//a[@class='next__button']")).shouldBe(visible).click();
     }
 
-    private static String addOneMonthAndDays(int days)
+    private static String addMonthAndDays(int months, int days)
     {
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
-        cal.add(Calendar.MONTH, 1);
+        cal.add(Calendar.MONTH, months);
         cal.add(Calendar.DAY_OF_MONTH, days);
         return new java.text.SimpleDateFormat("ddMMyyyy").format(cal.getTime());
     }
