@@ -31,7 +31,7 @@ public class Values {
     };
 
     public static String lang[][] = {
-        {"Русский", "русский", "ru", "ddMMM.yyyy,HH:mm→", "Россия"},
+        {"Русский", "русский", "ru", "ddMMMyyyy,HH:mm→", "Россия"},
         {"Английский", "english", "en", "ddMMMyyyy,HH:mm→", "Russia"},
         {"Немецкий", "deutsch", "de", "ddMMMyyyy,HH:mm→", "Russland"},
         {"Испанский", "español", "es", "ddMMMyyyy,HH:mm→", "Rusia"},
