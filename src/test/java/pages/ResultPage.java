@@ -29,6 +29,7 @@ public class ResultPage extends Page {
 
     @Step("Действие {0}, проверка страницы результатов оплаты")
     public void checkServicesData(String n, int test) {
+        System.out.println("\t" + n + ". Cheking final page with pay result");
         checkPageAppear();
         ElementsCollection services = $$(byXpath("//div[@id='frame-additionalServices']/descendant::div[@role='row']"));
         services.get(0).scrollTo();
@@ -102,7 +103,7 @@ public class ResultPage extends Page {
         for (SelenideElement doc : docs) {
             Values.docs = Values.docs + doc.getText() + ", ";
         }
-        String name = row.$(byXpath("child::div[1]")).getText();
+        String name = row.$(byXpath("child::div[1]/div")).getText();
         System.out.println("Auto = " + name);
         assertTrue("Название авто отличается от забронированного", auto.name.equals(name));
 
@@ -159,6 +160,7 @@ public class ResultPage extends Page {
 
         String price = row.$(byXpath("child::div[4]")).getText().replaceAll("\\D+","");
         if (Values.cur.equals("RUB")) price = price.substring(0, price.length()-2);
+        if (Values.cur.equals("CNY")) price = price.substring(0, price.length()-2);
         System.out.println("Hotel price = " + price);
         assertTrue("Стоимость проживания отличается от забронированной", Values.price.hotel.equals(price));
 
