@@ -25,6 +25,7 @@ import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static config.Values.ln;
 import static config.Values.text;
 import static org.testng.AssertJUnit.assertTrue;
+import static org.testng.AssertJUnit.assertFalse;
 
 /**
  * Created by mycola on 15.03.2018.
@@ -120,23 +121,26 @@ public class HotelPage extends Page {
         checkAscendingStars();
     }
 
-    @Step("Действие 21, Выбор отеля для аренды")
-    public void selectHotel() {
+    @Step("Действие 21, Выбор отеля для аренды ({0})")
+    public void selectHotel(int n) {
         System.out.print("\t21. Select hotel: ");
-        $(byXpath("//div[@id='shown_stars']/..")).click(); //кликнуть по выпадающему списку звезд
-        setStarsCheckbox($("#stars5")); //отметить галкой 5-ти звездные отели в фильтре
-        clickHotelSearchButton();//найти
-        clickSortByStarsButton();//отсортировать по убыванию звездности
+        if (n==0) {
+            $(byXpath("//div[@id='shown_stars']/..")).click(); //кликнуть по выпадающему списку звезд
+            setStarsCheckbox($("#stars5")); //отметить галкой 5-ти звездные отели в фильтре
+            clickHotelSearchButton();//найти
+            clickSortByStarsButton();//отсортировать по убыванию звездности
+        }
         ElementsCollection hotels = null;
-        String name = "";
-        int n = 0;
+        String name;
         for (int i=0; i<20; i++) {
             Sleep(1);
             hotels = $$(byXpath("//*[@id='hotel-search-result']/div/div/a"));
-            n = getRandomNumberLimit(hotels.size());
-            name = hotels.get(n).getText();
+            name = hotels.get(i).getText();
             if (name.length()>0) break;
         }
+        System.out.print(n + " ");
+        assertTrue("Неудалось найти отель с подходящими штрафами", n < hotels.size());
+        name = hotels.get(n).getText();
         System.out.println(name);//вывести в лог имя отеля
         hotels.get(n).click();
         waitPlane();
@@ -147,11 +151,19 @@ public class HotelPage extends Page {
     public int selectRoomType() {
         System.out.println("\t22. Select type of room");
         ElementsCollection rooms = $$(byXpath("//li[@class='hotel-room']"));
-
+        int sel = -1;
         //реализовать выбор нештрафного отеля
-        int sel = getRandomNumberLimit(rooms.size());
+        sel = getRandomNumberLimit(rooms.size());
         //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/*
+        for (int i=0; i<rooms.size(); i++){
+            rooms.get(sel).$(byXpath("descendant::")).click();
 
+        }
+*/
+
+
+        if (sel < 0) clickHotelCardClose();
         return sel;
     }
 
@@ -481,4 +493,7 @@ public class HotelPage extends Page {
                 "/descendant::div[@class='stars-item stars-item--mark']")).size();
     }
 
+    private void clickHotelCardClose(){
+        $(byXpath("//a[@class='modal__close']")).shouldBe(visible).click();
+    }
 }
