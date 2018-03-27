@@ -64,8 +64,9 @@ public class Values {
             {"Белорусский вокзал", "Belorussky Rail Terminal", "Weißrussischen Bahnhof", "Terminal de ferrocarril Belorussky", "Terminal ferroviario Belorussky", "Terminus de la gare de Biélorussie", "白俄罗斯站", "벨로루스키역 터미널", "ベロルスキー鉄道ターミナル"},
             {"Шереметьево", "Sheremetyevo", "Sheremetyevo", "Sheremetiévo", "Sheremetyevo", "Chérémétiévo", "谢列梅捷沃", "셰레메티예보", "シェレメティエブ"},
             {"Киевский вокзал", "Kievsky Rail Terminal", "Kiewer Bahnhof", "Terminal de ferrocarril Kievsky", "Terminal ferroviario Kievsky", "Terminus de la gare de Kiev", "基辅火车站", "키옙스키역 터미널", "キエフスキー鉄道ターミナル"},
-            {"Внуково", "Vnukovo", "Vnukovo", "Vnukovo", "Vnukovo", "Vnoukovo", "尤努科沃", "브누코보", "ヴヌーコヴォ"}
-
+            {"Внуково", "Vnukovo", "Vnukovo", "Vnukovo", "Vnukovo", "Vnoukovo", "尤努科沃", "브누코보", "ヴヌーコヴォ"},
+            {"Бесплатно", "Free of charge", "Kostenlos", "Gratis", "Gratis", "Gratuit", "免费", "무료", "無料"},
+            {"До", "Till", "Bis", "Hasta el", "Entro il:", "Jusqu`au", "截止", "까지", "まで"}
     };
 
 }
