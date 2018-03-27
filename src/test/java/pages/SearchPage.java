@@ -35,8 +35,8 @@ public class SearchPage extends Page {
         setFrom("MOW");
         setTo("PRG");
         if (test == 1) {
-            dateThere = addMonthAndDays(0,2);
-            dateBack = addMonthAndDays(0,3);
+            dateThere = addMonthAndDays(1,0);
+            dateBack = addMonthAndDays(1,2);
         }
         setThere(dateThere);
         setBack (dateBack);
