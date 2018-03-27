@@ -135,16 +135,20 @@ public class EssTest {
         hotelPg.clickResidenceButton();//шаг 15
         hotelPg.checkHotelFilter();//шаг 16
         hotelPg.checkHotelLogic(flightList);//шаг 17
-   //     hotelPg.checkFiltration();//шаг 19
-   //     hotelPg.checkSorting();//шаг 20
+        hotelPg.checkFiltration();//шаг 19
+        hotelPg.checkSorting();//шаг 20
+
+        //искать нештрафную комнату
         int room = -1;
         for (int i=0; i<=9; i++) {
             hotelPg.selectHotel(i);//шаг 21
             room = hotelPg.selectRoomType();//шаг 22
             if (room>=0) break;
         }
+        //------------------------
+
         hotelPg.clickBookButton(room);//шаг 23
-      /*  hotelPg.checkPassengersData(passList);//шаг 18
+        hotelPg.checkPassengersData(passList);//шаг 18
         hotelPg.clickPayInCart();//шаг 24
         choosePg.chooseTestStend("25");//шаг 25
         new EprPage().checkDataOnPayPage("26", flightList, passList, test);//шаг 26

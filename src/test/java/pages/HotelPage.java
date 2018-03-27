@@ -152,16 +152,43 @@ public class HotelPage extends Page {
         System.out.println("\t22. Select type of room");
         ElementsCollection rooms = $$(byXpath("//li[@class='hotel-room']"));
         int sel = -1;
-        //реализовать выбор нештрафного отеля
-        sel = getRandomNumberLimit(rooms.size());
-        //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-/*
-        for (int i=0; i<rooms.size(); i++){
-            rooms.get(sel).$(byXpath("descendant::")).click();
+        System.out.println("Rooms = " + rooms.size());
 
+        /*понажимать во всех комнатах линк 'Условия отмены'*/
+        for (int i=0; i<rooms.size(); i++){
+            rooms.get(i).$(byXpath("descendant::div[@class='h-fz--12 h-color--blue h-display--inline-block']")).click();
+            Sleep(1);
         }
-*/
-        if (sel < 0) clickHotelCardClose();
+
+        /*подождать пока прогрузятся условия отмены во всех комнатах*/
+        int n;//число прогрузившихся условий отмены
+        int t=0;//число секунд ожидания прогрузки всех, максимум 30
+        do {
+            n = $(byXpath("//div[@class='modal__frame modal__frame--no-padding']")).$$(byXpath("descendant::div[@class='wrapper']")).size();
+            Sleep(1);
+            t++;
+        } while ((rooms.size()>n)&(t<30));
+
+        /*найти условия отмены без штрафа на текущее число*/
+        String period;
+        for (int i=0; i<rooms.size(); i++){
+            ElementsCollection rules = rooms.get(i).$$(byXpath("descendant::div[@class='wrapper']"));
+            if (rules.size()>0) {
+                System.out.println("Room" + i + " Cancel Rules = " + rules.get(0).getAttribute("textContent"));
+                if (rules.get(0).getText().contains(Values.text[22][ln])) {//если условие отмены содержит текст "Бесплатно"
+                    period = rules.get(0).$(byXpath("//div[text()='" + Values.text[22][ln] + "']/..")).getAttribute("textContent");
+                    period = period.replaceFirst(Values.text[22][ln], "");
+                    if (period.contains(Values.text[23][ln])) {//если условие отмены содержит текст "До"
+                        period = period.replaceFirst(Values.text[23][ln], "");
+                        if (sTd(period.trim()).after(new Date())) {//если условие отмены содержит дату после текущей
+                            sel = i;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        if (sel < 0) clickHotelCardClose();//если комната с условиями отмены не найдена - нажать крестик, закрыть карточку отеля
         return sel;
     }
 
@@ -170,7 +197,7 @@ public class HotelPage extends Page {
         System.out.println("\t23. Click botton \"Book\"");
         ElementsCollection rooms = $$(byXpath("//li[@class='hotel-room']"));
         SelenideElement textprice = rooms.get(room).$(byXpath("descendant::div[@class='hotel-room__buy-price']")).shouldBe(visible);
-        System.out.println("Room text price = " + textprice.getText());
+        System.out.println("Room text price = " + textprice.getAttribute("textContent"));
         String price = "";
         if (Values.cur.equals("RUB")) {
             price = textprice.innerHtml();
@@ -469,6 +496,16 @@ public class HotelPage extends Page {
         Date parsingDate=null;
         try {
             parsingDate = new SimpleDateFormat("dd MMMM yyyy", new Locale(Values.lang[ln][2])).parse(d);
+        }catch (ParseException e) {
+            System.out.println("Parsing date error");
+        }
+        return parsingDate;
+    }
+
+    private Date sTd(String d) {
+        Date parsingDate=null;
+        try {
+            parsingDate = new SimpleDateFormat("dd.MM.yyyy", new Locale(Values.lang[ln][2])).parse(d);
         }catch (ParseException e) {
             System.out.println("Parsing date error");
         }
