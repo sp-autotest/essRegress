@@ -68,7 +68,7 @@ public class Page {
     public static String getRandomNumberString(int l) {
         StringBuilder tag = new StringBuilder();
         for (int i = 0; i < l; i++) {
-            tag.append((char) ((int) (Math.random() * 9 + 48)));
+            tag.append((char) ((int) (Math.random() * 8 + 49)));
         }
         return tag.toString();
     }
