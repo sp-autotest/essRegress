@@ -149,10 +149,12 @@ public class EssPage extends Page {
     private void checkDateData(int i, List<Flight> flightList, ElementsCollection flights){
         String date = flights.get(i-1).$(byXpath("descendant::div[@class='h-color--gray h-mt--4']")).getText().replace(" ", "");
         date = date.substring(0, date.indexOf("("));
-        date = date.replace(".","");
         System.out.println("Site = " + date);
-        String dd = new SimpleDateFormat(Values.lang[ln][3], new Locale(Values.lang[ln][2])).format(flightList.get(i-1).start);
-        dd = dd.replace(".","") + new SimpleDateFormat("HH:mm").format(flightList.get(i-1).end);
+        String format = Values.lang[ln][3];
+        String month = new SimpleDateFormat("MMMM", new Locale(Values.lang[ln][2])).format(flightList.get(i-1).start);
+        if (month.length()>5) format = format.replaceFirst("MMMM", "MMM.");
+        String dd = new SimpleDateFormat(format, new Locale(Values.lang[ln][2])).format(flightList.get(i-1).start);
+        dd = dd + new SimpleDateFormat("HH:mm").format(flightList.get(i-1).end);
         System.out.println("Locale = " + dd);
         assertTrue("Дата авиаперелета не совпадает с забронированной", date.equals(dd));
     }

@@ -161,8 +161,6 @@ public class HotelPage extends Page {
 
         }
 */
-
-
         if (sel < 0) clickHotelCardClose();
         return sel;
     }
