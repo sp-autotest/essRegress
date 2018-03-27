@@ -99,33 +99,35 @@ public class ResultPage extends Page {
 
     @Step("Проверка транспортной услуги")
     private void checkTransport(SelenideElement row){
-        ElementsCollection docs = row.$$(byXpath("child::div[5]/div/a"));
+        ElementsCollection docs = row.$$(byXpath("div[5]/a"));
         for (SelenideElement doc : docs) {
             Values.docs = Values.docs + doc.getText() + ", ";
         }
-        String name = row.$(byXpath("child::div[1]/div")).getText();
+        String name = row.$(byXpath("div[1]/div")).getText();
         System.out.println("Auto = " + name);
         assertTrue("Название авто отличается от забронированного", auto.name.equals(name));
 
-        String receiveLocation = row.$(byXpath("child::div[2]/div/div[2]")).getText();
+        SelenideElement receive = row.$(byXpath("div[2]"));
+        String receiveLocation = getMiddleText(receive);
         System.out.println("Auto = " + receiveLocation);
         assertTrue("Место получения отличается от забронированного", auto.receiveLocation.equals(receiveLocation));
 
-        String receiveDate = row.$(byXpath("child::div[2]/div/div[3]")).getText();
-        receiveDate = receiveDate.substring(receiveDate.indexOf(",")+1);
+        String receiveDate = receive.$(byXpath("div[2]")).getText();
+        receiveDate = receiveDate.substring(receiveDate.indexOf(",")+2);
         System.out.println("Auto = " + receiveDate);
         assertTrue("Дата получения отличается от забронированной", auto.receiveDate.equals(stringToDate(receiveDate)));
 
-        String returnLocation = row.$(byXpath("child::div[3]/div/div[2]")).getText();
+        SelenideElement retrn = row.$(byXpath("div[3]"));
+        String returnLocation = getMiddleText(retrn);
         System.out.println("Auto = " + returnLocation);
         assertTrue("Место возврата отличается от забронированного", auto.returnLocation.equals(returnLocation));
 
-        String returnDate = row.$(byXpath("child::div[3]/div/div[3]")).getText();
-        returnDate = returnDate.substring(returnDate.indexOf(",")+1);
+        String returnDate = retrn.$(byXpath("div[2]")).getText();
+        returnDate = returnDate.substring(returnDate.indexOf(",")+2);
         System.out.println("Auto = " + returnDate);
         assertTrue("Дата возврата отличается от забронированной", auto.returnDate.equals(stringToDate(returnDate)));
 
-        String price = row.$(byXpath("child::div[4]")).getText().replaceAll("\\D+","");
+        String price = row.$(byXpath("div[4]")).getText().replaceAll("\\D+","");
         if (Values.cur.equals("RUB")) price = price.substring(0, price.length()-2);
         if (Values.cur.equals("CNY")) price = price.substring(0, price.length()-2);
         System.out.println("Auto = " + price);
@@ -198,4 +200,13 @@ public class ResultPage extends Page {
         }
         return parsingDate;
     }
+
+    private String getMiddleText(SelenideElement el){
+        String allText = el.getText();
+        String beforeText = el.$(byXpath("span")).getText();
+        String afterText = el.$(byXpath("div[2]")).getText();
+        allText = allText.substring(beforeText.length()+1);
+        return allText.substring(0, allText.length() - afterText.length()-1);
+    }
+
 }
