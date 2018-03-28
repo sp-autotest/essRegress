@@ -1,6 +1,7 @@
 import com.codeborne.selenide.WebDriverRunner;
 import config.Values;
 import listeners.AllureOnEventListener;
+import listeners.MyTransformer;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -9,6 +10,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.opera.OperaDriver;
 import org.openqa.selenium.opera.OperaOptions;
+import org.testng.TestNG;
 import org.testng.annotations.*;
 import pages.*;
 import ru.yandex.qatools.allure.annotations.Description;
@@ -34,6 +36,8 @@ public class EssTest {
 
     @BeforeClass/* Метод, выполняющийся перед началом тест-сьюта */
     public void begin() {
+        TestNG tng = new TestNG();
+        tng.setAnnotationTransformer(new MyTransformer());
         browserName = System.getProperty("browser", "chrome");//получить имя браузера из дженкинса, при неудаче браузер=хром
         String res = System.getProperty("resolution", "1920x1080");//получить разрешение браузера из дженкинса, при неудаче разрешение=1920x1080
         browserWidth = stringIntoInt(res.substring(0, res.indexOf("x")));//взять ширину браузера из строки с разрешением
@@ -98,13 +102,13 @@ public class EssTest {
             {"Немецкий",    "CNY"},
         };
     }
-/*
+
     @Stories("Раздел 1 регрессионных испытаний")
     @Title("Тестирование ESS, раздел 1")
     @Description("Карта VISA;\nНаправление перелета: туда-обратно;\n" +
             "Состав бронирования авиаперелета, билеты: 2 взрослых;\n" +
             "Дополнительные услуги: «Полетная страховка», «Медицинская страховка» (классическая), «Отель»")
-    @Test(priority = 1, dataProvider = "parseLocaleData", description = "Раздел 1", enabled = true)
+    @Test(priority = 1, dataProvider = "parseLocaleData", description = "Раздел 1", groups = {"part1"})
     public void section1(String locale, String currency) {
         int test = 1;
         Values.ln = getLanguageNumber(locale);
@@ -156,14 +160,14 @@ public class EssTest {
         paymentPg.checkPaymentForm1();//шаг 27
         paymentPg.setCardDetails("28");//шаг 28
         new ResultPage().checkServicesData("29", test);//шаг 29
-    }*/
+    }
 
     @Stories("Раздел 2 регрессионных испытаний")
     @Title("Тестирование ESS, раздел 2")
     @Description("Карта VISA;\nHаправление перелета: туда-обратно;\n" +
             "Состав бронирования авиаперелета, билеты: 2 взрослых, 2 детских, 1 младенец;\n" +
             "Дополнительные услуги: «Полетная страховка», «Медицинская страховка» (Спортивная), «Аренда автомобиля»")
-    @Test(priority = 2, dataProvider = "parseLocaleData", description = "Раздел 2", enabled = true)
+    @Test(priority = 2, dataProvider = "parseLocaleData", description = "Раздел 2", groups = {"part2"})
     public void section2(String locale, String currency) {
         int test = 2;
         Values.ln = getLanguageNumber(locale);
