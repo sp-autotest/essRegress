@@ -8,6 +8,7 @@ import org.testng.ITestResult;
 import java.io.IOException;
 
 import static listeners.ScreenShoter.makeScreenshot;
+import static pages.Page.logDoc;
 import static pages.Page.resultat;
 
 /**
@@ -57,5 +58,9 @@ public class AllureOnEventListener implements ITestListener {
     public void onStart(ITestContext context) {}
 
     @Override
-    public void onFinish(ITestContext context) {}
+    public void onFinish(ITestContext context) {
+        logDoc(Values.error1);
+        logDoc(Values.error2);
+        logDoc(Values.error3);
+    }
 }
