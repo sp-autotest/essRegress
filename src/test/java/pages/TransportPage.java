@@ -205,7 +205,9 @@ public class TransportPage extends Page {
     }
 
     private int getCarPrice(){
-        String p = $(byXpath("//div[@id='button_down_price']/itm")).getText().replaceAll("\\D+","");
+        SelenideElement price = $(byXpath("//div[@id='button_down_price']/itm"));
+        price.scrollTo();
+        String p = price.getText().replaceAll("\\D+","");
         System.out.println("Car price="+p);
         return stringIntoInt(p);
     }
