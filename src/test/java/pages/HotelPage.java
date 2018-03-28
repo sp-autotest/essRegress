@@ -45,6 +45,8 @@ public class HotelPage extends Page {
         SelenideElement acc = $(byXpath("//div[@class='cart__item']")).shouldBe(visible);
         Sleep(1);
         acc.click();
+        Sleep(1);
+        acc.click();
         waitPlane();
         checkHotelFormAppear();
     }
