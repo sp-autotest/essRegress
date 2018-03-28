@@ -182,10 +182,11 @@ public class ResultPage extends Page {
         if (Values.cur.equals("CNY")) totalPrice = totalPrice.substring(0, totalPrice.length()-2);
         System.out.println("Total price = " + totalPrice);
         if (!Values.price.total.equals(totalPrice)){
-            logDoc("Информация по оплате не корректна, ожидалось " + Values.price.total);
+            error1 = "ОШИБКА!: Информация по оплате на результирующей странице не корректна, ожидалось " + Values.price.total;
+            logDoc(error1);
             screenShot("Скриншот");
         }
-        /*проверка итоговой суммы оплаты сделана неблокирующей, т.к. тоже это ошибка в отображении EPR
+        /*проверка итоговой суммы оплаты сделана неблокирующей, т.к. это тоже ошибка в отображении EPR
         assertTrue("Сумма в Информации по оплате не совпадает с забронированной" +
                    "\nОжидалось:" + Values.price.total +
                    "\nФактически:" + totalPrice,
