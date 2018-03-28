@@ -188,6 +188,8 @@ public class EssPage extends Page {
         System.out.println("Summ = " + s);
         String price = $(byXpath("//div[@class='frame__heading frame__heading--icon frame__heading--icon-safe']/span")).getText();
         price = price.substring(0, price.indexOf("(")).replaceAll("\\D+","");
+        if (price.length() == 1) price = price + "00";
+        if (price.length() == 2) price = price + "0";
         int p = stringIntoInt(price);
         System.out.println("price = " + p);
         System.out.println("ticket = " + ticket);
