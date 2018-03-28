@@ -30,6 +30,10 @@ public class Values {
         //{"2202000000000002", "12", "2019", "123", "TEST TEST"}, //1 - МИР
     };
 
+    public static String error1 = null;
+    public static String error2 = null;
+    public static String error3 = null;
+
     public static String lang[][] = {
         {"Русский", "русский", "ru", "ddMMMMyyyy,HH:mm→", "Россия"},
         {"Английский", "english", "en", "ddMMMyyyy,HH:mm→", "Russia"},
