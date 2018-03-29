@@ -41,10 +41,12 @@ public class EprPage extends Page {
         for (int i = 0; i < flights.size(); i++) {
             checkFlight(i + 1, flyList.get(i), flights.get(i));
         }
-        checkFlyInsurance(passList);
-        screenShot("Скриншот");
-        checkMedicalInsurance(passList);
-        checkAllInsurancePrice();
+        if (test!=4) {
+            checkFlyInsurance(passList);
+            screenShot("Скриншот");
+            checkMedicalInsurance(passList);
+            checkAllInsurancePrice();
+        }
         if (test == 1) checkAccommodation();
         if (test == 2) checkTransport();
     }

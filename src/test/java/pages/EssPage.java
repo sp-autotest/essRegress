@@ -21,7 +21,7 @@ import static org.testng.AssertJUnit.assertTrue;
  */
 public class EssPage extends Page {
 
-    @Step("Действие 6, проверка формы ESS")
+    @Step("Действие 6, Проверка формы ESS")
     public void step6() {
         checkPageAppear();
         screenShot("Скриншот");
@@ -38,8 +38,9 @@ public class EssPage extends Page {
         checkTimer();
     }
 
-    @Step("Действие 7, проверка данных в блоке «Перелет»")
+    @Step("Действие 7, Проверка данных в блоке «Перелет»")
     public void step7(List<Flight> flightList) {
+        System.out.println("\t8. Check Fly group");
         ElementsCollection flights = $$(byXpath("//div[@class='cart__item-details']"));
 //        checkPriceData();
         for (int i = 0; i < flights.size(); i++) {
@@ -50,20 +51,39 @@ public class EssPage extends Page {
         }
     }
 
-    @Step("Действие 8, проверка данных в блоке «Страховка»")
+    @Step("Действие 8, Проверка данных в блоке «Страховка»")
     public void step8() {
+        System.out.println("\t8. Check Insurance group");
         checkFlyInsuranceInCard();
         checkPriceOfFlyInsurance();
     }
 
-    @Step("Действие 9, проверка добавления Медицинской страховки {0}")
+    @Step("Действие 9, Проверка добавления Медицинской страховки {0}")
     public void step9(String type) {
+        System.out.println("\t9. Add Medical Insurance");
         clickAddMedicalButton(type);
         screenShot("Скриншот");
         checkPriceOfMedicalInsurance(type);
         checkMedicalButtonName(type);
         checkTotalAndInsurensPrices();
         screenShot("Скриншот");
+    }
+
+    @Step("Действие 9, Удалить услугу «Полётная страховка»")
+    public void deleteFlyInsurance() {
+        System.out.println("\t9. Delete Fly Insurance");
+        clickFlyInsuranceButton();
+        checkMissFlyInsuranceInCard();
+        checkFlyInsuranceButton(Values.text[5][ln]);
+        checkTotalAndFlyPrices();
+        screenShot("Скриншот");
+    }
+
+    @Step("Действие 10, Нажать Оплатить в корзине")
+    public void clickPayInCart() {
+        System.out.println("\t10. Click Pay in cart");
+        $(byXpath("//a[@class='cart__item-counter-link']")).click();
+        waitPlane();
     }
 
     private void checkPageAppear(){
@@ -179,6 +199,12 @@ public class EssPage extends Page {
                 .shouldBe(exist).shouldBe(visible).shouldBe(exactText(text[0][ln]));
     }
 
+    @Step("Полетная страховка отсутствует в корзине")
+    private void checkMissFlyInsuranceInCard(){
+        $("#left-column-insurance-block").$(byXpath("descendant::div[text()='" + text[0][ln] + "']"))
+                .shouldNotBe(exist).shouldNotBe(visible);
+    }
+
     @Step("Проверка общей суммы полетной страховки")
     private  void checkPriceOfFlyInsurance(){
         String summ = $("#left-column-insurance-block").$(byXpath("descendant::" +
@@ -250,9 +276,30 @@ public class EssPage extends Page {
         assertTrue("Общая сумма заказа некорректна", summ == stringIntoInt(Values.price.total));
     }
 
+    @Step("Проверка общей суммы заказа (включает в себя стоимость услуг страхования)")
+    private void checkTotalAndFlyPrices(){
+        String totalPrice = $("#cart-total-incarts").$(byXpath("descendant::div[@class='cart__item-price']")).getText().replaceAll("\\D+","");
+        System.out.println("Total price = " + totalPrice);
+        Values.price.total = totalPrice;
+        assertTrue("Общая сумма заказа некорректна", Values.price.fly.equals(Values.price.total));
+    }
+
     @Step("Нажать кнопку «Транспорт»")
     public void clickTransportButton() {
         $(byXpath("//a[@class='next__button']")).shouldBe(visible).click();
         waitPlane();
     }
+
+    @Step("Нажать кнопку выбора в полетной страховке")
+    private void clickFlyInsuranceButton() {
+        $("#flight_insurance_select_button").shouldBe(visible).click();
+    }
+
+    @Step("Проверить текст кнопки в полетной страховке: {0}")
+    private void checkFlyInsuranceButton(String text){
+
+    }
+
+
+
 }
