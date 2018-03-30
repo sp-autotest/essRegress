@@ -44,6 +44,8 @@ public class EssTest {
         browserHight = stringIntoInt(res.substring(res.indexOf("x")+1));//взять высоту браузера из строки с разрешением
         System.out.println("Browser = " + browserName);//вывести в лог значение имени браузера
         System.out.println("Resolution = " + res);//вывести в лог значение разрешения
+        Values.office_login = System.getProperty("officelogin", "");//получить логин АРМ ESS из дженкинса
+        Values.office_password = System.getProperty("officepassword", "");//получить пароль АРМ ESS из дженкинса
     }
 
     @BeforeMethod
