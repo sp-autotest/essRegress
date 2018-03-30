@@ -32,11 +32,13 @@ public class ResultPage extends Page {
         System.out.println("\t" + n + ". Cheking final page with pay result");
         checkPageAppear();
         ElementsCollection services = $$(byXpath("//div[@id='frame-additionalServices']/descendant::div[@role='row']"));
-        services.get(0).scrollTo();
-        checkFlyInsurance(services.get(0));
-        services.get(1).scrollTo();
-        checkMedicalInsurance(services.get(1));
-        services.get(2).scrollTo();
+        if (test != 4) {
+            services.get(0).scrollTo();
+            checkFlyInsurance(services.get(0));
+            services.get(1).scrollTo();
+            checkMedicalInsurance(services.get(1));
+            services.get(2).scrollTo();
+        } else assertTrue("Обнаружены дополнительные услуги", services.size() == 0);
         if (test == 1) checkHotel(services.get(2));
         if (test == 2) checkTransport(services.get(2));
         checkTotalPrice();
