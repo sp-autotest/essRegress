@@ -15,9 +15,9 @@ import static org.testng.AssertJUnit.assertTrue;
  */
 public class PaymentPage extends Page {
 
-    @Step("Действие 27, проверка формы оплаты")
-    public void checkPaymentForm1() {
-        System.out.println("\t27. Checking Payment form");
+    @Step("Действие {0}, проверка формы оплаты")
+    public void checkPaymentForm1(String n) {
+        System.out.println("\t" + n + ". Checking Payment form");
         new EprPage().clickPayButton();
         checkTotalPrice1();
     }
