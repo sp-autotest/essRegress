@@ -157,7 +157,7 @@ public class EssTest {
         choosePg.chooseTestStend("25");//шаг 25
         new EprPage().checkDataOnPayPage("26", flightList, passList, test);//шаг 26
         PaymentPage paymentPg = new PaymentPage();
-        paymentPg.checkPaymentForm1();//шаг 27
+        paymentPg.checkPaymentForm1("27");//шаг 27
         paymentPg.setCardDetails("28");//шаг 28
         new ResultPage().checkServicesData("29", test);//шаг 29
     }
@@ -206,7 +206,7 @@ public class EssTest {
     @Title("Тестирование ESS, раздел 4")
     @Description("Карта VISA;\nНаправление перелета: туда-обратно;\n" +
                  "Состав бронирования авиаперелета, билеты: 2 взрослых")
-    @Test(priority = 4, dataProvider = "parseLocaleData", description = "Раздел 4", groups = {"part4"}, enabled = false)
+    @Test(priority = 4, dataProvider = "parseLocaleData", description = "Раздел 4", groups = {"part4"})
     public void section4(String locale, String currency) {
         int test = 4;
         Values.ln = getLanguageNumber(locale);
@@ -233,9 +233,13 @@ public class EssTest {
         choosePg.chooseTestStend("11");//шаг 11
         new EprPage().checkDataOnPayPage("12", flightList, passList, test);//шаг 12
         PaymentPage paymentPg = new PaymentPage();
-        paymentPg.checkPaymentForm1();//шаг 13
+        paymentPg.checkPaymentForm1("13");//шаг 13
         paymentPg.setCardDetails("14");//шаг 14
-        new ResultPage().checkServicesData("15", test);//шаг 15*/
+        new ResultPage().checkServicesData("15", test);//шаг 15
+        OfficePage officePg = new OfficePage();
+        officePg.authorization();//шаг 17
+        officePg.searchOrder(Values.pnr);//шаг 18
+        officePg.openOrderDetails(Values.pnr, flightList, passList);//шаг 19
     }
 
 
