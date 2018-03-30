@@ -18,7 +18,7 @@ public class PlacePage extends Page {
                 Sleep(1);
                 if ($$(byXpath("//div[@class='text text--inline']")).size()>0) {
                     $(byXpath("//div[@class='text text--inline']")).click();
-                    break;
+                    //break;
                 }
             }
             if ($$(byXpath("//h1[text()='Вход в тестовую среду системы ЕПР']")).size()>0) break;
