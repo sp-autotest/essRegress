@@ -25,6 +25,10 @@ public class Values {
     public static String email = "tafl@software-provider.ru";
     public static String host = "https://afl-test.test.aeroflot.ru/sb/app/ru-ru";
 
+    public static String office_host = "https://office.ess.test.aeroflot.ru/";
+    public static String office_login = "";
+    public static String office_password = "";
+
     public static String card[][] = {
         {"4154810047474554", "12", "2019", "314", "TEST TEST"}, //0 - Visa
         //{"2202000000000002", "12", "2019", "123", "TEST TEST"}, //1 - МИР
