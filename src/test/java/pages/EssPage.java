@@ -276,12 +276,12 @@ public class EssPage extends Page {
         assertTrue("Общая сумма заказа некорректна", summ == stringIntoInt(Values.price.total));
     }
 
-    @Step("Проверка общей суммы заказа (включает в себя стоимость услуг страхования)")
+    @Step("Проверка общей суммы заказа")
     private void checkTotalAndFlyPrices(){
-        String totalPrice = $("#cart-total-incarts").$(byXpath("descendant::div[@class='cart__item-price']")).getText().replaceAll("\\D+","");
-        System.out.println("Total price = " + totalPrice);
-        Values.price.total = totalPrice;
-        assertTrue("Общая сумма заказа некорректна", Values.price.fly.equals(Values.price.total));
+        String flyPrice = $(byXpath("//div[@class='cart__item-price']")).getText().replaceAll("\\D+","");
+        Values.price.total = $("#cart-total-incarts").$(byXpath("descendant::div[@class='cart__item-price']")).getText().replaceAll("\\D+","");
+        System.out.println("Total price = " + Values.price.total);
+        assertTrue("Общая сумма заказа некорректна", flyPrice.equals(Values.price.total));
     }
 
     @Step("Нажать кнопку «Транспорт»")
@@ -295,9 +295,13 @@ public class EssPage extends Page {
         $("#flight_insurance_select_button").shouldBe(visible).click();
     }
 
-    @Step("Проверить текст кнопки в полетной страховке: {0}")
+    @Step("Проверить текст кнопки в полетной страховке")
     private void checkFlyInsuranceButton(String text){
-
+        String name = $("#flight_insurance_select_button").getText();
+        assertTrue("Название кнопки в блоке полетной страховки некорректно" +
+                   "\nОжидалось: " + text +
+                   "\nФактически: " + name,
+                   name.equals(text));
     }
 
 
