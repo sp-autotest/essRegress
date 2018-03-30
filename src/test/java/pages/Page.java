@@ -1,6 +1,7 @@
 package pages;
 
 import config.Values;
+import org.openqa.selenium.WebDriver;
 import ru.yandex.qatools.allure.annotations.Step;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -8,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static listeners.ScreenShoter.makeScreenshot;
 
 /**
@@ -100,6 +102,20 @@ public class Page {
             if (Values.lang[i][0].equals(language)) return i;
         }
         return 0;
+    }
+
+    public static void switchFromFirstPageToSecond(String parentHandle) {
+        WebDriver wd = getWebDriver();
+        try {
+            for (String handle: wd.getWindowHandles()) {
+                if (handle != parentHandle) {
+                    wd.switchTo().window(handle);
+                    //wd.switchTo().activeElement();
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Couldn't get to second page");
+        }
     }
 
 }
