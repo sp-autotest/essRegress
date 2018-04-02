@@ -3,6 +3,8 @@ package pages;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import config.Values;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import ru.yandex.qatools.allure.annotations.Step;
 import struct.Flight;
 import java.text.SimpleDateFormat;
@@ -12,6 +14,7 @@ import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
+import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static config.Values.*;
 import static org.testng.AssertJUnit.assertTrue;
 
@@ -292,7 +295,10 @@ public class EssPage extends Page {
 
     @Step("Нажать кнопку выбора в полетной страховке")
     private void clickFlyInsuranceButton() {
-        $("#flight_insurance_select_button").shouldBe(visible).click();
+        WebElement el = $("#flight_insurance_select_button").toWebElement();
+        Actions actions = new Actions(getWebDriver());
+        actions.moveToElement(el).perform();
+        $("#flight_insurance_deselect_button").shouldBe(visible).click();
     }
 
     @Step("Проверить текст кнопки в полетной страховке")
