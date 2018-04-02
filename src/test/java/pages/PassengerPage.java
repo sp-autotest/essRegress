@@ -16,7 +16,7 @@ import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
-import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.url;
 import static config.Values.lang;
 import static config.Values.ln;
@@ -121,7 +121,7 @@ public class PassengerPage extends Page {
 
     @Step("Указать номер")
     private String setRandomNumber(SelenideElement card){
-        String number = getRandomNumberString(6);
+        String number = getRandomNumberString(7);
         card.$$(byXpath("descendant::input[@type='text']")).get(4).setValue(number);
         return number;
     }
@@ -175,7 +175,7 @@ public class PassengerPage extends Page {
             String link = url();
             link = link.replaceFirst("app/ru", "app/" + cur);
             System.out.println("New link = " + link);
-            open(link);
+            getWebDriver().get(link);
             checkPageAppear();
         }
     }
