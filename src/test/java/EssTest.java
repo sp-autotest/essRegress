@@ -44,7 +44,7 @@ public class EssTest {
         browserHight = stringIntoInt(res.substring(res.indexOf("x")+1));//взять высоту браузера из строки с разрешением
         System.out.println("Browser = " + browserName);//вывести в лог значение имени браузера
         System.out.println("Resolution = " + res);//вывести в лог значение разрешения
-        Values.office_login = System.getProperty("officelogin", "");//получить логин АРМ ESS из дженкинса
+        Values.office_login = System.getProperty("officelogin", "any");//получить логин АРМ ESS из дженкинса
         Values.office_password = System.getProperty("officepassword", "");//получить пароль АРМ ESS из дженкинса
     }
 
@@ -239,7 +239,7 @@ public class EssTest {
         paymentPg.setCardDetails("14");//шаг 14
         new ResultPage().checkServicesData("15", test);//шаг 15
         OfficePage officePg = new OfficePage();
-        officePg.authorization();//шаг 17
+        officePg.authorization(browserName);//шаг 17
         officePg.searchOrder(Values.pnr);//шаг 18
         officePg.openOrderDetails(Values.pnr, flightList, passList);//шаг 19
     }
