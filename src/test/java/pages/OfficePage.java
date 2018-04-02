@@ -37,12 +37,14 @@ public class OfficePage extends Page{
     }
 
     @Step("Действие 17, Переход в АРМ ESS")
-    public void authorization (){
+    public void authorization (String browser){
         System.out.println("\t17. Redirect to office ESS");
         open(Values.office_host);
-        setLogin();
-        setPassword();
-        clickEnterButton();
+        if (!browser.equals("ie")) {
+            setLogin();
+            setPassword();
+            clickEnterButton();
+        }
         checkOrderFormAppear();
     }
 
@@ -57,9 +59,9 @@ public class OfficePage extends Page{
     @Step("Действие 19, Открыть детализацию заказа {0}")
     public void openOrderDetails (String pnr, List<Flight> flyList, List<Passenger> passList) {
         System.out.println("\t19. Open order details");
-        String parentHandle = getWebDriver().getWindowHandle();
+        //String parentHandle = getWebDriver().getWindowHandle();
         clickOrder(pnr);
-        switchFromFirstPageToSecond(parentHandle);
+        //switchFromFirstPageToSecond(parentHandle);
         checkOrderDetailsTabAppear(pnr);
         checkServices();
         checkFlight(flyList);
@@ -99,7 +101,8 @@ public class OfficePage extends Page{
 
     @Step("Открыть заказ {0}")
     private void clickOrder(String pnr){
-        $(byXpath("//td/a[text()='" + pnr + "']")).click();
+        String link = $(byXpath("//td/a[text()='" + pnr + "']")).getAttribute("href");
+        open(link);
         Sleep(3);
     }
 
