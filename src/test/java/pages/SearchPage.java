@@ -1,6 +1,7 @@
 package pages;
 
 import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.SelenideElement;
 import config.Values;
 import ru.yandex.qatools.allure.annotations.Step;
 import struct.Flight;
@@ -70,6 +71,7 @@ public class SearchPage extends Page {
         }
         $(byXpath("//div[@class='header__select-items']")).shouldBe(visible).click();
         $(byXpath("//div[text()='" + lang[ln][1] + "']")).shouldBe(visible).click();
+        $(byXpath("//input[@class='input__text-input']")).shouldBe(visible);
     }
 
     @Step("Выбрать город вылета: {0}")
@@ -85,7 +87,11 @@ public class SearchPage extends Page {
 
     @Step("Указать дату \"Туда\": {0}")
     private void setThere(String date) {
-        $$(byXpath("//input[@class='input__text-input']")).get(2).shouldBe(visible).setValue(date);
+        date = date.substring(0,2)+"."+date.substring(2,4)+"."+date.substring(4);
+        SelenideElement el = $$(byXpath("//input[@class='input__text-input']")).get(2);
+        while(!el.getValue().equals(date)) {
+            el.setValue(date);
+        }
     }
 
     @Step("Указать дату \"Обратно\": {0}")
