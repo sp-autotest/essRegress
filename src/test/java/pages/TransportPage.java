@@ -39,6 +39,14 @@ public class TransportPage extends Page {
             screenShot("Скриншот");
             checkSelectedCars();
         }
+        if (test == 3) {
+            screenShot("Скриншот");
+            checkAeroexpressForm();
+            checkCarRentalForm();
+            checkTransferForm();
+            checkMissTransportServices();
+        }
+
     }
 
     @Step("Действие 11, Арендовать автомобиль")
@@ -287,10 +295,22 @@ public class TransportPage extends Page {
         }
     }
 
-    @Step("Проверка отображения формы «Билеты на аэроэкспресс")
+    @Step("Проверка отображения раздела «Билеты на аэроэкспресс»")
     private void checkAeroexpressForm(){
         SelenideElement h = $(byXpath("//div[@class='axpholder']")).shouldBe(exist).shouldBe(visible);
         h.$(byXpath("descendant::h2")).shouldBe(exactText(text[16][ln]));
+    }
+
+    @Step("Проверка отображения раздела «Прокат автомобилей»")
+    private void checkCarRentalForm(){
+        SelenideElement h = $(byXpath("//div[@class='carholder']")).shouldBe(exist).shouldBe(visible);
+        h.$(byXpath("descendant::h2")).shouldBe(exactText(text[24][ln]));
+    }
+
+    @Step("Проверка отображения раздела «Бронирование трансфера»")
+    private void checkTransferForm(){
+        SelenideElement h = $("#iway_transfer_page").shouldBe(exist).shouldBe(visible);
+        h.$(byXpath("descendant::h2")).shouldBe(exactText(text[25][ln]));
     }
 
     @Step("Проверка отсутствия услуги «Аэроэкспресс» в корзине")
@@ -342,5 +362,12 @@ public class TransportPage extends Page {
                         "\nФактически: " + totalPrice,
                         totalPrice.equals(Values.price.total));
     }
+
+    @Step("Проверка отсутствия услуг в блоке Транспорт")
+    private void checkMissTransportServices() {
+        ElementsCollection services = $("#left-column-transport").$$(byXpath("descendant::div[@class='cart__item-priceondemand-item']"));
+        assertTrue("Обнаружены услуги в блоке Транспорт", services.size() == 0);
+    }
+
 
 }
