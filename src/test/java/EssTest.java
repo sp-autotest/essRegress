@@ -204,6 +204,41 @@ public class EssTest {
         new ResultPage().checkServicesData("17", test);//шаг 17
     }
 
+    @Stories("Раздел 3 регрессионных испытаний")
+    @Title("Тестирование ESS, раздел 3")
+    @Description("Карта VISA;\nHаправление перелета: туда-обратно;\n" +
+            "Состав бронирования авиаперелета, билеты: 2 взрослых;\n" +
+            "Дополнительные услуги: «Полетная страховка», «Аэроэкспресс», «Трансфер»")
+    @Test(priority = 3, dataProvider = "parseLocaleData", description = "Раздел 3", groups = {"part3"}, enabled = true)
+    public void section3(String locale, String currency) {
+        int test = 3;
+        Values.ln = getLanguageNumber(locale);
+        Values.cur = currency;
+        Values.docs = "";
+        Values.ticket = 1;
+        System.out.println("=========================================================="+
+                "\n\t\t*** AUTOTEST *** : section" + test + ", " + Values.lang[Values.ln][2].toUpperCase()+
+                ", " + currency + "\n==========================================================");
+        open(Values.host);
+        SearchPage searchPg = new SearchPage();
+        searchPg.step1(test);
+        List<Flight> flightList = searchPg.step2();
+        List<Passenger> passList = new PassengerPage().step3();
+        new PlacePage().clickPay();
+        ChoosePage choosePg = new ChoosePage();
+        choosePg.step4();
+        EssPage essPg = new EssPage();
+        essPg.step6();
+        essPg.step7(flightList);
+        essPg.step8();
+        TransportPage transportPg = new TransportPage();
+        transportPg.step10(test);
+        transportPg.checkAeroexpressPassengerLogic();//шаг 11
+        transportPg.checkAeroexpressLogic(flightList);//шаг 12
+
+
+    }
+
     @Stories("Раздел 4 регрессионных испытаний")
     @Title("Тестирование ESS, раздел 4")
     @Description("Карта VISA;\nНаправление перелета: туда-обратно;\n" +
