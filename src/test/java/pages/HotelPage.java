@@ -337,25 +337,16 @@ public class HotelPage extends Page {
             chb = $("#stars"+i);
             if (i!=4) clearStarsCheckbox(chb); //снять галки с чекбокса кроме четырех звезд
         }
-
     }
 
     @Step("Установить галку в чекбоксе со звездами")
     private void setStarsCheckbox(SelenideElement chb) {
-        if (!chb.isSelected()) {
-            WebElement checkbox = chb.toWebElement();
-            JavascriptExecutor executor = (JavascriptExecutor) getWebDriver();
-            executor.executeScript("arguments[0].click();", checkbox);
-        }
+        if (!chb.isSelected()) jsClick(chb);
     }
 
     @Step("Снять галку в чекбоксе со звездами")
     private void clearStarsCheckbox(SelenideElement chb) {
-        if (chb.isSelected()) {
-            WebElement checkbox = chb.toWebElement();
-            JavascriptExecutor executor = (JavascriptExecutor) getWebDriver();
-            executor.executeScript("arguments[0].click();", checkbox);
-        }
+        if (chb.isSelected()) jsClick(chb);
     }
 
     @Step("Проверить звездность найденных отелей")

@@ -1,7 +1,10 @@
 package pages;
 
+import com.codeborne.selenide.SelenideElement;
 import config.Values;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import ru.yandex.qatools.allure.annotations.Step;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -116,6 +119,11 @@ public class Page {
         } catch (Exception e) {
             System.err.println("Couldn't get to second page");
         }
+    }
+
+    public static void jsClick(SelenideElement el) {
+        JavascriptExecutor executor = (JavascriptExecutor) getWebDriver();
+        executor.executeScript("arguments[0].click();", el.toWebElement());
     }
 
 }
