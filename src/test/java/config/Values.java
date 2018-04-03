@@ -74,7 +74,9 @@ public class Values {
       /*20*/{"Киевский вокзал", "Kievsky Rail Terminal", "Kiewer Bahnhof", "Terminal de ferrocarril Kievsky", "Terminal ferroviario Kievsky", "Terminus de la gare de Kiev", "基辅火车站", "키옙스키역 터미널", "キエフスキー鉄道ターミナル"},
             {"Внуково", "Vnukovo", "Vnukovo", "Vnukovo", "Vnukovo", "Vnoukovo", "尤努科沃", "브누코보", "ヴヌーコヴォ"},
             {"Бесплатно", "Free of charge", "Kostenlos", "Gratis", "Gratis", "Gratuit", "免费", "무료", "無料"},
-            {"До", "Till", "Bis", "Hasta el", "Entro il:", "Jusqu`au", "截止", "까지", "まで"}
+            {"До", "Till", "Bis", "Hasta el", "Entro il:", "Jusqu`au", "截止", "까지", "まで"},
+            {"Прокат автомобилей", "Car rental", "Autovermietung", "Alquiler de coches", "Noleggio auto", "Location de voiture", "租车", "렌터카", "レンタカー"},
+            {"Бронирование трансфера", "Booking a transfer", "Transfer buchen", "Reservar un traslado", "Prenotare un trasferimento", "Réservation d'un transfert", "预订换乘", "트랜스퍼 예약", "乗り換えの予約"}
     };
 
 }
