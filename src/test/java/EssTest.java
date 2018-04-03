@@ -235,7 +235,7 @@ public class EssTest {
         transportPg.step10(test);
         transportPg.checkAeroexpressPassengerLogic();//шаг 11
         transportPg.checkAeroexpressLogic(flightList);//шаг 12
-
+        transportPg.addAeroexpressTickets();//шаг 13
 
     }
 

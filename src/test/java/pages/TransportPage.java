@@ -17,6 +17,7 @@ import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
+import static com.codeborne.selenide.WebDriverRunner.source;
 import static config.Values.*;
 import static org.testng.AssertJUnit.assertTrue;
 
@@ -136,6 +137,14 @@ public class TransportPage extends Page {
         }
     }
 
+    @Step("Действие 13, Добавить в заказ билеты на Аэроэкспресс")
+    public void addAeroexpressTickets() {
+        System.out.println("\t13. Add Aeroexpress tickets");
+        jsClick($(byXpath("//div[contains(@class,'dropdown--show')]/descendant::input")));
+        clickAddInOrderButton();
+        checkAeroexpressInCart();
+        Sleep(15);
+    }
 
     @Step("Проверка перехода в раздел «Транспорт»")
     private void checkTransportBlock(){
@@ -256,7 +265,7 @@ public class TransportPage extends Page {
     private void checkTranspotrPriceInCard() {
         String leftPrice = $("#left-column-transport").$(byXpath("descendant::div[@class='cart__item-priceondemand-item-price']")).getText().replaceAll("\\D+","");
         System.out.println("Transport price = " + leftPrice);
-        assertTrue("Стоимость страхования в корзине не совпадает с указанной в блоке" +
+        assertTrue("Стоимость аренды авто в корзине не совпадает с указанной в блоке" +
                 "\nОжидалось: " + price.nationalTransport +
                 "\nФакически: " + leftPrice,
                 price.nationalTransport.equals(leftPrice));
@@ -398,5 +407,29 @@ public class TransportPage extends Page {
         String price2 = $(byXpath("//div[contains(@class,'js-price')]")).getText().replaceAll("\\D+","");
         assertTrue("Общая стоимость Аэроэкспресс не изменилась", !price1.equals(price2));
     }
+
+    @Step("Нажать кнопку «Добавить в заказ»")
+    private void clickAddInOrderButton(){
+        $(byXpath("//a[contains(@id,'axp-send')]")).click();
+    }
+
+    @Step("Проверить наличие и сумму Аэроэкспресс в корзине")
+    private void checkAeroexpressInCart() {
+        String price = $(byXpath("//div[contains(@class,'js-price')]")).getText().replaceAll("\\D+", "");
+        System.out.println("aeroexpress = "+price);
+        SelenideElement transport = $("#left-column-transport");
+        String leftPrice = transport.$(byXpath("descendant::div[@class='cart__item-priceondemand-item-price']")).getText().replaceAll("\\D+","");
+        System.out.println("Aeroexpress price = " + leftPrice);
+        assertTrue("Сумма Аэроэкспресс в корзине не совпадает с рассчитанной" +
+                   "\nОжидалось: " + price +
+                   "\nФакически: " + leftPrice,
+                   price.equals(leftPrice));
+        Values.price.aeroexpress = price;
+        String service = "";
+        if (ln == 0) service = "Аэроэкспресс (2)";
+        else service = "Aeroexpress (2)";
+        transport.$(byXpath("descendant::div[contains(text(),'"+ service +"')]")).shouldBe(visible);
+    }
+
 
 }
