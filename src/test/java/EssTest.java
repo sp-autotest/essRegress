@@ -236,7 +236,8 @@ public class EssTest {
         transportPg.checkAeroexpressPassengerLogic();//шаг 11
         transportPg.checkAeroexpressLogic(flightList);//шаг 12
         transportPg.addAeroexpressTickets();//шаг 13
-
+        transportPg.setTransferLocations();//шаг 14
+        transportPg.clickSelectStandartButton();//шаг 15
     }
 
     @Stories("Раздел 4 регрессионных испытаний")

@@ -76,7 +76,9 @@ public class Values {
             {"Бесплатно", "Free of charge", "Kostenlos", "Gratis", "Gratis", "Gratuit", "免费", "무료", "無料"},
             {"До", "Till", "Bis", "Hasta el", "Entro il:", "Jusqu`au", "截止", "까지", "まで"},
             {"Прокат автомобилей", "Car rental", "Autovermietung", "Alquiler de coches", "Noleggio auto", "Location de voiture", "租车", "렌터카", "レンタカー"},
-            {"Бронирование трансфера", "Booking a transfer", "Transfer buchen", "Reservar un traslado", "Prenotare un trasferimento", "Réservation d'un transfert", "预订换乘", "트랜스퍼 예약", "乗り換えの予約"}
+            {"Бронирование трансфера", "Booking a transfer", "Transfer buchen", "Reservar un traslado", "Prenotare un trasferimento", "Réservation d'un transfert", "预订换乘", "트랜스퍼 예약", "乗り換えの予約"},
+            {"Стандарт", "Standard class", "Standard", "Clase Standard", "Classe Standard", "Classe standard", "标准舱", "스탠다드 클래스", "スタンダードクラス"},
+            {"Трансфер", "Transfer", "Transfer", "Traslado", "Trasferimento", "Transfert", "换乘", "트랜스퍼", "乗り換え"}
     };
 
 }

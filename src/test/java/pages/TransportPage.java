@@ -143,7 +143,30 @@ public class TransportPage extends Page {
         jsClick($(byXpath("//div[contains(@class,'dropdown--show')]/descendant::input")));
         clickAddInOrderButton();
         checkAeroexpressInCart();
-        Sleep(15);
+    }
+
+    @Step("Действие 14, Характеристики услуги «Бронирование трансфера»")
+    public void setTransferLocations() {
+        System.out.println("\t14. Set transfer locations");
+        $("#iway_change_city").selectOptionByValue("1202");
+        $("#iway_change_city").selectOptionByValue("1200");
+        $(byXpath("//div[@id='transfer_options_list']/descendant::div[@class='frame__container']")).shouldBe(visible);
+        Sleep(1);
+    }
+
+    @Step("Действие 15, Нажать на кнопку «Выбрать» для категории Стандарт")
+    public void clickSelectStandartButton() {
+        System.out.println("\t15. Click Select button");
+        ElementsCollection categories = $("#transfer_options_list").$$(byXpath("descendant::div[@class='frame__container']"));
+        for (int i=0; i<categories.size(); i++){
+            String cat = categories.get(i).$(byXpath("descendant::h3")).getText();
+            System.out.println(cat);
+            if (cat.equals(Values.text[26][ln])){ //Стандарт
+                categories.get(i).$(byXpath("descendant::a[contains(@class,'button')]")).click();
+                break;
+            }
+        }
+        checkTransferAdditionalForm();
     }
 
     @Step("Проверка перехода в раздел «Транспорт»")
@@ -431,5 +454,9 @@ public class TransportPage extends Page {
         transport.$(byXpath("descendant::div[contains(text(),'"+ service +"')]")).shouldBe(visible);
     }
 
+    @Step("Проверить наличие формы дополнительной информации о трансфере")
+    private void checkTransferAdditionalForm(){
+        $(byXpath("//h2[text()='"+Values.text[26][ln]+"']")).shouldBe(visible);//Стандарт
+    }
 
 }
