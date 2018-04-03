@@ -6,6 +6,7 @@ import config.Values;
 import org.openqa.selenium.interactions.Actions;
 import ru.yandex.qatools.allure.annotations.Step;
 import struct.Flight;
+import struct.Passenger;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -74,10 +75,21 @@ public class TransportPage extends Page {
     @Step("Действие 11, Проверка выпадающего списка выбора пассажиров")
     public void checkAeroexpressPassengersList() {
         System.out.println("\t11. Check dropdown list in Aeroexpress");
-        dropdownClick();
+        dropdownClick(0);
         checkAeroexpressTikets();
         checkAeroexpressPrice();
         checkAeroexpressPricesIsNotAdded();
+    }
+
+    @Step("Действие 11, Проверка логики отображения пассажиров Аэроэкспресса")
+    public void checkAeroexpressPassengerLogic() {
+        System.out.println("\t11. Check Aeroexpress passengers logic");
+        dropdownClick(1);
+        checkAeroexpressPassengers();
+        dropdownClick(0);
+        checkAeroexpressPassengers();
+        checkAeroexpressPrice();
+        checkAeroexpressChangePrice();
     }
 
     @Step("Действие 12, Нажать Оплатить в корзине")
@@ -325,8 +337,9 @@ public class TransportPage extends Page {
     }
 
     @Step("Развернуть выпадающий список выбора пассажиров")
-    private void dropdownClick(){
-        $("#countTickets_").shouldBe(visible).click();
+    private void dropdownClick(int n){
+        ElementsCollection drop = $$("#countTickets_");
+        drop.get(n).shouldBe(visible).click();
     }
 
     @Step("Проверить количество билетов, выбранных для поездки")
@@ -369,5 +382,21 @@ public class TransportPage extends Page {
         assertTrue("Обнаружены услуги в блоке Транспорт", services.size() == 0);
     }
 
+    @Step("Проверить количество пассажиров, выбранных для поездки")
+    private void checkAeroexpressPassengers(){
+        ElementsCollection chb = $(byXpath("//div[contains(@class,'dropdown--show')]")).$$(byXpath("descendant::input"));
+        int n = 0;
+        for (int i=0; i<chb.size(); i++) if (chb.get(i).isSelected()) n++;
+        assertTrue("Для поездки на Аэроэкспресс выбраны не все пассажиры" +
+                   "\nОжидалось: " + ticket + "\nФактически: " + n, n == ticket);
+    }
+
+    @Step("Проверить изменение общей стоимости Аэроэкспресс")
+    private void checkAeroexpressChangePrice(){
+        String price1 = $(byXpath("//div[contains(@class,'js-price')]")).getText().replaceAll("\\D+","");
+        jsClick($(byXpath("//div[contains(@class,'dropdown--show')]/descendant::input")));
+        String price2 = $(byXpath("//div[contains(@class,'js-price')]")).getText().replaceAll("\\D+","");
+        assertTrue("Общая стоимость Аэроэкспресс не изменилась", !price1.equals(price2));
+    }
 
 }
