@@ -26,6 +26,7 @@ public class EssPage extends Page {
 
     @Step("Действие 6, Проверка формы ESS")
     public void step6() {
+        System.out.println("\t6. Check ESS form");
         checkPageAppear();
         screenShot("Скриншот");
         checkFlight();
@@ -43,7 +44,7 @@ public class EssPage extends Page {
 
     @Step("Действие 7, Проверка данных в блоке «Перелет»")
     public void step7(List<Flight> flightList) {
-        System.out.println("\t8. Check Fly group");
+        System.out.println("\t7. Check Fly group");
         ElementsCollection flights = $$(byXpath("//div[@class='cart__item-details']"));
 //        checkPriceData();
         for (int i = 0; i < flights.size(); i++) {

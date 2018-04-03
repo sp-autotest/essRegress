@@ -12,7 +12,7 @@ import static com.codeborne.selenide.Selenide.$$;
 public class PlacePage extends Page {
 
     @Step("Кликнуть \"Оплатить\" на странице выбора места")
-    public static void clickPay() {
+    public void clickPay() {
         for (int i=0; i<30; i++) {
             if ($$(byXpath("//div[@class='text text--inline']")).size()>0){
                 Sleep(1);

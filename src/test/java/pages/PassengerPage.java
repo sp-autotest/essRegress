@@ -121,7 +121,7 @@ public class PassengerPage extends Page {
 
     @Step("Указать номер")
     private String setRandomNumber(SelenideElement card){
-        String number = getRandomNumberString(7);
+        String number = getRandomNumberString(6);
         card.$$(byXpath("descendant::input[@type='text']")).get(4).setValue(number);
         return number;
     }
