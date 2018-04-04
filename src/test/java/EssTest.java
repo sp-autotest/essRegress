@@ -239,6 +239,8 @@ public class EssTest {
         String dir = transportPg.setTransferLocations();//шаг 14
         transportPg.clickSelectStandartButton();//шаг 15
         transportPg.setTransferAdditionalInfo(flightList.get(0).start, dir);//шаг 16
+        transportPg.selectTransfer(flightList.get(0).start, dir);//шаг 17
+
 
     }
 
