@@ -14,6 +14,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.byXpath;
@@ -161,16 +162,20 @@ public class TransportPage extends Page {
     @Step("Действие 15, Нажать на кнопку «Выбрать» для категории Стандарт")
     public void clickSelectStandartButton() {
         System.out.println("\t15. Click Select button");
-        ElementsCollection categories = $("#transfer_options_list").$$(byXpath("descendant::div[@class='frame__container']"));
+        String price = "";
+                ElementsCollection categories = $("#transfer_options_list").$$(byXpath("descendant::div[@class='frame__container']"));
         for (int i=0; i<categories.size(); i++){
             String cat = categories.get(i).$(byXpath("descendant::h3")).getText();
             System.out.println(cat);
             if (cat.equals(Values.text[26][ln])){ //Стандарт
+                price = categories.get(i).$(byXpath("div/div[4]")).getText().replaceAll("\\D+","");
+                System.out.println("transfer = " + price);
                 categories.get(i).$(byXpath("descendant::a[contains(@class,'button')]")).click();
                 break;
             }
         }
         checkTransferAdditionalForm();
+        Values.price.transfer = price;
     }
 
     @Step("Действие 16, Заполнить и проверить форму трансфера")
@@ -180,6 +185,14 @@ public class TransportPage extends Page {
         setTransferText();
         setTransferTime();
         compareDirection(dir);
+    }
+
+    @Step("Действие 17, Нажать кнопку «Выбрать»")
+    public void selectTransfer(Date date, String dir) {
+        System.out.println("\t17. Click Select button in transfer form");
+        clickSelectButton();
+        checkTransferInCart();
+        checkTransferAllData(date, dir);
     }
 
     @Step("Проверка перехода в раздел «Транспорт»")
@@ -499,6 +512,84 @@ public class TransportPage extends Page {
                    "\nОжидалось: " + dir +
                    "\nФакически: " + direction,
                    dir.equals(direction));
+    }
+
+    @Step("Нажать кнопку «Выбрать»")
+    private void clickSelectButton(){
+        $(byXpath("//button[contains(@onclick,'book_transfer')]")).click();
+    }
+
+    @Step("Проверить наличие и сумму трансфера в корзине")
+    private void checkTransferInCart() {
+        SelenideElement transport = $("#left-column-transport");
+        SelenideElement transfer = transport.$(byXpath("descendant::div[contains(text(),'"+ Values.text[27][ln] +"')]")).shouldBe(visible);
+        String leftPrice = transfer.$(byXpath("parent::div/div[@class='cart__item-priceondemand-item-price']")).getText().replaceAll("\\D+","");
+        System.out.println("Transfer price = " + leftPrice);
+        assertTrue("Сумма трансфера в корзине не совпадает с рассчитанной" +
+                   "\nОжидалось: " + Values.price.transfer +
+                   "\nФакически: " + leftPrice,
+                   Values.price.transfer.equals(leftPrice));
+    }
+
+    @Step("Проверить наличие и сумму трансфера в корзине")
+    private void checkTransferAllData(Date date, String dir) {
+        String from = getTransferFrom();
+        String fromC = dir.substring(0, dir.indexOf("—")-1);
+        String to = getTransferTo();
+        String toC = dir.substring(dir.indexOf("—")+2);
+        String tdate = getTransferDate();
+        String dateC = new SimpleDateFormat("dd MMMM, E", new Locale(Values.lang[ln][2])).format(date);
+        String time = getTransferTime();
+        String category = getTransferCategory();
+        String summ = getTransferSumm();
+        assertTrue("Направление Откуда трансфера не совпадает с выбранным" +
+                   "\nОжидалось: " + fromC +
+                   "\nФакически: " + from,
+                   from.equals(fromC));
+        assertTrue("Направление Куда трансфера не совпадает с выбранным" +
+                   "\nОжидалось: " + toC +
+                   "\nФакически: " + to,
+                   to.equals(toC));
+        assertTrue("Дата трансфера не совпадает с выбранной" +
+                   "\nОжидалось: " + dateC +
+                   "\nФакически: " + tdate,
+                   tdate.equals(dateC));
+        assertTrue("Время трансфера не совпадает с выбранным" +
+                   "\nОжидалось: 00:00" +
+                   "\nФакически: " + time,
+                   time.equals("00:00"));
+        assertTrue("Категория трансфера не совпадает с выбранной" +
+                   "\nОжидалось:" + text[26][ln] +
+                   "\nФакически: " + category,
+                   category.equals(text[26][ln]));
+        assertTrue("Сумма трансфера не совпадает с расчитанной" +
+                   "\nОжидалось:" + price.transfer +
+                   "\nФакически: " + summ,
+                   summ.equals(price.transfer));
+    }
+
+    private String getTransferFrom(){
+        return $(byXpath("//div[@class='text h-clearfix h-mb--16 h-fz--14']")).getText().trim();
+    }
+
+    private String getTransferTo(){
+        return $(byXpath("//div[@class='text h-clearfix h-mb--40 h-fz--14']")).getText().trim();
+    }
+
+    private String getTransferDate(){
+        return $(byXpath("//div[@class='text h-clearfix h-mb--28 h-fz--14']/span[1]")).getText().trim();
+    }
+
+    private String getTransferTime(){
+        return $(byXpath("//div[@class='text h-clearfix h-mb--28 h-fz--14']/span[2]")).getText().trim();
+    }
+
+    private String getTransferCategory(){
+        return $(byXpath("//div[@class='col--11 col--stack-below-tablet']/descendant::h3")).getText();
+    }
+
+    private String getTransferSumm(){
+        return $(byXpath("//span[@class='h-pull--right h-fz--18 h-fw--700']")).getText().replaceAll("\\D+","");
     }
 
 
