@@ -3,6 +3,8 @@ package pages;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import config.Values;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import ru.yandex.qatools.allure.annotations.Step;
 import struct.Flight;
@@ -10,6 +12,7 @@ import struct.Passenger;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import static com.codeborne.selenide.Condition.*;
@@ -146,12 +149,13 @@ public class TransportPage extends Page {
     }
 
     @Step("Действие 14, Характеристики услуги «Бронирование трансфера»")
-    public void setTransferLocations() {
+    public String setTransferLocations() {
         System.out.println("\t14. Set transfer locations");
-        $("#iway_change_city").selectOptionByValue("1202");
         $("#iway_change_city").selectOptionByValue("1200");
         $(byXpath("//div[@id='transfer_options_list']/descendant::div[@class='frame__container']")).shouldBe(visible);
-        Sleep(1);
+        $("#iway_change_city1").selectOptionByValue("1202");
+        Sleep(3); //задержка в трансфере между селектом направления и кликом по кнопке Выбрать
+        return $("#iway_change_city").getText() + " — " + $("#iway_change_city1").getText();
     }
 
     @Step("Действие 15, Нажать на кнопку «Выбрать» для категории Стандарт")
@@ -167,6 +171,15 @@ public class TransportPage extends Page {
             }
         }
         checkTransferAdditionalForm();
+    }
+
+    @Step("Действие 16, Заполнить и проверить форму трансфера")
+    public void setTransferAdditionalInfo(Date date, String dir) {
+        System.out.println("\t16. Setting transfer form");
+        setTransferDate(new SimpleDateFormat("d.MM.yyyy").format(date));
+        setTransferText();
+        setTransferTime();
+        compareDirection(dir);
     }
 
     @Step("Проверка перехода в раздел «Транспорт»")
@@ -458,5 +471,35 @@ public class TransportPage extends Page {
     private void checkTransferAdditionalForm(){
         $(byXpath("//h2[text()='"+Values.text[26][ln]+"']")).shouldBe(visible);//Стандарт
     }
+
+    @Step("Указать дату трансфера")
+    private void setTransferDate(String date){
+        SelenideElement el = $("#iway_calendar_ow");
+        JavascriptExecutor executor = (JavascriptExecutor) getWebDriver();
+        executor.executeScript("arguments[0].removeAttribute('readonly');", el.toWebElement());
+        el.setValue(date);
+        executor.executeScript("arguments[0].setAttribute('readonly', '');", el.toWebElement());
+    }
+
+    @Step("Указать время трансфера")
+    private void setTransferTime(){
+        $(byXpath("//*[@id='iway_time']/..")).click();
+    }
+
+    @Step("Указать текст на табличке трансфера")
+    private void setTransferText(){
+        $("#transferItemDesc").setValue("Test Test");
+    }
+
+    @Step("Сравнить направления")
+    private void compareDirection(String dir){
+        System.out.println(dir);
+        String direction = $(byXpath("//div[@id='trip_hi']/h3")).getText();
+        assertTrue("Направления на форме с доп.информацией не совпадают с выбранными" +
+                   "\nОжидалось: " + dir +
+                   "\nФакически: " + direction,
+                   dir.equals(direction));
+    }
+
 
 }
