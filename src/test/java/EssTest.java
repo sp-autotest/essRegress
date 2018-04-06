@@ -209,7 +209,7 @@ public class EssTest {
     @Description("Карта VISA;\nHаправление перелета: туда-обратно;\n" +
             "Состав бронирования авиаперелета, билеты: 2 взрослых;\n" +
             "Дополнительные услуги: «Полетная страховка», «Аэроэкспресс», «Трансфер»")
-    @Test(priority = 3, dataProvider = "parseLocaleData", description = "Раздел 3", groups = {"part3"}, enabled = true)
+    @Test(priority = 3, dataProvider = "parseLocaleData", description = "Раздел 3", groups = {"part3"}, enabled = false)
     public void section3(String locale, String currency) {
         int test = 3;
         Values.ln = getLanguageNumber(locale);
