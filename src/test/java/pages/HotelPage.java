@@ -43,9 +43,9 @@ public class HotelPage extends Page {
         System.out.println("\t15. Click Accommodation");
         //$(byXpath("//div[@class='cart__item-title'][contains(text(),'" + text[3][ln] + "')]")).shouldBe(visible).click();
         SelenideElement acc = $(byXpath("//div[@class='cart__item']")).shouldBe(visible);
-        Sleep(1);
+        Sleep(2);
         acc.click();
-        Sleep(1);
+        Sleep(2);
         acc.click();
         waitPlane();
         checkHotelFormAppear();
@@ -452,6 +452,7 @@ public class HotelPage extends Page {
         p = p.substring(0, p.indexOf(" "));
         p = p.replaceAll("\\D+","");
         System.out.println("Hotel price = " + p);
+        Values.hotel.price = p;
         SelenideElement hotel = $(byXpath("//div[text()='" + text[3][ln] + "']")).shouldBe(visible);
         String cartPrice = hotel.$(byXpath("following::div[@class='cart__item-pricelist-item-price']")).getText().replaceAll("\\D+","");
         System.out.println("Hotel cart price = " + cartPrice);

@@ -10,4 +10,5 @@ public class Hotel {
     public int star;//звездность
     public Date accDate;
     public Date depDate;
+    public String price;
 }

@@ -169,11 +169,15 @@ public class ResultPage extends Page {
         if (Values.cur.equals("RUB")) price = price.substring(0, price.length()-2);
         if (Values.cur.equals("CNY")) price = price.substring(0, price.length()-2);
         System.out.println("Hotel price = " + price);
-        assertTrue("Стоимость проживания отличается от забронированной", Values.price.hotel.equals(price));
+        assertTrue("Стоимость проживания отличается от забронированной" +
+                   "\nОжидалось :" + Values.hotel.price +
+                   "\nФактически:" + price, Values.hotel.price.equals(price));
 
         System.out.println("docs = " + docs.size());
-        assertTrue("Количество приложенных документов не один", docs.size() == 1);
-        assertTrue("Название ваучера некорректно", docs.get(0).getText().contains(text[15][ln]));
+        assertTrue("Количество приложенных документов некорректно" +
+                   "\nОжидалось : 1\nФактически:" + docs.size(), docs.size() == 1);
+        assertTrue("Название ваучера некорректно\nОжидалось : " + text[15][ln] + "\nФактически:" + docs.get(0).getText(),
+                   docs.get(0).getText().contains(text[15][ln]));
     }
 
     @Step("Проверка оплаченной стоимости")
