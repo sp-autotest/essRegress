@@ -238,6 +238,7 @@ public class TransportPage extends Page {
                 break;
             }
         }
+        $("#button_top_price").shouldBe(visible);
     }
 
     @Step("Добавить страховку SPCDW")
@@ -284,7 +285,7 @@ public class TransportPage extends Page {
 
     private int getCarPrice(){
         SelenideElement price = $(byXpath("//div[@id='button_down_price']/itm"));
-        price.scrollTo();
+        //price.scrollTo();
         String p = price.getText().replaceAll("\\D+","");
         System.out.println("Car price="+p);
         return stringIntoInt(p);
