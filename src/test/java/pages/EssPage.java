@@ -16,6 +16,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static config.Values.*;
+import static java.lang.Math.abs;
 import static org.testng.AssertJUnit.assertTrue;
 
 
@@ -153,8 +154,8 @@ public class EssPage extends Page {
     private void checkPriceData(){
         String price = $(byXpath("//div[@class='cart__item-price']")).getText().replaceAll("\\D+","");
         assertTrue("Стоимость не совпадает c указанной при бронировании" +
-                "\nОжидалось: " + Values.price.fly +"\nФактически: " + price,
-                price.equals(Values.price.fly));
+                   "\nОжидалось: " + Values.price.fly +"\nФактически: " + price,
+                   price.equals(Values.price.fly));
     }
 
     @Step("Проверка данных о {0}-м маршруте")
@@ -166,7 +167,9 @@ public class EssPage extends Page {
     @Step("Проверка данных о номере {0}-го рейса")
     private void checkNumberData(int i, List<Flight> flightList, ElementsCollection flights){
         String number = flights.get(i-1).$(byXpath("descendant::div[@class='cart__item-details-model']")).getText().trim();
-        assertTrue("Номер рейса не совпадает с забронированным", number.equals(flightList.get(i-1).number));
+        assertTrue("Номер рейса не совпадает с забронированным" +
+                   "\nОжидалось : " + flightList.get(i-1).number + "\nФактически: " + number,
+                   number.equals(flightList.get(i-1).number));
     }
 
     @Step("Проверка данных о дате {0}-го авиаперелета")
@@ -180,7 +183,8 @@ public class EssPage extends Page {
         String dd = new SimpleDateFormat(format, new Locale(Values.lang[ln][2])).format(flightList.get(i-1).start);
         dd = dd + new SimpleDateFormat("HH:mm").format(flightList.get(i-1).end);
         System.out.println("Locale = " + dd);
-        assertTrue("Дата авиаперелета не совпадает с забронированной", date.equals(dd));
+        assertTrue("Дата авиаперелета не совпадает с забронированной"+
+                   "\nОжидалось : " + dd + "\nФактически: " + date, date.equals(dd));
     }
 
     @Step("Проверка данных о длительности {0}-го авиаперелета")
@@ -194,7 +198,9 @@ public class EssPage extends Page {
             }
         }
         System.out.println("duration = " + duration);
-        assertTrue("Длительность авиаперелета не совпадает с забронированной", duration.equals(flightList.get(i-1).duration));
+        assertTrue("Длительность авиаперелета не совпадает с забронированной" +
+                   "\nОжидалось : " + flightList.get(i-1).duration + "\nФактически: " + duration,
+                   duration.equals(flightList.get(i-1).duration));
     }
 
     @Step("Полетная страховка в корзине")
@@ -249,9 +255,9 @@ public class EssPage extends Page {
         Values.price.imedical = p.$(byXpath("following-sibling::div[@class='cart__item-priceondemand-item-price']")).getText().replaceAll("\\D+","");
         System.out.println("Med price = " + Values.price.imedical);
         assertTrue("Стоимость страхования в корзине не совпадает с указанной в блоке" +
-                "\nОжидалось: " + price +
-                "\nФактически: " + Values.price.imedical,
-                price.equals(Values.price.imedical));
+                   "\nОжидалось : " + price +
+                   "\nФактически: " + Values.price.imedical,
+                   price.equals(Values.price.imedical));
         Sleep(3);
     }
 
@@ -277,7 +283,10 @@ public class EssPage extends Page {
         String totalPrice = $("#cart-total-incarts").$(byXpath("descendant::div[@class='cart__item-price']")).getText().replaceAll("\\D+","");
         System.out.println("Total price = " + totalPrice);
         Values.price.total = totalPrice;
-        assertTrue("Общая сумма заказа некорректна", summ == stringIntoInt(Values.price.total));
+        assertTrue("Общая сумма заказа некорректна" +
+                   "\nОжидалось : " + summ +
+                   "\nФактически: " + Values.price.total,
+                   abs(summ - stringIntoInt(Values.price.total))<2);
     }
 
     @Step("Проверка общей суммы заказа")
@@ -285,7 +294,10 @@ public class EssPage extends Page {
         String flyPrice = $(byXpath("//div[@class='cart__item-price']")).getText().replaceAll("\\D+","");
         Values.price.total = $("#cart-total-incarts").$(byXpath("descendant::div[@class='cart__item-price']")).getText().replaceAll("\\D+","");
         System.out.println("Total price = " + Values.price.total);
-        assertTrue("Общая сумма заказа некорректна", flyPrice.equals(Values.price.total));
+        assertTrue("Общая сумма заказа некорректна" +
+                   "\nОжидалось : " + Values.price.total +
+                   "\nФактически: " + flyPrice,
+                   flyPrice.equals(Values.price.total));
     }
 
     @Step("Нажать кнопку «Транспорт»")
