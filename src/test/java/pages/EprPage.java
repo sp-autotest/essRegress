@@ -131,8 +131,12 @@ public class EprPage extends Page {
             fullName = (passList.get(i).lastname + " " + passList.get(i).firstname).toUpperCase();
             assertTrue("Медицинская страховка не содержит пассажира " + fullName, insurance.contains(fullName));
         }
-        assertTrue("Стоимость медицинской страховки отличается от забронированной", Values.price.imedical.equals(price));
-        assertTrue("Название медицинской страховки не корректно", insurance.contains(Values.text[1][ln]));
+        assertTrue("Стоимость медицинской страховки отличается от забронированной" +
+                   "\nОжидалось : " + Values.price.imedical + "\nФактически: " + price,
+                   Values.price.imedical.equals(price));
+        assertTrue("Название медицинской страховки не корректно" +
+                   "\nОжидалось : " + Values.text[1][ln] + "\nФактически: " + insurance,
+                   insurance.contains(Values.text[1][ln]));
     }
 
     @Step("Проверка общей стоимости всех страховок")
@@ -141,7 +145,8 @@ public class EprPage extends Page {
                 "div[@class='checkout-item__left-container']")).getText().replaceAll("\\D+","");
         System.out.println("all insurances= " + price);
         int allPrice = stringIntoInt(Values.price.iflight) + stringIntoInt(Values.price.imedical);
-        assertTrue("Общая стоимость всех страховок некорректна", stringIntoInt(price) == allPrice);
+        assertTrue("Общая стоимость всех страховок некорректна" +
+                   "\nОжидалось : " + allPrice + "\nФактически: " + price, stringIntoInt(price) == allPrice);
     }
 
     @Step("Проверка данных транспортной услуги")
@@ -150,11 +155,14 @@ public class EprPage extends Page {
         row.scrollTo();
         String name = row.$(byXpath("descendant::div[@ng-bind='item.details.carName']")).getText();
         System.out.println(name);
-        assertTrue("Название авто отличается от забронированного", Values.auto.name.equals(name));
+        assertTrue("Название авто отличается от забронированного" +
+                   "\nОжидалось : " + Values.auto.name + "\nФактически: " + name, Values.auto.name.equals(name));
 
         String receiveLocation = row.$(byXpath("descendant::div[@ng-bind='item.details.receiveLocation']")).getText();
         System.out.println(receiveLocation);
-        assertTrue("Место получения отличается от забронированного", Values.auto.receiveLocation.equals(receiveLocation));
+        assertTrue("Место получения отличается от забронированного" +
+                   "\nОжидалось : " + Values.auto.receiveLocation + "\nФактически: " + receiveLocation,
+                   Values.auto.receiveLocation.equals(receiveLocation));
 
         String receiveDate = row.$(byXpath("descendant::div[@ng-bind='item.details.receiveDate']")).getText();
         receiveDate = receiveDate.substring(receiveDate.indexOf(",")+1);

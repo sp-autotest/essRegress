@@ -18,6 +18,8 @@ import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
 import struct.Flight;
 import struct.Passenger;
+
+import java.io.IOException;
 import java.util.List;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.Selenide.open;
@@ -78,8 +80,12 @@ public class EssTest {
     }
 
     @AfterMethod
-    public void stop() {
+    public void stop() throws IOException {
         getWebDriver().quit();
+
+        //костыль, для того чтобы закрыть оперу, т.к. в ее драйвере есть баг
+        // https://github.com/operasoftware/operachromiumdriver/issues/44
+        if (browserName.equals("opera")) Runtime.getRuntime().exec("taskkill /f /im opera.exe");
     }
 
     @AfterClass
