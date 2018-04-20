@@ -18,7 +18,9 @@ import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static config.Values.ln;
+import static config.Values.text;
 import static java.lang.Math.abs;
+import static java.lang.Math.incrementExact;
 import static org.testng.AssertJUnit.assertTrue;
 
 /**
@@ -41,15 +43,20 @@ public class EprPage extends Page {
         for (int i = 0; i < flights.size(); i++) {
             checkFlight(i + 1, flyList.get(i), flights.get(i));
         }
-        if (test!=4) {
+        if (test<4) {
             checkFlyInsurance(passList);
             screenShot("Скриншот");
+        }
+        if (test<3) {
+            checkMedicalInsurance(passList);
             checkAllInsurancePrice();
         }
-        if (test < 3)  checkMedicalInsurance(passList);
         if (test == 1) checkAccommodation();
         if (test == 2) checkTransport();
-        if (test == 3) checkAeroexpress();
+        if (test == 3) {
+            checkAeroexpress(flyList.get(0).from_orig);
+            checkTransfer(flyList.get(0).start);
+        }
     }
 
     @Step("Проверка фамилии и имени {0}-го пассажира")
@@ -185,11 +192,74 @@ public class EprPage extends Page {
     }
 
     @Step("Проверка данных услуги Аэроэкспресс")
-    private void checkAeroexpress() {
-        SelenideElement row = $(byXpath("//div[@data-toggle-id='toggle-TRANSPORT']"));
-        row.scrollTo();
-        String name = row.$(byXpath("descendant::div[@ng-bind='item.details.carName']")).getText();
-        System.out.println(name);
+    private void checkAeroexpress(String aero) {
+        SelenideElement group = $(byXpath("//div[@data-toggle-id='toggle-TRANSPORT']"));
+        group.scrollTo();
+        ElementsCollection row = group.$$(byXpath("//div[@ng-repeat='item in items']"));
+        for (int i = 0; i < row.size()-1; i++) {//последняя строка - єто трансфер
+            SelenideElement aRow = row.get(i);
+            String name = aRow.$(byXpath("descendant::div[@ng-bind='item.details.description']")).getText();
+            name = name.substring(name.indexOf(",") + 2);
+            name = name.substring(0, name.indexOf(","));
+            System.out.println(name);
+            if (aero.equals("SVO")) assertTrue("Направление в Аэроэкспресс некорректно" +
+                    "\nОжидалось: " + text[18][ln] + " -> " + text[19][ln] +
+                    "\nФактически: " + name, name.equals(text[18][ln] + " -> " + text[19][ln]));
+            if (aero.equals("VKO")) assertTrue("Направление в Аэроэкспресс некорректно" +
+                    "\nОжидалось: " + text[20][ln] + " -> " + text[21][ln] +
+                    "\nФактически: " + name, name.equals(text[20][ln] + " -> " + text[21][ln]));
+
+            String count = aRow.$(byXpath("descendant::span[@translate-plural='paymentPage.passengers']/..")).getText().replaceAll("\\D+", "");
+            System.out.println("passengers = " + count);
+            assertTrue("Количество билетов на Аэроэкспресс не корректно" +
+                    "\nОжидалось : 2\nФактически: " + count, count.equals("2"));
+
+            String price = aRow.$(byXpath("descendant::span[contains(@class,'checkout-item__item-price')]")).getText().replaceAll("\\D+", "");
+            System.out.println("price = " + price);
+            int p = stringIntoInt(Values.price.aeroexpress) / 2;
+            assertTrue("Стоимость билета на Аэроэкспресс не корректна" +
+                    "\nОжидалось : " + p + "\nФактически: " + price, stringIntoInt(price) == p);
+        }
+        String summ = group.$(byXpath("descendant::span[@class='h-color--black h-fz--14 ng-binding']")).getText().replaceAll("\\D+","");
+        System.out.println("Aeroexpress summ = " + summ);
+        assertTrue("Общая сумма билетов на Аэроэкспресс не корректна" +
+                   "\nОжидалось : " + Values.price.aeroexpress +
+                   "\nФактически: " + summ, summ.equals(Values.price.aeroexpress));
+    }
+
+    @Step("Проверка данных услуги Трансфера")
+    private void checkTransfer(Date d) {
+        SelenideElement group = $(byXpath("//div[@ng-switch-when='Transfer'][@class='ng-scope']"));
+        String from = group.$(byXpath("descendant::div[@ng-bind='item.details.from']")).getText();
+        System.out.println("Transfer from = " + from);
+        String fromC = (ln==0) ? "Курский, Москва" : "Kurskiy, Moscow";
+        assertTrue("Направление Откуда трансфера не корректно" +
+                   "\nОжидалось : " + fromC + "\nФактически: " + from, from.equals(fromC));
+
+        String to = group.$(byXpath("descendant::div[@ng-bind='item.details.to']")).getText();
+        System.out.println("Transfer to = " + to);
+        String toC = (ln==0) ? "Белорусский, Москва" : "Belorussky, Moscow";
+        assertTrue("Направление Куда трансфера не корректно" +
+                   "\nОжидалось : " + toC + "\nФактически: " + to, to.equals(toC));
+
+        String date = group.$(byXpath("descendant::div[@ng-bind='item.details.date']")).getText();
+        System.out.println("Transfer date = " + date);
+        String dateC = new SimpleDateFormat("E, dd MMMM", new Locale(Values.lang[ln][2])).format(d);
+        assertTrue("Дата трансфера не корректна" +
+                   "\nОжидалось : " + dateC + "\nФактически: " + date, date.equals(dateC));
+
+        String price = group.$(byXpath("descendant::span[@class='h-text--bold checkout-item__item-price ng-binding']")).getText().replaceAll("\\D+","");
+        System.out.println("Transfer price = " + price);
+        assertTrue("Cтоимость трансфера не корректна" +
+                   "\nОжидалось : " + Values.price.transfer +
+                   "\nФактически: " + price, price.equals(Values.price.transfer));
+
+        SelenideElement trans = $(byXpath("//div[@data-toggle-id='toggle-TRANSPORT']"));
+        String summ = trans.$(byXpath("descendant::span[@class='h-color--black h-fz--14 ng-binding'][2]")).getText().replaceAll("\\D+","");
+        System.out.println("Transfer summ = " + summ);
+        assertTrue("Сумма трансфера не корректна" +
+                "\nОжидалось : " + Values.price.transfer +
+                "\nФактически: " + summ, summ.equals(Values.price.transfer));
     }
 
     @Step("Проверка данных услуги проживания")

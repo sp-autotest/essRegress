@@ -215,7 +215,7 @@ public class EssTest {
     @Description("Карта VISA;\nHаправление перелета: туда-обратно;\n" +
             "Состав бронирования авиаперелета, билеты: 2 взрослых;\n" +
             "Дополнительные услуги: «Полетная страховка», «Аэроэкспресс», «Трансфер»")
-    @Test(priority = 3, dataProvider = "parseLocaleData", description = "Раздел 3", groups = {"part3"}, enabled = false)
+    @Test(priority = 3, dataProvider = "parseLocaleData", description = "Раздел 3", groups = {"part3"}, enabled = true)
     public void section3(String locale, String currency) {
         int test = 3;
         Values.ln = getLanguageNumber(locale);
@@ -230,24 +230,27 @@ public class EssTest {
         searchPg.step1(test);
         List<Flight> flightList = searchPg.step2();
         List<Passenger> passList = new PassengerPage().step3();
-        new PlacePage().clickPay();
+        new PlacePage().clickPay();//шаг 5
         ChoosePage choosePg = new ChoosePage();
-        choosePg.step4();
+        choosePg.step4();//шаг 6
         EssPage essPg = new EssPage();
-        essPg.step6();
-        essPg.step7(flightList);
-        essPg.step8();
+        essPg.step6();//шаг 7
+        essPg.step7(flightList);//шаг 8
+        essPg.step8();//шаг 9
         TransportPage transportPg = new TransportPage();
         transportPg.step10(test);
         transportPg.checkAeroexpressPassengerLogic();//шаг 11
         transportPg.checkAeroexpressLogic(flightList);//шаг 12
-        //transportPg.addAeroexpressTickets();//шаг 13
-        /*String dir = transportPg.setTransferLocations();//шаг 14
+        transportPg.addAeroexpressTickets();//шаг 13
+        String dir = transportPg.setTransferLocations();//шаг 14
         transportPg.clickSelectStandartButton();//шаг 15
         transportPg.setTransferAdditionalInfo(flightList.get(0).start, dir);//шаг 16
-        transportPg.selectTransfer(flightList.get(0).start, dir);//шаг 17*/
+        transportPg.selectTransfer(flightList.get(0).start, dir);//шаг 17
         transportPg.clickContinue();//шаг 18
         transportPg.clickContinue();//шаг 18
+
+        //transportPg.step12(); //убрать - нажимаем Купить в корзине
+
         choosePg.chooseTestStend("19");//шаг 19
         new EprPage().checkDataOnPayPage("20", flightList, passList, test);//шаг 20
 
