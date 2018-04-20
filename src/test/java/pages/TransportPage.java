@@ -195,6 +195,13 @@ public class TransportPage extends Page {
         checkTransferAllData(date, dir);
     }
 
+    @Step("Действие 18, Нажать Продолжить")
+    public void clickContinue() {
+        System.out.println("\t18. Click Continue button");
+        $(byXpath("//a[@class='next__button']")).click();
+        waitPlane();
+    }
+
     @Step("Проверка перехода в раздел «Транспорт»")
     private void checkTransportBlock(){
         $(byXpath("//div[@id='left-column-transport'][contains(@class,'--active')]")).

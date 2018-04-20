@@ -241,12 +241,15 @@ public class EssTest {
         transportPg.step10(test);
         transportPg.checkAeroexpressPassengerLogic();//шаг 11
         transportPg.checkAeroexpressLogic(flightList);//шаг 12
-        transportPg.addAeroexpressTickets();//шаг 13
-        String dir = transportPg.setTransferLocations();//шаг 14
+        //transportPg.addAeroexpressTickets();//шаг 13
+        /*String dir = transportPg.setTransferLocations();//шаг 14
         transportPg.clickSelectStandartButton();//шаг 15
         transportPg.setTransferAdditionalInfo(flightList.get(0).start, dir);//шаг 16
-        transportPg.selectTransfer(flightList.get(0).start, dir);//шаг 17
-
+        transportPg.selectTransfer(flightList.get(0).start, dir);//шаг 17*/
+        transportPg.clickContinue();//шаг 18
+        transportPg.clickContinue();//шаг 18
+        choosePg.chooseTestStend("19");//шаг 19
+        new EprPage().checkDataOnPayPage("20", flightList, passList, test);//шаг 20
 
     }
 

@@ -44,11 +44,12 @@ public class EprPage extends Page {
         if (test!=4) {
             checkFlyInsurance(passList);
             screenShot("Скриншот");
-            checkMedicalInsurance(passList);
             checkAllInsurancePrice();
         }
+        if (test < 3)  checkMedicalInsurance(passList);
         if (test == 1) checkAccommodation();
         if (test == 2) checkTransport();
+        if (test == 3) checkAeroexpress();
     }
 
     @Step("Проверка фамилии и имени {0}-го пассажира")
@@ -181,6 +182,14 @@ public class EprPage extends Page {
         String price = row.$(byXpath("descendant::span[contains(@class,'__item-price')]")).getText().replaceAll("\\D+","");
         System.out.println(price);
         assertTrue("Стоимость аренды автомобиля отличается от забронированной", Values.price.transport.equals(price));
+    }
+
+    @Step("Проверка данных услуги Аэроэкспресс")
+    private void checkAeroexpress() {
+        SelenideElement row = $(byXpath("//div[@data-toggle-id='toggle-TRANSPORT']"));
+        row.scrollTo();
+        String name = row.$(byXpath("descendant::div[@ng-bind='item.details.carName']")).getText();
+        System.out.println(name);
     }
 
     @Step("Проверка данных услуги проживания")
