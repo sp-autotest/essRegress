@@ -197,7 +197,7 @@ public class EprPage extends Page {
         SelenideElement group = $(byXpath("//div[@data-toggle-id='toggle-TRANSPORT']"));
         group.scrollTo();
         ElementsCollection row = group.$$(byXpath("//div[@ng-repeat='item in items']"));
-        for (int i = 0; i < row.size()-1; i++) {//последняя строка - єто трансфер
+        for (int i = 0; i < row.size()-1; i++) {//последняя строка - это трансфер
             SelenideElement aRow = row.get(i);
             String name = aRow.$(byXpath("descendant::div[@ng-bind='item.details.description']")).getText();
             name = name.substring(name.indexOf(",") + 2);

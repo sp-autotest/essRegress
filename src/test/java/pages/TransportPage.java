@@ -159,7 +159,7 @@ public class TransportPage extends Page {
         $("#iway_change_city").selectOptionByValue("1202");
         $(byXpath("//div[@id='transfer_options_list']/descendant::div[@class='frame__container']")).shouldBe(visible);
         $("#iway_change_city1").selectOptionByValue("1200");
-        Sleep(1); //задержка в трансфере между селектом направления и кликом по кнопке Выбрать
+        Sleep(3); //задержка в трансфере между селектом направления и кликом по кнопке Выбрать
         return $("#iway_change_city").getText() + " — " + $("#iway_change_city1").getText();
     }
 
@@ -174,6 +174,7 @@ public class TransportPage extends Page {
             if (cat.equals(Values.text[26][ln])){ //Стандарт
                 price = categories.get(i).$(byXpath("div/div[4]")).getText().replaceAll("\\D+","");
                 System.out.println("transfer = " + price);
+                screenShot("скриншот");
                 categories.get(i).$(byXpath("descendant::a[contains(@class,'button')]")).click();
                 break;
             }

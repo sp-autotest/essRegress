@@ -4,6 +4,7 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import config.Values;
 import ru.yandex.qatools.allure.annotations.Step;
+import struct.Flight;
 import struct.Passenger;
 
 import java.text.ParseException;
@@ -32,7 +33,7 @@ public class ResultPage extends Page {
         System.out.println("\t" + n + ". Cheking final page with pay result");
         checkPageAppear();
         ElementsCollection services = $$(byXpath("//div[@id='frame-additionalServices']/descendant::div[@role='row']"));
-        if (test != 4) {
+        if (test < 4) {
             services.get(0).scrollTo();
             checkFlyInsurance(services.get(0));
             services.get(1).scrollTo();
@@ -42,6 +43,17 @@ public class ResultPage extends Page {
         if (test == 1) checkHotel(services.get(2));
         if (test == 2) checkTransport(services.get(2));
         checkTotalPrice();
+    }
+
+    @Step("Действие 23, проверка страницы результатов оплаты")
+    public void checkServicesData3(Flight flight) {
+        System.out.println("\t23. Cheking final page with pay result");
+        checkPageAppear();
+        ElementsCollection services = $$(byXpath("//div[@id='frame-additionalServices']/descendant::div[@role='row']"));
+        services.get(0).scrollTo();
+        checkFlyInsurance(services.get(0));
+        checkAeroexpress(services.get(1), flight.from_orig);
+        checkTransfer(services.get(2), flight.start);
     }
 
     private void checkPageAppear(){
@@ -178,6 +190,89 @@ public class ResultPage extends Page {
                    "\nОжидалось : 1\nФактически: " + docs.size(), docs.size() == 1);
         assertTrue("Название ваучера некорректно\nОжидалось : " + text[15][ln] + "\nФактически: " + docs.get(0).getText(),
                    docs.get(0).getText().contains(text[15][ln]));
+    }
+
+    @Step("Проверка услуги Аэроэкспресс")
+    private void checkAeroexpress(SelenideElement row, String direction){
+        ElementsCollection docs = row.$$(byXpath("div[4]/a"));
+        for (SelenideElement doc : docs) {
+            Values.docs = Values.docs + doc.getText() + ", ";
+        }
+        String name = row.$(byXpath("div[1]/span[2]")).getText();
+        name = name.substring(name.indexOf(",") + 2);
+        name = name.substring(0, name.indexOf(","));
+        System.out.println(name);
+        if (direction.equals("SVO")) assertTrue("Направление в Аэроэкспресс некорректно" +
+                "\nОжидалось : " + text[28][ln] + " -> " + text[29][ln] +
+                "\nФактически: " + name, name.equals(text[28][ln] + " -> " + text[29][ln]));
+        if (direction.equals("VKO")) assertTrue("Направление в Аэроэкспресс некорректно" +
+                "\nОжидалось : " + text[20][ln] + " -> " + text[21][ln] +
+                "\nФактически: " + name, name.equals(text[20][ln] + " -> " + text[21][ln]));
+
+        String count = row.$(byXpath("div[2]")).getText().replaceAll("\\D+", "");
+        System.out.println("passengers = " + count);
+        assertTrue("Количество билетов на Аэроэкспресс не корректно" +
+                   "\nОжидалось : 2\nФактически: " + count, count.equals("2"));
+
+        String price = row.$(byXpath("div[3]/div")).getText().replaceAll("\\D+", "");
+        if (Values.cur.equals("RUB")) price = price.substring(0, price.length()-2);
+        if (Values.cur.equals("CNY")) price = price.substring(0, price.length()-2);
+        System.out.println("price = " + price);
+        assertTrue("Стоимость билета на Аэроэкспресс не корректна" +
+                   "\nОжидалось : " + Values.price.aeroexpress +
+                   "\nФактически: " + price, price.equals(Values.price.aeroexpress));
+
+        System.out.println("docs = " + docs.size());//должно быть 4 документа: по два на каждого пассажира
+        assertTrue("Количество приложенных документов некорректно" +
+                   "\nОжидалось : 4\nФактически: " + docs.size(), docs.size() == 4);
+        for (int i=0; i<docs.size(); i=i+2) {
+            assertTrue("Название квитанции некорректно\nОжидалось :" + text[13][ln] +
+                       "\nФактически:" + docs.get(i).getText(), docs.get(i).getText().equals(text[13][ln]));
+            assertTrue("Название билета некорректно\nОжидалось :" + text[30][ln] +
+                       "\nФактически:" + docs.get(i+1).getText(), docs.get(i+1).getText().contains(text[30][ln]));
+        }
+    }
+
+    @Step("Проверка данных услуги Трансфера")
+    private void checkTransfer(SelenideElement row, Date d) {
+        ElementsCollection docs = row.$$(byXpath("div[4]/a"));
+        for (SelenideElement doc : docs) {
+            Values.docs = Values.docs + doc.getText() + ", ";
+        }
+        String from = row.$(byXpath("div[1]/div[2]")).getText();
+        System.out.println("Transfer from = " + from);
+        String fromC = (ln==0) ? "Курский, Москва" : "Kurskiy, Moscow";
+        assertTrue("Направление Откуда трансфера не корректно" +
+                   "\nОжидалось : " + fromC + "\nФактически: " + from, from.equals(fromC));
+
+        String to = row.$(byXpath("div[2]/div[2]")).getText();
+        System.out.println("Transfer to = " + to);
+        String toC = (ln==0) ? "Белорусский, Москва" : "Belorussky, Moscow";
+        assertTrue("Направление Куда трансфера не корректно" +
+                   "\nОжидалось : " + toC + "\nФактически: " + to, to.equals(toC));
+
+        String date = row.$(byXpath("div[1]/div[3]")).getText();
+        System.out.println("Transfer date = " + date);
+        String dateC;
+        dateC = new SimpleDateFormat("E, dd MMMM yyyy", new Locale(Values.lang[ln][2])).format(d);
+        if (ln == 6) dateC = date;//невозможно воспроизвести формат даты для китайского, убрать когда сообщат формат
+        if (ln == 8) dateC = new SimpleDateFormat("E, dd M yyyy", new Locale(Values.lang[ln][2])).format(d);
+        assertTrue("Дата трансфера не корректна" +
+                   "\nОжидалось : " + dateC + "\nФактически: " + date, date.equals(dateC));
+
+        String price = row.$(byXpath("div[3]/div")).getText().replaceAll("\\D+","");
+        if (Values.cur.equals("RUB")) price = price.substring(0, price.length()-2);
+        if (Values.cur.equals("CNY")) price = price.substring(0, price.length()-2);
+        System.out.println("Transfer price = " + price);
+        assertTrue("Cтоимость трансфера не корректна" +
+                   "\nОжидалось : " + Values.price.transfer +
+                   "\nФактически: " + price, price.equals(Values.price.transfer));
+
+        System.out.println("docs = " + docs.size());
+        assertTrue("Количество приложенных документов некорректно" +
+                   "\nОжидалось : 1\nФактически: " + docs.size(), docs.size() == 1);
+        assertTrue("Название квитанции некорректно\nОжидалось :" + text[13][ln] +
+                   "\nФактически:" + docs.get(0).getText(), docs.get(0).getText().equals(text[13][ln]));
     }
 
     @Step("Проверка оплаченной стоимости")

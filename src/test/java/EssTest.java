@@ -210,12 +210,12 @@ public class EssTest {
         new ResultPage().checkServicesData("17", test);//шаг 17
     }
 
-    /*@Stories("Раздел 3 регрессионных испытаний")
+    @Stories("Раздел 3 регрессионных испытаний")
     @Title("Тестирование ESS, раздел 3")
     @Description("Карта VISA;\nHаправление перелета: туда-обратно;\n" +
             "Состав бронирования авиаперелета, билеты: 2 взрослых;\n" +
             "Дополнительные услуги: «Полетная страховка», «Аэроэкспресс», «Трансфер»")
-    @Test(priority = 3, dataProvider = "parseLocaleData", description = "Раздел 3", groups = {"part3"}, enabled = true)*/
+    @Test(priority = 3, dataProvider = "parseLocaleData", description = "Раздел 3", groups = {"part3"})
     public void section3(String locale, String currency) {
         int test = 3;
         Values.ln = getLanguageNumber(locale);
@@ -246,14 +246,13 @@ public class EssTest {
         transportPg.clickSelectStandartButton();//шаг 15
         transportPg.setTransferAdditionalInfo(flightList.get(0).start, dir);//шаг 16
         transportPg.selectTransfer(flightList.get(0).start, dir);//шаг 17
-        transportPg.clickContinue();//шаг 18
-        transportPg.clickContinue();//шаг 18
-
-        //transportPg.step12(); //убрать - нажимаем Купить в корзине
-
         choosePg.chooseTestStend("19");//шаг 19
-        new EprPage().checkDataOnPayPage("20", flightList, passList, test);//шаг 20
-
+        EprPage eprPg = new EprPage();
+        eprPg.checkDataOnPayPage("20", flightList, passList, test);//шаг 20
+        eprPg.clickPayButton();//шаг 21
+        PaymentPage paymentPg = new PaymentPage();
+        paymentPg.setCardDetails("22");//шаг 22
+        new ResultPage().checkServicesData3(flightList.get(0));//шаг 23
     }
 
     @Stories("Раздел 4 регрессионных испытаний")

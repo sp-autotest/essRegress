@@ -81,7 +81,7 @@ public class Values {
             {"Трансфер", "Transfer", "Transfer", "Traslado", "Trasferimento", "Transfert", "换乘", "트랜스퍼", "乗り換え"},
             {"Белорусский вокзал", "Belorussky Rail Terminal", "Weißrussischen Bahnhof", "Terminal de ferrocarril Belorussky", "Terminal ferroviario Belorussky", "Terminus de la gare de Biélorussie", "白俄罗斯火车站", "벨로루스키역 터미널", "ベロルスキー鉄道ターミナル"},
             {"Шереметьево", "Sheremetyevo", "Sheremetyevo", "Sheremetiévo", "Sheremetyevo", "Chérémétiévo", "谢列梅捷沃", "셰레메티예보", "シェレメーチエヴォ"},
-      /*30*/
+      /*30*/{"Билет №", "Ticket No.", "Ticket-Nr.", "N.° de billete", "Biglietto n.", "Ticket N°", "票据编号", "항공권 번호", "チケット番号"}
     };
 
 }
