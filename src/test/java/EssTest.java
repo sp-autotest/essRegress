@@ -246,6 +246,8 @@ public class EssTest {
         transportPg.clickSelectStandartButton();//шаг 15
         transportPg.setTransferAdditionalInfo(flightList.get(0).start, dir);//шаг 16
         transportPg.selectTransfer(flightList.get(0).start, dir);//шаг 17
+        transportPg.clickContinue();//шаг 18
+        transportPg.clickContinue();//шаг 18
         choosePg.chooseTestStend("19");//шаг 19
         EprPage eprPg = new EprPage();
         eprPg.checkDataOnPayPage("20", flightList, passList, test);//шаг 20

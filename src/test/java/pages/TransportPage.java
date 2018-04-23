@@ -480,6 +480,10 @@ public class TransportPage extends Page {
         String price = $(byXpath("//div[contains(@class,'js-price')]")).getText().replaceAll("\\D+", "");
         System.out.println("aeroexpress = "+price);
         SelenideElement transport = $("#left-column-transport");
+        if (getWebDriver().manage().window().getSize().getWidth() < 1280) {
+            transport.click();//раскрыть блок Транспорт
+            Sleep(1);
+        }
         String leftPrice = transport.$(byXpath("descendant::div[@class='cart__item-priceondemand-item-price']")).getText().replaceAll("\\D+","");
         System.out.println("Aeroexpress price = " + leftPrice);
         assertTrue("Сумма Аэроэкспресс в корзине не совпадает с рассчитанной" +
@@ -535,6 +539,10 @@ public class TransportPage extends Page {
     @Step("Проверить наличие и сумму трансфера в корзине")
     private void checkTransferInCart() {
         SelenideElement transport = $("#left-column-transport");
+        if (getWebDriver().manage().window().getSize().getWidth() < 1280) {
+            transport.click();//раскрыть блок Транспорт
+            Sleep(1);
+        }
         SelenideElement transfer = transport.$(byXpath("descendant::div[contains(text(),'"+ Values.text[27][ln] +"')]")).shouldBe(visible);
         String leftPrice = transfer.$(byXpath("parent::div/div[@class='cart__item-priceondemand-item-price']")).getText().replaceAll("\\D+","");
         System.out.println("Transfer price = " + leftPrice);

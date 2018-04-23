@@ -29,6 +29,10 @@ public class EssPage extends Page {
     public void step6() {
         System.out.println("\t6. Check ESS form");
         checkPageAppear();
+        if (getWebDriver().manage().window().getSize().getWidth() < 1280) {
+            $("#left-column-insurance-block").click();//раскрыть блок Страховка
+            Sleep(1);
+        }
         screenShot("Скриншот");
         checkFlight();
         checkNumber();
@@ -92,7 +96,8 @@ public class EssPage extends Page {
     }
 
     private void checkPageAppear(){
-        $(byXpath("//div[@class='cart__item-title']")).shouldBe(visible).shouldBe(text(pnr)).click();
+        //$(byXpath("//div[@class='cart__item-title']")).shouldBe(visible).shouldBe(text(pnr)).click();
+        $("#left-column-insurance-block").shouldBe(visible);
     }
 
     @Step("Маршрут")
