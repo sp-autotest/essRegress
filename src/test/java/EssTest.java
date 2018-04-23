@@ -210,13 +210,13 @@ public class EssTest {
         new ResultPage().checkServicesData("17", test);//шаг 17
     }
 
-/*    @Stories("Раздел 3 регрессионных испытаний")
+    /*@Stories("Раздел 3 регрессионных испытаний")
     @Title("Тестирование ESS, раздел 3")
     @Description("Карта VISA;\nHаправление перелета: туда-обратно;\n" +
             "Состав бронирования авиаперелета, билеты: 2 взрослых;\n" +
             "Дополнительные услуги: «Полетная страховка», «Аэроэкспресс», «Трансфер»")
-    @Test(priority = 3, dataProvider = "parseLocaleData", description = "Раздел 3", groups = {"part3"}, enabled = false)
-  */  public void section3(String locale, String currency) {
+    @Test(priority = 3, dataProvider = "parseLocaleData", description = "Раздел 3", groups = {"part3"}, enabled = true)*/
+    public void section3(String locale, String currency) {
         int test = 3;
         Values.ln = getLanguageNumber(locale);
         Values.cur = currency;

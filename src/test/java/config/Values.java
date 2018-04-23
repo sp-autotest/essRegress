@@ -78,7 +78,10 @@ public class Values {
             {"Прокат автомобилей", "Car rental", "Autovermietung", "Alquiler de coches", "Noleggio auto", "Location de voiture", "租车", "렌터카", "レンタカー"},
             {"Бронирование трансфера", "Booking a transfer", "Transfer buchen", "Reservar un traslado", "Prenotare un trasferimento", "Réservation d'un transfert", "预订换乘", "트랜스퍼 예약", "乗り換えの予約"},
             {"Стандарт", "Standard class", "Standard", "Clase Standard", "Classe Standard", "Classe standard", "标准舱", "스탠다드 클래스", "スタンダードクラス"},
-            {"Трансфер", "Transfer", "Transfer", "Traslado", "Trasferimento", "Transfert", "换乘", "트랜스퍼", "乗り換え"}
+            {"Трансфер", "Transfer", "Transfer", "Traslado", "Trasferimento", "Transfert", "换乘", "트랜스퍼", "乗り換え"},
+            {"Белорусский вокзал", "Belorussky Rail Terminal", "Weißrussischen Bahnhof", "Terminal de ferrocarril Belorussky", "Terminal ferroviario Belorussky", "Terminus de la gare de Biélorussie", "白俄罗斯火车站", "벨로루스키역 터미널", "ベロルスキー鉄道ターミナル"},
+            {"Шереметьево", "Sheremetyevo", "Sheremetyevo", "Sheremetiévo", "Sheremetyevo", "Chérémétiévo", "谢列梅捷沃", "셰레메티예보", "シェレメーチエヴォ"},
+      /*30*/
     };
 
 }
