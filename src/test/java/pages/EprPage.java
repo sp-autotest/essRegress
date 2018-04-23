@@ -124,7 +124,8 @@ public class EprPage extends Page {
             fullName = (passList.get(i).lastname + " " + passList.get(i).firstname).toUpperCase();
             assertTrue("Полетная страховка не содержит пассажира " + fullName, insurance.contains(fullName));
         }
-        assertTrue("Стоимость полетной страховки отличается от забронированной", Values.price.iflight.equals(price));
+        assertTrue("Стоимость полетной страховки отличается от забронированной" +
+                "\nОжидалось : " + Values.price.iflight + "\nФактически: " + price, Values.price.iflight.equals(price));
     }
 
     @Step("Проверка медицинской страховки")
@@ -203,10 +204,10 @@ public class EprPage extends Page {
             name = name.substring(0, name.indexOf(","));
             System.out.println(name);
             if (aero.equals("SVO")) assertTrue("Направление в Аэроэкспресс некорректно" +
-                    "\nОжидалось: " + text[18][ln] + " -> " + text[19][ln] +
+                    "\nОжидалось : " + text[18][ln] + " -> " + text[19][ln] +
                     "\nФактически: " + name, name.equals(text[18][ln] + " -> " + text[19][ln]));
             if (aero.equals("VKO")) assertTrue("Направление в Аэроэкспресс некорректно" +
-                    "\nОжидалось: " + text[20][ln] + " -> " + text[21][ln] +
+                    "\nОжидалось : " + text[20][ln] + " -> " + text[21][ln] +
                     "\nФактически: " + name, name.equals(text[20][ln] + " -> " + text[21][ln]));
 
             String count = aRow.$(byXpath("descendant::span[@translate-plural='paymentPage.passengers']/..")).getText().replaceAll("\\D+", "");
@@ -244,7 +245,12 @@ public class EprPage extends Page {
 
         String date = group.$(byXpath("descendant::div[@ng-bind='item.details.date']")).getText();
         System.out.println("Transfer date = " + date);
-        String dateC = new SimpleDateFormat("E, dd MMMM", new Locale(Values.lang[ln][2])).format(d);
+        String dateC;
+        if (ln != 6) {
+            dateC = new SimpleDateFormat("E, dd MMMM", new Locale(Values.lang[ln][2])).format(d);
+        }else {
+            dateC = date;//невозможно воспроизвести формат даты для китайского
+        }
         assertTrue("Дата трансфера не корректна" +
                    "\nОжидалось : " + dateC + "\nФактически: " + date, date.equals(dateC));
 

@@ -116,30 +116,30 @@ public class TransportPage extends Page {
         switch (flightList.get(0).from_orig) {
             case "SVO":
                 dir = directions.get(0).getText();
-                assertTrue("Направление \"Из города\" некорректно\nОжидалось: " + text[18][ln] + "\nФактически: " + dir, dir.equals(text[18][ln]));
+                assertTrue("Направление \"Из города\" некорректно\nОжидалось : " + text[18][ln] + "\nФактически: " + dir, dir.equals(text[18][ln]));
                 dir = directions.get(1).getText();
-                assertTrue("Направление \"В аэропорт\" некорректно\nОжидалось: " + text[19][ln] + "\nФактически: " + dir, dir.equals(text[19][ln]));
+                assertTrue("Направление \"В аэропорт\" некорректно\nОжидалось : " + text[19][ln] + "\nФактически: " + dir, dir.equals(text[19][ln]));
                 break;
             case "VKO":
                 dir = directions.get(0).getText();
-                assertTrue("Направление \"Из города\" некорректно\nОжидалось: " + text[20][ln] + "\nФактически: " + dir, dir.equals(text[20][ln]));
+                assertTrue("Направление \"Из города\" некорректно\nОжидалось : " + text[20][ln] + "\nФактически: " + dir, dir.equals(text[20][ln]));
                 dir = directions.get(1).getText();
-                assertTrue("Направление \"В аэропорт\" некорректно\nОжидалось: " + text[21][ln] + "\nФактически: " + dir, dir.equals(text[21][ln]));
+                assertTrue("Направление \"В аэропорт\" некорректно\nОжидалось : " + text[21][ln] + "\nФактически: " + dir, dir.equals(text[21][ln]));
                 break;
         }
         /*Обратно*/
         switch (flightList.get(flightList.size()-1).to_orig) {
             case "SVO":
                 dir = directions.get(2).getText();
-                assertTrue("Направление \"Из аэропорта\" некорректно\nОжидалось: " + text[19][ln] + "\nФактически: " + dir, dir.equals(text[19][ln]));
+                assertTrue("Направление \"Из аэропорта\" некорректно\nОжидалось : " + text[19][ln] + "\nФактически: " + dir, dir.equals(text[19][ln]));
                 dir = directions.get(3).getText();
-                assertTrue("Направление \"В город\" некорректно\nОжидалось: " + text[18][ln] + "\nФактически: " + dir, dir.equals(text[18][ln]));
+                assertTrue("Направление \"В город\" некорректно\nОжидалось : " + text[18][ln] + "\nФактически: " + dir, dir.equals(text[18][ln]));
                 break;
             case "VKO":
                 dir = directions.get(2).getText();
-                assertTrue("Направление \"Из аэропорта\" некорректно\nОжидалось: " + text[21][ln] + "\nФактически: " + dir, dir.equals(text[21][ln]));
+                assertTrue("Направление \"Из аэропорта\" некорректно\nОжидалось : " + text[21][ln] + "\nФактически: " + dir, dir.equals(text[21][ln]));
                 dir = directions.get(3).getText();
-                assertTrue("Направление \"В город\" некорректно\nОжидалось: " + text[20][ln] + "\nФактически: " + dir, dir.equals(text[20][ln]));
+                assertTrue("Направление \"В город\" некорректно\nОжидалось : " + text[20][ln] + "\nФактически: " + dir, dir.equals(text[20][ln]));
                 break;
         }
     }
@@ -155,10 +155,11 @@ public class TransportPage extends Page {
     @Step("Действие 14, Характеристики услуги «Бронирование трансфера»")
     public String setTransferLocations() {
         System.out.println("\t14. Set transfer locations");
+        $("#iway_transfer_page").scrollTo();
         $("#iway_change_city").selectOptionByValue("1202");
         $(byXpath("//div[@id='transfer_options_list']/descendant::div[@class='frame__container']")).shouldBe(visible);
         $("#iway_change_city1").selectOptionByValue("1200");
-        Sleep(3); //задержка в трансфере между селектом направления и кликом по кнопке Выбрать
+        Sleep(1); //задержка в трансфере между селектом направления и кликом по кнопке Выбрать
         return $("#iway_change_city").getText() + " — " + $("#iway_change_city1").getText();
     }
 
