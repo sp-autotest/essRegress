@@ -199,9 +199,9 @@ public class ResultPage extends Page {
             Values.docs = Values.docs + doc.getText() + ", ";
         }
         String name = row.$(byXpath("div[1]/span[2]")).getText();
+        System.out.println("Name = " + name);
         name = name.substring(name.indexOf(",") + 2);
         name = name.substring(0, name.indexOf(","));
-        System.out.println(name);
         if (direction.equals("SVO")) assertTrue("Направление в Аэроэкспресс некорректно" +
                 "\nОжидалось : " + text[28][ln] + " -> " + text[29][ln] +
                 "\nФактически: " + name, name.equals(text[28][ln] + " -> " + text[29][ln]));
@@ -270,9 +270,11 @@ public class ResultPage extends Page {
 
         System.out.println("docs = " + docs.size());
         assertTrue("Количество приложенных документов некорректно" +
-                   "\nОжидалось : 1\nФактически: " + docs.size(), docs.size() == 1);
+                   "\nОжидалось : 2\nФактически: " + docs.size(), docs.size() == 2);
         assertTrue("Название квитанции некорректно\nОжидалось :" + text[13][ln] +
                    "\nФактически:" + docs.get(0).getText(), docs.get(0).getText().equals(text[13][ln]));
+        assertTrue("Название ваучера некорректно\nОжидалось :" + text[15][ln] +
+                   "\nФактически:" + docs.get(1).getText(), docs.get(1).getText().contains(text[15][ln]));
     }
 
     @Step("Проверка оплаченной стоимости")
