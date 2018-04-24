@@ -33,7 +33,7 @@ public class SearchPage extends Page {
 
     @Step("Действие 1, поиск рейсов")
     public void step1(int test) {
-        selectLocale();
+        //selectLocale();
         setFrom("MOW");
         setTo("PRG");
         if (test == 1) {
