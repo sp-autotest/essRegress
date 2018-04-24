@@ -91,6 +91,10 @@ public class EssPage extends Page {
     @Step("Действие 10, Нажать Оплатить в корзине")
     public void clickPayInCart() {
         System.out.println("\t10. Click Pay in cart");
+        if (getWebDriver().manage().window().getSize().getWidth() < 1280) {
+            $("#left-column-insurance-block").click();//раскрыть блок Страховка
+            Sleep(1);
+        }
         $(byXpath("//a[@class='cart__item-counter-link']")).click();
         waitPlane();
     }
