@@ -126,7 +126,7 @@ public class EssTest {
         System.out.println("=========================================================="+
         "\n\t\t*** AUTOTEST *** : section" + test + ", " + Values.lang[Values.ln][2].toUpperCase()+
         ", " + currency + "\n==========================================================");
-        open(Values.host);
+        open(Values.host + Values.lang[Values.ln][2]);
         SearchPage searchPg = new SearchPage();
         searchPg.step1(test);
         List<Flight> flightList = searchPg.step2();
@@ -185,7 +185,7 @@ public class EssTest {
         System.out.println("=========================================================="+
         "\n\t\t*** AUTOTEST *** : section" + test + ", " + Values.lang[Values.ln][2].toUpperCase()+
         ", " + currency + "\n==========================================================");
-        open(Values.host);
+        open(Values.host + Values.lang[Values.ln][2]);
         SearchPage searchPg = new SearchPage();
         searchPg.step1(test);
         List<Flight> flightList = searchPg.step2();
@@ -225,7 +225,7 @@ public class EssTest {
         System.out.println("=========================================================="+
                 "\n\t\t*** AUTOTEST *** : section" + test + ", " + Values.lang[Values.ln][2].toUpperCase()+
                 ", " + currency + "\n==========================================================");
-        open(Values.host);
+        open(Values.host + Values.lang[Values.ln][2]);
         SearchPage searchPg = new SearchPage();
         searchPg.step1(test);
         List<Flight> flightList = searchPg.step2();
@@ -271,7 +271,7 @@ public class EssTest {
         System.out.println("=========================================================="+
                 "\n\t\t*** AUTOTEST *** : section" + test + ", " + Values.lang[Values.ln][2].toUpperCase()+
                 ", " + currency + "\n==========================================================");
-        open(Values.host);
+        open(Values.host + Values.lang[Values.ln][2]);
         SearchPage searchPg = new SearchPage();
         searchPg.step1(test);
         List<Flight> flightList = searchPg.step2();
