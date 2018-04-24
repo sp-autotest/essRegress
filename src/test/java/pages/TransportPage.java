@@ -158,8 +158,11 @@ public class TransportPage extends Page {
         $("#iway_transfer_page").scrollTo();
         $("#iway_change_city").selectOptionByValue("1202");
         $(byXpath("//div[@id='transfer_options_list']/descendant::div[@class='frame__container']")).shouldBe(visible);
+        $("#iway_change_city1").selectOptionByValue("1202");
+        $(byXpath("//div[@id='transfer_options_list']/descendant::div[@class='frame__container']")).shouldNotBe(visible);
         $("#iway_change_city1").selectOptionByValue("1200");
-        Sleep(3); //задержка в трансфере между селектом направления и кликом по кнопке Выбрать
+        $(byXpath("//div[@id='transfer_options_list']/descendant::div[@class='frame__container']")).shouldBe(visible);
+        Sleep(2); //задержка в трансфере между селектом направления и кликом по кнопке Выбрать
         return $("#iway_change_city").getText() + " — " + $("#iway_change_city1").getText();
     }
 
@@ -167,7 +170,7 @@ public class TransportPage extends Page {
     public void clickSelectStandartButton() {
         System.out.println("\t15. Click Select button");
         String price = "";
-                ElementsCollection categories = $("#transfer_options_list").$$(byXpath("descendant::div[@class='frame__container']"));
+        ElementsCollection categories = $("#transfer_options_list").$$(byXpath("descendant::div[@class='frame__container']"));
         for (int i=0; i<categories.size(); i++){
             String cat = categories.get(i).$(byXpath("descendant::h3")).getText();
             System.out.println(cat);
@@ -196,7 +199,7 @@ public class TransportPage extends Page {
     public void selectTransfer(Date date, String dir) {
         System.out.println("\t17. Click Select button in transfer form");
         clickSelectButton();
-        checkTransferInCart();
+        checkTransferInCart(); //коммент изза того, что не раскрывается транспорт в корзине - СНЯТЬ ПРИ КОММИТЕ!!!
         checkTransferAllData(date, dir);
     }
 
