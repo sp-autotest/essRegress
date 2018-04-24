@@ -126,4 +126,11 @@ public class Page {
         executor.executeScript("arguments[0].click();", el.toWebElement());
     }
 
+    public static void scrollWithOffset(SelenideElement el, int x, int y) {
+        String code = "window.scroll(" + (el.getLocation().x + x) + ","
+                + (el.getLocation().y + y) + ");";
+        ((JavascriptExecutor)getWebDriver()).executeScript(code, el.toWebElement(), x, y);
+        Sleep(1);
+    }
+
 }
