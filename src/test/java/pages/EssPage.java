@@ -99,6 +99,14 @@ public class EssPage extends Page {
         waitPlane();
     }
 
+
+
+    @Step("Нажать кнопку «Транспорт»")
+    public void clickTransportButton() {
+        $(byXpath("//a[@class='next__button']")).shouldBe(visible).click();
+        waitPlane();
+    }
+
     private void checkPageAppear(){
         //$(byXpath("//div[@class='cart__item-title']")).shouldBe(visible).shouldBe(text(pnr)).click();
         $("#left-column-insurance-block").shouldBe(visible);
@@ -309,11 +317,7 @@ public class EssPage extends Page {
                    flyPrice.equals(Values.price.total));
     }
 
-    @Step("Нажать кнопку «Транспорт»")
-    public void clickTransportButton() {
-        $(byXpath("//a[@class='next__button']")).shouldBe(visible).click();
-        waitPlane();
-    }
+
 
     @Step("Нажать кнопку выбора в полетной страховке")
     private void clickFlyInsuranceButton() {

@@ -45,7 +45,7 @@ public class TransportPage extends Page {
             screenShot("Скриншот");
             checkSelectedCars();
         }
-        if (test == 3) {
+        if (test == 3 | test == 5) {
             screenShot("Скриншот");
             checkAeroexpressForm();
             checkCarRentalForm();

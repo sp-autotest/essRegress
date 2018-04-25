@@ -43,7 +43,7 @@ public class SearchPage extends Page {
         setThere(dateThere);
         setBack (dateBack);
         clickPassengers();
-        addAdult();
+        if (test != 5) addAdult();
         if (test == 2) {
             addChild();
             addChild();

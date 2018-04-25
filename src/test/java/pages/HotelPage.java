@@ -38,9 +38,9 @@ public class HotelPage extends Page {
         System.out.println("Accommodation form appeared");
     }
 
-    @Step("Действие 15, Нажать кнопку «Проживание»")
-    public void clickResidenceButton() {
-        System.out.println("\t15. Click Accommodation");
+    @Step("Действие {0}, Нажать кнопку «Проживание»")
+    public void clickResidenceButton(String n) {
+        System.out.println("\t" + n + ". Click Accommodation");
         //$(byXpath("//div[@class='cart__item-title'][contains(text(),'" + text[3][ln] + "')]")).shouldBe(visible).click();
         SelenideElement acc = $(byXpath("//div[@class='cart__item']")).shouldBe(visible);
         Sleep(2);
@@ -219,6 +219,13 @@ public class HotelPage extends Page {
     public void clickPayInCart() {
         System.out.println("\t24. Click Pay in cart");
         $(byXpath("//a[@class='cart__item-counter-link']")).click();
+        waitPlane();
+    }
+
+    @Step("Нажать Продолжить")
+    public void clickContinue() {
+        System.out.println("\tClick Continue button");
+        $(byXpath("//a[@class='next__button']")).click();
         waitPlane();
     }
 
@@ -506,4 +513,6 @@ public class HotelPage extends Page {
     private void clickHotelCardClose(){
         $(byXpath("//a[@class='modal__close']")).shouldBe(visible).click();
     }
+
+
 }
