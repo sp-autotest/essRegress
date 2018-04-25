@@ -39,15 +39,15 @@ public class Values {
     public static String error3 = null;
 
     public static String lang[][] = {
-        {"Русский", "русский", "ru", "ddMMMMyyyy,HH:mm→", "Россия"},
-        {"Английский", "english", "en", "ddMMMyyyy,HH:mm→", "Russia"},
-        {"Немецкий", "deutsch", "de", "ddMMMyyyy,HH:mm→", "Russland"},
-        {"Испанский", "español", "es", "ddMMMyyyy,HH:mm→", "Rusia"},
-        {"Итальянский", "italiano", "it", "ddMMMyyyy,HH:mm→", "Russia"},
-        {"Французский", "le français", "fr", "ddMMMyyyy,HH:mm→", "Russie"},
-        {"Китайский", "中文", "zh", "ddM月yyyy,HH:mm→", "俄罗斯"},
-        {"Корейский", "한국어", "ko", "ddMMMyyyy,HH:mm→", "러시아"},
-        {"Японский", "日本語", "ja", "ddMMMMyyyy,HH:mm→", "ロシア"},
+        {"Russian", "русский", "ru", "ddMMMMyyyy,HH:mm→", "Россия"},
+        {"English", "english", "en", "ddMMMyyyy,HH:mm→", "Russia"},
+        {"German", "deutsch", "de", "ddMMMyyyy,HH:mm→", "Russland"},
+        {"Spanish", "español", "es", "ddMMMyyyy,HH:mm→", "Rusia"},
+        {"Italian", "italiano", "it", "ddMMMyyyy,HH:mm→", "Russia"},
+        {"French", "le français", "fr", "ddMMMyyyy,HH:mm→", "Russie"},
+        {"Chinese", "中文", "zh", "ddM月yyyy,HH:mm→", "俄罗斯"},
+        {"Korean", "한국어", "ko", "ddMMMyyyy,HH:mm→", "러시아"},
+        {"Japanese", "日本語", "ja", "ddMMMMyyyy,HH:mm→", "ロシア"},
     };
 
     public static String text[][] = {

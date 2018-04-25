@@ -49,7 +49,7 @@ public class EssTest {
         System.out.println("Resolution = " + res);//вывести в лог значение разрешения
         Values.office_login = System.getProperty("officelogin", "any");//получить логин АРМ ESS из дженкинса
         Values.office_password = System.getProperty("officepassword", "");//получить пароль АРМ ESS из дженкинса
-        String lc = System.getProperty("language_currency", "Русский, RUB");//получить язык и валюту браузера из дженкинса, при неудаче Русский, RUB
+        String lc = System.getProperty("language_currency", "Russian,RUB");//получить язык и валюту браузера из дженкинса, при неудаче Русский, RUB
         System.out.println("Language and currency = " + lc);
         Values.ln = getLanguageNumber(lc.substring(0, lc.indexOf(",")));
         Values.cur = lc.substring(lc.indexOf(",")+1);
