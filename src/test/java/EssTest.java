@@ -297,45 +297,4 @@ public class EssTest {
         officePg.openOrderDetails(Values.pnr, flightList, passList);//шаг 19
     }
 
-    @Stories("Раздел 5 регрессионных испытаний")
-    @Title("Тестирование ESS, раздел 5")
-    @Description("Карта VISA;\nНаправление перелета: туда-обратно;\n" +
-                 "Состав бронирования авиаперелета, билеты: 1 взрослый")
-    @Test(priority = 5, dataProvider = "parseLocaleData", description = "Раздел 5", groups = {"part5"}, enabled = false)
-    public void section5(String locale, String currency) {
-        int test = 5;
-        Values.ln = getLanguageNumber(locale);
-        Values.cur = currency;
-        Values.docs = "";
-        Values.ticket = 1;
-        System.out.println("=========================================================="+
-                "\n\t\t*** AUTOTEST *** : section" + test + ", " + Values.lang[Values.ln][2].toUpperCase()+
-                ", " + currency + "\n==========================================================");
-        open(Values.host + Values.lang[Values.ln][2]);
-        SearchPage searchPg = new SearchPage();
-        searchPg.step1(test);
-        List<Flight> flightList = searchPg.step2();
-        List<Passenger> passList = new PassengerPage().step3();
-        new PlacePage().clickPay();
-        ChoosePage choosePg = new ChoosePage();
-        choosePg.step4();//шаг 6
-        EssPage essPg = new EssPage();
-        essPg.step6();//шаг 7
-        essPg.step7(flightList);//шаг 8
-        essPg.step8();//шаг 9
-        essPg.deleteFlyInsurance();//шаг 10
-        TransportPage transportPg = new TransportPage();
-        transportPg.step10(test);//шаг 11
-        HotelPage hotelPg = new HotelPage();
-        hotelPg.clickResidenceButton("12");//шаг 12
-        hotelPg.clickContinue();
-        choosePg.chooseTestStend("13");//шаг 13
-        EprPage eprPg = new EprPage();
-        eprPg.checkDataOnPayPage("14", flightList, passList, test);//шаг 14
-        eprPg.clickPayButton();//шаг 15
-        new PaymentPage().setCardDetails("16");//шаг 16
-        new ResultPage().checkServicesData("17", test);//шаг 17
-    }
-
-
 }
