@@ -50,7 +50,7 @@ public class EssTest {
         Values.office_password = System.getProperty("officepassword", "");//получить пароль АРМ ESS из дженкинса
         String lc = System.getProperty("language_currency", "Русский, RUB");//получить язык и валюту браузера из дженкинса, при неудаче Русский, RUB
         Values.ln = getLanguageNumber(lc.substring(0, lc.indexOf(",")));
-        Values.cur = lc.substring(lc.indexOf(",")+2);
+        Values.cur = lc.substring(lc.indexOf(",")+1);
     }
 
     @BeforeMethod
