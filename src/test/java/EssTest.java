@@ -48,6 +48,9 @@ public class EssTest {
         System.out.println("Resolution = " + res);//вывести в лог значение разрешения
         Values.office_login = System.getProperty("officelogin", "any");//получить логин АРМ ESS из дженкинса
         Values.office_password = System.getProperty("officepassword", "");//получить пароль АРМ ESS из дженкинса
+        String lc = System.getProperty("language_currency", "Русский, RUB");//получить язык и валюту браузера из дженкинса, при неудаче Русский, RUB
+        Values.ln = getLanguageNumber(lc.substring(0, lc.indexOf(",")));
+        Values.cur = lc.substring(lc.indexOf(",")+2);
     }
 
     @BeforeMethod
@@ -93,39 +96,19 @@ public class EssTest {
         getWebDriver().quit();
     }
 
-    @DataProvider
-    public Object[][] parseLocaleData() {
-        return new Object[][]{
-            {"Французский", "EUR"},
-            {"Испанский",   "EUR"},
-            {"Итальянский", "EUR"},
-            {"Японский",    "USD"},
-            {"Китайский",   "USD"},
-            {"Английский",  "USD"},
-            {"Корейский",   "RUB"},
-            {"Русский",     "RUB"},
-            {"Немецкий",    "RUB"},
-            {"Русский",     "CNY"},
-            {"Китайский",   "CNY"},
-            {"Немецкий",    "CNY"},
-        };
-    }
-
     @Stories("Раздел 1 регрессионных испытаний")
     @Title("Тестирование ESS, раздел 1")
     @Description("Карта VISA;\nНаправление перелета: туда-обратно;\n" +
             "Состав бронирования авиаперелета, билеты: 2 взрослых;\n" +
             "Дополнительные услуги: «Полетная страховка», «Медицинская страховка» (классическая), «Отель»")
-    @Test(priority = 1, dataProvider = "parseLocaleData", description = "Раздел 1", groups = {"part1"})
-    public void section1(String locale, String currency) {
+    @Test(priority = 1, description = "Раздел 1", groups = {"part1"})
+    public void section1() {
         int test = 1;
-        Values.ln = getLanguageNumber(locale);
-        Values.cur = currency;
         Values.docs = "";
         Values.ticket = 1;
         System.out.println("=========================================================="+
         "\n\t\t*** AUTOTEST *** : section" + test + ", " + Values.lang[Values.ln][2].toUpperCase()+
-        ", " + currency + "\n==========================================================");
+        ", " + Values.cur + "\n==========================================================");
         open(Values.host + Values.lang[Values.ln][2]);
         SearchPage searchPg = new SearchPage();
         searchPg.step1(test);
@@ -175,16 +158,14 @@ public class EssTest {
     @Description("Карта VISA;\nHаправление перелета: туда-обратно;\n" +
             "Состав бронирования авиаперелета, билеты: 2 взрослых, 2 детских, 1 младенец;\n" +
             "Дополнительные услуги: «Полетная страховка», «Медицинская страховка» (Спортивная), «Аренда автомобиля»")
-    @Test(priority = 2, dataProvider = "parseLocaleData", description = "Раздел 2", groups = {"part2"})
-    public void section2(String locale, String currency) {
+    @Test(priority = 2, description = "Раздел 2", groups = {"part2"})
+    public void section2() {
         int test = 2;
-        Values.ln = getLanguageNumber(locale);
-        Values.cur = currency;
         Values.docs = "";
         Values.ticket = 1;
         System.out.println("=========================================================="+
         "\n\t\t*** AUTOTEST *** : section" + test + ", " + Values.lang[Values.ln][2].toUpperCase()+
-        ", " + currency + "\n==========================================================");
+        ", " + Values.cur + "\n==========================================================");
         open(Values.host + Values.lang[Values.ln][2]);
         SearchPage searchPg = new SearchPage();
         searchPg.step1(test);
@@ -215,16 +196,14 @@ public class EssTest {
     @Description("Карта VISA;\nHаправление перелета: туда-обратно;\n" +
             "Состав бронирования авиаперелета, билеты: 2 взрослых;\n" +
             "Дополнительные услуги: «Полетная страховка», «Аэроэкспресс», «Трансфер»")
-    @Test(priority = 3, dataProvider = "parseLocaleData", description = "Раздел 3", groups = {"part3"})
-    public void section3(String locale, String currency) {
+    @Test(priority = 3, description = "Раздел 3", groups = {"part3"})
+    public void section3() {
         int test = 3;
-        Values.ln = getLanguageNumber(locale);
-        Values.cur = currency;
         Values.docs = "";
         Values.ticket = 1;
         System.out.println("=========================================================="+
                 "\n\t\t*** AUTOTEST *** : section" + test + ", " + Values.lang[Values.ln][2].toUpperCase()+
-                ", " + currency + "\n==========================================================");
+                ", " + Values.cur + "\n==========================================================");
         open(Values.host + Values.lang[Values.ln][2]);
         SearchPage searchPg = new SearchPage();
         searchPg.step1(test);
@@ -261,16 +240,14 @@ public class EssTest {
     @Title("Тестирование ESS, раздел 4")
     @Description("Карта VISA;\nНаправление перелета: туда-обратно;\n" +
                  "Состав бронирования авиаперелета, билеты: 2 взрослых")
-    @Test(priority = 4, dataProvider = "parseLocaleData", description = "Раздел 4", groups = {"part4"})
-    public void section4(String locale, String currency) {
+    @Test(priority = 4, description = "Раздел 4", groups = {"part4"})
+    public void section4() {
         int test = 4;
-        Values.ln = getLanguageNumber(locale);
-        Values.cur = currency;
         Values.docs = "";
         Values.ticket = 1;
         System.out.println("=========================================================="+
                 "\n\t\t*** AUTOTEST *** : section" + test + ", " + Values.lang[Values.ln][2].toUpperCase()+
-                ", " + currency + "\n==========================================================");
+                ", " + Values.cur + "\n==========================================================");
         open(Values.host + Values.lang[Values.ln][2]);
         SearchPage searchPg = new SearchPage();
         searchPg.step1(test);
