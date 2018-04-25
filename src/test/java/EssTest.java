@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.List;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.WebDriverRunner.source;
 import static pages.Page.getLanguageNumber;
 import static pages.Page.stringIntoInt;
 
@@ -49,6 +50,7 @@ public class EssTest {
         Values.office_login = System.getProperty("officelogin", "any");//получить логин АРМ ESS из дженкинса
         Values.office_password = System.getProperty("officepassword", "");//получить пароль АРМ ESS из дженкинса
         String lc = System.getProperty("language_currency", "Русский, RUB");//получить язык и валюту браузера из дженкинса, при неудаче Русский, RUB
+        System.out.println("Language and currency = " + lc);
         Values.ln = getLanguageNumber(lc.substring(0, lc.indexOf(",")));
         Values.cur = lc.substring(lc.indexOf(",")+1);
     }
