@@ -152,18 +152,34 @@ public class TransportPage extends Page {
         checkAeroexpressInCart();
     }
 
-    @Step("Действие 14, Характеристики услуги «Бронирование трансфера»")
+    @Step("Действие 14, Задать характеристики услуги «Бронирование трансфера»")
     public String setTransferLocations() {
         System.out.println("\t14. Set transfer locations");
         $("#iway_transfer_page").scrollTo();
-        $("#iway_change_city").selectOptionByValue("1202");
+        setTransferRouteFrom("1202");
         $(byXpath("//div[@id='transfer_options_list']/descendant::div[@class='frame__container']")).shouldBe(visible);
-        $("#iway_change_city1").selectOptionByValue("1202");
+        setTransferRouteTo("1202");
         $(byXpath("//div[@id='transfer_options_list']/descendant::div[@class='frame__container']")).shouldNotBe(visible);
-        $("#iway_change_city1").selectOptionByValue("1200");
+        setTransferRouteTo("1200");
         $(byXpath("//div[@id='transfer_options_list']/descendant::div[@class='frame__container']")).shouldBe(visible);
         Sleep(2); //задержка в трансфере между селектом направления и кликом по кнопке Выбрать
         return $("#iway_change_city").getText() + " — " + $("#iway_change_city1").getText();
+    }
+
+    @Step("Выбрать маршрут «Откуда» - ж/д вокзал Курский (Москва)")
+    private void setTransferRouteFrom(String v) {
+        $("#iway_change_city").click();
+        int n = $$(byXpath("//select[@id='iway_change_city']/option[@value='" + v + "']")).size();
+        assertTrue("Ж/д вокзал Курский (Москва) в селекте не обнаружен", n>0);
+        $("#iway_change_city").selectOptionByValue(v);
+    }
+
+    @Step("Выбрать маршрут «Куда» - ж/д вокзал Белорусский (Москва)")
+    private void setTransferRouteTo(String v) {
+        $("#iway_change_city1").click();
+        int n = $$(byXpath("//select[@id='iway_change_city1']/option[@value='" + v + "']")).size();
+        assertTrue("Ж/д вокзал Белорусский (Москва) в селекте не обнаружен", n>0);
+        $("#iway_change_city1").selectOptionByValue(v);
     }
 
     @Step("Действие 15, Нажать на кнопку «Выбрать» для категории Стандарт")

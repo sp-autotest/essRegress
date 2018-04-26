@@ -32,7 +32,7 @@ public class EssPage extends Page {
         if (getWebDriver().manage().window().getSize().getWidth() < 1280) {
             $("#left-column-insurance-block").click();//раскрыть блок Страховка
             Sleep(1);
-        }
+        }else moveMouseToFlight();
         screenShot("Скриншот");
         checkFlight();
         checkNumber();
@@ -336,6 +336,12 @@ public class EssPage extends Page {
                    name.equals(text));
     }
 
-
+    @Step("Переместить мышку в блок маршрутов")
+    private void moveMouseToFlight() {
+        WebElement el = $(byXpath("//div[@data-toggle-id='cart-booking']")).toWebElement();
+        Actions actions = new Actions(getWebDriver());
+        actions.moveToElement(el).perform();
+        Sleep(1);
+    }
 
 }
