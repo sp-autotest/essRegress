@@ -71,16 +71,19 @@ public class ResultPage extends Page {
         }
         String passengers = row.$(byXpath("child::div[2]")).scrollTo().getText().replaceAll("\\D+","");
         System.out.println("passengers = " + passengers);
-        assertTrue("Количество пассажиров в полетной страховке отличается от количества билетов", ticket == stringIntoInt(passengers));
+        assertTrue("Количество пассажиров в полетной страховке отличается от количества билетов" +
+                "\nОжидалось : " + ticket + "\nФактически: " + passengers, ticket == stringIntoInt(passengers));
 
         String price = row.$(byXpath("child::div[3]")).getText().replaceAll("\\D+","");
         if (Values.cur.equals("RUB")) price = price.substring(0, price.length()-2);
         if (Values.cur.equals("CNY")) price = price.substring(0, price.length()-2);
         System.out.println("fly insurance = " + price);
-        assertTrue("Стоимость полетной страховки отличается от забронированной", Values.price.iflight.equals(price));
+        assertTrue("Стоимость полетной страховки отличается от забронированной" +
+                "\nОжидалось : " + Values.price.iflight + "\nФактически: " +price, Values.price.iflight.equals(price));
 
         System.out.println("docs = " + docs.size());
-        assertTrue("Количество приложенных документов не соответствует количеству пассажиров", docs.size() == ticket*2);
+        assertTrue("Количество приложенных документов не соответствует количеству пассажиров" +
+                "\nОжидалось : " + ticket*2 + "\nФактически: " + docs.size(), docs.size() == ticket*2);
         for (int i=0; i<docs.size(); i=i+2) {
             assertTrue("Название квитанции некорректно", docs.get(i).getText().equals(text[13][ln]));
             assertTrue("Название полиса некорректно", docs.get(i+1).getText().contains(text[14][ln]));
@@ -182,14 +185,14 @@ public class ResultPage extends Page {
         if (Values.cur.equals("CNY")) price = price.substring(0, price.length()-2);
         System.out.println("Hotel price = " + price);
         assertTrue("Стоимость проживания отличается от забронированной" +
-                   "\nОжидалось : " + Values.hotel.price +
-                   "\nФактически: " + price, Values.hotel.price.equals(price));
+                "\nОжидалось : " + Values.hotel.price +
+                "\nФактически: " + price, Values.hotel.price.equals(price));
 
         System.out.println("docs = " + docs.size());
         assertTrue("Количество приложенных документов некорректно" +
-                   "\nОжидалось : 1\nФактически: " + docs.size(), docs.size() == 1);
+                "\nОжидалось : 1\nФактически: " + docs.size(), docs.size() == 1);
         assertTrue("Название ваучера некорректно\nОжидалось : " + text[15][ln] + "\nФактически: " + docs.get(0).getText(),
-                   docs.get(0).getText().contains(text[15][ln]));
+                docs.get(0).getText().contains(text[15][ln]));
     }
 
     @Step("Проверка услуги Аэроэкспресс")
@@ -212,24 +215,24 @@ public class ResultPage extends Page {
         String count = row.$(byXpath("div[2]")).getText().replaceAll("\\D+", "");
         System.out.println("passengers = " + count);
         assertTrue("Количество билетов на Аэроэкспресс не корректно" +
-                   "\nОжидалось : 2\nФактически: " + count, count.equals("2"));
+                "\nОжидалось : 2\nФактически: " + count, count.equals("2"));
 
         String price = row.$(byXpath("div[3]/div")).getText().replaceAll("\\D+", "");
         if (Values.cur.equals("RUB")) price = price.substring(0, price.length()-2);
         if (Values.cur.equals("CNY")) price = price.substring(0, price.length()-2);
         System.out.println("price = " + price);
         assertTrue("Стоимость билета на Аэроэкспресс не корректна" +
-                   "\nОжидалось : " + Values.price.aeroexpress +
-                   "\nФактически: " + price, price.equals(Values.price.aeroexpress));
+                "\nОжидалось : " + Values.price.aeroexpress +
+                "\nФактически: " + price, price.equals(Values.price.aeroexpress));
 
         System.out.println("docs = " + docs.size());//должно быть 4 документа: по два на каждого пассажира
         assertTrue("Количество приложенных документов некорректно" +
-                   "\nОжидалось : 4\nФактически: " + docs.size(), docs.size() == 4);
+                "\nОжидалось : 4\nФактически: " + docs.size(), docs.size() == 4);
         for (int i=0; i<docs.size(); i=i+2) {
             assertTrue("Название квитанции некорректно\nОжидалось :" + text[13][ln] +
-                       "\nФактически:" + docs.get(i).getText(), docs.get(i).getText().equals(text[13][ln]));
+                    "\nФактически:" + docs.get(i).getText(), docs.get(i).getText().equals(text[13][ln]));
             assertTrue("Название билета некорректно\nОжидалось :" + text[30][ln] +
-                       "\nФактически:" + docs.get(i+1).getText(), docs.get(i+1).getText().contains(text[30][ln]));
+                    "\nФактически:" + docs.get(i+1).getText(), docs.get(i+1).getText().contains(text[30][ln]));
         }
     }
 
@@ -243,13 +246,13 @@ public class ResultPage extends Page {
         System.out.println("Transfer from = " + from);
         String fromC = (ln==0) ? "Курский, Москва" : "Kurskiy, Moscow";
         assertTrue("Направление Откуда трансфера не корректно" +
-                   "\nОжидалось : " + fromC + "\nФактически: " + from, from.equals(fromC));
+                "\nОжидалось : " + fromC + "\nФактически: " + from, from.equals(fromC));
 
         String to = row.$(byXpath("div[2]/div[2]")).getText();
         System.out.println("Transfer to = " + to);
         String toC = (ln==0) ? "Белорусский, Москва" : "Belorussky, Moscow";
         assertTrue("Направление Куда трансфера не корректно" +
-                   "\nОжидалось : " + toC + "\nФактически: " + to, to.equals(toC));
+                "\nОжидалось : " + toC + "\nФактически: " + to, to.equals(toC));
 
         String date = row.$(byXpath("div[1]/div[3]")).getText();
         System.out.println("Transfer date = " + date);
@@ -258,23 +261,23 @@ public class ResultPage extends Page {
         if (ln == 6) dateC = date;//невозможно воспроизвести формат даты для китайского, убрать когда сообщат формат
         if (ln == 8) dateC = new SimpleDateFormat("E, dd M yyyy", new Locale(Values.lang[ln][2])).format(d);
         assertTrue("Дата трансфера не корректна" +
-                   "\nОжидалось : " + dateC + "\nФактически: " + date, date.equals(dateC));
+                "\nОжидалось : " + dateC + "\nФактически: " + date, date.equals(dateC));
 
         String price = row.$(byXpath("div[3]/div")).getText().replaceAll("\\D+","");
         if (Values.cur.equals("RUB")) price = price.substring(0, price.length()-2);
         if (Values.cur.equals("CNY")) price = price.substring(0, price.length()-2);
         System.out.println("Transfer price = " + price);
         assertTrue("Cтоимость трансфера не корректна" +
-                   "\nОжидалось : " + Values.price.transfer +
-                   "\nФактически: " + price, price.equals(Values.price.transfer));
+                "\nОжидалось : " + Values.price.transfer +
+                "\nФактически: " + price, price.equals(Values.price.transfer));
 
         System.out.println("docs = " + docs.size());
         assertTrue("Количество приложенных документов некорректно" +
-                   "\nОжидалось : 2\nФактически: " + docs.size(), docs.size() == 2);
+                "\nОжидалось : 2\nФактически: " + docs.size(), docs.size() == 2);
         assertTrue("Название квитанции некорректно\nОжидалось :" + text[13][ln] +
-                   "\nФактически:" + docs.get(0).getText(), docs.get(0).getText().equals(text[13][ln]));
+                "\nФактически:" + docs.get(0).getText(), docs.get(0).getText().equals(text[13][ln]));
         assertTrue("Название ваучера некорректно\nОжидалось :" + text[15][ln] +
-                   "\nФактически:" + docs.get(1).getText(), docs.get(1).getText().contains(text[15][ln]));
+                "\nФактически:" + docs.get(1).getText(), docs.get(1).getText().contains(text[15][ln]));
     }
 
     @Step("Проверка оплаченной стоимости")
