@@ -67,7 +67,7 @@ public class ResultPage extends Page {
     private void checkFlyInsurance(SelenideElement row){
         ElementsCollection docs = row.$$(byXpath("child::div[4]/div/a"));
         for (int i=0; i<docs.size(); i++) {
-            Values.docs = Values.docs + docs.get(i).getText() + ", ";
+            Values.docs = Values.docs + "Страховка:" + docs.get(i).getText() + ", ";
         }
         String passengers = row.$(byXpath("child::div[2]")).scrollTo().getText().replaceAll("\\D+","");
         System.out.println("passengers = " + passengers);
@@ -94,7 +94,7 @@ public class ResultPage extends Page {
     private void checkMedicalInsurance(SelenideElement row){
         ElementsCollection docs = row.$$(byXpath("child::div[4]/div/a"));
         for (SelenideElement doc : docs) {
-            Values.docs = Values.docs + doc.getText() + ", ";
+            Values.docs = Values.docs + "Страховка(мед):" + doc.getText() + ", ";
         }
         String passengers = row.$(byXpath("child::div[2]")).getText().replaceAll("\\D+","");
         System.out.println("passengers = " + passengers);
@@ -118,7 +118,7 @@ public class ResultPage extends Page {
     private void checkTransport(SelenideElement row){
         ElementsCollection docs = row.$$(byXpath("div[5]/a"));
         for (SelenideElement doc : docs) {
-            Values.docs = Values.docs + doc.getText() + ", ";
+            Values.docs = Values.docs + "Авто:" + doc.getText() + ", ";
         }
         String name = row.$(byXpath("div[1]/div")).getText();
         System.out.println("Auto = " + name);
@@ -160,7 +160,7 @@ public class ResultPage extends Page {
     private void checkHotel(SelenideElement row){
         ElementsCollection docs = row.$$(byXpath("child::div[5]/div/a"));
         for (SelenideElement doc : docs) {
-            Values.docs = Values.docs + doc.getText() + ", ";
+            Values.docs = Values.docs + "Отель:" + doc.getText() + ", ";
         }
         /* проверка названия отеля не выполняется, поскольку это ошибка в отображении EPR
         String name = row.$(byXpath("child::div[1]")).getText();
@@ -199,7 +199,7 @@ public class ResultPage extends Page {
     private void checkAeroexpress(SelenideElement row, String direction){
         ElementsCollection docs = row.$$(byXpath("div[4]/a"));
         for (SelenideElement doc : docs) {
-            Values.docs = Values.docs + doc.getText() + ", ";
+            Values.docs = Values.docs + "Аэроэкспресс:" + doc.getText() + ", ";
         }
         String name = row.$(byXpath("div[1]/span[2]")).getText();
         System.out.println("Name = " + name);
@@ -240,7 +240,7 @@ public class ResultPage extends Page {
     private void checkTransfer(SelenideElement row, Date d) {
         ElementsCollection docs = row.$$(byXpath("div[4]/a"));
         for (SelenideElement doc : docs) {
-            Values.docs = Values.docs + doc.getText() + ", ";
+            Values.docs = Values.docs + "Трансфер:" + doc.getText() + ", ";
         }
         String from = row.$(byXpath("div[1]/div[2]")).getText();
         System.out.println("Transfer from = " + from);
