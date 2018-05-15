@@ -88,11 +88,14 @@ public class SearchPage extends Page {
 
     @Step("Указать дату \"Туда\": {0}")
     private void setThere(String date) {
-        date = date.substring(0,2)+"."+date.substring(2,4)+"."+date.substring(4);
+        //date = date.substring(0,2)+"."+date.substring(2,4)+"."+date.substring(4);
         SelenideElement el = $$(byXpath("//input[@class='input__text-input']")).get(2);
-        while(!el.getValue().equals(date)) {
+        //while(!el.getValue().equals(date)) {
             el.setValue(date);
-        }
+            Sleep(1);
+            el.pressTab();
+            Sleep(1);
+        //}
     }
 
     @Step("Указать дату \"Обратно\": {0}")

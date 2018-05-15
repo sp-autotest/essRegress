@@ -94,7 +94,7 @@ public class ResultPage extends Page {
     private void checkMedicalInsurance(SelenideElement row){
         ElementsCollection docs = row.$$(byXpath("child::div[4]/div/a"));
         for (SelenideElement doc : docs) {
-            Values.docs = Values.docs + "Страховка(мед):" + doc.getText() + ", ";
+            Values.docs = Values.docs + "Страховка:" + doc.getText() + ", ";
         }
         String passengers = row.$(byXpath("child::div[2]")).getText().replaceAll("\\D+","");
         System.out.println("passengers = " + passengers);
