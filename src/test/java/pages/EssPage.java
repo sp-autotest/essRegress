@@ -287,6 +287,7 @@ public class EssPage extends Page {
     @Step("Проверка общей суммы заказа (включает в себя стоимость услуг страхования)")
     private void checkTotalAndInsurensPrices(){
         String itemPrice;
+        moveMouseToFlight();
         String flyPrice = $(byXpath("//div[@class='cart__item-price']")).scrollTo().getText().replaceAll("\\D+","");
         int summ = stringIntoInt(flyPrice);
         System.out.println("Fly price = " + flyPrice);
