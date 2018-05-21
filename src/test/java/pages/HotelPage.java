@@ -153,7 +153,7 @@ public class HotelPage extends Page {
 
         /*понажимать во всех комнатах линк 'Условия отмены'*/
         for (int i=0; i<rooms.size(); i++){
-            rooms.get(i).$(byXpath("descendant::div[@class='h-fz--12 h-color--blue h-display--inline-block']")).click();
+            rooms.get(i).$(byXpath("descendant::div[@class='h-fz--12 h-color--blue h-display--inline-block h-mr--4']")).click();
             Sleep(1);
         }
 
