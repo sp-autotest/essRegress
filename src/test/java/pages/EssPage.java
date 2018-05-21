@@ -288,7 +288,7 @@ public class EssPage extends Page {
     private void checkTotalAndInsurensPrices(){
         String itemPrice;
         moveMouseToFlight();
-        String flyPrice = $(byXpath("//div[@class='cart__item-price']")).scrollTo().getText().replaceAll("\\D+","");
+        String flyPrice = $(byXpath("//div[contains(@class,'cart__item-price cart__item-price--hovered')]")).scrollTo().getText().replaceAll("\\D+","");
         int summ = stringIntoInt(flyPrice);
         System.out.println("Fly price = " + flyPrice);
         ElementsCollection items = $("#left-column-insurance-block").$$(byXpath("descendant::div[@class='cart__item-priceondemand-item-price']"));
