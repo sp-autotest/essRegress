@@ -355,7 +355,7 @@ public class TransportPage extends Page {
                 "\nОжидалось: " + price.nationalTransport +
                 "\nФакически: " + leftPrice,
                 price.nationalTransport.equals(leftPrice));
-  *///временно отключена проверка
+  *////временно отключена проверка
     }
 
     @Step("Проверка общей суммы заказа (включает в себя стоимость транспортных услуг)")
