@@ -583,7 +583,7 @@ public class TransportPage extends Page {
         String to = getTransferTo();
         String toC = dir.substring(dir.indexOf("—")+2);
         String tdate = getTransferDate();
-        String dateC = new SimpleDateFormat("dd MMMM , E", new Locale(Values.lang[ln][2])).format(date);
+        String dateC = new SimpleDateFormat("dd MMMM, E", new Locale(Values.lang[ln][2])).format(date);
         if (ln==6) tdate = dateC; //убрать когда выяснится формат даты трансфера в китайском языке
         String time = getTransferTime();
         String category = getTransferCategory();

@@ -110,6 +110,10 @@ public class EssPage extends Page {
     private void checkPageAppear(){
         //$(byXpath("//div[@class='cart__item-title']")).shouldBe(visible).shouldBe(text(pnr)).click();
         $("#left-column-insurance-block").shouldBe(visible);
+        if ($$("#acceptCookiesLaw").size()>0){
+            Sleep(1);
+            $("#acceptCookiesLaw").click();
+        }
     }
 
     @Step("Маршрут")
