@@ -217,9 +217,9 @@ public class EprPage extends Page {
 
         String price = row.$(byXpath("descendant::span[contains(@class,'__item-price')]")).getText().replaceAll("\\D+","");
         System.out.println(price);
-        /*assertTrue("Стоимость аренды автомобиля отличается от забронированной" +
+        assertTrue("Стоимость аренды автомобиля отличается от забронированной" +
                    "\nОжидалось :" + Values.price.transport +
-                   "\nФактически:" + price, Values.price.transport.equals(price));*////отключили временно
+                   "\nФактически:" + price, Values.price.transport.equals(price));////отключили временно
     }
 
     @Step("Проверка данных услуги Аэроэкспресс")

@@ -351,11 +351,11 @@ public class TransportPage extends Page {
     private void checkTranspotrPriceInCard() {
         String leftPrice = $("#left-column-transport").$(byXpath("descendant::div[@class='cart__item-priceondemand-item-price']")).getText().replaceAll("\\D+","");
         System.out.println("Transport price = " + leftPrice);
-/*        assertTrue("Стоимость аренды авто в корзине не совпадает с указанной в блоке" +
+        assertTrue("Стоимость аренды авто в корзине не совпадает с указанной в блоке" +
                 "\nОжидалось: " + price.nationalTransport +
                 "\nФакически: " + leftPrice,
                 price.nationalTransport.equals(leftPrice));
-  *////временно отключена проверка
+  ////временно отключена проверка
     }
 
     @Step("Проверка общей суммы заказа (включает в себя стоимость транспортных услуг)")
