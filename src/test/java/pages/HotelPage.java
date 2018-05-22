@@ -175,8 +175,11 @@ public class HotelPage extends Page {
                 if (rules.get(0).getText().contains(Values.text[22][ln])) {//если условие отмены содержит текст "Бесплатно"
                     period = rules.get(0).$(byXpath("//div[text()='" + Values.text[22][ln] + "']/..")).getAttribute("textContent");
                     period = period.replaceFirst(Values.text[22][ln], "");
+                    System.out.println("period = " + period);
                     if (period.contains(Values.text[23][ln])) {//если условие отмены содержит текст "До"
                         period = period.replaceFirst(Values.text[23][ln], "");
+                        period = period.substring(period.indexOf(":")+2);
+                        System.out.println("period = " + period);
                         if (sTd(period.trim()).after(new Date())) {//если условие отмены содержит дату после текущей
                             sel = i;
                             break;
