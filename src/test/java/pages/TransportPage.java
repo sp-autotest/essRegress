@@ -361,7 +361,7 @@ public class TransportPage extends Page {
     @Step("Проверка общей суммы заказа (включает в себя стоимость транспортных услуг)")
     private void checkTotalPrices(){
         String itemPrice;
-        String flyPrice = $(byXpath("//div[@class='cart__item-price']")).getText().replaceAll("\\D+","");
+        String flyPrice = $(byXpath("//div[contains(@class,'cart__item-price cart__item-price--hovered')]")).getText().replaceAll("\\D+","");
         int summ = stringIntoInt(flyPrice);
         Actions actions = new Actions(getWebDriver());
         actions.moveToElement($("#left-column-insurance-block").toWebElement(),1,1).build().perform();
@@ -571,10 +571,10 @@ public class TransportPage extends Page {
         SelenideElement transfer = transport.$(byXpath("descendant::div[contains(text(),'"+ Values.text[27][ln] +"')]")).shouldBe(visible);
         String leftPrice = transfer.$(byXpath("parent::div/div[@class='cart__item-priceondemand-item-price']")).getText().replaceAll("\\D+","");
         System.out.println("Transfer price = " + leftPrice);
-        /*assertTrue("Сумма трансфера в корзине не совпадает с рассчитанной" +
+        assertTrue("Сумма трансфера в корзине не совпадает с рассчитанной" +
                    "\nОжидалось: " + Values.price.transfer +
                    "\nФакически: " + leftPrice,
-                   Values.price.transfer.equals(leftPrice));*/////временно отключена проверка
+                   Values.price.transfer.equals(leftPrice));
     }
 
     @Step("Проверить наличие и сумму трансфера в корзине")
