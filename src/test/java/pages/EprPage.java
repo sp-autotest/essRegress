@@ -252,7 +252,7 @@ public class EprPage extends Page {
                     "\nОжидалось : " + p + "\nФактически: " + price, stringIntoInt(price) == p);
         }
         if (getWebDriver().manage().window().getSize().getWidth() > 1279) {//сумма есть только в широких разрешениях
-            String summ = group.$(byXpath("descendant::span[@class='h-fz--18 h-mr--4 h-color--black ng-binding']")).getText().replaceAll("\\D+", "");
+            String summ = group.$(byXpath("descendant::span[@class='h-color--black h-fz--14 ng-binding']")).getText().replaceAll("\\D+", "");
             System.out.println("Aeroexpress summ = " + summ);
             assertTrue("Общая сумма билетов на Аэроэкспресс не корректна" +
                     "\nОжидалось : " + Values.price.aeroexpress +

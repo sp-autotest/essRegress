@@ -34,6 +34,9 @@ public class SearchPage extends Page {
     @Step("Действие 1, поиск рейсов")
     public void step1(int test) {
         //selectLocale();
+        clickAcceptCookiesButton();
+        countrySelect();
+
         setFrom("MOW");
         setTo("PRG");
         if (test == 1) {
@@ -254,6 +257,17 @@ public class SearchPage extends Page {
             }
             duration = duration + " ";
         }
+    }
+
+    private void countrySelect() {
+        $("#countryListToggle").shouldBe(visible).click();
+        $(byXpath("//input[@id='select-country-ru']/..")).shouldBe(visible).click();
+        $(byXpath("//button[contains(@class,'submitSelectedCountry')]")).shouldBe(visible).click();
+        Sleep(2);
+    }
+
+    private void clickAcceptCookiesButton() {
+        $("#acceptCookiesLaw").shouldBe(visible).click();
     }
 
 

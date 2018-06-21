@@ -1,5 +1,6 @@
 package pages;
 
+import com.codeborne.selenide.SelenideElement;
 import config.Values;
 import ru.yandex.qatools.allure.annotations.Step;
 import static com.codeborne.selenide.Condition.visible;
@@ -19,6 +20,7 @@ public class PaymentPage extends Page {
     public void checkPaymentForm1(String n) {
         System.out.println("\t" + n + ". Checking Payment form");
         new EprPage().clickPayButton();
+        selectCardPay();
         checkTotalPrice1();
     }
 
@@ -26,6 +28,7 @@ public class PaymentPage extends Page {
     public void checkPaymentForm2() {
         System.out.println("\t15. Checking Payment form");
         new EprPage().clickPayButton();
+        selectCardPay();
         checkTotalPrice2();  //отключили временно
         checkTransportPrice(); // отключили временно
     }
@@ -33,6 +36,7 @@ public class PaymentPage extends Page {
     @Step("Действие {0}, ввод реквизитов карточки и оплата")
     public void setCardDetails(String n) {
         System.out.println("\t" + n + ". Filling bank card details and click Pay");
+        selectCardPay();
         setPan();
         setOwner();
         setMonth();
@@ -126,6 +130,12 @@ public class PaymentPage extends Page {
         assertTrue("Сообщение об успешной оплате отсутствует", text.equals(Values.text[11][ln]));
     }
 
+    @Step("Открыть способ оплаты банковской картой")
+    private void selectCardPay() {
+        SelenideElement card = $("#accordion_card").shouldBe(visible);
+        String status = card.getAttribute("class");
+        if (!status.contains("open")) card.click();
+    }
 
 
 }
