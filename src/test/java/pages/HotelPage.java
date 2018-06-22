@@ -85,7 +85,7 @@ public class HotelPage extends Page {
         System.out.println("\t17. Check logic in Accommodation block");
         checkStartHotelDate(new SimpleDateFormat("yyyy-MM-d").format(flightList.get(0).end));
         checkEndHotelDate(new SimpleDateFormat("yyyy-MM-d").format(flightList.get(1).start));
-        checkResidentsNumber();
+        //checkResidentsNumber();//проверка количества пассажиров временно отключена 22.06
         checkRoomCount();
         clickHotelCheckbox();
         clickHotelSearchButton();
