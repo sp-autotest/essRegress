@@ -60,7 +60,7 @@ public class ResultPage extends Page {
         Sleep(25);
         $(byXpath("//div[contains(@class,'text text--bold')]")).shouldBe(visible).shouldBe(exactText(pnr));
         System.out.println("URL = " + url());
-        $(byXpath("//div[contains(text(),'" + text[12][ln] + "')]")).shouldBe(visible);
+        $(byXpath("//p[contains(text(),'" + text[12][ln] + "')]")).shouldBe(visible);
     }
 
     @Step("Проверка полетной страховки")

@@ -81,11 +81,11 @@ public class HotelPage extends Page {
     }
 
     @Step("Действие 17, Проверка логики отображения информации в блоке «Проживание»")
-    public void checkHotelLogic(List<Flight> flightList) {
+    public void checkHotelLogic(List<Flight> flightList, List<Passenger> passList) {
         System.out.println("\t17. Check logic in Accommodation block");
         checkStartHotelDate(new SimpleDateFormat("yyyy-MM-d").format(flightList.get(0).end));
         checkEndHotelDate(new SimpleDateFormat("yyyy-MM-d").format(flightList.get(1).start));
-        //checkResidentsNumber();//проверка количества пассажиров временно отключена 22.06
+        checkResidentsNumber(passList.size());//проверка количества пассажиров
         checkRoomCount();
         clickHotelCheckbox();
         clickHotelSearchButton();
@@ -251,9 +251,12 @@ public class HotelPage extends Page {
     }
 
     @Step("Проверить количество проживающих")
-    private void checkResidentsNumber() {
+    private void checkResidentsNumber(int passCount) {
         int n = $$(byXpath("//div[@class='js-travellers-list']/div")).size();
-        assertTrue("Не соответствует количество проживающих\nОжидалось: 1\nФактически: " + n, n == 1);
+        if (passCount == 1)
+            assertTrue("Не соответствует количество мест размещения\nОжидалось: 1\nФактически: " + n, n == 1);
+        if (passCount > 1)
+            assertTrue("Не соответствует количество мест размещения\nОжидалось: 2\nФактически: " + n, n == 2);
     }
 
     @Step("Проверить количество номеров")
