@@ -131,7 +131,7 @@ public class EssTest {
         HotelPage hotelPg = new HotelPage();
         hotelPg.clickResidenceButton("15");//шаг 15
         hotelPg.checkHotelFilter();//шаг 16
-        hotelPg.checkHotelLogic(flightList);//шаг 17
+        hotelPg.checkHotelLogic(flightList, passList);//шаг 17
         hotelPg.checkFiltration();//шаг 19
         hotelPg.checkSorting();//шаг 20
 
