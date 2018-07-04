@@ -7,6 +7,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import ru.yandex.qatools.allure.annotations.Step;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -135,13 +137,23 @@ public class Page {
         Sleep(1);
     }
 
-    public static String addMonthAndDays(int months, int days)
+    public static String addMonthAndDays(Date startDate, int months, int days)
     {
         Calendar cal = Calendar.getInstance();
-        cal.setTime(new Date());
+        cal.setTime(startDate);
         cal.add(Calendar.MONTH, months);
         cal.add(Calendar.DAY_OF_MONTH, days);
         return new java.text.SimpleDateFormat("ddMMyyyy").format(cal.getTime());
+    }
+
+    public Date string2Date(String d, String f) {
+        Date parsingDate=null;
+        try {
+            parsingDate = new SimpleDateFormat(f).parse(d);
+        }catch (ParseException e) {
+            System.out.println("Parsing date error");
+        }
+        return parsingDate;
     }
 
 }

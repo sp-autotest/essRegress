@@ -33,7 +33,6 @@ public class SearchPage extends Page {
 
     private InitialData initData;
 
-
     public SearchPage(InitialData initData) {
         this.initData = initData;
     }
@@ -58,8 +57,10 @@ public class SearchPage extends Page {
     public List<Flight> step2() {
         selectRandomFlight("туда");
         clickBuyButton();
-        selectRandomFlight("обратно");
-        clickBuyButton();
+        if (null != initData.getDateBack()) {
+            selectRandomFlight("обратно");
+            clickBuyButton();
+        }
         saveFlightData();
         clickPassengersButton();
         return flightList;
@@ -169,23 +170,15 @@ public class SearchPage extends Page {
     private void clickPassengersButton() {
         $(byXpath("//a[@class='next__button']")).shouldBe(visible).click();
     }
-/*
-    private static String addMonthAndDays(int months, int days)
-    {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(new Date());
-        cal.add(Calendar.MONTH, months);
-        cal.add(Calendar.DAY_OF_MONTH, days);
-        return new java.text.SimpleDateFormat("ddMMyyyy").format(cal.getTime());
-    }
-*/
+
     private void saveFlightData() {
         Values.price.fly = $(byXpath("//div[@class='cart__item-price js-popover']")).getText().replaceAll("\\D+","");
         System.out.println("Fly price = " + Values.price.fly);
         Flight f;
         String d;
         ElementsCollection groups = $$(byXpath("//div[@class='flight-search flight-search--active']"));
-        for (int m=0; m<2; m++) {
+        System.out.println("Groups count = " + groups.size());
+        for (int m=0; m<groups.size(); m++) {
             ElementsCollection flights = groups.get(m).$$(byXpath("descendant::div[@class='row flight-search__flights']"));
             for (int i = 0; i < flights.size(); i++) {
                 ElementsCollection el = flights.get(i).$$(byXpath("child::*"));
@@ -210,10 +203,10 @@ public class SearchPage extends Page {
                 f.number = (String) executor.executeScript("return arguments[0].textContent;", num.toWebElement());
                 d = (m==0) ? initData.getDateThere() : initData.getDateBack();
                 d = d + " " + flights.get(i).$(byXpath("descendant::div[@class='time-destination__from']/div[@class='time-destination__time']")).getText();
-                f.start = stringToDate(d);
+                f.start = string2Date(d, "ddMMyyyy HH:mm");
                 d = (m==0) ? initData.getDateThere() : initData.getDateBack();
                 d = d + " " + flights.get(i).$(byXpath("descendant::div[@class='time-destination__to']/div[@class='time-destination__time']")).getText();
-                f.end = stringToDate(d);
+                f.end = string2Date(d, "ddMMyyyy HH:mm");
                 f.duration = duration.substring(0, duration.indexOf(" "));
                 duration = duration.substring(duration.indexOf(" ")+1);
                 flightList.add(f);
@@ -223,16 +216,6 @@ public class SearchPage extends Page {
             System.out.println(fl.from + " / " + fl.to + " / " + fl.number + " / " + fl.duration +
                     " [" + fl.start + "] [" + fl.end + "] " + fl.transfer);
         }
-    }
-
-    private Date stringToDate(String d) {
-        Date parsingDate=null;
-        try {
-            parsingDate = new SimpleDateFormat("ddMMyyyy HH:mm").parse(d);
-        }catch (ParseException e) {
-            System.out.println("Parsing date error");
-        }
-        return parsingDate;
     }
 
     private void saveDuration() {

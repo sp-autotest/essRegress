@@ -9,10 +9,12 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import ru.yandex.qatools.allure.annotations.Step;
 import struct.Flight;
+import struct.InitialData;
 import struct.Passenger;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -31,6 +33,12 @@ import static org.testng.AssertJUnit.assertFalse;
  * Created by mycola on 15.03.2018.
  */
 public class HotelPage extends Page {
+
+    private InitialData initData;
+
+    public HotelPage(InitialData initData) {
+        this.initData = initData;
+    }
 
     @Step("Форма дополнительных услуг «Проживание» открылась")
     private void checkHotelFormAppear() {
@@ -84,7 +92,14 @@ public class HotelPage extends Page {
     public void checkHotelLogic(List<Flight> flightList, List<Passenger> passList) {
         System.out.println("\t17. Check logic in Accommodation block");
         checkStartHotelDate(new SimpleDateFormat("yyyy-MM-d").format(flightList.get(0).end));
-        checkEndHotelDate(new SimpleDateFormat("yyyy-MM-d").format(flightList.get(1).start));
+        if (null != initData.getDateBack()) {
+            checkEndHotelDate(new SimpleDateFormat("yyyy-MM-d").format(flightList.get(1).start));
+        } else {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(flightList.get(0).end);//в случае OneWay дата окончания бронирования
+            cal.add(Calendar.DAY_OF_MONTH, 3); //должна быть на трое суток позже даты начала
+            checkEndHotelDate(new SimpleDateFormat("yyyy-MM-d").format(cal.getTime()));
+        }
         checkResidentsNumber(passList.size());//проверка количества пассажиров
         checkRoomCount();
         clickHotelCheckbox();

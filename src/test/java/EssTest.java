@@ -21,6 +21,7 @@ import struct.InitialData;
 import struct.Passenger;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.Selenide.open;
@@ -118,8 +119,8 @@ public class EssTest {
                 "MOW",//город "откуда"
                 "PRG",//город "куда"
                 null,//город "пересадка" для сложных маршрутов
-                addMonthAndDays(1,0),//дата "туда" плюс 1 месяц от текущей
-                addMonthAndDays(1,2),//дата "назад" плюс 1 месяц и 2 дня от текущей
+                addMonthAndDays(new Date(),1,0),//дата "туда": плюс 1 месяц от текущей
+                addMonthAndDays(new Date(),1,2),//дата "назад": плюс 1 месяц и 2 дня от текущей
                 2,//взрослых
                 0,//детей
                 0//младенцев
@@ -140,7 +141,7 @@ public class EssTest {
         transportPg.step10(test);//шаг 10
         transportPg.checkAeroexpressPassengersList();//шаг 11
         transportPg.checkAeroexpressLogic(flightList);//шаг 12
-        HotelPage hotelPg = new HotelPage();
+        HotelPage hotelPg = new HotelPage(initData);
         hotelPg.clickResidenceButton("15");//шаг 15
         hotelPg.checkHotelFilter();//шаг 16
         hotelPg.checkHotelLogic(flightList, passList);//шаг 17
@@ -185,8 +186,8 @@ public class EssTest {
                 "MOW",//город "откуда"
                 "PRG",//город "куда"
                 null,//город "пересадка" для сложных маршрутов
-                addMonthAndDays(1,0),//дата "туда" плюс 1 месяц от текущей
-                addMonthAndDays(1,2),//дата "назад" плюс 1 месяц и 2 дня от текущей
+                addMonthAndDays(new Date(),1,0),//дата "туда": плюс 1 месяц от текущей
+                addMonthAndDays(new Date(),1,2),//дата "назад": плюс 1 месяц и 2 дня от текущей
                 2,//взрослых
                 2,//детей
                 1//младенцев
@@ -229,7 +230,16 @@ public class EssTest {
                 "\n\t\t*** AUTOTEST *** : section 3, " + Values.lang[Values.ln][2].toUpperCase()+
                 ", " + Values.cur + "\n==========================================================");
         open(Values.host + Values.lang[Values.ln][2]);
-        InitialData initData = new InitialData("MOW", "PRG", null, addMonthAndDays(1,0), addMonthAndDays(1,2), 2, 0, 0);
+        InitialData initData = new InitialData(
+                "MOW",
+                "PRG",
+                null,
+                addMonthAndDays(new Date(),1,0),
+                addMonthAndDays(new Date(),1,2),
+                2,
+                0,
+                0
+        );
         SearchPage searchPg = new SearchPage(initData);
         searchPg.step1();
         List<Flight> flightList = searchPg.step2();
@@ -274,7 +284,16 @@ public class EssTest {
                 "\n\t\t*** AUTOTEST *** : section 4, " + Values.lang[Values.ln][2].toUpperCase()+
                 ", " + Values.cur + "\n==========================================================");
         open(Values.host + Values.lang[Values.ln][2]);
-        InitialData initData = new InitialData("MOW", "PRG", null, addMonthAndDays(1,0), addMonthAndDays(1,2), 2, 0, 0);
+        InitialData initData = new InitialData(
+                "MOW",
+                "PRG",
+                null,
+                addMonthAndDays(new Date(),1,0),
+                addMonthAndDays(new Date(),1,2),
+                2,
+                0,
+                0
+        );
         SearchPage searchPg = new SearchPage(initData);
         searchPg.step1();
         List<Flight> flightList = searchPg.step2();
