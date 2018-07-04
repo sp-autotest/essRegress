@@ -257,9 +257,9 @@ public class ResultPage extends Page {
         String date = row.$(byXpath("div[1]/div[3]")).getText();
         System.out.println("Transfer date = " + date);
         String dateC;
-        dateC = new SimpleDateFormat("E, dd MMMM yyyy", new Locale(Values.lang[ln][2])).format(d);
+        dateC = new SimpleDateFormat("E, d MMMM yyyy", new Locale(Values.lang[ln][2])).format(d);
         if (ln == 6) dateC = date;//невозможно воспроизвести формат даты для китайского, убрать когда сообщат формат
-        if (ln == 8) dateC = new SimpleDateFormat("E, dd M yyyy", new Locale(Values.lang[ln][2])).format(d);
+        if (ln == 8) dateC = new SimpleDateFormat("E, d M yyyy", new Locale(Values.lang[ln][2])).format(d);
         assertTrue("Дата трансфера не корректна" +
                 "\nОжидалось : " + dateC + "\nФактически: " + date, date.equals(dateC));
 

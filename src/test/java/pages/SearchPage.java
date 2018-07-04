@@ -6,6 +6,8 @@ import config.Values;
 import org.openqa.selenium.JavascriptExecutor;
 import ru.yandex.qatools.allure.annotations.Step;
 import struct.Flight;
+import struct.InitialData;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -27,31 +29,27 @@ import static config.Values.ticket;
 public class SearchPage extends Page {
 
     List<Flight> flightList = new ArrayList<Flight>();
-    String dateThere = addMonthAndDays(1,0);
-    String dateBack = addMonthAndDays(1,2);
     String duration = "";
 
+    private InitialData initData;
+
+
+    public SearchPage(InitialData initData) {
+        this.initData = initData;
+    }
+
     @Step("Действие 1, поиск рейсов")
-    public void step1(int test) {
-        //selectLocale();
+    public void step1() {
         clickAcceptCookiesButton();
         countrySelect();
-
-        setFrom("MOW");
-        setTo("PRG");
-        if (test == 1) {
-            dateThere = addMonthAndDays(1,0);
-            dateBack = addMonthAndDays(1,2);
-        }
-        setThere(dateThere);
-        setBack (dateBack);
+        if (null != initData.getCityFrom()) setFrom(initData.getCityFrom());
+        if (null != initData.getCityTo()) setTo(initData.getCityTo());
+        if (null != initData.getDateThere()) setThere(initData.getDateThere());
+        if (null != initData.getDateBack()) setBack(initData.getDateBack());
         clickPassengers();
-        addAdult();
-        if (test == 2) {
-            addChild();
-            addChild();
-            addInfant();
-        }
+        for (int i=1; i<initData.getAdult(); i++) addAdult();
+        for (int i=0; i<initData.getChild(); i++) addChild();
+        for (int i=0; i<initData.getInfant(); i++) addInfant();
         clickPassengers();
         clickSearchButton();
     }
@@ -86,7 +84,6 @@ public class SearchPage extends Page {
     @Step("Выбрать город прибытия: {0}")
     private void setTo(String city) {
         $$(byXpath("//input[@class='input__text-input']")).get(1).shouldBe(visible).setValue(city);
-
     }
 
     @Step("Указать дату \"Туда\": {0}")
@@ -172,7 +169,7 @@ public class SearchPage extends Page {
     private void clickPassengersButton() {
         $(byXpath("//a[@class='next__button']")).shouldBe(visible).click();
     }
-
+/*
     private static String addMonthAndDays(int months, int days)
     {
         Calendar cal = Calendar.getInstance();
@@ -181,7 +178,7 @@ public class SearchPage extends Page {
         cal.add(Calendar.DAY_OF_MONTH, days);
         return new java.text.SimpleDateFormat("ddMMyyyy").format(cal.getTime());
     }
-
+*/
     private void saveFlightData() {
         Values.price.fly = $(byXpath("//div[@class='cart__item-price js-popover']")).getText().replaceAll("\\D+","");
         System.out.println("Fly price = " + Values.price.fly);
@@ -211,10 +208,10 @@ public class SearchPage extends Page {
                 SelenideElement num = flights.get(i).$(byXpath("descendant::div[@class='flight-search__plane-number']"));
                 JavascriptExecutor executor = (JavascriptExecutor) getWebDriver();
                 f.number = (String) executor.executeScript("return arguments[0].textContent;", num.toWebElement());
-                d = (m==0) ? dateThere : dateBack;
+                d = (m==0) ? initData.getDateThere() : initData.getDateBack();
                 d = d + " " + flights.get(i).$(byXpath("descendant::div[@class='time-destination__from']/div[@class='time-destination__time']")).getText();
                 f.start = stringToDate(d);
-                d = (m==0) ? dateThere : dateBack;
+                d = (m==0) ? initData.getDateThere() : initData.getDateBack();
                 d = d + " " + flights.get(i).$(byXpath("descendant::div[@class='time-destination__to']/div[@class='time-destination__time']")).getText();
                 f.end = stringToDate(d);
                 f.duration = duration.substring(0, duration.indexOf(" "));

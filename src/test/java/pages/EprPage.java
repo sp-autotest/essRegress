@@ -312,7 +312,9 @@ public class EprPage extends Page {
         assertTrue("Дата заселения отличается от забронированной", Values.hotel.accDate.equals(sTd(sDate)));
         assertTrue("Дата выезда отличается от забронированной", Values.hotel.depDate.equals(sTd(eDate)));
         int delta = abs(stringIntoInt(price)-stringIntoInt(Values.price.hotel));
-        assertTrue("Стоимость проживания отличается от забронированной", delta <= 2);
+        assertTrue("Стоимость проживания отличается от забронированной" +
+                "\nОжидалось : " + Values.price.hotel +
+                "\nФактически: " + price, delta <= 2);
     }
 
     private Date stringToDate(String d) {

@@ -17,6 +17,7 @@ import ru.yandex.qatools.allure.annotations.Description;
 import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
 import struct.Flight;
+import struct.InitialData;
 import struct.Passenger;
 
 import java.io.IOException;
@@ -24,6 +25,7 @@ import java.util.List;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.source;
+import static pages.Page.addMonthAndDays;
 import static pages.Page.getLanguageNumber;
 import static pages.Page.stringIntoInt;
 
@@ -109,11 +111,21 @@ public class EssTest {
         Values.docs = "";
         Values.ticket = 1;
         System.out.println("=========================================================="+
-        "\n\t\t*** AUTOTEST *** : section" + test + ", " + Values.lang[Values.ln][2].toUpperCase()+
+        "\n\t\t*** AUTOTEST *** : section 1, " + Values.lang[Values.ln][2].toUpperCase()+
         ", " + Values.cur + "\n==========================================================");
         open(Values.host + Values.lang[Values.ln][2]);
-        SearchPage searchPg = new SearchPage();
-        searchPg.step1(test);
+        InitialData initData = new InitialData(
+                "MOW",//город "откуда"
+                "PRG",//город "куда"
+                null,//город "пересадка" для сложных маршрутов
+                addMonthAndDays(1,0),//дата "туда" плюс 1 месяц от текущей
+                addMonthAndDays(1,2),//дата "назад" плюс 1 месяц и 2 дня от текущей
+                2,//взрослых
+                0,//детей
+                0//младенцев
+        );
+        SearchPage searchPg = new SearchPage(initData);
+        searchPg.step1();
         List<Flight> flightList = searchPg.step2();
         List<Passenger> passList = new PassengerPage().step3();
         new PlacePage().clickPay();
@@ -166,11 +178,21 @@ public class EssTest {
         Values.docs = "";
         Values.ticket = 1;
         System.out.println("=========================================================="+
-        "\n\t\t*** AUTOTEST *** : section" + test + ", " + Values.lang[Values.ln][2].toUpperCase()+
+        "\n\t\t*** AUTOTEST *** : section 2, " + Values.lang[Values.ln][2].toUpperCase()+
         ", " + Values.cur + "\n==========================================================");
         open(Values.host + Values.lang[Values.ln][2]);
-        SearchPage searchPg = new SearchPage();
-        searchPg.step1(test);
+        InitialData initData = new InitialData(
+                "MOW",//город "откуда"
+                "PRG",//город "куда"
+                null,//город "пересадка" для сложных маршрутов
+                addMonthAndDays(1,0),//дата "туда" плюс 1 месяц от текущей
+                addMonthAndDays(1,2),//дата "назад" плюс 1 месяц и 2 дня от текущей
+                2,//взрослых
+                2,//детей
+                1//младенцев
+        );
+        SearchPage searchPg = new SearchPage(initData);
+        searchPg.step1();
         List<Flight> flightList = searchPg.step2();
         List<Passenger> passList = new PassengerPage().step3();
         new PlacePage().clickPay();
@@ -204,11 +226,12 @@ public class EssTest {
         Values.docs = "";
         Values.ticket = 1;
         System.out.println("=========================================================="+
-                "\n\t\t*** AUTOTEST *** : section" + test + ", " + Values.lang[Values.ln][2].toUpperCase()+
+                "\n\t\t*** AUTOTEST *** : section 3, " + Values.lang[Values.ln][2].toUpperCase()+
                 ", " + Values.cur + "\n==========================================================");
         open(Values.host + Values.lang[Values.ln][2]);
-        SearchPage searchPg = new SearchPage();
-        searchPg.step1(test);
+        InitialData initData = new InitialData("MOW", "PRG", null, addMonthAndDays(1,0), addMonthAndDays(1,2), 2, 0, 0);
+        SearchPage searchPg = new SearchPage(initData);
+        searchPg.step1();
         List<Flight> flightList = searchPg.step2();
         List<Passenger> passList = new PassengerPage().step3();
         new PlacePage().clickPay();//шаг 5
@@ -248,11 +271,12 @@ public class EssTest {
         Values.docs = "";
         Values.ticket = 1;
         System.out.println("=========================================================="+
-                "\n\t\t*** AUTOTEST *** : section" + test + ", " + Values.lang[Values.ln][2].toUpperCase()+
+                "\n\t\t*** AUTOTEST *** : section 4, " + Values.lang[Values.ln][2].toUpperCase()+
                 ", " + Values.cur + "\n==========================================================");
         open(Values.host + Values.lang[Values.ln][2]);
-        SearchPage searchPg = new SearchPage();
-        searchPg.step1(test);
+        InitialData initData = new InitialData("MOW", "PRG", null, addMonthAndDays(1,0), addMonthAndDays(1,2), 2, 0, 0);
+        SearchPage searchPg = new SearchPage(initData);
+        searchPg.step1();
         List<Flight> flightList = searchPg.step2();
         List<Passenger> passList = new PassengerPage().step3();
         new PlacePage().clickPay();

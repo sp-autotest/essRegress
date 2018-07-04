@@ -7,6 +7,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import ru.yandex.qatools.allure.annotations.Step;
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import static com.codeborne.selenide.Condition.visible;
@@ -131,6 +133,15 @@ public class Page {
                 + (el.getLocation().y + y) + ");";
         ((JavascriptExecutor)getWebDriver()).executeScript(code, el.toWebElement(), x, y);
         Sleep(1);
+    }
+
+    public static String addMonthAndDays(int months, int days)
+    {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        cal.add(Calendar.MONTH, months);
+        cal.add(Calendar.DAY_OF_MONTH, days);
+        return new java.text.SimpleDateFormat("ddMMyyyy").format(cal.getTime());
     }
 
 }
