@@ -111,7 +111,7 @@ public class HotelPage extends Page {
         System.out.println("\t18. Check passengers data");
         ElementsCollection info = $$(byXpath("//div[@class='hotel-selected__room-guest-info']/div"));
         int n = checkPassengerName(info.get(0), passList);
-        checkPassengerDob(info.get(1), passList.get(n).dob);
+        checkPassengerDob(info.get(1), passList.get(n).getDob());
         checkEmail();
         checkPhone();
     }
@@ -302,7 +302,7 @@ public class HotelPage extends Page {
         boolean found = false;
         int i = 0;
         for (Passenger p : passList) {
-            bookname = (p.lastname + " " + p.firstname).toUpperCase();
+            bookname = (p.getLastname() + " " + p.getFirstname()).toUpperCase();
             if (bookname.equals(name)){
                 found = true;
                 break;

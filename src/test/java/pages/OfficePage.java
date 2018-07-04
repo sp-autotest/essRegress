@@ -172,7 +172,7 @@ public class OfficePage extends Page{
     private void checkPassengers(List<Passenger> passList){
         ElementsCollection rows = $$(byXpath("//h5[text()='Пассажиры']/following-sibling::table[1]/tbody/tr"));
         for (int i=0; i<rows.size(); i++){
-            String fio = (passList.get(i).lastname + " " + passList.get(i).firstname).toUpperCase();
+            String fio = (passList.get(i).getLastname() + " " + passList.get(i).getFirstname()).toUpperCase();
             String name = rows.get(i).$(byXpath("td[1]/strong")).getText();
             assertTrue("ФИ " + (i+1) +"-го пассажира не совпадает с забронированным" +
                        "\nОжидалось: " + fio +
@@ -185,9 +185,9 @@ public class OfficePage extends Page{
                        type.contains("(ADT, RU)"));
             String dob = rows.get(i).$(byXpath("td[2]")).getText().replace("-","");
             assertTrue("День рождения " + (i+1) +"-го пассажира не совпадает с забронированным" +
-                       "\nОжидалось: " + passList.get(i).dob +
+                       "\nОжидалось: " + passList.get(i).getDob() +
                        "\nФактически: " + dob,
-                       dob.equals(passList.get(i).dob));
+                       dob.equals(passList.get(i).getDob()));
         }
     }
 

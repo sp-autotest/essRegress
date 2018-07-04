@@ -21,7 +21,6 @@ import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static config.Values.ln;
 import static config.Values.text;
 import static java.lang.Math.abs;
-import static java.lang.Math.incrementExact;
 import static org.testng.AssertJUnit.assertTrue;
 
 /**
@@ -85,7 +84,7 @@ public class EprPage extends Page {
         String pass = passenger.$(byXpath("child::div[2]")).getText();
         System.out.println(pass);
         assertTrue("Фамилия и/или имя пассажира не совпадает с забронированным",
-                pass.equals((p.lastname+" "+p.firstname).toUpperCase()));
+                pass.equals((p.getLastname()+" "+p.getFirstname()).toUpperCase()));
     }
 
     @Step("Проверка данных о {0}-м маршруте")
@@ -149,7 +148,7 @@ public class EprPage extends Page {
         System.out.println("fly insurance = " + price);
         String fullName;
         for (int i=0; i<passList.size(); i++){
-            fullName = (passList.get(i).lastname + " " + passList.get(i).firstname).toUpperCase();
+            fullName = (passList.get(i).getLastname() + " " + passList.get(i).getFirstname()).toUpperCase();
             assertTrue("Полетная страховка не содержит пассажира " + fullName, insurance.contains(fullName));
         }
         assertTrue("Стоимость полетной страховки отличается от забронированной" +
@@ -165,7 +164,7 @@ public class EprPage extends Page {
         System.out.println("med insurance = " + price);
         String fullName;
         for (int i=0; i<passList.size(); i++){
-            fullName = (passList.get(i).lastname + " " + passList.get(i).firstname).toUpperCase();
+            fullName = (passList.get(i).getLastname() + " " + passList.get(i).getFirstname()).toUpperCase();
             assertTrue("Медицинская страховка не содержит пассажира " + fullName, insurance.contains(fullName));
         }
         assertTrue("Стоимость медицинской страховки отличается от забронированной" +

@@ -21,6 +21,7 @@ import struct.InitialData;
 import struct.Passenger;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
@@ -128,7 +129,8 @@ public class EssTest {
         SearchPage searchPg = new SearchPage(initData);
         searchPg.step1();
         List<Flight> flightList = searchPg.step2();
-        List<Passenger> passList = new PassengerPage().step3();
+        List<Passenger> passList = createPassengers(initData);
+        new PassengerPage().step3(passList);
         new PlacePage().clickPay();
         ChoosePage choosePg = new ChoosePage();
         choosePg.step4();
@@ -195,7 +197,8 @@ public class EssTest {
         SearchPage searchPg = new SearchPage(initData);
         searchPg.step1();
         List<Flight> flightList = searchPg.step2();
-        List<Passenger> passList = new PassengerPage().step3();
+        List<Passenger> passList = createPassengers(initData);
+        new PassengerPage().step3(passList);
         new PlacePage().clickPay();
         ChoosePage choosePg = new ChoosePage();
         choosePg.step4();
@@ -243,7 +246,8 @@ public class EssTest {
         SearchPage searchPg = new SearchPage(initData);
         searchPg.step1();
         List<Flight> flightList = searchPg.step2();
-        List<Passenger> passList = new PassengerPage().step3();
+        List<Passenger> passList = createPassengers(initData);
+        new PassengerPage().step3(passList);
         new PlacePage().clickPay();//шаг 5
         ChoosePage choosePg = new ChoosePage();
         choosePg.step4();//шаг 6
@@ -297,7 +301,8 @@ public class EssTest {
         SearchPage searchPg = new SearchPage(initData);
         searchPg.step1();
         List<Flight> flightList = searchPg.step2();
-        List<Passenger> passList = new PassengerPage().step3();
+        List<Passenger> passList = createPassengers(initData);
+        new PassengerPage().step3(passList);
         new PlacePage().clickPay();
         ChoosePage choosePg = new ChoosePage();
         choosePg.step4();
@@ -317,6 +322,24 @@ public class EssTest {
         officePg.authorization(browserName);//шаг 17
         officePg.searchOrder(Values.pnr);//шаг 18
         officePg.openOrderDetails(Values.pnr, flightList, passList);//шаг 19
+    }
+
+
+    private List<Passenger> createPassengers(InitialData initData) {
+        List<Passenger> passengerList = new ArrayList<Passenger>();
+        for (int i=0; i<initData.getAdult(); i++) {
+            Passenger p = new Passenger("ADT");
+            passengerList.add(p);
+        }
+        for (int i=0; i<initData.getChild(); i++) {
+            Passenger p = new Passenger("CHD");
+            passengerList.add(p);
+        }
+        for (int i=0; i<initData.getInfant(); i++) {
+            Passenger p = new Passenger("INF");
+            passengerList.add(p);
+        }
+        return passengerList;
     }
 
 }

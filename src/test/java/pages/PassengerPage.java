@@ -26,104 +26,72 @@ import static config.Values.ln;
  */
 public class PassengerPage extends Page {
 
-    List<Passenger> passengerList = new ArrayList<Passenger>();
-
     @Step("Действие 3, информация о пассажирах")
-    public List<Passenger> step3() {
+    public void step3(List<Passenger> passengerList) {
         checkPageAppear();
         if ((!Values.cur.equals("RUB"))&(Values.currencyChange.equals("link"))) currencyChange(Values.cur);
         ElementsCollection cards = $$(byXpath("//div[@class='passenger-card']"));
-        int count = getPassengersCount();
-        for (int i=0;i<count;i++) fillPassengerData(cards.get(i),i+1);
+        int count = cards.size();
+        for (int i=0;i<count;i++) fillPassengerData(cards.get(i), passengerList.get(i));
         setEmail();
         setPhone();
         setTerms();
         clickContinueButton();
-        return passengerList;
     }
 
     private void checkPageAppear(){
         $(byXpath("//div[@class='passenger-card__gender']")).shouldBe(exist);
     }
 
-    private int getPassengersCount(){
-        return $$(byXpath("//div[@class='passenger-card']")).size();
-    }
-
-    private static String addMonthsFromToday(int months)
-    {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(new Date());
-        cal.add(Calendar.MONTH, months);
-        return new java.text.SimpleDateFormat("ddMMyyyy").format(cal.getTime());
-    }
 
     @Step("Заполнить данные для {1}-го пассажира")
-    private void fillPassengerData(SelenideElement card, int i){
-        Passenger p = new Passenger();
-        p.gender = setRandomGender(card);
-        p.lastname = setRandomLastName(card);
-        p.firstname = setRandomFirstName(card);
-        p.dob = setDOB(card, i);
-        p.number = setRandomNumber(card);
-        setNationality(card);
-        setСountry(card);
+    private void fillPassengerData(SelenideElement card, Passenger p){
+        setGender(card, p.getGender());
+        setLastName(card, p.getLastname());
+        setFirstName(card, p.getFirstname());
+        setDOB(card, p.getDob());
+        setNumber(card, p.getNumber());
+        setNationality(card, p.getNationality());
+        setСountry(card, p.getCoutry());
         clickUnlimitedLink(card);
-        passengerList.add(p);
     }
 
-    @Step("Указать пол")
-    private int setRandomGender(SelenideElement card){
+    @Step("Указать пол: {1}")
+    private void setGender(SelenideElement card, int g){
         ElementsCollection gender = card.$$(byXpath("descendant::div[@class='passenger-card__gender']/a"));
-        int g = getRandomNumberLimit(gender.size());
         gender.get(g).click();
-        return g;
     }
 
-    @Step("Указать фамилию")
-    private String setRandomLastName(SelenideElement card){
-        String lastName = getRandomString(8);
+    @Step("Указать фамилию: {1}")
+    private void setLastName(SelenideElement card, String lastName){
         card.$$(byXpath("descendant::input[@type='text']")).get(0).setValue(lastName);
-        return lastName;
     }
 
-    @Step("Указать имя")
-    private String setRandomFirstName(SelenideElement card){
-        String firstName = getRandomString(4);
+    @Step("Указать имя: {1}")
+    private void setFirstName(SelenideElement card, String firstName){
         card.$$(byXpath("descendant::input[@type='text']")).get(1).setValue(firstName);
-        return firstName;
     }
 
-    @Step("Указать день рождения")
-    private String setDOB(SelenideElement card, int i){
-        int delta=0;
-        if (i == 1) delta = -438;
-        if (i == 2) delta = -415;
-        if (i == 3) delta = -66;
-        if (i == 4) delta = -100;
-        if (i == 5) delta = -8;
-        String dob = addMonthsFromToday(delta);
+    @Step("Указать день рождения: {1}")
+    private void setDOB(SelenideElement card, String dob){
         card.$$(byXpath("descendant::input[@type='text']")).get(3).setValue(dob);
-        return dob;
     }
 
-    @Step("Указать гражданство")
-    private void setNationality(SelenideElement card){
-        SelenideElement el = card.$$(byXpath("descendant::input[@role='listbox']")).get(0);
-        while(!el.getValue().equals(lang[ln][4])) el.setValue(lang[ln][4]);
-    }
-
-    @Step("Указать страну выдачи")
-    private void setСountry(SelenideElement card){
-        SelenideElement el = card.$$(byXpath("descendant::input[@role='listbox']")).get(1);
-        while(!el.getValue().equals(lang[ln][4])) el.setValue(lang[ln][4]);
-    }
-
-    @Step("Указать номер")
-    private String setRandomNumber(SelenideElement card){
-        String number = getRandomNumberString(6);
+    @Step("Указать номер: {1}")
+    private void setNumber(SelenideElement card, String number){
         card.$$(byXpath("descendant::input[@type='text']")).get(4).setValue(number);
-        return number;
+    }
+
+    @Step("Указать гражданство: {1}")
+    private void setNationality(SelenideElement card, String natio){
+        SelenideElement el = card.$$(byXpath("descendant::input[@role='listbox']")).get(0);
+        while(!el.getValue().equals(natio)) el.setValue(natio);
+    }
+
+    @Step("Указать страну выдачи: {1}")
+    private void setСountry(SelenideElement card, String country){
+        SelenideElement el = card.$$(byXpath("descendant::input[@role='listbox']")).get(1);
+        while(!el.getValue().equals(country)) el.setValue(country);
     }
 
     @Step("Кликнуть \"Бессрочно\"")

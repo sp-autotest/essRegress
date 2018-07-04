@@ -253,9 +253,10 @@ public class EssPage extends Page {
         System.out.println("price = " + p);
         System.out.println("ticket = " + ticket);
         System.out.println("price * ticket = " + p*ticket);
-        assertTrue("Общая сумма страховки не равняется сумме страховок каждого пассажира", s == p*ticket);
+        assertTrue("Общая сумма страховки не равняется сумме страховок каждого пассажира" +
+                "\nОжидалось : " + Values.price.iflight +
+                "\nФактически: " + p*ticket, s == p*ticket);
     }
-
 
     @Step("Нажать кнопку «Добавить в заказ»")
     private void clickAddMedicalButton(String type){
