@@ -9,6 +9,7 @@ import java.io.IOException;
 
 import static listeners.ScreenShoter.makeScreenshot;
 import static pages.Page.logDoc;
+import static pages.Page.nonBlockingErrors;
 import static pages.Page.resultat;
 
 /**
@@ -22,6 +23,7 @@ public class AllureOnEventListener implements ITestListener {
     @Override
     public void onTestSuccess(ITestResult result) {
         resultat();
+        if (Values.errors.size()>0) nonBlockingErrors();
     }
 
     @Override
@@ -32,6 +34,7 @@ public class AllureOnEventListener implements ITestListener {
             e.printStackTrace();
         }
         resultat();
+        if (Values.errors.size()>0) nonBlockingErrors();
     }
 
     @Override
@@ -42,6 +45,7 @@ public class AllureOnEventListener implements ITestListener {
             e.printStackTrace();
         }
         resultat();
+        if (Values.errors.size()>0) nonBlockingErrors();
     }
 
     @Override
@@ -52,15 +56,12 @@ public class AllureOnEventListener implements ITestListener {
             e.printStackTrace();
         }
         resultat();
+        if (Values.errors.size()>0) nonBlockingErrors();
     }
 
     @Override
     public void onStart(ITestContext context) {}
 
     @Override
-    public void onFinish(ITestContext context) {
-        logDoc(Values.error1);
-        logDoc(Values.error2);
-        logDoc(Values.error3);
-    }
+    public void onFinish(ITestContext context) {}
 }

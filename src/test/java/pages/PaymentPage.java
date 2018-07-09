@@ -6,8 +6,6 @@ import ru.yandex.qatools.allure.annotations.Step;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
-import static config.Values.error2;
-import static config.Values.error3;
 import static config.Values.ln;
 import static org.testng.AssertJUnit.assertTrue;
 
@@ -51,16 +49,18 @@ public class PaymentPage extends Page {
         String price = $(byXpath("//div[@class='cart__item-price ng-binding']")).getText().replaceAll("\\D+","");
         System.out.println(price);
         if (!Values.price.total.equals(price)){
-            error2 = "ОШИБКА!: Стоимость на странице оплаты картой не корректна, ожидалось " + Values.price.total;
-            logDoc(error2);
+            String text = "ОШИБКА!: Стоимость на странице оплаты картой не корректна, ожидалось " + Values.price.total;
+            Values.errors.add(text);
+            logDoc(text);
             screenShot("Скриншот");
         }//неблокирующая проверка
         //assertTrue("Стоимость «К ОПЛАТЕ ВСЕГО» некорректна", price.equals(Values.price.total));
         String button = $(byXpath("//span[contains(@ng-bind-html,'payAmountText')]")).getText().replaceAll("\\D+","");
         System.out.println(button);
         if (!Values.price.total.equals(button)){
-            error3 = "ОШИБКА!: Стоимость на кнопке страницы оплаты картой не корректна, ожидалось " + Values.price.total;
-            logDoc(error3);
+            String text = "ОШИБКА!: Стоимость на кнопке страницы оплаты картой не корректна, ожидалось " + Values.price.total;
+            Values.errors.add(text);
+            logDoc(text);
             screenShot("Скриншот");
         }//неблокирующая проверка
         //assertTrue("Стоимость «Заплатить» на кнопке некорректна", button.equals(Values.price.total));

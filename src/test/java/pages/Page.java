@@ -48,6 +48,11 @@ public class Page {
         logDocuments(Values.docs);
     }
 
+    @Step("Неблокирующие ошибки")
+    public static void nonBlockingErrors(){
+        for (String e : Values.errors) logDoc(e);
+    }
+
     @Step("PNR: {0}")
     public static void logPNR(String pnr){}
 

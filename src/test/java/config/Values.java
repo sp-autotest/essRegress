@@ -1,8 +1,12 @@
 package config;
 
 import struct.Auto;
+import struct.Flight;
 import struct.Hotel;
 import struct.Price;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by mycola on 20.02.2018.
@@ -34,9 +38,7 @@ public class Values {
         //{"2202000000000002", "12", "2019", "123", "TEST TEST"}, //1 - МИР
     };
 
-    public static String error1 = null;
-    public static String error2 = null;
-    public static String error3 = null;
+    public static List<String> errors = new ArrayList<>();
 
     public static String lang[][] = {
         {"Russian", "русский", "ru", "ddMMMMyyyy,HH:mm→", "Россия"},

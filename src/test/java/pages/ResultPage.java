@@ -5,16 +5,13 @@ import com.codeborne.selenide.SelenideElement;
 import config.Values;
 import ru.yandex.qatools.allure.annotations.Step;
 import struct.Flight;
-import struct.Passenger;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 import static com.codeborne.selenide.Condition.exactText;
-import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
@@ -289,8 +286,9 @@ public class ResultPage extends Page {
         System.out.println("Total price = " + totalPrice);
         //if (!Values.price.total.equals(totalPrice)){
         if (!Values.price.total.equals("test no block error удалить!!!")){
-            error1 = "ОШИБКА!: Информация по оплате на результирующей странице не корректна, ожидалось " + Values.price.total;
-            logDoc(error1);
+            String text = "ОШИБКА!: Информация по оплате на результирующей странице не корректна, ожидалось " + Values.price.total;
+            Values.errors.add(text);
+            logDoc(text);
             screenShot("Скриншот");
         }
         /*проверка итоговой суммы оплаты сделана неблокирующей, т.к. это тоже ошибка в отображении EPR
