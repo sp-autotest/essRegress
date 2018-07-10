@@ -286,9 +286,9 @@ public class ResultPage extends Page {
         if (Values.cur.equals("RUB")) totalPrice = totalPrice.substring(0, totalPrice.length()-2);
         if (Values.cur.equals("CNY")) totalPrice = totalPrice.substring(0, totalPrice.length()-2);
         System.out.println("Total price = " + totalPrice);
-        //if (!Values.price.total.equals(totalPrice)){
-            if (!Values.price.total.equals("TEST TEST TEST")){
-            String text = "Ошибка: [" + n + "]Информация по оплате на результирующей странице не корректна, ожидалось " + Values.price.total;
+        if (!Values.price.total.equals(totalPrice)){
+            String text = "Ошибка: [" + n + "] Информация по оплате на результирующей странице не корректна, " +
+                    "ожидалось: " + Values.price.total + ", фактически: " + totalPrice;
             Values.errors.add(text);
             logDoc(text);
             screenShot("Скриншот");

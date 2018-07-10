@@ -48,11 +48,9 @@ public class PaymentPage extends Page {
     private void checkTotalPrice1(String n) {
         String price = $(byXpath("//div[@class='cart__item-price ng-binding']")).getText().replaceAll("\\D+","");
         System.out.println(price);
-        //if (!Values.price.total.equals(price)){
-            if (!Values.price.total.equals("TEST TEST TEST")){
-            String text = "Ошибка: [" + n + "]Стоимость на странице оплаты картой не корректна" +
-                        "\nОжидалось :" + Values.price.total +
-                        "\nФактически:" + price;
+        if (!Values.price.total.equals(price)){
+            String text = "Ошибка: [" + n + "] Стоимость на странице оплаты картой не корректна, " +
+                        "ожидалось: " + Values.price.total + ", фактически: " + price;
             Values.errors.add(text);
             logDoc(text);
             screenShot("Скриншот");
@@ -60,11 +58,9 @@ public class PaymentPage extends Page {
         //assertTrue("Стоимость «К ОПЛАТЕ ВСЕГО» некорректна", price.equals(Values.price.total));
         String button = $(byXpath("//span[contains(@ng-bind-html,'payAmountText')]")).getText().replaceAll("\\D+","");
         System.out.println(button);
-        //if (!Values.price.total.equals(button)){
-        if (!Values.price.total.equals("TEST TEST TEST")){
-            String text = "Ошибка: [" + n + "]Стоимость на кнопке страницы оплаты картой не корректна, ожидалось " +
-                        "\nОжидалось :" + Values.price.total +
-                        "\nФактически:" + button;
+        if (!Values.price.total.equals(button)){
+            String text = "Ошибка: [" + n + "] Стоимость на кнопке страницы оплаты картой не корректна, " +
+                        "ожидалось: " + Values.price.total + ", фактически:" + button;
             Values.errors.add(text);
             logDoc(text);
             screenShot("Скриншот");
