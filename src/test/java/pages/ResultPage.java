@@ -36,10 +36,12 @@ public class ResultPage extends Page {
             services.get(1).scrollTo();
             checkMedicalInsurance(services.get(1));
             services.get(2).scrollTo();
+            n = n + "04";
         } else assertTrue("Обнаружены дополнительные услуги", services.size() == 0);
         if (test == 1) checkHotel(services.get(2));
         if (test == 2) checkTransport(services.get(2));
-        checkTotalPrice();
+        if (test == 4) n = n + "01";
+        checkTotalPrice(n);
     }
 
     @Step("Действие 23, проверка страницы результатов оплаты")
@@ -278,14 +280,15 @@ public class ResultPage extends Page {
     }
 
     @Step("Проверка оплаченной стоимости")
-    private void checkTotalPrice(){
+    private void checkTotalPrice(String n){
         ElementsCollection texts= $$(byXpath("//div[@class='col--16 col--stack-below-mobile']"));
         String totalPrice = texts.get(1).scrollTo().getText().replaceAll("\\D+","");
         if (Values.cur.equals("RUB")) totalPrice = totalPrice.substring(0, totalPrice.length()-2);
         if (Values.cur.equals("CNY")) totalPrice = totalPrice.substring(0, totalPrice.length()-2);
         System.out.println("Total price = " + totalPrice);
-        if (!Values.price.total.equals(totalPrice)){
-            String text = "ОШИБКА!: Информация по оплате на результирующей странице не корректна, ожидалось " + Values.price.total;
+        //if (!Values.price.total.equals(totalPrice)){
+            if (!Values.price.total.equals("TEST TEST TEST")){
+            String text = "Ошибка: [" + n + "]Информация по оплате на результирующей странице не корректна, ожидалось " + Values.price.total;
             Values.errors.add(text);
             logDoc(text);
             screenShot("Скриншот");

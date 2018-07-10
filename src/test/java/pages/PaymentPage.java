@@ -19,7 +19,7 @@ public class PaymentPage extends Page {
         System.out.println("\t" + n + ". Checking Payment form");
         new EprPage().clickPayButton();
         selectCardPay();
-        checkTotalPrice1();
+        checkTotalPrice1(n+"03");
     }
 
     @Step("Действие 15, проверка формы оплаты")
@@ -45,11 +45,14 @@ public class PaymentPage extends Page {
     }
 
     @Step("Проверка стоимости на оплату")
-    private void checkTotalPrice1() {
+    private void checkTotalPrice1(String n) {
         String price = $(byXpath("//div[@class='cart__item-price ng-binding']")).getText().replaceAll("\\D+","");
         System.out.println(price);
-        if (!Values.price.total.equals(price)){
-            String text = "ОШИБКА!: Стоимость на странице оплаты картой не корректна, ожидалось " + Values.price.total;
+        //if (!Values.price.total.equals(price)){
+            if (!Values.price.total.equals("TEST TEST TEST")){
+            String text = "Ошибка: [" + n + "]Стоимость на странице оплаты картой не корректна" +
+                        "\nОжидалось :" + Values.price.total +
+                        "\nФактически:" + price;
             Values.errors.add(text);
             logDoc(text);
             screenShot("Скриншот");
@@ -57,8 +60,11 @@ public class PaymentPage extends Page {
         //assertTrue("Стоимость «К ОПЛАТЕ ВСЕГО» некорректна", price.equals(Values.price.total));
         String button = $(byXpath("//span[contains(@ng-bind-html,'payAmountText')]")).getText().replaceAll("\\D+","");
         System.out.println(button);
-        if (!Values.price.total.equals(button)){
-            String text = "ОШИБКА!: Стоимость на кнопке страницы оплаты картой не корректна, ожидалось " + Values.price.total;
+        //if (!Values.price.total.equals(button)){
+        if (!Values.price.total.equals("TEST TEST TEST")){
+            String text = "Ошибка: [" + n + "]Стоимость на кнопке страницы оплаты картой не корректна, ожидалось " +
+                        "\nОжидалось :" + Values.price.total +
+                        "\nФактически:" + button;
             Values.errors.add(text);
             logDoc(text);
             screenShot("Скриншот");
