@@ -48,12 +48,14 @@ public class EssPage extends Page {
 
     //проверка таймера изменена на основании задачи 2663
     @Step("Действие 6, Проверка таймера")
-    public boolean checkTimer(){
+    public boolean checkTimer() {
         ElementsCollection timers = $$(byXpath("//div[@class='cart__item-counter-time']"));
-        String timer = "";
-        if (timers.size()>0) timer = timers.get(0).getText();
-        System.out.println("Timer value on ESS: " + timer);
-        return (timers.size()>0);
+        if ((timers.size() > 0) && (timers.get(0).isDisplayed())) {
+            System.out.println("Timer value on ESS: " + timers.get(0).getText());
+            return true;
+        }
+        System.out.println("Timer value on ESS not found");
+        return false;
     }
 
     @Step("Действие 7, Проверка данных в блоке «Перелет»")
