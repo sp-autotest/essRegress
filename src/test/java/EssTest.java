@@ -136,6 +136,7 @@ public class EssTest {
         choosePg.step4();
         EssPage essPg = new EssPage();
         essPg.step6();
+        boolean timer = essPg.checkTimer();
         essPg.step7(flightList);
         essPg.step8();
         essPg.step9("COMMON_SPORT");
@@ -163,7 +164,7 @@ public class EssTest {
         hotelPg.checkPassengersData(passList);//шаг 18
         hotelPg.clickPayInCart();//шаг 24
         choosePg.chooseTestStend("25");//шаг 25
-        new EprPage().checkDataOnPayPage("26", flightList, passList, test);//шаг 26
+        new EprPage().checkDataOnPayPage("26", flightList, passList, test, timer);//шаг 26
         PaymentPage paymentPg = new PaymentPage();
         paymentPg.checkPaymentForm1("27");//шаг 27
         paymentPg.setCardDetails("28");//шаг 28
@@ -204,6 +205,7 @@ public class EssTest {
         choosePg.step4();
         EssPage essPg = new EssPage();
         essPg.step6();
+        boolean timer = essPg.checkTimer();
         essPg.step7(flightList);
         essPg.step8();
         essPg.step9("TEAM_SPORTS");
@@ -212,7 +214,7 @@ public class EssTest {
         transportPg.step11();
         transportPg.step12();
         choosePg.chooseTestStend("13");//шаг 13
-        new EprPage().checkDataOnPayPage("14", flightList, passList, test);//шаг 14
+        new EprPage().checkDataOnPayPage("14", flightList, passList, test, timer);//шаг 14
         PaymentPage paymentPg = new PaymentPage();
         paymentPg.checkPaymentForm2();//шаг 15
         paymentPg.setCardDetails("16");//шаг 16
@@ -253,6 +255,7 @@ public class EssTest {
         choosePg.step4();//шаг 6
         EssPage essPg = new EssPage();
         essPg.step6();//шаг 7
+        boolean timer = essPg.checkTimer();
         essPg.step7(flightList);//шаг 8
         essPg.step8();//шаг 9
         TransportPage transportPg = new TransportPage();
@@ -268,7 +271,7 @@ public class EssTest {
         transportPg.clickContinue();//шаг 18
         choosePg.chooseTestStend("19");//шаг 19
         EprPage eprPg = new EprPage();
-        eprPg.checkDataOnPayPage("20", flightList, passList, test);//шаг 20
+        eprPg.checkDataOnPayPage("20", flightList, passList, test, timer);//шаг 20
         eprPg.clickPayButton();//шаг 21
         PaymentPage paymentPg = new PaymentPage();
         paymentPg.setCardDetails("22");//шаг 22
@@ -308,12 +311,13 @@ public class EssTest {
         choosePg.step4();
         EssPage essPg = new EssPage();
         essPg.step6();
+        boolean timer = essPg.checkTimer();
         essPg.step7(flightList);
         essPg.step8();
         essPg.deleteFlyInsurance();//шаг 9
         essPg.clickPayInCart();//шаг 10
         choosePg.chooseTestStend("11");//шаг 11
-        new EprPage().checkDataOnPayPage("12", flightList, passList, test);//шаг 12
+        new EprPage().checkDataOnPayPage("12", flightList, passList, test, timer);//шаг 12
         PaymentPage paymentPg = new PaymentPage();
         paymentPg.checkPaymentForm1("13");//шаг 13
         paymentPg.setCardDetails("14");//шаг 14

@@ -44,7 +44,16 @@ public class EssPage extends Page {
         checkNextButton();
         checkTransport();
         checkDwelling();
-        checkTimer();
+    }
+
+    //проверка таймера изменена на основании задачи 2663
+    @Step("Действие 6, Проверка таймера")
+    public boolean checkTimer(){
+        ElementsCollection timers = $$(byXpath("//div[@class='cart__item-counter-time']"));
+        String timer = "";
+        if (timers.size()>0) timer = timers.get(0).getText();
+        System.out.println("Timer value on ESS: " + timer);
+        return (timers.size()>0);
     }
 
     @Step("Действие 7, Проверка данных в блоке «Перелет»")
@@ -164,11 +173,6 @@ public class EssPage extends Page {
     @Step("Проживание")
     private void checkDwelling(){
         $(byXpath("//div[@class='cart__item']")).shouldBe(visible).shouldBe(exactText(text[3][ln]));
-    }
-
-    @Step("Таймер")
-    private void checkTimer(){
-        $(byXpath("//div[@class='cart__item-counter-time']")).shouldBe(visible);
     }
 
     @Step("Проверка данных о стоимости")

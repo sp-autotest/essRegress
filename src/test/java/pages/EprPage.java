@@ -28,10 +28,13 @@ import static org.testng.AssertJUnit.assertTrue;
  */
 public class EprPage extends Page {
 
+    private static int MINUTES_LIMIT = 100;
+
     @Step("Действие {0}, проверка данных на странице оплаты")
-    public void checkDataOnPayPage(String n, List<Flight> flyList, List<Passenger> passList, int test) {
+    public void checkDataOnPayPage(String n, List<Flight> flyList, List<Passenger> passList, int test, boolean timer) {
         System.out.println("\t" + n + ". Checking data on Pay page");
         screenShot("Скриншот");
+        if (!timer) checkTimer();//добавлена проверка значения таймера согласно задачи 2663
         ElementsCollection passengers = $$(byXpath("//div[contains(@ng-repeat,'passenger')]"));
         for (int i = 0; i < passengers.size(); i++) {
             checkPassengerName(i + 1, passList.get(i), passengers.get(i));
@@ -342,5 +345,16 @@ public class EprPage extends Page {
         waitPlane();
     }
 
+    @Step("Проверка таймера")
+    private void checkTimer(){
+        String timer = $(byXpath("//div[@class='counter__value limited_time']")).shouldBe(visible).getText();
+        System.out.println("Timer value on EPR: " + timer);
+        String[] array = timer.split(":");
+        int minutes = Integer.parseInt(array[0]) * 60;
+        minutes = minutes + Integer.parseInt(array[1]);
+        assertTrue("Количество оставшихся минут в таймере меньше лимита" +
+                "\nОжидалось : " + MINUTES_LIMIT +
+                "\nФактически: " + minutes, minutes >= MINUTES_LIMIT);
+    }
 
 }
