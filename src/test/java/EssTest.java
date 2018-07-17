@@ -36,7 +36,8 @@ import static pages.Page.stringIntoInt;
 @Listeners({AllureOnEventListener.class})  //"слушатель" для Allure-отчета
 @Title("Aeroflot Test Suite")
 public class EssTest {
-    private int currentCount = 0;
+    private int currentRow = 0;
+    private int rows = 0;
     private Object[][] startData;
     private String browserName = "chrome";//браузер, по умолчанию хром
 
@@ -52,8 +53,8 @@ public class EssTest {
 
     @BeforeMethod()
     public void start() {
-        browserName = startData[currentCount][0].toString();
-        String res = startData[currentCount][1].toString();
+        browserName = startData[currentRow][0].toString();
+        String res = startData[currentRow][1].toString();
         int browserWidth = stringIntoInt(res.substring(0, res.indexOf("x")));//взять ширину браузера из строки с разрешением
         int browserHeight = stringIntoInt(res.substring(res.indexOf("x")+1));//взять высоту браузера из строки с разрешением
 
@@ -82,11 +83,12 @@ public class EssTest {
         }
         WebDriverRunner.setWebDriver(myWebDriver); //запуск браузера
         myWebDriver.manage().window().setSize(new Dimension(browserWidth, browserHeight));
+        if (currentRow>=(rows-1)) currentRow = 0;
+        else currentRow++;
     }
 
     @AfterMethod
     public void stop(ITestResult testResult) throws IOException {
-        currentCount = testResult.getMethod().getCurrentInvocationCount();//текущий номер запуска тестов
         getWebDriver().quit();
         //костыль, для того чтобы закрыть оперу, т.к. в ее драйвере есть баг
         // https://github.com/operasoftware/operachromiumdriver/issues/44
@@ -406,7 +408,7 @@ public class EssTest {
             languages.add("German,CNY");
         }else languages.add(lc);
 
-        int rows = browsers.size()*resolutions.size()*languages.size();
+        rows = browsers.size()*resolutions.size()*languages.size();
         Object[][] o = new Object[rows][4];
         int i = 0;
         for (String b: browsers) {
