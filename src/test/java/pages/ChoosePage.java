@@ -50,7 +50,7 @@ public class ChoosePage extends Page {
 
     @Step("Проверить переход на платёжную страницу ЕПР")
     private void checkEprPageAppear(){
-        String epr = "https://pay.test.aeroflot.ru/test-" + env.toLowerCase() + "/aeropayment/epr/payment2.html";
+        String epr = "https://pay.test.aeroflot.ru/test-" + env.toLowerCase() + "/aeropayment/epr";
         assertTrue("URL платежной страницы ЕПР не соответствует эталону", url().contains(epr));
         if ($$("#acceptCookiesLaw").size()>0){
             Sleep(1);

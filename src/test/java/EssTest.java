@@ -10,6 +10,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.opera.OperaDriver;
 import org.openqa.selenium.opera.OperaOptions;
+import org.testng.ITestResult;
 import org.testng.TestNG;
 import org.testng.annotations.*;
 import pages.*;
@@ -23,10 +24,10 @@ import struct.Passenger;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.Selenide.open;
-import static com.codeborne.selenide.WebDriverRunner.source;
 import static pages.Page.addMonthAndDays;
 import static pages.Page.getLanguageNumber;
 import static pages.Page.stringIntoInt;
@@ -35,32 +36,27 @@ import static pages.Page.stringIntoInt;
 @Listeners({AllureOnEventListener.class})  //"слушатель" для Allure-отчета
 @Title("Aeroflot Test Suite")
 public class EssTest {
-
-
+    private int currentCount = 0;
+    private Object[][] startData;
     private String browserName = "chrome";//браузер, по умолчанию хром
-    private int browserWidth = 1920;//ширина окна браузера, по умолчанию 1920
-    private int browserHight = 1080;//высота окна браузера, по умолчанию 1080
+
 
     @BeforeClass/* Метод, выполняющийся перед началом тест-сьюта */
     public void begin() {
         TestNG tng = new TestNG();
         tng.setAnnotationTransformer(new MyTransformer());
-        browserName = System.getProperty("browser", "chrome");//получить имя браузера из дженкинса, при неудаче браузер=хром
-        String res = System.getProperty("resolution", "1920x1080");//получить разрешение браузера из дженкинса, при неудаче разрешение=1920x1080
-        browserWidth = stringIntoInt(res.substring(0, res.indexOf("x")));//взять ширину браузера из строки с разрешением
-        browserHight = stringIntoInt(res.substring(res.indexOf("x")+1));//взять высоту браузера из строки с разрешением
-        System.out.println("Browser = " + browserName);//вывести в лог значение имени браузера
-        System.out.println("Resolution = " + res);//вывести в лог значение разрешения
         Values.office_login = System.getProperty("officelogin", "any");//получить логин АРМ ESS из дженкинса
         Values.office_password = System.getProperty("officepassword", "");//получить пароль АРМ ESS из дженкинса
-        String lc = System.getProperty("language_currency", "Russian,RUB");//получить язык и валюту браузера из дженкинса, при неудаче Русский, RUB
-        System.out.println("Language and currency = " + lc);
-        Values.ln = getLanguageNumber(lc.substring(0, lc.indexOf(",")));
-        Values.cur = lc.substring(lc.indexOf(",")+1);
+        startData = getStartUpParameters();//сформировать dataProvider из парамеров дженкинса
     }
 
-    @BeforeMethod
+    @BeforeMethod()
     public void start() {
+        browserName = startData[currentCount][0].toString();
+        String res = startData[currentCount][1].toString();
+        int browserWidth = stringIntoInt(res.substring(0, res.indexOf("x")));//взять ширину браузера из строки с разрешением
+        int browserHeight = stringIntoInt(res.substring(res.indexOf("x")+1));//взять высоту браузера из строки с разрешением
+
         com.codeborne.selenide.Configuration.browser = browserName;   //браузер для тестов
         com.codeborne.selenide.Configuration.timeout = 60000;         //максимальный интервал ожидания вебэлементов в милисекундах
         com.codeborne.selenide.Configuration.savePageSource = false;  //не сохранять дополнительные настройки
@@ -85,13 +81,13 @@ public class EssTest {
                 break;
         }
         WebDriverRunner.setWebDriver(myWebDriver); //запуск браузера
-        myWebDriver.manage().window().setSize(new Dimension(browserWidth, browserHight));
+        myWebDriver.manage().window().setSize(new Dimension(browserWidth, browserHeight));
     }
 
     @AfterMethod
-    public void stop() throws IOException {
+    public void stop(ITestResult testResult) throws IOException {
+        currentCount = testResult.getMethod().getCurrentInvocationCount();//текущий номер запуска тестов
         getWebDriver().quit();
-
         //костыль, для того чтобы закрыть оперу, т.к. в ее драйвере есть баг
         // https://github.com/operasoftware/operachromiumdriver/issues/44
         if (browserName.equals("opera")) Runtime.getRuntime().exec("taskkill /f /im opera.exe");
@@ -102,20 +98,30 @@ public class EssTest {
         getWebDriver().quit();
     }
 
+    @DataProvider(name="data")
+        public Object[][] parseLocaleData() {
+    return startData;
+}
+
+
     @Stories("Раздел 1 регрессионных испытаний")
     @Title("Тестирование ESS, раздел 1")
     @Description("Карта VISA;\nНаправление перелета: туда-обратно;\n" +
             "Состав бронирования авиаперелета, билеты: 2 взрослых;" +
             "Дополнительные услуги: «Полетная страховка», «Медицинская страховка» (классическая), «Отель»")
-    @Test(priority = 1, description = "Раздел 1", groups = {"part1"})
-    public void section1() {
+    @Test(priority = 1, description = "Раздел 1", groups = {"part1"}, dataProvider= "data")
+    public void section1(String browser, String resolution, String language, String currency) {
         int test = 1;
         Values.docs = "";
         Values.ticket = 1;
-        System.out.println("=========================================================="+
-        "\n\t\t*** AUTOTEST *** : section 1, " + Values.lang[Values.ln][2].toUpperCase()+
-        ", " + Values.cur + "\n==========================================================");
-        open(Values.host + Values.lang[Values.ln][2]);
+        Values.ln = getLanguageNumber(language);
+        Values.cur = currency;
+
+        System.out.println("==========================================================" +
+                "\n*** AUTOTEST *** : section 1, " + browser + ", " + resolution + ", " +
+                Values.lang[Values.ln][2].toUpperCase() + ", " + Values.cur +
+                "\n==========================================================");
+
         InitialData initData = new InitialData(
                 "MOW",//город "откуда"
                 "PRG",//город "куда"
@@ -126,6 +132,7 @@ public class EssTest {
                 0,//детей
                 0//младенцев
         );
+        open(Values.host + Values.lang[Values.ln][2]);
         SearchPage searchPg = new SearchPage(initData);
         searchPg.step1();
         List<Flight> flightList = searchPg.step2();
@@ -176,15 +183,19 @@ public class EssTest {
     @Description("Карта VISA;\nHаправление перелета: туда-обратно;\n" +
             "Состав бронирования авиаперелета, билеты: 2 взрослых, 2 детских, 1 младенец;" +
             "Дополнительные услуги: «Полетная страховка», «Медицинская страховка» (Спортивная), «Аренда автомобиля»")
-    @Test(priority = 2, description = "Раздел 2", groups = {"part2"})
-    public void section2() {
+    @Test(priority = 2, description = "Раздел 2", groups = {"part2"}, dataProvider= "data")
+    public void section2(String browser, String resolution, String language, String currency) {
         int test = 2;
         Values.docs = "";
         Values.ticket = 1;
-        System.out.println("=========================================================="+
-        "\n\t\t*** AUTOTEST *** : section 2, " + Values.lang[Values.ln][2].toUpperCase()+
-        ", " + Values.cur + "\n==========================================================");
-        open(Values.host + Values.lang[Values.ln][2]);
+        Values.ln = getLanguageNumber(language);
+        Values.cur = currency;
+
+        System.out.println("==========================================================" +
+                "\n*** AUTOTEST *** : section 2, " + browser + ", " + resolution + ", " +
+                Values.lang[Values.ln][2].toUpperCase() + ", " + Values.cur +
+                "\n==========================================================");
+
         InitialData initData = new InitialData(
                 "MOW",//город "откуда"
                 "PRG",//город "куда"
@@ -195,6 +206,7 @@ public class EssTest {
                 2,//детей
                 1//младенцев
         );
+        open(Values.host + Values.lang[Values.ln][2]);
         SearchPage searchPg = new SearchPage(initData);
         searchPg.step1();
         List<Flight> flightList = searchPg.step2();
@@ -226,15 +238,19 @@ public class EssTest {
     @Description("Карта VISA;\nHаправление перелета: туда-обратно;\n" +
             "Состав бронирования авиаперелета, билеты: 2 взрослых;" +
             "Дополнительные услуги: «Полетная страховка», «Аэроэкспресс», «Трансфер»")
-    @Test(priority = 3, description = "Раздел 3", groups = {"part3"})
-    public void section3() {
+    @Test(priority = 3, description = "Раздел 3", groups = {"part3"}, dataProvider= "data")
+    public void section3(String browser, String resolution, String language, String currency) {
         int test = 3;
         Values.docs = "";
         Values.ticket = 1;
-        System.out.println("=========================================================="+
-                "\n\t\t*** AUTOTEST *** : section 3, " + Values.lang[Values.ln][2].toUpperCase()+
-                ", " + Values.cur + "\n==========================================================");
-        open(Values.host + Values.lang[Values.ln][2]);
+        Values.ln = getLanguageNumber(language);
+        Values.cur = currency;
+        System.out.println("==========================================================" +
+                "\n*** AUTOTEST *** : section 3, " + browser + ", " + resolution + ", " +
+                Values.lang[Values.ln][2].toUpperCase() + ", " + Values.cur +
+                "\n==========================================================");
+
+
         InitialData initData = new InitialData(
                 "MOW",
                 "PRG",
@@ -245,6 +261,7 @@ public class EssTest {
                 0,
                 0
         );
+        open(Values.host + Values.lang[Values.ln][2]);
         SearchPage searchPg = new SearchPage(initData);
         searchPg.step1();
         List<Flight> flightList = searchPg.step2();
@@ -282,15 +299,20 @@ public class EssTest {
     @Title("Тестирование ESS, раздел 4")
     @Description("Карта VISA;\nНаправление перелета: туда-обратно;\n" +
                  "Состав бронирования авиаперелета, билеты: 2 взрослых")
-    @Test(priority = 4, description = "Раздел 4", groups = {"part4"})
-    public void section4() {
+    @Test(priority = 4, description = "Раздел 4", groups = {"part4"}, dataProvider= "data")
+    public void section4(String browser, String resolution, String language, String currency) {
         int test = 4;
         Values.docs = "";
         Values.ticket = 1;
-        System.out.println("=========================================================="+
-                "\n\t\t*** AUTOTEST *** : section 4, " + Values.lang[Values.ln][2].toUpperCase()+
-                ", " + Values.cur + "\n==========================================================");
-        open(Values.host + Values.lang[Values.ln][2]);
+        Values.ln = getLanguageNumber(language);
+        Values.cur = currency;
+
+        System.out.println("==========================================================" +
+                "\n*** AUTOTEST *** : section 4, " + browser + ", " + resolution + ", " +
+                Values.lang[Values.ln][2].toUpperCase() + ", " + Values.cur +
+                "\n==========================================================");
+
+
         InitialData initData = new InitialData(
                 "MOW",
                 "PRG",
@@ -301,6 +323,7 @@ public class EssTest {
                 0,
                 0
         );
+        open(Values.host + Values.lang[Values.ln][2]);
         SearchPage searchPg = new SearchPage(initData);
         searchPg.step1();
         List<Flight> flightList = searchPg.step2();
@@ -328,7 +351,6 @@ public class EssTest {
         officePg.openOrderDetails(Values.pnr, flightList, passList);//шаг 19
     }
 
-
     private List<Passenger> createPassengers(InitialData initData) {
         List<Passenger> passengerList = new ArrayList<Passenger>();
         for (int i=0; i<initData.getAdult(); i++) {
@@ -344,6 +366,62 @@ public class EssTest {
             passengerList.add(p);
         }
         return passengerList;
+    }
+
+    private Object[][] getStartUpParameters(){
+        String chrome = System.getProperty("chrome_browser", "true");
+        String firefox = System.getProperty("firefox_browser", "false");
+        String opera = System.getProperty("opera_browser", "false");
+        String ie = System.getProperty("ie_browser", "false");
+        String res1 = System.getProperty("resolution_1920x1080", "true");
+        String res2 = System.getProperty("resolution_1366x768", "false");
+        String res3 = System.getProperty("resolution_1680x1050", "false");
+        String res4 = System.getProperty("resolution_1280x1024", "false");
+        String lc = System.getProperty("language_currency", "Russian,RUB");
+
+        List<String> browsers = new ArrayList<>();
+        List<String> resolutions = new ArrayList<>();
+        List<String> languages = new ArrayList<>();
+
+        if (chrome.equals("true")) browsers.add("chrome");
+        if (firefox.equals("true")) browsers.add("firefox");
+        if (opera.equals("true")) browsers.add("opera");
+        if (ie.equals("true")) browsers.add("ie");
+        if (res1.equals("true")) resolutions.add("1920x1080");
+        if (res2.equals("true")) resolutions.add("1366x768");
+        if (res3.equals("true")) resolutions.add("1680x1050");
+        if (res4.equals("true")) resolutions.add("1280x1024");
+        if (lc.equals("All")) {
+            languages.add("French,EUR");
+            languages.add("Spanish,EUR");
+            languages.add("Italian,EUR");
+            languages.add("Japanese,USD");
+            languages.add("Chinese,USD");
+            languages.add("English,USD");
+            languages.add("Korean,RUB");
+            languages.add("Russian,RUB");
+            languages.add("German,RUB");
+            languages.add("Russian,CNY");
+            languages.add("Chinese,CNY");
+            languages.add("German,CNY");
+        }else languages.add(lc);
+
+        int rows = browsers.size()*resolutions.size()*languages.size();
+        Object[][] o = new Object[rows][4];
+        int i = 0;
+        for (String b: browsers) {
+            for (String r: resolutions) {
+                for (String l: languages) {
+                    o[i][0] = b;
+                    o[i][1] = r;
+                    o[i][2] = l.substring(0, l.indexOf(","));
+                    o[i][3] = l.substring(l.indexOf(",")+1);
+                    System.out.println("DATA[" + i + "] = " + o[i][0] + " " + o[i][1] + " " + o[i][2] + " " + o[i][3]);
+                    i++;
+                }
+            }
+        }
+        return o;
     }
 
 }
