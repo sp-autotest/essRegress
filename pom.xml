@@ -111,10 +111,15 @@
                     <stopPort>1234</stopPort>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>io.qameta.allure</groupId>
+                <artifactId>allure-maven</artifactId>
+                <version>2.9</version>
+            </plugin>
         </plugins>
     </build>
 
-    <reporting>
+    <!--reporting>
         <excludeDefaults>true</excludeDefaults>
         <plugins>
             <plugin>
@@ -123,6 +128,6 @@
                 <version>2.6</version>
             </plugin>
         </plugins>
-    </reporting>
+    </reporting-->
     
 </project>
