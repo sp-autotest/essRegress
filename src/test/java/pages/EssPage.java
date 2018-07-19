@@ -29,6 +29,7 @@ public class EssPage extends Page {
     public void step6() {
         System.out.println("\t6. Check ESS form");
         checkPageAppear();
+        countrySelect();
         if (getWebDriver().manage().window().getSize().getWidth() < 1280) {
             $("#left-column-insurance-block").click();//раскрыть блок Страховка
             Sleep(1);
@@ -353,6 +354,14 @@ public class EssPage extends Page {
         Actions actions = new Actions(getWebDriver());
         actions.moveToElement(el).perform();
         Sleep(1);
+    }
+
+    @Step("Выбрать страну в диалоге справа вверху")
+    private void countrySelect() {
+        $("#countryListToggle").shouldBe(visible).click();
+        $(byXpath("//input[@id='select-country-ru']/..")).shouldBe(visible).click();
+        $(byXpath("//button[contains(@class,'submitSelectedCountry')]")).shouldBe(visible).click();
+        Sleep(2);
     }
 
 }
