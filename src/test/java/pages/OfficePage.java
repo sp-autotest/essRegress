@@ -3,7 +3,8 @@ package pages;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import config.Values;
-import ru.yandex.qatools.allure.annotations.Step;
+//import ru.yandex.qatools.allure.annotations.Step;
+import io.qameta.allure.Step;
 import struct.Flight;
 import struct.Passenger;
 
@@ -18,7 +19,6 @@ import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static org.testng.AssertJUnit.assertTrue;
 
 

@@ -4,12 +4,10 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import config.Values;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
-import ru.yandex.qatools.allure.annotations.Step;
+//import ru.yandex.qatools.allure.annotations.Step;
+import io.qameta.allure.Step;
 import struct.Flight;
-import struct.Passenger;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -21,7 +19,6 @@ import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
-import static com.codeborne.selenide.WebDriverRunner.source;
 import static config.Values.*;
 import static org.testng.AssertJUnit.assertTrue;
 

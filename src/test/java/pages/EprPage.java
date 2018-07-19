@@ -3,7 +3,8 @@ package pages;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import config.Values;
-import ru.yandex.qatools.allure.annotations.Step;
+//import ru.yandex.qatools.allure.annotations.Step;
+import io.qameta.allure.Step;
 import struct.Flight;
 import struct.Passenger;
 

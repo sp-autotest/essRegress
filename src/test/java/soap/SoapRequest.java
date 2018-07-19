@@ -1,17 +1,14 @@
 package soap;
 
 import config.Values;
-import org.testng.Assert;
 import org.w3c.dom.Document;
-import ru.yandex.qatools.allure.annotations.Step;
-
+//import ru.yandex.qatools.allure.annotations.Step;
+import io.qameta.allure.Step;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-
-import static pages.Page.Sleep;
 
 /**
  * Created by mycola on 21.02.2018.

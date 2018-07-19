@@ -4,15 +4,11 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import config.Values;
 import org.openqa.selenium.JavascriptExecutor;
-import ru.yandex.qatools.allure.annotations.Step;
+//import ru.yandex.qatools.allure.annotations.Step;
+import io.qameta.allure.Step;
 import struct.Flight;
 import struct.InitialData;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.Condition.visible;

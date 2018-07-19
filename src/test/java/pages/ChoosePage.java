@@ -2,11 +2,11 @@ package pages;
 
 import com.codeborne.selenide.ElementsCollection;
 import config.Values;
-import ru.yandex.qatools.allure.annotations.Step;
+//import ru.yandex.qatools.allure.annotations.Step;
+import io.qameta.allure.Step;
 import soap.SoapRequest;
 
 import static com.codeborne.selenide.Condition.exactText;
-import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;

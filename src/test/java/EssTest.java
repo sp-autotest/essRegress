@@ -14,9 +14,14 @@ import org.testng.ITestResult;
 import org.testng.TestNG;
 import org.testng.annotations.*;
 import pages.*;
-import ru.yandex.qatools.allure.annotations.Description;
+/*import ru.yandex.qatools.allure.annotations.Description;
 import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
+*/
+import io.qameta.allure.Description;
+import io.qameta.allure.Stories;
+
+
 import struct.Flight;
 import struct.InitialData;
 import struct.Passenger;
@@ -24,7 +29,6 @@ import struct.Passenger;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.Selenide.open;
@@ -34,7 +38,7 @@ import static pages.Page.stringIntoInt;
 
 
 @Listeners({AllureOnEventListener.class})  //"слушатель" для Allure-отчета
-@Title("Aeroflot Test Suite")
+//@Title("Aeroflot Test Suite")
 public class EssTest {
     private int currentRow = 0;
     private int rows = 0;
@@ -106,9 +110,9 @@ public class EssTest {
 }
 
 
-    @Stories("Раздел 1 регрессионных испытаний")
+/*    @Stories("Раздел 1 регрессионных испытаний")
     @Title("Тестирование ESS, раздел 1")
-    @Description("Карта VISA;\nНаправление перелета: туда-обратно;\n" +
+  */  @Description("Карта VISA;\nНаправление перелета: туда-обратно;\n" +
             "Состав бронирования авиаперелета, билеты: 2 взрослых;" +
             "Дополнительные услуги: «Полетная страховка», «Медицинская страховка» (классическая), «Отель»")
     @Test(priority = 1, description = "Раздел 1", groups = {"part1"}, dataProvider= "data")
@@ -180,9 +184,9 @@ public class EssTest {
         new ResultPage().checkServicesData("29", test);//шаг 29
     }
 
-    @Stories("Раздел 2 регрессионных испытаний")
+    /*@Stories("Раздел 2 регрессионных испытаний")
     @Title("Тестирование ESS, раздел 2")
-    @Description("Карта VISA;\nHаправление перелета: туда-обратно;\n" +
+    */@Description("Карта VISA;\nHаправление перелета: туда-обратно;\n" +
             "Состав бронирования авиаперелета, билеты: 2 взрослых, 2 детских, 1 младенец;" +
             "Дополнительные услуги: «Полетная страховка», «Медицинская страховка» (Спортивная), «Аренда автомобиля»")
     @Test(priority = 2, description = "Раздел 2", groups = {"part2"}, dataProvider= "data")
@@ -235,9 +239,9 @@ public class EssTest {
         new ResultPage().checkServicesData("17", test);//шаг 17
     }
 
-    @Stories("Раздел 3 регрессионных испытаний")
+/*    @Stories("Раздел 3 регрессионных испытаний")
     @Title("Тестирование ESS, раздел 3")
-    @Description("Карта VISA;\nHаправление перелета: туда-обратно;\n" +
+  */  @Description("Карта VISA;\nHаправление перелета: туда-обратно;\n" +
             "Состав бронирования авиаперелета, билеты: 2 взрослых;" +
             "Дополнительные услуги: «Полетная страховка», «Аэроэкспресс», «Трансфер»")
     @Test(priority = 3, description = "Раздел 3", groups = {"part3"}, dataProvider= "data")
@@ -297,9 +301,9 @@ public class EssTest {
         new ResultPage().checkServicesData3(flightList.get(0));//шаг 23
     }
 
-    @Stories("Раздел 4 регрессионных испытаний")
+    /*@Stories("Раздел 4 регрессионных испытаний")
     @Title("Тестирование ESS, раздел 4")
-    @Description("Карта VISA;\nНаправление перелета: туда-обратно;\n" +
+    */@Description("Карта VISA;\nНаправление перелета: туда-обратно;\n" +
                  "Состав бронирования авиаперелета, билеты: 2 взрослых")
     @Test(priority = 4, description = "Раздел 4", groups = {"part4"}, dataProvider= "data")
     public void section4(String browser, String resolution, String language, String currency) {
