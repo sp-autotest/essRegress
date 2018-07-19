@@ -12,7 +12,8 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <allure.version>1.5.4</allure.version>
-        <aspectj.version>1.8.5</aspectj.version>
+        <!--aspectj.version>1.8.5</aspectj.version-->
+        <aspectj.version>1.8.10</aspectj.version>
         <sel.version>3.4.0</sel.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -51,10 +52,16 @@
             <artifactId>jsch</artifactId>
             <version>0.1.54</version>
         </dependency>
-        <dependency>
+        <!--dependency>
             <groupId>ru.yandex.qatools.allure</groupId>
             <artifactId>allure-testng-adaptor</artifactId>
             <version>${allure.version}</version>
+        </dependency-->
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-testng</artifactId>
+            <version>2.6.0</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
