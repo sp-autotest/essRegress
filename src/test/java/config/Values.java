@@ -13,14 +13,14 @@ import java.util.List;
  */
 public class Values {
 
-    public static int ln = 0;
+    public static int ln;
     public static int ticket;
-    public static String pnr = null;
-    public static String cur = null;
-    public static String docs = null;
-    public static Price price = new Price();
-    public static Auto auto = new Auto();
-    public static Hotel hotel = new Hotel();
+    public static String pnr;
+    public static String cur;
+    public static String docs;
+    public static Price price;
+    public static Auto auto;
+    public static Hotel hotel;
     public static String currencyChange = "link"; //параметр определяет метод смены валюты.
                                                   //Возможные значения:
                                                   //    link - с помощью подмены параметров в линке

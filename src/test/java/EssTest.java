@@ -17,10 +17,7 @@ import pages.*;
 import io.qameta.allure.Description;
 
 
-
-import struct.Flight;
-import struct.InitialData;
-import struct.Passenger;
+import struct.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -51,6 +48,12 @@ public class EssTest {
 
     @BeforeMethod()
     public void start() {
+        Values.docs = "";
+        Values.ticket = 1;
+        Values.pnr = null;
+        Values.price = new Price();
+        Values.auto = new Auto();
+        Values.hotel = new Hotel();
         Values.errors.clear();//очистить массив неблокирующих ошибок перед каждым тестом
         browserName = startData[currentRow][0].toString();
         String res = startData[currentRow][1].toString();
@@ -104,15 +107,12 @@ public class EssTest {
     return startData;
 }
 
-
     @Description("Карта VISA;\nНаправление перелета: туда-обратно;\n" +
             "Состав бронирования авиаперелета, билеты: 2 взрослых;" +
             "Дополнительные услуги: «Полетная страховка», «Медицинская страховка» (классическая), «Отель»")
     @Test(priority = 1, description = "Раздел 1", groups = {"part1"}, dataProvider= "data")
     public void section1(String browser, String resolution, String language, String currency) {
         int test = 1;
-        Values.docs = "";
-        Values.ticket = 1;
         Values.ln = getLanguageNumber(language);
         Values.cur = currency;
 
@@ -183,8 +183,6 @@ public class EssTest {
     @Test(priority = 2, description = "Раздел 2", groups = {"part2"}, dataProvider= "data")
     public void section2(String browser, String resolution, String language, String currency) {
         int test = 2;
-        Values.docs = "";
-        Values.ticket = 1;
         Values.ln = getLanguageNumber(language);
         Values.cur = currency;
 
@@ -236,10 +234,9 @@ public class EssTest {
     @Test(priority = 3, description = "Раздел 3", groups = {"part3"}, dataProvider= "data")
     public void section3(String browser, String resolution, String language, String currency) {
         int test = 3;
-        Values.docs = "";
-        Values.ticket = 1;
         Values.ln = getLanguageNumber(language);
         Values.cur = currency;
+
         System.out.println("==========================================================" +
                 "\n*** AUTOTEST *** : section 3, " + browser + ", " + resolution + ", " +
                 Values.lang[Values.ln][2].toUpperCase() + ", " + Values.cur +
@@ -295,8 +292,6 @@ public class EssTest {
     @Test(priority = 4, description = "Раздел 4", groups = {"part4"}, dataProvider= "data")
     public void section4(String browser, String resolution, String language, String currency) {
         int test = 4;
-        Values.docs = "";
-        Values.ticket = 1;
         Values.ln = getLanguageNumber(language);
         Values.cur = currency;
 
