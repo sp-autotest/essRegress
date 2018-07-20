@@ -51,6 +51,7 @@ public class EssTest {
 
     @BeforeMethod()
     public void start() {
+        Values.errors.clear();//очистить массив неблокирующих ошибок перед каждым тестом
         browserName = startData[currentRow][0].toString();
         String res = startData[currentRow][1].toString();
         int browserWidth = stringIntoInt(res.substring(0, res.indexOf("x")));//взять ширину браузера из строки с разрешением
