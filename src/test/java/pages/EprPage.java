@@ -171,9 +171,17 @@ public class EprPage extends Page {
             fullName = (passList.get(i).getLastname() + " " + passList.get(i).getFirstname()).toUpperCase();
             assertTrue("Медицинская страховка не содержит пассажира " + fullName, insurance.contains(fullName));
         }
+
+
+        /*временно отключена проверка суммы медицинской страховки
+          причина: issue https://rbs-develop.paymentgate.ru/bugs/browse/AEROESS-830
+
         assertTrue("Стоимость медицинской страховки отличается от забронированной" +
                    "\nОжидалось : " + Values.price.imedical + "\nФактически: " + price,
-                   Values.price.imedical.equals(price));
+                   Values.price.imedical.equals(price));*/
+
+
+
         assertTrue("Название медицинской страховки не корректно" +
                    "\nОжидалось : " + Values.text[1][ln] + "\nФактически: " + insurance,
                    insurance.contains(Values.text[1][ln]));
