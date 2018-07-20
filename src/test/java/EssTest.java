@@ -14,12 +14,8 @@ import org.testng.ITestResult;
 import org.testng.TestNG;
 import org.testng.annotations.*;
 import pages.*;
-/*import ru.yandex.qatools.allure.annotations.Description;
-import ru.yandex.qatools.allure.annotations.Stories;
-import ru.yandex.qatools.allure.annotations.Title;
-*/
 import io.qameta.allure.Description;
-import io.qameta.allure.Stories;
+
 
 
 import struct.Flight;
@@ -36,15 +32,13 @@ import static pages.Page.addMonthAndDays;
 import static pages.Page.getLanguageNumber;
 import static pages.Page.stringIntoInt;
 
-
 @Listeners({AllureOnEventListener.class})  //"слушатель" для Allure-отчета
-//@Title("Aeroflot Test Suite")
+
 public class EssTest {
     private int currentRow = 0;
     private int rows = 0;
     private Object[][] startData;
     private String browserName = "chrome";//браузер, по умолчанию хром
-
 
     @BeforeClass/* Метод, выполняющийся перед началом тест-сьюта */
     public void begin() {
@@ -94,7 +88,7 @@ public class EssTest {
     @AfterMethod
     public void stop(ITestResult testResult) throws IOException {
         getWebDriver().quit();
-        //костыль, для того чтобы закрыть оперу, т.к. в ее драйвере есть баг
+        // костыль, для того чтобы закрыть оперу, т.к. в ее драйвере есть баг
         // https://github.com/operasoftware/operachromiumdriver/issues/44
         if (browserName.equals("opera")) Runtime.getRuntime().exec("taskkill /f /im opera.exe");
     }
@@ -110,9 +104,7 @@ public class EssTest {
 }
 
 
-/*    @Stories("Раздел 1 регрессионных испытаний")
-    @Title("Тестирование ESS, раздел 1")
-  */  @Description("Карта VISA;\nНаправление перелета: туда-обратно;\n" +
+    @Description("Карта VISA;\nНаправление перелета: туда-обратно;\n" +
             "Состав бронирования авиаперелета, билеты: 2 взрослых;" +
             "Дополнительные услуги: «Полетная страховка», «Медицинская страховка» (классическая), «Отель»")
     @Test(priority = 1, description = "Раздел 1", groups = {"part1"}, dataProvider= "data")
@@ -184,9 +176,7 @@ public class EssTest {
         new ResultPage().checkServicesData("29", test);//шаг 29
     }
 
-    /*@Stories("Раздел 2 регрессионных испытаний")
-    @Title("Тестирование ESS, раздел 2")
-    */@Description("Карта VISA;\nHаправление перелета: туда-обратно;\n" +
+    @Description("Карта VISA;\nHаправление перелета: туда-обратно;\n" +
             "Состав бронирования авиаперелета, билеты: 2 взрослых, 2 детских, 1 младенец;" +
             "Дополнительные услуги: «Полетная страховка», «Медицинская страховка» (Спортивная), «Аренда автомобиля»")
     @Test(priority = 2, description = "Раздел 2", groups = {"part2"}, dataProvider= "data")
@@ -239,9 +229,7 @@ public class EssTest {
         new ResultPage().checkServicesData("17", test);//шаг 17
     }
 
-/*    @Stories("Раздел 3 регрессионных испытаний")
-    @Title("Тестирование ESS, раздел 3")
-  */  @Description("Карта VISA;\nHаправление перелета: туда-обратно;\n" +
+    @Description("Карта VISA;\nHаправление перелета: туда-обратно;\n" +
             "Состав бронирования авиаперелета, билеты: 2 взрослых;" +
             "Дополнительные услуги: «Полетная страховка», «Аэроэкспресс», «Трансфер»")
     @Test(priority = 3, description = "Раздел 3", groups = {"part3"}, dataProvider= "data")
@@ -301,9 +289,7 @@ public class EssTest {
         new ResultPage().checkServicesData3(flightList.get(0));//шаг 23
     }
 
-    /*@Stories("Раздел 4 регрессионных испытаний")
-    @Title("Тестирование ESS, раздел 4")
-    */@Description("Карта VISA;\nНаправление перелета: туда-обратно;\n" +
+    @Description("Карта VISA;\nНаправление перелета: туда-обратно;\n" +
                  "Состав бронирования авиаперелета, билеты: 2 взрослых")
     @Test(priority = 4, description = "Раздел 4", groups = {"part4"}, dataProvider= "data")
     public void section4(String browser, String resolution, String language, String currency) {
@@ -398,18 +384,18 @@ public class EssTest {
         if (res3.equals("true")) resolutions.add("1680x1050");
         if (res4.equals("true")) resolutions.add("1280x1024");
         if (lc.equals("All")) {
-            languages.add("French,EUR");
+            /*languages.add("French,EUR");
             languages.add("Spanish,EUR");
             languages.add("Italian,EUR");
             languages.add("Japanese,USD");
             languages.add("Chinese,USD");
             languages.add("English,USD");
-            languages.add("Korean,RUB");
+            languages.add("Korean,RUB");*/
             languages.add("Russian,RUB");
-            languages.add("German,RUB");
+            languages.add("German,RUB");/*
             languages.add("Russian,CNY");
             languages.add("Chinese,CNY");
-            languages.add("German,CNY");
+            languages.add("German,CNY");*/
         }else languages.add(lc);
 
         rows = browsers.size()*resolutions.size()*languages.size();
