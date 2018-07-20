@@ -384,18 +384,18 @@ public class EssTest {
         if (res3.equals("true")) resolutions.add("1680x1050");
         if (res4.equals("true")) resolutions.add("1280x1024");
         if (lc.equals("All")) {
-            /*languages.add("French,EUR");
+            languages.add("French,EUR");
             languages.add("Spanish,EUR");
             languages.add("Italian,EUR");
             languages.add("Japanese,USD");
             languages.add("Chinese,USD");
             languages.add("English,USD");
-            languages.add("Korean,RUB");*/
+            languages.add("Korean,RUB");
             languages.add("Russian,RUB");
-            languages.add("German,RUB");/*
+            languages.add("German,RUB");
             languages.add("Russian,CNY");
             languages.add("Chinese,CNY");
-            languages.add("German,CNY");*/
+            languages.add("German,CNY");
         }else languages.add(lc);
 
         rows = browsers.size()*resolutions.size()*languages.size();
