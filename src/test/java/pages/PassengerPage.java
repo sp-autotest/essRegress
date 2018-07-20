@@ -39,7 +39,7 @@ public class PassengerPage extends Page {
     }
 
 
-    @Step("Заполнить данные для {1}-го пассажира")
+    @Step("Заполнить данные пассажира")
     private void fillPassengerData(SelenideElement card, Passenger p){
         setGender(card, p.getGender());
         setLastName(card, p.getLastname());
