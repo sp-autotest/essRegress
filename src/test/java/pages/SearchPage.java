@@ -236,14 +236,18 @@ public class SearchPage extends Page {
     }
 
     private void countrySelect() {
-        $("#countryListToggle").shouldBe(visible).click();
-        $(byXpath("//input[@id='select-country-ru']/..")).shouldBe(visible).click();
-        $(byXpath("//button[contains(@class,'submitSelectedCountry')]")).shouldBe(visible).click();
-        Sleep(2);
+        ElementsCollection country = $$("#countryListToggle");
+        if (country.size()>0) {
+            country.get(0).click();
+            $(byXpath("//input[@id='select-country-ru']/..")).shouldBe(visible).click();
+            $(byXpath("//button[contains(@class,'submitSelectedCountry')]")).shouldBe(visible).click();
+            Sleep(2);
+        }
     }
 
     private void clickAcceptCookiesButton() {
-        $("#acceptCookiesLaw").shouldBe(visible).click();
+        ElementsCollection cookies = $$("#acceptCookiesLaw");
+        if (cookies.size()>0) cookies.get(0).click();
     }
 
 

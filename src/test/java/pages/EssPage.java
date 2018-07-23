@@ -359,10 +359,13 @@ public class EssPage extends Page {
 
     @Step("Выбрать страну в диалоге справа вверху")
     private void countrySelect() {
-        $("#countryListToggle").shouldBe(visible).click();
-        $(byXpath("//input[@id='select-country-ru']/..")).shouldBe(visible).click();
-        $(byXpath("//button[contains(@class,'submitSelectedCountry')]")).shouldBe(visible).click();
-        Sleep(2);
+        ElementsCollection counry = $$("#countryListToggle");
+        if (counry.size()>0) {
+            counry.get(0).click();
+            $(byXpath("//input[@id='select-country-ru']/..")).shouldBe(visible).click();
+            $(byXpath("//button[contains(@class,'submitSelectedCountry')]")).shouldBe(visible).click();
+            Sleep(2);
+        }
     }
 
 }

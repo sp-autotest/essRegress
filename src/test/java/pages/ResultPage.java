@@ -3,7 +3,6 @@ package pages;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import config.Values;
-//import ru.yandex.qatools.allure.annotations.Step;
 import io.qameta.allure.Step;
 import struct.Flight;
 
@@ -12,7 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import static com.codeborne.selenide.Condition.exactText;
+import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
@@ -58,7 +57,7 @@ public class ResultPage extends Page {
 
     private void checkPageAppear(){
         Sleep(25);
-        $(byXpath("//div[contains(@class,'text text--bold')]")).shouldBe(visible).shouldBe(exactText(pnr));
+        $(byXpath("//div[contains(@class,'text text--bold')]")).shouldBe(visible).shouldBe(text(pnr));
         System.out.println("URL = " + url());
         $(byXpath("//p[contains(text(),'" + text[12][ln] + "')]")).shouldBe(visible);
     }
