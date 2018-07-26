@@ -70,6 +70,10 @@ public class EprPage extends Page {
             checkMedicalInsurance(passList);
             checkAllInsurancePrice();
         }
+        /*
+        ВРЕМЕННО отключены проверки услуг на странице EPR в свзязи
+        с отсутствием необходимых данных на странице
+        ///
         if (test == 1) checkAccommodation();
         if (getWebDriver().manage().window().getSize().getWidth() < 1280) {
             SelenideElement el = $(byXpath("//div[@data-toggle-target='toggle-TRANSPORT']")).shouldBe(visible);
@@ -81,6 +85,7 @@ public class EprPage extends Page {
             checkAeroexpress(flyList.get(0).from_orig);
             checkTransfer(flyList.get(0).start);
         }
+        */
     }
 
     @Step("Проверка фамилии и имени {0}-го пассажира")
@@ -171,17 +176,9 @@ public class EprPage extends Page {
             fullName = (passList.get(i).getLastname() + " " + passList.get(i).getFirstname()).toUpperCase();
             assertTrue("Медицинская страховка не содержит пассажира " + fullName, insurance.contains(fullName));
         }
-
-
-        /*временно отключена проверка суммы медицинской страховки
-          причина: issue https://rbs-develop.paymentgate.ru/bugs/browse/AEROESS-830
-
         assertTrue("Стоимость медицинской страховки отличается от забронированной" +
                    "\nОжидалось : " + Values.price.imedical + "\nФактически: " + price,
-                   Values.price.imedical.equals(price));*/
-
-
-
+                   Values.price.imedical.equals(price));
         assertTrue("Название медицинской страховки не корректно" +
                    "\nОжидалось : " + Values.text[1][ln] + "\nФактически: " + insurance,
                    insurance.contains(Values.text[1][ln]));
