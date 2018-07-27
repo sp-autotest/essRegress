@@ -6,6 +6,8 @@ import config.Values;
 //import ru.yandex.qatools.allure.annotations.Step;
 import io.qameta.allure.Step;
 import struct.Passenger;
+
+import java.util.Date;
 import java.util.List;
 
 import static com.codeborne.selenide.Condition.exist;
@@ -26,8 +28,7 @@ public class PassengerPage extends Page {
         checkPageAppear();
         if ((!Values.cur.equals("RUB"))&(Values.currencyChange.equals("link"))) currencyChange(Values.cur);
         ElementsCollection cards = $$(byXpath("//div[@class='passenger-card']"));
-        int count = cards.size();
-        for (int i=0;i<count;i++) fillPassengerData(cards.get(i), passengerList.get(i));
+        for (int i=0; i < cards.size(); i++) fillPassengerData(cards.get(i), passengerList.get(i));
         setEmail();
         setPhone();
         setTerms();
@@ -139,7 +140,16 @@ public class PassengerPage extends Page {
             link = link.replaceFirst("app/ru", "app/" + cur);
             System.out.println("New link = " + link);
             getWebDriver().get(link);
+            Sleep(2);
             checkPageAppear();
+            ElementsCollection cards;
+            for (int i=0; i<10; i++) {
+                cards = $$(byXpath("//div[@class='passenger-card']"));
+                String d = "Date = " + new Date();
+                System.out.println(d + ", Passenger card found on page = " + cards.size());
+                if (cards.size()>0) break;
+                Sleep(1);
+            }
         }
     }
 }
