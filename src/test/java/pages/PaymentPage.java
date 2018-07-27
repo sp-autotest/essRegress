@@ -72,16 +72,23 @@ public class PaymentPage extends Page {
     @Step("Проверка стоимости на оплату(без аренды авто)")
     private void checkTotalPrice2() {
         String price = $(byXpath("//div[@class='cart__item-price ng-binding']")).getText().replaceAll("\\D+","");
+        System.out.println(Values.price.total);
         System.out.println(price);
-        assertTrue("Стоимость «К ОПЛАТЕ ВСЕГО» некорректна", price.equals(Values.price.total));
+        assertTrue("Стоимость «К ОПЛАТЕ ВСЕГО» некорректна" +
+                   "\nОжидалось : " + Values.price.total + "\nФактически: " + price,
+                   price.equals(Values.price.total));
 
         String now = $(byXpath("//div[contains(@translate,'now2')]/following-sibling::div")).getText().replaceAll("\\D+","");
         System.out.println(now);
-        assertTrue("Стоимость «К оплате сейчас» некорректна", now.equals(Values.price.total));
+        assertTrue("Стоимость «К оплате сейчас» некорректна" +
+                   "\nОжидалось : " + Values.price.total + "\nФактически: " + now,
+                   now.equals(Values.price.total));
 
         String button = $(byXpath("//span[contains(@ng-bind-html,'payAmountText')]")).getText().replaceAll("\\D+","");
         System.out.println(button);
-        assertTrue("Стоимость «Заплатить» на кнопке некорректна", button.equals(Values.price.total));
+        assertTrue("Стоимость «Заплатить» на кнопке некорректна" +
+                   "\nОжидалось : " + Values.price.total + "\nФактически: " + button,
+                   button.equals(Values.price.total));
     }
 
     @Step("Проверка стоимости аренды автомобиля")
@@ -89,11 +96,15 @@ public class PaymentPage extends Page {
         String inplace = $(byXpath("//div[contains(@translate,'onSite')]/following-sibling::div")).getText().replaceAll("\\D+","");
         System.out.println("«На месте» = " + inplace);
         System.out.println("«Transport» = " + Values.price.transport);
-        assertTrue("Стоимость «На месте» некорректна", inplace.equals(Values.price.transport));
+        assertTrue("Стоимость «На месте» некорректна" +
+                   "\nОжидалось : " + Values.price.transport + "\nФактически: " + inplace,
+                   inplace.equals(Values.price.transport));
 
         String comment = $(byXpath("//div[@class='order-price__table-data-price ng-binding']")).getText().replaceAll("\\D+","");
         System.out.println(comment);
-        assertTrue("Стоимость аренды авто в комментарии некорректна", comment.equals(Values.price.transport));
+        assertTrue("Стоимость аренды авто в комментарии некорректна" +
+                   "\nОжидалось : " + Values.price.transport + "\nФактически: " + comment,
+                   comment.equals(Values.price.transport));
     }
 
     @Step("Заполнить поле \"Номер карты\"")

@@ -334,7 +334,7 @@ public class EssTest {
         paymentPg.setCardDetails("14");//шаг 14
         new ResultPage().checkServicesData("15", test);//шаг 15
         OfficePage officePg = new OfficePage();
-        officePg.authorization(browserName);//шаг 17
+        officePg.authorization();//шаг 17
         officePg.searchOrder(Values.pnr);//шаг 18
         officePg.openOrderDetails(Values.pnr, flightList, passList);//шаг 19
     }

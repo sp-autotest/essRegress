@@ -37,10 +37,12 @@ public class OfficePage extends Page{
     }
 
     @Step("Действие 17, Переход в АРМ ESS")
-    public void authorization (String browser){
+    public void authorization (){
         System.out.println("\t17. Redirect to office ESS");
         open(Values.office_host);
-        if (!browser.equals("ie")) {
+        Sleep(1);
+        ElementsCollection login = $$(byName("login"));
+        if (login.size()>0) {
             setLogin();
             setPassword();
             clickEnterButton();

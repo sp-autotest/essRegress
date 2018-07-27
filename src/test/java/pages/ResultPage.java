@@ -36,7 +36,7 @@ public class ResultPage extends Page {
             checkFlyInsurance(services.get(0));
             services.get(1).scrollTo();
             checkMedicalInsurance(services.get(1));
-            services.get(2).scrollTo();
+            //services.get(2).scrollTo();
             n = n + "04";
         } else assertTrue("Обнаружены дополнительные услуги", services.size() == 0);
         if (test == 1) checkHotel(services.get(2));
