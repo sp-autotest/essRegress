@@ -20,11 +20,16 @@ import io.qameta.allure.Description;
 import struct.*;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.Selenide.open;
+import static config.Values.ln;
 import static pages.Page.addMonthAndDays;
 import static pages.Page.getLanguageNumber;
 import static pages.Page.stringIntoInt;
@@ -338,7 +343,26 @@ public class EssTest {
         officePg.searchOrder(Values.pnr);//шаг 18
         officePg.openOrderDetails(Values.pnr, flightList, passList);//шаг 19
     }
+/*
+    @Test(priority = 5, description = "Раздел 5", groups = {"part4"}, dataProvider= "data")
+    public void section5(String browser, String resolution, String language, String currency) {
+        int test = 5;
+        Values.ln = getLanguageNumber(language);
+        Values.cur = currency;
+        String date = "28 12 月 1982";
+        System.out.println("Date on site = " + date);
 
+        Date parsingDate=null;
+        try {
+            parsingDate = new SimpleDateFormat("dd MMMM yyyy", new Locale(Values.lang[ln][2])).parse(date);
+        }catch (ParseException e) {
+            System.out.println("Parsing date error");
+        }
+        String datef = new java.text.SimpleDateFormat("ddMMyyyy").format(parsingDate);
+
+        System.out.println("Parse date = " + datef);
+    }
+*/
     private List<Passenger> createPassengers(InitialData initData) {
         List<Passenger> passengerList = new ArrayList<Passenger>();
         for (int i=0; i<initData.getAdult(); i++) {

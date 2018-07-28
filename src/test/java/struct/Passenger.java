@@ -26,7 +26,7 @@ public class Passenger {
         this.gender = getRandomNumberLimit(2);
         this.firstname = getRandomString(4);
         this.lastname = getRandomString(8);
-        this.number = getRandomNumberString(6);
+        this.number = getRandomNumberString(8);
         this.nationality = lang[ln][4];//пока что для всех - Россия
         this.country = lang[ln][4];//пока что для всех - Россия
         switch (type) {
