@@ -168,15 +168,15 @@ public class ResultPage extends Page {
         assertTrue("Название отеля отличается от забронированного", hotel.name.equals(name));*/
 
         String sDate = row.$(byXpath("child::div[2]")).getText();
-        int s = row.$(byXpath("child::div[2]/span")).getText().length()+1;
-        sDate = sDate.substring(s);
+        int s = row.$(byXpath("child::div[2]/span")).getText().length();
+        sDate = sDate.substring(s).replaceAll("[\t\n\r\f]","");//убрать перенос строки
         System.out.println("Hotel start = " + sDate);
         String f = "d MMMM yyyy";
         assertTrue("Дата заселения отличается от забронированной", hotel.accDate.equals(stringToDate(sDate, f)));
 
         String eDate = row.$(byXpath("child::div[3]")).getText();
-        s = row.$(byXpath("child::div[3]/span")).getText().length()+1;
-        eDate = eDate.substring(s);
+        s = row.$(byXpath("child::div[3]/span")).getText().length();
+        eDate = eDate.substring(s).replaceAll("[\t\n\r\f]","");//убрать перенос строки
         System.out.println("Hotel end = " + eDate);
         assertTrue("Дата выезда отличается от забронированной", hotel.depDate.equals(stringToDate(eDate, f)));
 
