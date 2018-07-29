@@ -188,7 +188,15 @@ public class TransportPage extends Page {
             String cat = categories.get(i).$(byXpath("descendant::h3")).getText();
             System.out.println(cat);
             if (cat.equals(Values.text[26][ln])){ //Стандарт
-                price = categories.get(i).$(byXpath("div/div[4]")).getText().replaceAll("\\D+","");
+                price = categories.get(i).$(byXpath("div/div[4]")).getText();//.replaceAll("\\D+","");
+                price = price.substring(0, price.indexOf(" "));
+                int startMinor = price.indexOf(".");
+                if (startMinor>0) {
+                    String minor = price.substring(startMinor+1);
+                    System.out.println("Копейки = >" + minor + "<");
+                    if (minor.length() == 1) price = price + "0";
+                }
+                price = price.replaceAll("\\D+","");
                 System.out.println("transfer = " + price);
                 screenShot("скриншот");
                 categories.get(i).$(byXpath("descendant::a[contains(@class,'button')]")).click();
@@ -338,8 +346,8 @@ public class TransportPage extends Page {
 
     @Step("Проверка пересчета стоимости: без доп. услуг {1}, страховка {0}, всего {2}")
     private void checkAllPrice(int insurance, int before, int after){
-        assertTrue("Стоимость пересчитана неверно\n" +
-                "Ожидалось: " + (before + insurance) +
+        assertTrue("Стоимость пересчитана неверно" +
+                "\nОжидалось : " + (before + insurance) +
                 "\nФактически: " + after,
                 after == before + insurance);
     }
@@ -349,8 +357,8 @@ public class TransportPage extends Page {
         String leftPrice = $("#left-column-transport").$(byXpath("descendant::div[@class='cart__item-priceondemand-item-price']")).getText().replaceAll("\\D+","");
         System.out.println("Transport price = " + leftPrice);
         assertTrue("Стоимость аренды авто в корзине не совпадает с указанной в блоке" +
-                "\nОжидалось: " + price.nationalTransport +
-                "\nФакически: " + leftPrice,
+                "\nОжидалось : " + price.nationalTransport +
+                "\nФактически: " + leftPrice,
                 price.nationalTransport.equals(leftPrice));
   ////временно отключена проверка
     }
@@ -374,7 +382,7 @@ public class TransportPage extends Page {
         String totalPrice = $("#cart-total-incarts").$(byXpath("descendant::div[@class='cart__item-price']")).getText().replaceAll("\\D+","");
         System.out.println("Total price = " + totalPrice);
         assertTrue("Общая сумма заказа некорректна" +
-                "\nОжидалось: " + summ +
+                "\nОжидалось : " + summ +
                 "\nФактически: " + totalPrice,
                 summ == stringIntoInt(totalPrice));
     }
@@ -439,7 +447,7 @@ public class TransportPage extends Page {
     private void checkAeroexpressTikets(){
         int count = stringIntoInt($("#countTickets_").getText().replaceAll("\\D+",""));
         assertTrue("Количество билетов Аэроэкспресс, выбранных для поездки, отличается от количества пассажиров" +
-                        "\nОжидалось: " + ticket +
+                        "\nОжидалось : " + ticket +
                         "\nФактически: " + count,
                         count == ticket);
     }
@@ -454,7 +462,7 @@ public class TransportPage extends Page {
             summ = summ + stringIntoInt(prices.get(i).getText().replaceAll("\\D+",""));
         }
         assertTrue("Общая стоимость Аэроэкспресс не равна сумме для всех пассажиров" +
-                        "\nОжидалось: " + summ +
+                        "\nОжидалось : " + summ +
                         "\nФактически: " + price,
                         summ == stringIntoInt(price));
     }
@@ -464,7 +472,7 @@ public class TransportPage extends Page {
         //int summ = stringIntoInt(price.fly) + stringIntoInt(price.iflight) + stringIntoInt(price.imedical);
         String totalPrice = $("#cart-total-incarts").$(byXpath("descendant::div[@class='cart__item-price']")).getText().replaceAll("\\D+","");
         assertTrue("Сумма \"Всего к оплате\" не корректна" +
-                        "\nОжидалось: " + Values.price.total +
+                        "\nОжидалось : " + Values.price.total +
                         "\nФактически: " + totalPrice,
                         totalPrice.equals(Values.price.total));
     }
@@ -481,7 +489,7 @@ public class TransportPage extends Page {
         int n = 0;
         for (int i=0; i<chb.size(); i++) if (chb.get(i).isSelected()) n++;
         assertTrue("Для поездки на Аэроэкспресс выбраны не все пассажиры" +
-                   "\nОжидалось: " + ticket + "\nФактически: " + n, n == ticket);
+                   "\nОжидалось : " + ticket + "\nФактически: " + n, n == ticket);
     }
 
     @Step("Проверить изменение общей стоимости Аэроэкспресс")
@@ -509,8 +517,8 @@ public class TransportPage extends Page {
         String leftPrice = transport.$(byXpath("descendant::div[@class='cart__item-priceondemand-item-price']")).getText().replaceAll("\\D+","");
         System.out.println("Aeroexpress price = " + leftPrice);
         assertTrue("Сумма Аэроэкспресс в корзине не совпадает с рассчитанной" +
-                   "\nОжидалось: " + price +
-                   "\nФакически: " + leftPrice,
+                   "\nОжидалось : " + price +
+                   "\nФактически: " + leftPrice,
                    price.equals(leftPrice));
         Values.price.aeroexpress = price;
         String service = "";
@@ -548,8 +556,8 @@ public class TransportPage extends Page {
         System.out.println(dir);
         String direction = $(byXpath("//div[@id='trip_hi']/h3")).getText();
         assertTrue("Направления на форме с доп.информацией не совпадают с выбранными" +
-                   "\nОжидалось: " + dir +
-                   "\nФакически: " + direction,
+                   "\nОжидалось : " + dir +
+                   "\nФактически: " + direction,
                    dir.equals(direction));
     }
 
@@ -569,12 +577,12 @@ public class TransportPage extends Page {
         String leftPrice = transfer.$(byXpath("parent::div/div[@class='cart__item-priceondemand-item-price']")).getText().replaceAll("\\D+","");
         System.out.println("Transfer price = " + leftPrice);
         assertTrue("Сумма трансфера в корзине не совпадает с рассчитанной" +
-                   "\nОжидалось: " + Values.price.transfer +
-                   "\nФакически: " + leftPrice,
+                   "\nОжидалось : " + Values.price.transfer +
+                   "\nФактически: " + leftPrice,
                    Values.price.transfer.equals(leftPrice));
     }
 
-    @Step("Проверить наличие и сумму трансфера в корзине")
+    @Step("Проверить наличие и сумму трансфера в окне")
     private void checkTransferAllData(Date date, String dir) {
         String from = getTransferFrom();
         String fromC = dir.substring(0, dir.indexOf("—")-1);
@@ -587,12 +595,12 @@ public class TransportPage extends Page {
         String category = getTransferCategory();
         String summ = getTransferSumm();
         assertTrue("Направление Откуда трансфера не совпадает с выбранным" +
-                   "\nОжидалось: " + fromC +
-                   "\nФакически: " + from,
+                   "\nОжидалось : " + fromC +
+                   "\nФактически: " + from,
                    from.equals(fromC));
         assertTrue("Направление Куда трансфера не совпадает с выбранным" +
-                   "\nОжидалось: " + toC +
-                   "\nФакически: " + to,
+                   "\nОжидалось : " + toC +
+                   "\nФактически: " + to,
                    to.equals(toC));
         /*
         ВРЕМЕННО до решения вопроса с датой трансфера изменена её проверка:
@@ -610,8 +618,8 @@ public class TransportPage extends Page {
         System.out.println("dateC2 = " + dateC2);
         if (!tdate.equals(dateC2)) {
             assertTrue("Дата трансфера не совпадает с выбранной" +
-                            "\nОжидалось: " + dateC +
-                            "\nФакически: " + tdate,
+                            "\nОжидалось : " + dateC +
+                            "\nФактически: " + tdate,
                     tdate.equals(dateC));
         }
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -619,16 +627,16 @@ public class TransportPage extends Page {
 
 
         assertTrue("Время трансфера не совпадает с выбранным" +
-                   "\nОжидалось: 00:00" +
-                   "\nФакически: " + time,
+                   "\nОжидалось : 00:00" +
+                   "\nФактически: " + time,
                    time.equals("00:00"));
         assertTrue("Категория трансфера не совпадает с выбранной" +
-                   "\nОжидалось:" + text[26][ln] +
-                   "\nФакически: " + category,
+                   "\nОжидалось : " + text[26][ln] +
+                   "\nФактически: " + category,
                    category.equals(text[26][ln]));
         assertTrue("Сумма трансфера не совпадает с расчитанной" +
-                   "\nОжидалось:" + price.transfer +
-                   "\nФакически: " + summ,
+                   "\nОжидалось : " + price.transfer +
+                   "\nФактически: " + summ,
                    summ.equals(price.transfer));
     }
 
@@ -653,7 +661,16 @@ public class TransportPage extends Page {
     }
 
     private String getTransferSumm(){
-        return $(byXpath("//span[@class='h-pull--right h-fz--18 h-fw--700']")).getText().replaceAll("\\D+","");
+        String price = $(byXpath("//span[@class='h-pull--right h-fz--18 h-fw--700']")).getText();//.replaceAll("\\D+","");
+        price = price.substring(0, price.indexOf(" "));
+        int startMinor = price.indexOf(".");
+        if (startMinor>0) {
+            String minor = price.substring(startMinor+1);
+            System.out.println("Копейки = >" + minor + "<");
+            if (minor.length() == 1) price = price + "0";
+        }
+        price = price.replaceAll("\\D+","");
+        return price;
     }
 
     @Step("Действие 18, Нажать Продолжить")
