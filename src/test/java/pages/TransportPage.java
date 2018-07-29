@@ -5,7 +5,6 @@ import com.codeborne.selenide.SelenideElement;
 import config.Values;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.interactions.Actions;
-//import ru.yandex.qatools.allure.annotations.Step;
 import io.qameta.allure.Step;
 import struct.Flight;
 import java.text.ParseException;
@@ -21,7 +20,6 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static config.Values.*;
-import static java.lang.Math.abs;
 import static org.testng.AssertJUnit.assertTrue;
 
 /**
@@ -214,7 +212,7 @@ public class TransportPage extends Page {
     public void selectTransfer(Date date, String dir) {
         System.out.println("\t17. Click Select button in transfer form");
         clickSelectButton();
-        checkTransferInCart(); //коммент изза того, что не раскрывается транспорт в корзине - СНЯТЬ ПРИ КОММИТЕ!!!
+        checkTransferInCart();
         checkTransferAllData(date, dir);
     }
 
@@ -598,7 +596,7 @@ public class TransportPage extends Page {
                    to.equals(toC));
         /*
         ВРЕМЕННО до решения вопроса с датой трансфера изменена её проверка:
-        проверяем разницу дат - должно біть не более 1-го дня
+        проверяем разницу дат - должно быть не более 1-го дня
         assertTrue("Дата трансфера не совпадает с выбранной" +
                    "\nОжидалось: " + dateC +
                    "\nФакически: " + tdate,
@@ -656,6 +654,16 @@ public class TransportPage extends Page {
 
     private String getTransferSumm(){
         return $(byXpath("//span[@class='h-pull--right h-fz--18 h-fw--700']")).getText().replaceAll("\\D+","");
+    }
+
+    @Step("Действие 18, Нажать Продолжить")
+    public void clickRepeatedlyContinue() {
+        if (getWebDriver().manage().window().getSize().getWidth() < 1280) {
+            $("#left-column-insurance-block").click();//раскрыть блок Страховка
+            Sleep(1);
+        }
+        $(byXpath("//a[@class='cart__item-counter-link']")).click();
+        waitPlane();
     }
 
 

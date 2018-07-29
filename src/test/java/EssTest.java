@@ -16,20 +16,13 @@ import org.testng.annotations.*;
 import pages.*;
 import io.qameta.allure.Description;
 
-
 import struct.*;
-
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.Selenide.open;
-import static config.Values.ln;
 import static pages.Page.addMonthAndDays;
 import static pages.Page.getLanguageNumber;
 import static pages.Page.stringIntoInt;
@@ -281,8 +274,7 @@ public class EssTest {
         transportPg.clickSelectStandartButton();//шаг 15
         transportPg.setTransferAdditionalInfo(flightList.get(0).start, dir);//шаг 16
         transportPg.selectTransfer(flightList.get(0).start, dir);//шаг 17
-        transportPg.clickContinue();//шаг 18
-        transportPg.clickContinue();//шаг 18
+        transportPg.clickRepeatedlyContinue();//шаг 18
         choosePg.chooseTestStend("19");//шаг 19
         EprPage eprPg = new EprPage();
         eprPg.checkDataOnPayPage("20", flightList, passList, test, timer);//шаг 20

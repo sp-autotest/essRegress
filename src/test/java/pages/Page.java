@@ -4,7 +4,6 @@ import com.codeborne.selenide.SelenideElement;
 import config.Values;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
-//import ru.yandex.qatools.allure.annotations.Step;
 import io.qameta.allure.Step;
 import java.io.IOException;
 import java.text.ParseException;
@@ -14,7 +13,6 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static listeners.ScreenShoter.makeScreenshot;
@@ -106,7 +104,7 @@ public class Page {
 
     public static void waitPlane() {
         Sleep(3);
-        $(byXpath("//svg[contains(@class,'circle-preloader--plane')]")).shouldNotBe(visible);
+        $("#window_next_wait").shouldNotBe(visible);
     }
 
     public static int getLanguageNumber(String language) {
