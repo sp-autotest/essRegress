@@ -219,19 +219,8 @@ public class SearchPage extends Page {
         $(byXpath("//a[contains(@class,'modal__close')]")).shouldBe(visible);
         ElementsCollection dur = $$(byXpath("//div[@class='flight__date']"));
         for (int i=1; i<dur.size(); i=i+2) {
-            temp = dur.get(i).$(byXpath("descendant::span[2]")).getText();
-            if (temp.indexOf("：")>0) {
-                temp = temp.substring(temp.indexOf("：") + 2);
-            } else {
-                temp = temp.substring(temp.indexOf(":") + 2);
-            }
-            temp = temp.substring(0, temp.length() - 3);
-            for (int c = 0; c < temp.length(); c++) {
-                if (Character.isDigit(temp.charAt(c))) {
-                    duration = duration + temp.charAt(c);
-                }
-            }
-            duration = duration + " ";
+            temp = dur.get(i).$(byXpath("descendant::span[last()]")).getText();//вместо last() было 2
+            duration = duration + temp.replaceAll("\\D+","") + " ";
         }
     }
 
