@@ -51,10 +51,10 @@ public class SearchPage extends Page {
 
     @Step("Действие 2, выбор рейсов")
     public List<Flight> step2() {
-        selectRandomFlight("туда");
+        selectRandomFlight();
         clickBuyButton();
         if (null != initData.getDateBack()) {
-            selectRandomFlight("обратно");
+            selectRandomFlight();
             clickBuyButton();
         }
         saveFlightData();
@@ -134,18 +134,12 @@ public class SearchPage extends Page {
         $(byXpath("//a[contains(@class,'button--wide')]")).shouldBe(visible).click();
     }
 
-    @Step("Выбрать рейс {0}")
-    private void selectRandomFlight(String r) {
-        int i;
-        if (r.equals("туда")) {
-            i = 0;
-        } else {
-            i = 1;
-        }
+    @Step("Выбрать рейс")
+    private void selectRandomFlight() {
         $(byXpath("//div[contains(@class,'frame__heading')]")).shouldBe(visible);
         Sleep(2);
-        ElementsCollection headers = $$(byXpath("//div[@class='row flight-search__header']"));
-        ElementsCollection flights = headers.get(i).$$(byXpath("following-sibling::*"));
+        ElementsCollection headers = $$(byXpath("//div[@class='price-chart']/following-sibling::div"));
+        ElementsCollection flights = headers.get(0).$$(byXpath("descendant::div[@class='flight-search__inner']"));
         int limit = flights.size();
         if (limit>10) limit = 3;
         flights.get(getRandomNumberLimit(limit)).click();
