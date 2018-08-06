@@ -352,10 +352,11 @@ public class TransportPage extends Page {
 
     private String getEuroAllCarPrice(){
         String p;
-        if (Values.cur.equals("EUR")) {
-            p = $(byXpath("//div[@id='button_down_allprice']/itm")).getText().replaceAll("\\D+", "");
+        ElementsCollection carPrice = $$(byXpath("//div[@id='button_down_allprice']/span/itmsub"));
+        if (carPrice.size()>0) {
+            p = carPrice.get(0).getText().replaceAll("\\D+", "");
         } else {
-            p = $(byXpath("//div[@id='button_down_allprice']/span/itmsub")).getText().replaceAll("\\D+", "");
+            p = $(byXpath("//div[@id='button_down_allprice']/itm")).getText().replaceAll("\\D+", "");
         }
         System.out.println("Euro All car price ="+p);
         return p;
