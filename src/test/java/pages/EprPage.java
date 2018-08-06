@@ -10,6 +10,7 @@ import struct.Passenger;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -70,22 +71,27 @@ public class EprPage extends Page {
             checkMedicalInsurance(passList);
             checkAllInsurancePrice();
         }
-        /*
-        ВРЕМЕННО отключены проверки услуг на странице EPR в свзязи
-        с отсутствием необходимых данных на странице
+        if (test == 5) {
+            screenShot("Скриншот");
+            checkFlyInsurance(passList);
+            checkMedicalInsurance(passList);
+            checkAllInsurancePrice();
+        }
+/*
+        //ВРЕМЕННО отключены проверки услуг на странице EPR изза
+        //отсутствия необходимых данных на странице
         ///
-        if (test == 1) checkAccommodation();
+        if ((test == 1)|(test == 5)) checkAccommodation();
         if (getWebDriver().manage().window().getSize().getWidth() < 1280) {
             SelenideElement el = $(byXpath("//div[@data-toggle-target='toggle-TRANSPORT']")).shouldBe(visible);
             scrollWithOffset(el, 0, -100);
             el.click(); //раскрыть блок Транспорт
         }
-        if (test == 2) checkTransport();
-        if (test == 3) {
+        if ((test == 2)|(test == 5)) checkTransport();
+        if ((test == 3)|(test == 5)) {
             checkAeroexpress(flyList.get(0).from_orig);
             checkTransfer(flyList.get(0).start);
-        }
-        */
+        }*/
     }
 
     @Step("Проверка фамилии и имени {0}-го пассажира")
@@ -98,6 +104,7 @@ public class EprPage extends Page {
 
     @Step("Проверка данных о {0}-м маршруте")
     private void checkFlight(int i, Flight f, SelenideElement flight){
+        boolean overnight = false;
         String from = flight.$(byXpath("descendant::div[@class='flight__direction-airport-code ng-binding']")).getText();
         if (from.equals("SVO")|from.equals("VKO")) from = "MOW";
         System.out.print(from + " / ");
@@ -135,6 +142,8 @@ public class EprPage extends Page {
                    "\nОжидалось : " + f.start + "\nФактически: " + dStart, dStart.equals(f.start));
 
         String end = flight.$(byXpath("descendant::div[@class='flight__date ng-binding'][2]")).getText();
+
+        if (end.contains("+1")) overnight = true;
         end = end.substring(end.indexOf(",")+1);
         end = end.substring(0, end.indexOf(",")) + " " + new SimpleDateFormat("yyyy").format(f.end);
         Date dEnd = new Date();
@@ -144,8 +153,11 @@ public class EprPage extends Page {
         }catch (ParseException e) {
             System.out.println("Дата нераспаршена");
         }
+        Date expectedDate;
+        if (overnight) expectedDate = overNight(f.end);
+        else expectedDate = f.end;
         assertTrue("Время/дата прилета отличается от забронированного" +
-                   "\nОжидалось : " + f.end + "\nФактически: " + dEnd, dEnd.equals(f.end));
+                   "\nОжидалось : " + expectedDate + "\nФактически: " + dEnd, dEnd.equals(expectedDate));
     }
 
     @Step("Проверка полетной страховки")
@@ -361,6 +373,14 @@ public class EprPage extends Page {
         assertTrue("Количество оставшихся минут в таймере меньше лимита" +
                 "\nОжидалось : " + MINUTES_LIMIT +
                 "\nФактически: " + minutes, minutes >= MINUTES_LIMIT);
+    }
+
+    private Date overNight(Date d)
+    {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(d);
+        cal.add(Calendar.DAY_OF_MONTH, 1);
+        return cal.getTime();
     }
 
 }

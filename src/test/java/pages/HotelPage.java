@@ -25,8 +25,10 @@ import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
+import static config.Values.cityHotel;
 import static config.Values.ln;
 import static config.Values.text;
+import static java.lang.String.format;
 import static org.testng.AssertJUnit.assertTrue;
 import static org.testng.AssertJUnit.assertFalse;
 
@@ -43,7 +45,8 @@ public class HotelPage extends Page {
 
     @Step("Форма дополнительных услуг «Проживание» открылась")
     private void checkHotelFormAppear() {
-        $(byXpath("//h1[contains(text(),'" + text[17][ln] + "')]")).shouldBe(visible);
+        String header = format(text[17][ln], cityHotel.getCity(initData.getCityTo()).split(",")[ln]);
+        $(byXpath("//h1[contains(text(),'" + header + "')]")).shouldBe(visible);
         System.out.println("Accommodation form appeared");
     }
 
@@ -144,16 +147,16 @@ public class HotelPage extends Page {
         System.out.print("\t21. Select hotel: ");
         if (n==0) clickSortByStarsButton();//отсортировать по убыванию звездности
         ElementsCollection hotels = null;
-        String name;
+        String name = null;
         for (int i=0; i<20; i++) {
             Sleep(1);
             hotels = $$(byXpath("//*[@id='hotel-search-result']/div/div/a"));
-            name = hotels.get(i).getText();
+            name = hotels.get(n).getText();
             if (name.length()>0) break;
         }
         System.out.print(n + " ");
         assertTrue("Неудалось найти отель с подходящими штрафами", n < hotels.size());
-        name = hotels.get(n).getText();
+        //name = hotels.get(n).getText();
         System.out.println(name);//вывести в лог имя отеля
         hotels.get(n).click();
         waitPlane();
@@ -292,7 +295,7 @@ public class HotelPage extends Page {
     private void clickHotelSearchButton() {
         $(byXpath("//a[@data-check-id='button-hotel']")).click();
         waitPlane();
-        $(byXpath("//h1[contains(text(),'" + text[17][ln] + "')]")).shouldBe(visible);
+        checkHotelFormAppear();
     }
 
     @Step("Проверить Имя/Фамилию пассажира")
@@ -432,14 +435,15 @@ public class HotelPage extends Page {
     private void clickSortByPriceButton(){
         $(byXpath("//button[@data-order-by='Price']")).click();
         waitPlane();
-        $(byXpath("//h1[contains(text(),'" + text[17][ln] + "')]")).shouldBe(visible);
+        checkHotelFormAppear();
     }
 
     @Step("Нажать кнопку сортировки по звездности")
     private void clickSortByStarsButton(){
         $(byXpath("//button[@data-order-by='Category']")).click();
         waitPlane();
-        $(byXpath("//h1[contains(text(),'" + text[17][ln] + "')]")).shouldBe(visible);
+        String header = format(text[17][ln], cityHotel.getCity(initData.getCityTo()).split(",")[ln]);
+        $(byXpath("//h1[contains(text(),'" + header + "')]")).shouldBe(visible);
     }
 
     @Step("Проверить сортировку по убыванию звездности")

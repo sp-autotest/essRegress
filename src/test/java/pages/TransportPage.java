@@ -42,7 +42,7 @@ public class TransportPage extends Page {
             screenShot("Скриншот");
             checkSelectedCars();
         }
-        if (test == 3) {
+        if ((test == 3)|(test == 5)) {
             screenShot("Скриншот");
             checkAeroexpressForm();
             checkCarRentalForm();
@@ -73,6 +73,23 @@ public class TransportPage extends Page {
         checkOptionsButton();
         checkTimeButton();
         checkInsuranceButton();
+        checkTotalPrices();
+        saveTransportData();
+    }
+
+    @Step("Действие 11, Арендовать автомобиль")
+    public void step11_5() {
+        System.out.println("\t11. Rent Auto");
+        selectCar();
+        screenShot("Скриншот");
+        price.nationalTransport = getAllCarPrice();
+        price.transport = getEuroAllCarPrice();
+        clickRentButton();
+        screenShot("Скриншот");
+        checkTranspotrPriceInCard();
+        checkRentButtonName();
+        checkOptionsButton();
+        checkTimeButton();
         checkTotalPrices();
         saveTransportData();
     }
@@ -514,17 +531,18 @@ public class TransportPage extends Page {
             transport.click();//раскрыть блок Транспорт
             Sleep(1);
         }
-        String leftPrice = transport.$(byXpath("descendant::div[@class='cart__item-priceondemand-item-price']")).getText().replaceAll("\\D+","");
+        String service = "";
+        if (ln == 0) service = "Аэроэкспресс (2)";
+        else service = "Aeroexpress (2)";
+        SelenideElement aero = transport.$(byXpath("descendant::div[contains(text(),'"+ service +"')]")).shouldBe(visible);
+        //String leftPrice = transport.$(byXpath("descendant::div[@class='cart__item-priceondemand-item-price']")).getText().replaceAll("\\D+","");
+        String leftPrice = aero.$(byXpath("following-sibling::div[@class='cart__item-priceondemand-item-price']")).getText().replaceAll("\\D+","");
         System.out.println("Aeroexpress price = " + leftPrice);
         assertTrue("Сумма Аэроэкспресс в корзине не совпадает с рассчитанной" +
                    "\nОжидалось : " + price +
                    "\nФактически: " + leftPrice,
                    price.equals(leftPrice));
         Values.price.aeroexpress = price;
-        String service = "";
-        if (ln == 0) service = "Аэроэкспресс (2)";
-        else service = "Aeroexpress (2)";
-        transport.$(byXpath("descendant::div[contains(text(),'"+ service +"')]")).shouldBe(visible);
     }
 
     @Step("Проверить наличие формы дополнительной информации о трансфере")

@@ -80,9 +80,18 @@ public class EssPage extends Page {
         checkPriceOfFlyInsurance();
     }
 
+    @Step("Действие 8, Проверка отсутствия/добавления полетной страховки")
+    public void step8_5() {
+        System.out.println("\t8. Check missing of Fly Insurance");
+        checkMissFlyInsuranceInCard();
+        clickAddFlyInsuranceButton();
+        checkFlyInsuranceInCard();
+    }
+
     @Step("Действие 9, Проверка добавления Медицинской страховки {0}")
     public void step9(String type) {
         System.out.println("\t9. Add Medical Insurance");
+        if (type.equals("RANDOM")) type = getRandomMedicalInsurance();
         clickAddMedicalButton(type);
         screenShot("Скриншот");
         checkPriceOfMedicalInsurance(type);
@@ -190,14 +199,19 @@ public class EssPage extends Page {
     @Step("Проверка данных о {0}-м маршруте")
     private void checkFlightData(int i, List<Flight> flightList, ElementsCollection flights){
         String flight = flights.get(i-1).$(byXpath("descendant::div[@class='cart__item-details-item']")).getText().trim();
-        assertTrue("Маршрут не совпадает с забронированным", flight.equals(flightList.get(i-1).from+" → "+flightList.get(i-1).to));
+        String expected = flightList.get(i-1).from+" → "+flightList.get(i-1).to;
+        assertTrue("Маршрут не совпадает с забронированным" +
+                   "\nОжидалось : " + expected +
+                   "\nФактически: " + flight,
+                   flight.equals(expected));
     }
 
     @Step("Проверка данных о номере {0}-го рейса")
     private void checkNumberData(int i, List<Flight> flightList, ElementsCollection flights){
         String number = flights.get(i-1).$(byXpath("descendant::div[@class='cart__item-details-model']")).getText().trim();
         assertTrue("Номер рейса не совпадает с забронированным" +
-                   "\nОжидалось : " + flightList.get(i-1).number + "\nФактически: " + number,
+                   "\nОжидалось : " + flightList.get(i-1).number +
+                   "\nФактически: " + number,
                    number.equals(flightList.get(i-1).number));
     }
 
@@ -213,7 +227,7 @@ public class EssPage extends Page {
         dd = dd + new SimpleDateFormat("HH:mm").format(flightList.get(i-1).end);
         System.out.println("Locale = " + dd);
         assertTrue("Дата авиаперелета не совпадает с забронированной"+
-                   "\nОжидалось : " + dd + "\nФактически: " + date, date.equals(dd));
+                   "\nОжидалось : " + dd + "\nФактически: " + date, date.contains(dd));
     }
 
     @Step("Проверка данных о длительности {0}-го авиаперелета")
@@ -228,7 +242,8 @@ public class EssPage extends Page {
         }
         System.out.println("duration = " + duration);
         assertTrue("Длительность авиаперелета не совпадает с забронированной" +
-                   "\nОжидалось : " + flightList.get(i-1).duration + "\nФактически: " + duration,
+                   "\nОжидалось : " + flightList.get(i-1).duration +
+                   "\nФактически: " + duration,
                    duration.equals(flightList.get(i-1).duration));
     }
 
@@ -241,7 +256,13 @@ public class EssPage extends Page {
     @Step("Полетная страховка отсутствует в корзине")
     private void checkMissFlyInsuranceInCard(){
         $("#left-column-insurance-block").$(byXpath("descendant::div[text()='" + text[0][ln] + "']"))
-                .shouldNotBe(exist).shouldNotBe(visible);
+                .shouldNotBe(exist);
+    }
+
+    @Step("Нажать кнопку «Добавить в заказ» для полетной страховки")
+    private void clickAddFlyInsuranceButton(){
+        SelenideElement ins = $("#flight_insurance_select_button");
+        ins.scrollTo().click();
     }
 
     @Step("Проверка общей суммы полетной страховки")
@@ -365,6 +386,16 @@ public class EssPage extends Page {
             $(byXpath("//input[@id='select-country-ru']/..")).shouldBe(visible).click();
             $(byXpath("//button[contains(@class,'submitSelectedCountry')]")).shouldBe(visible).click();
             Sleep(2);
+        }
+    }
+
+    private String getRandomMedicalInsurance() {
+        int n = getRandomNumberLimit(3);
+        switch (n) {
+            case 0 : return "COMMON_SPORT";
+            case 1 : return "TEAM_SPORTS";
+            case 2 : return "DANGEROUS_SPORT";
+            default : return "COMMON_SPORT";
         }
     }
 

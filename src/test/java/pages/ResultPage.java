@@ -38,10 +38,13 @@ public class ResultPage extends Page {
             checkMedicalInsurance(services.get(1));
             //services.get(2).scrollTo();
             n = n + "04";
-        } else assertTrue("Обнаружены дополнительные услуги", services.size() == 0);
+        }
         if (test == 1) checkHotel(services.get(2));
         if (test == 2) checkTransport(services.get(2));
-        if (test == 4) n = n + "01";
+        if (test == 4) {
+            n = n + "01";
+            assertTrue("Обнаружены дополнительные услуги", services.size() == 0);
+        }
         checkTotalPrice(n);
     }
 
@@ -54,6 +57,18 @@ public class ResultPage extends Page {
         checkFlyInsurance(services.get(0));
         checkAeroexpress(services.get(1), flight.from_orig);
         checkTransfer(services.get(2), flight.start);
+    }
+
+    @Step("Действие 29, проверка страницы результатов оплаты")
+    public void checkServicesData5(Flight flight) {
+        System.out.println("\t29. Cheking final page with pay result");
+        checkPageAppear();
+        ElementsCollection services = $$(byXpath("//div[@id='frame-additionalServices']/descendant::div[@role='row']"));
+        checkMedicalInsurance(services.get(0).scrollTo());
+        checkAeroexpress(services.get(1), flight.from_orig);
+        checkTransport(services.get(2).scrollTo());
+        checkTransfer(services.get(3), flight.start);
+        checkHotel(services.get(4).scrollTo());
     }
 
     private void checkPageAppear(){
@@ -104,7 +119,10 @@ public class ResultPage extends Page {
         if (Values.cur.equals("RUB")) price = price.substring(0, price.length()-2);
         if (Values.cur.equals("CNY")) price = price.substring(0, price.length()-2);
         System.out.println("med insurance = " + price);
-        assertTrue("Стоимость медицинской страховки отличается от забронированной", Values.price.imedical.equals(price));
+        assertTrue("Стоимость медицинской страховки отличается от забронированной" +
+                    "\nОжидалось : " + Values.price.imedical +
+                    "\nФактически: " + price,
+                    Values.price.imedical.equals(price));
 
         System.out.println("docs = " + docs.size());
         assertTrue("Количество приложенных документов не соответствует количеству пассажиров", docs.size() == ticket*2);
