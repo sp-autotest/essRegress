@@ -34,7 +34,7 @@ public class Passenger {
                 this.dob = addMonthsFromToday((-1)*getRandomFromInterval(415, 438));
                 break;
             case "CHD":
-                this.dob = addMonthsFromToday((-1)*getRandomFromInterval(30, 100));
+                this.dob = addMonthsFromToday((-1)*getRandomFromInterval(85, 100)); //от 7 лет
                 break;
             case "INF":
                 this.dob = addMonthsFromToday((-1)*getRandomFromInterval(1, 10));

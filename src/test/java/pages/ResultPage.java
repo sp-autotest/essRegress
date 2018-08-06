@@ -64,11 +64,12 @@ public class ResultPage extends Page {
         System.out.println("\t29. Cheking final page with pay result");
         checkPageAppear();
         ElementsCollection services = $$(byXpath("//div[@id='frame-additionalServices']/descendant::div[@role='row']"));
-        checkMedicalInsurance(services.get(0).scrollTo());
-        checkAeroexpress(services.get(1), flight.from_orig);
-        checkTransport(services.get(2).scrollTo());
-        checkTransfer(services.get(3), flight.start);
-        checkHotel(services.get(4).scrollTo());
+        checkFlyInsurance(services.get(0).scrollTo());
+        checkMedicalInsurance(services.get(1).scrollTo());
+        checkAeroexpress(services.get(2), flight.from_orig);
+        checkTransport(services.get(3).scrollTo());
+        checkTransfer(services.get(4), flight.start);
+        checkHotel(services.get(5).scrollTo());
     }
 
     private void checkPageAppear(){

@@ -86,6 +86,7 @@ public class EssPage extends Page {
         checkMissFlyInsuranceInCard();
         clickAddFlyInsuranceButton();
         checkFlyInsuranceInCard();
+        checkPriceOfFlyInsurance();
     }
 
     @Step("Действие 9, Проверка добавления Медицинской страховки {0}")
