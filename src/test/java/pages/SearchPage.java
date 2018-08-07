@@ -215,6 +215,7 @@ public class SearchPage extends Page {
         for (int i=1; i<dur.size(); i=i+2) {
             temp = dur.get(i).$(byXpath("descendant::span[last()]")).getText();//вместо last() было 2
             long occurrencesCount = temp.chars().filter(ch -> ch == ':').count();//велосипед:
+            if (temp.contains("：")) occurrencesCount++;                         //в японском и китайском двоеточия разные
             if (occurrencesCount>2) temp = temp.substring(0,temp.length()-3);    //отбрасываем секунды, если они есть
             duration = duration + temp.replaceAll("\\D+","") + " ";
         }
