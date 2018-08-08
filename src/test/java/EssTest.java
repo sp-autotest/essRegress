@@ -23,9 +23,7 @@ import java.util.Date;
 import java.util.List;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.Selenide.open;
-import static pages.Page.addMonthAndDays;
-import static pages.Page.getLanguageNumber;
-import static pages.Page.stringIntoInt;
+import static pages.Page.*;
 
 @Listeners({AllureOnEventListener.class})  //"слушатель" для Allure-отчета
 
@@ -172,7 +170,7 @@ public class EssTest {
         PaymentPage paymentPg = new PaymentPage();
         paymentPg.checkPaymentForm1("27");//шаг 27
         paymentPg.setCardDetails("28");//шаг 28
-        new ResultPage().checkServicesData("29", test);//шаг 29
+        new ResultPage(passList).checkServicesData("29", test);//шаг 29
     }
 
     @Description("Карта VISA;\nHаправление перелета: туда-обратно;\n" +
@@ -223,7 +221,7 @@ public class EssTest {
         PaymentPage paymentPg = new PaymentPage();
         paymentPg.checkPaymentForm2();//шаг 15
         paymentPg.setCardDetails("16");//шаг 16
-        new ResultPage().checkServicesData("17", test);//шаг 17
+        new ResultPage(passList).checkServicesData("17", test);//шаг 17
     }
 
     @Description("Карта VISA;\nHаправление перелета: туда-обратно;\n" +
@@ -281,7 +279,7 @@ public class EssTest {
         eprPg.clickPayButton();//шаг 21
         PaymentPage paymentPg = new PaymentPage();
         paymentPg.setCardDetails("22");//шаг 22
-        new ResultPage().checkServicesData3(flightList.get(0));//шаг 23
+        new ResultPage(passList).checkServicesData3(flightList.get(0));//шаг 23
     }
 
     @Description("Карта VISA;\nНаправление перелета: туда-обратно;\n" +
@@ -329,7 +327,7 @@ public class EssTest {
         PaymentPage paymentPg = new PaymentPage();
         paymentPg.checkPaymentForm1("13");//шаг 13
         paymentPg.setCardDetails("14");//шаг 14
-        new ResultPage().checkServicesData("15", test);//шаг 15
+        new ResultPage(passList).checkServicesData("15", test);//шаг 15
         OfficePage officePg = new OfficePage();
         officePg.authorization();//шаг 17
         officePg.searchOrder(Values.pnr);//шаг 18
@@ -406,7 +404,76 @@ public class EssTest {
         PaymentPage paymentPg = new PaymentPage();
         paymentPg.checkPaymentForm1("27");//шаг 27
         paymentPg.setCardDetails("28");//шаг 28
-        new ResultPage().checkServicesData5(flightList.get(0));//шаг 29
+        new ResultPage(passList).checkServicesData5(flightList.get(0));//шаг 29
+    }
+
+    @Description("Карта VISA;\nНаправление перелета: в одну сторону;\n" +
+            "Состав бронирования авиаперелета, билеты: 1 взрослый, 4 ребенка, 1 младенец;" +
+            "Дополнительные услуги: «Мед.страховка», «Авто», «Аэроэкспресс», «Трансфер», «Отель»")
+    @Test(priority = 6, description = "Раздел 6", groups = {"part6"}, dataProvider= "data")
+    public void section6(String browser, String resolution, String language, String currency) {
+        int test = 5;
+        Values.ln = getLanguageNumber(language);
+        Values.cur = currency;
+
+        System.out.println("==========================================================" +
+                "\n*** AUTOTEST *** : section 6.2, " + browser + ", " + resolution + ", " +
+                Values.lang[Values.ln][2].toUpperCase() + ", " + Values.cur +
+                "\n==========================================================");
+
+        InitialData initData = new InitialData(
+                "MOW",//город "откуда"
+                "LAX",//город "куда"
+                null,//город "пересадка" для сложных маршрутов
+                addMonthAndDays(new Date(),0,15),//дата "туда": плюс 1 месяц от текущей
+                null,//дата "назад"
+                1,//взрослых
+                4,//детей
+                1//младенцев
+        );
+        open(Values.host + Values.lang[Values.ln][2]);
+        SearchPage searchPg = new SearchPage(initData);
+        searchPg.step1();
+        List<Flight> flightList = searchPg.step2();
+        List<Passenger> passList = createPassengers(initData);
+        new PassengerPage().step3(passList);
+        new PlacePage().clickPay();
+        ChoosePage choosePg = new ChoosePage();
+        choosePg.step4();
+        EssPage essPg = new EssPage();
+        essPg.step6();
+        boolean timer = essPg.checkTimer();
+        essPg.step7(flightList);
+        essPg.step8_5();
+        essPg.step9("RANDOM");
+        TransportPage transportPg = new TransportPage();
+        transportPg.step10(test);//шаг 10
+        transportPg.step11_5();//шаг 11
+        transportPg.addAeroexpressTickets();//шаг 13
+        String dir = transportPg.setTransferLocations();//шаг 14
+        transportPg.clickSelectStandartButton();//шаг 15
+        transportPg.setTransferAdditionalInfo(flightList.get(0).start, dir);//шаг 16
+        transportPg.selectTransfer(flightList.get(0).start, dir);//шаг 17
+        HotelPage hotelPg = new HotelPage(initData);
+        hotelPg.clickResidenceButton("15");//шаг 15
+        hotelPg.checkHotelFilter();//шаг 16
+        hotelPg.checkHotelLogic(flightList, passList);//шаг 17
+        //искать нештрафную комнату
+        int room = -1;
+        for (int i=0; i<=9; i++) {
+            hotelPg.selectHotel(i);//шаг 21
+            room = hotelPg.selectRoomType();//шаг 22
+            if (room>=0) break;
+        }
+        //------------------------
+        hotelPg.clickBookButton(room);//шаг 23
+        hotelPg.clickPayInCart();//шаг 24
+        choosePg.chooseTestStend("25");//шаг 25
+        new EprPage().checkDataOnPayPage("26", flightList, passList, test, timer);//шаг 26
+        PaymentPage paymentPg = new PaymentPage();
+        paymentPg.checkPaymentForm1("27");//шаг 27
+        paymentPg.setCardDetails("28");//шаг 28
+        new ResultPage(passList).checkServicesData5(flightList.get(0));//шаг 29
     }
 
     private List<Passenger> createPassengers(InitialData initData) {

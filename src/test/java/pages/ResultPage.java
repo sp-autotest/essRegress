@@ -5,11 +5,13 @@ import com.codeborne.selenide.SelenideElement;
 import config.Values;
 import io.qameta.allure.Step;
 import struct.Flight;
+import struct.Passenger;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import static com.codeborne.selenide.Condition.text;
@@ -25,6 +27,12 @@ import static org.testng.AssertJUnit.assertTrue;
  * Created by mycola on 06.03.2018.
  */
 public class ResultPage extends Page {
+
+    private List<Passenger> passengers;
+
+    public ResultPage(List<Passenger> passengers) {
+        this.passengers = passengers;
+    }
 
     @Step("Действие {0}, проверка страницы результатов оплаты")
     public void checkServicesData(String n, int test) {
@@ -230,11 +238,13 @@ public class ResultPage extends Page {
         if (direction.equals("VKO")) assertTrue("Направление в Аэроэкспресс некорректно" +
                 "\nОжидалось : " + text[20][ln] + " -> " + text[21][ln] +
                 "\nФактически: " + name, name.equals(text[20][ln] + " -> " + text[21][ln]));
-
+        Integer iCount = 0;
+        for (Passenger p : passengers) if (!p.getType().equals("INF")) iCount++;
         String count = row.$(byXpath("div[2]")).getText().replaceAll("\\D+", "");
         System.out.println("passengers = " + count);
         assertTrue("Количество билетов на Аэроэкспресс не корректно" +
-                "\nОжидалось : 2\nФактически: " + count, count.equals("2"));
+                "\nОжидалось : " + iCount +
+                "\nФактически: " + count, count.equals(iCount.toString()));
 
         String price = row.$(byXpath("div[3]/div")).getText().replaceAll("\\D+", "");
         if (Values.cur.equals("RUB")) price = price.substring(0, price.length()-2);
@@ -246,7 +256,8 @@ public class ResultPage extends Page {
 
         System.out.println("docs = " + docs.size());//должно быть 4 документа: по два на каждого пассажира
         assertTrue("Количество приложенных документов некорректно" +
-                "\nОжидалось : 4\nФактически: " + docs.size(), docs.size() == 4);
+                "\nОжидалось : " + iCount*2 +
+                "\nФактически: " + docs.size(), docs.size() == iCount*2);
         for (int i=0; i<docs.size(); i=i+2) {
             assertTrue("Название квитанции некорректно\nОжидалось :" + text[13][ln] +
                     "\nФактически:" + docs.get(i).getText(), docs.get(i).getText().equals(text[13][ln]));

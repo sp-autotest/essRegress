@@ -48,7 +48,7 @@ public class PassengerPage extends Page {
         setDOB(card, p.getDob());
         setNumber(card, p.getNumber());
         setNationality(card, p.getNationality());
-        setСountry(card, p.getCoutry());
+        setСountry(card, p.getCountry());
         clickUnlimitedLink(card);
     }
 

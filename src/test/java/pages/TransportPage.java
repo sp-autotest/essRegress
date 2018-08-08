@@ -161,7 +161,8 @@ public class TransportPage extends Page {
     @Step("Действие 13, Добавить в заказ билеты на Аэроэкспресс")
     public void addAeroexpressTickets() {
         System.out.println("\t13. Add Aeroexpress tickets");
-        jsClick($(byXpath("//div[contains(@class,'dropdown--show')]/descendant::input")));
+        ElementsCollection cbPassengers = $$(byXpath("//div[contains(@class,'dropdown--show')]/descendant::input"));
+        if (cbPassengers.size()>0) jsClick(cbPassengers.get(0));
         clickAddInOrderButton();
         checkAeroexpressInCart();
     }
@@ -533,8 +534,8 @@ public class TransportPage extends Page {
             Sleep(1);
         }
         String service = "";
-        if (ln == 0) service = "Аэроэкспресс (2)";
-        else service = "Aeroexpress (2)";
+        if (ln == 0) service = "Аэроэкспресс (";
+        else service = "Aeroexpress (";
         SelenideElement aero = transport.$(byXpath("descendant::div[contains(text(),'"+ service +"')]")).shouldBe(visible);
         //String leftPrice = transport.$(byXpath("descendant::div[@class='cart__item-priceondemand-item-price']")).getText().replaceAll("\\D+","");
         String leftPrice = aero.$(byXpath("following-sibling::div[@class='cart__item-priceondemand-item-price']")).getText().replaceAll("\\D+","");

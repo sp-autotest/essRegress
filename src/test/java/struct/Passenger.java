@@ -17,6 +17,7 @@ public class Passenger {
     private int gender; //пол
     private String firstname; //имя
     private String lastname; //фамилия
+    private String type; //взрослый/ребенок/младенец
     private String dob; //день рождения
     private String number; //номер документа
     private String nationality; //национальность
@@ -26,6 +27,7 @@ public class Passenger {
         this.gender = getRandomNumberLimit(2);
         this.firstname = getRandomString(4);
         this.lastname = getRandomString(8);
+        this.type = type;
         this.number = getRandomNumberString(8);
         this.nationality = lang[ln][4];//пока что для всех - Россия
         this.country = lang[ln][4];//пока что для всех - Россия
@@ -50,6 +52,9 @@ public class Passenger {
     public String getLastname() {
         return lastname;
     }
+    public String getType() {
+        return type;
+    }
     public String getDob() {
         return dob;
     }
@@ -59,7 +64,7 @@ public class Passenger {
     public String getNationality() {
         return nationality;
     }
-    public String getCoutry() {
+    public String getCountry() {
         return country;
     }
 
@@ -82,6 +87,7 @@ public class Passenger {
                 "gender=" + gender +
                 ", firstname='" + firstname + '\'' +
                 ", lastname='" + lastname + '\'' +
+                ", type='" + type + '\'' +
                 ", dob='" + dob + '\'' +
                 ", number='" + number + '\'' +
                 ", nationality='" + nationality + '\'' +
