@@ -77,10 +77,7 @@ public class EprPage extends Page {
             checkMedicalInsurance(passList);
             checkAllInsurancePrice();
         }
-/*
-        //ВРЕМЕННО отключены проверки услуг на странице EPR изза
-        //отсутствия необходимых данных на странице
-        ///
+
         if ((test == 1)|(test == 5)) checkAccommodation();
         if (getWebDriver().manage().window().getSize().getWidth() < 1280) {
             SelenideElement el = $(byXpath("//div[@data-toggle-target='toggle-TRANSPORT']")).shouldBe(visible);
@@ -91,7 +88,7 @@ public class EprPage extends Page {
         if ((test == 3)|(test == 5)) {
             checkAeroexpress(flyList.get(0).from_orig);
             checkTransfer(flyList.get(0).start);
-        }*/
+        }
     }
 
     @Step("Проверка фамилии и имени {0}-го пассажира")
