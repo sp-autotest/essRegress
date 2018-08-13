@@ -3,11 +3,14 @@ package pages;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import config.Values;
+import dict.NationalityName;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 //import ru.yandex.qatools.allure.annotations.Step;
 import io.qameta.allure.Step;
 import struct.Flight;
+import struct.Passenger;
+
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
@@ -87,6 +90,36 @@ public class EssPage extends Page {
         clickAddFlyInsuranceButton();
         checkFlyInsuranceInCard();
         checkPriceOfFlyInsurance();
+    }
+
+    @Step("Действие 8, Проверка данных в блоке «Страховка»")
+    public void step8_7(List<Passenger> passengerList) {
+        System.out.println("\t8. Check Insurance group");
+        int n = 0;
+        for (Passenger p : passengerList) {
+            if (!p.getNationality().equals(NationalityName.getNationalityByLanguage("us", ln))) n++;
+        }
+        screenShot("Скриншот");
+        if (n>0) {
+            String summ = $("#left-column-insurance-block").$(byXpath("descendant::" +
+                    "div[@class='cart__item-priceondemand-item-price']")).getText().trim();
+            Values.price.iflight = summ.replaceAll("\\D+", "");
+            int s = stringIntoInt(Values.price.iflight);
+            System.out.println("Summ = " + s);
+            String price = $(byXpath("//div[@class='frame__heading frame__heading--icon frame__heading--icon-safe']/span")).getText();
+            price = price.substring(0, price.indexOf("(")).replaceAll("\\D+", "");
+            if (Values.cur.equals("EUR") | Values.cur.equals("USD")) {
+                if (price.length() == 1) price = price + "00";
+                if (price.length() == 2) price = price + "0";
+            }
+            int p = stringIntoInt(price);
+            System.out.println("price = " + p);
+            System.out.println("no USA passengers = " + n);
+            System.out.println("price * n = " + p * n);
+            assertTrue("Общая сумма страховки не равняется сумме страховок каждого пассажира" +
+                    "\nОжидалось : " + p * n +
+                    "\nФактически: " + Values.price.iflight , s == p * n);
+        } else checkMissFlyInsuranceInCard();
     }
 
     @Step("Действие 9, Проверка добавления Медицинской страховки {0}")

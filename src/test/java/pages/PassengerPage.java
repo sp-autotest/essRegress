@@ -81,7 +81,7 @@ public class PassengerPage extends Page {
     @Step("Указать гражданство: {1}")
     private void setNationality(SelenideElement card, String natio){
         SelenideElement el = card.$$(byXpath("descendant::input[@role='listbox']")).get(0);
-        while(!el.getValue().equals(natio)) el.setValue(natio);
+       while(!el.getValue().equals(natio)) el.setValue(natio);
     }
 
     @Step("Указать страну выдачи: {1}")

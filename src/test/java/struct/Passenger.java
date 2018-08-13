@@ -29,8 +29,8 @@ public class Passenger {
         this.lastname = getRandomString(8);
         this.type = type;
         this.number = getRandomNumberString(8);
-        this.nationality = lang[ln][4];//пока что для всех - Россия
-        this.country = lang[ln][4];//пока что для всех - Россия
+        this.nationality = lang[ln][4];//изначально - Россия
+        this.country = lang[ln][4];//изначально - Россия
         switch (type) {
             case "ADT":
                 this.dob = addMonthsFromToday((-1)*getRandomFromInterval(415, 438));
@@ -66,6 +66,9 @@ public class Passenger {
     }
     public String getCountry() {
         return country;
+    }
+    public void setNationality(String nationality) {
+        this.nationality = nationality;
     }
 
     private static String addMonthsFromToday(int months)
