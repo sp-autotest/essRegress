@@ -31,13 +31,23 @@ public class SoapRequest {
             e.printStackTrace();
         }
     }
+    public void addAdditionalAviaServices() {
+        System.out.println("SOAP start...");
+        try {
+            callSoapWebService(7);
+            callSoapWebService(8);
 
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @Step("SOAP запрос: {0}")
     private static void callSoapWebService(int n) throws Exception {
         String host = RequestsData.request[n][2];
         String request = RequestsData.request[n][3];
-        if (n > 1) {
+        if ((n != 1) & (n != 7)) {
             int t = request.indexOf("BinarySecurityToken><")+20;
             String r1 = request.substring(0, t);
             String r2 = request.substring(t);
@@ -50,6 +60,11 @@ public class SoapRequest {
             request = request.replaceFirst("HostCommand>", "HostCommand>" + command(Values.cur));
             //System.out.println(request);
         }
+        if (n == 8) {
+            request = request.replaceFirst("AAAAAA", config.Values.pnr);
+            System.out.println(request);
+        }
+
 
 
         URL url = null;
@@ -107,11 +122,11 @@ public class SoapRequest {
         System.out.println(": " + respond);
 
 
-        if (n == 1) {
+        if ((n == 1)|(n == 7)) {
             Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().
                     parse(new ByteArrayInputStream(respond.getBytes()));
             token = document.getElementsByTagName("wsse:BinarySecurityToken").item(0).getTextContent();
-            //System.out.println("BinarySecurityToken = " + token);
+            System.out.println("BinarySecurityToken = " + token);
         }
     }
 

@@ -269,7 +269,86 @@ public class RequestsData {
             "         <ns:EndTransaction Ind=\"true\"/>\n" +
             "      </ns:EndTransactionRQ>\n" +
             "   </soapenv:Body>\n" +
-            "</soapenv:Envelope>"}
+            "</soapenv:Envelope>"},
+
+    /* 7 */ {"SessionCreateRQ",
+            "\"OTA\"",
+            "https://sws-crt.cert.sabre.com",
+            "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:sec=\"http://schemas.xmlsoap.org/ws/2002/12/secext\" xmlns:mes=\"http://www.ebxml.org/namespaces/messageHeader\" xmlns:ns=\"http://www.opentravel.org/OTA/2002/11\">" +
+                "<soapenv:Header>" +
+                    "<sec:Security>" +
+                        "<sec:UsernameToken>" +
+                            "<sec:Username>970007</sec:Username>" +
+                            "<sec:Password>id85u314</sec:Password>" +
+                            "<Organization>SU</Organization>" +
+                            "<Domain>SU</Domain>" +
+                        "</sec:UsernameToken>" +
+                    "</sec:Security>" +
+                    "<mes:MessageHeader>" +
+                        "<mes:From>" +
+                            "<mes:PartyId>SoapUI</mes:PartyId>" +
+                        "</mes:From>" +
+                        "<mes:To>" +
+                            "<mes:PartyId>Sabre</mes:PartyId>" +
+                        "</mes:To>" +
+                        "<mes:CPAId>SU</mes:CPAId>" +
+                        "<mes:ConversationId>EMD tests</mes:ConversationId>" +
+                        "<mes:Service mes:type=\"OTA\">SessionCreateRQ</mes:Service>" +
+                        "<mes:Action>SessionCreateRQ</mes:Action>" +
+                        "<mes:MessageData>" +
+                            "<mes:MessageId>1000</mes:MessageId>" +
+                            "<mes:Timestamp>2015-04-05T12:12:12</mes:Timestamp>" +
+                        "</mes:MessageData>" +
+                    "</mes:MessageHeader>" +
+                "</soapenv:Header>" +
+                "<soapenv:Body>" +
+                    "<ns:SessionCreateRQ returnContextID=\"true\">" +
+                        "<ns:POS>" +
+                            "<ns:Source PseudoCityCode=\"SU\"/>" +
+                        "</ns:POS>" +
+                    "</ns:SessionCreateRQ>" +
+                "</soapenv:Body>" +
+            "</soapenv:Envelope>"
+            },
+
+    /* 8 */ {"TravelItineraryReadRQ",
+            "\"TravelItineraryReadRQ\"",
+            "https://sws-crt.cert.sabre.com",
+            "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:sec=\"http://schemas.xmlsoap.org/ws/2002/12/secext\" xmlns:mes=\"http://www.ebxml.org/namespaces/messageHeader\" xmlns:ns=\"http://webservices.sabre.com/sabreXML/2011/10\">\n" +
+            "   <soapenv:Header>\n" +
+            "      <sec:Security>\n" +
+            "         <sec:BinarySecurityToken></sec:BinarySecurityToken>\n" +
+            "      </sec:Security>\n" +
+            "      <mes:MessageHeader>\n" +
+            "         <mes:From>\n" +
+            "            <mes:PartyId mes:type=\"urn:x12.org:IO5:01\">99999</mes:PartyId>\n" +
+            "         </mes:From>\n" +
+            "         <mes:To>\n" +
+            "            <mes:PartyId mes:type=\"urn:x12.org:IO5:01\">123123</mes:PartyId>\n" +
+            "            </mes:To>\n" +
+            "         <mes:CPAId>ipcc</mes:CPAId>\n" +
+            "         <mes:ConversationId>conversation_ID</mes:ConversationId>\n" +
+            "         <mes:Service>TravelItineraryReadRQ</mes:Service>\n" +
+            "         <mes:Action>TravelItineraryReadRQ</mes:Action>\n" +
+            "         <mes:MessageData>\n" +
+            "            <mes:MessageId>mid:20001209-133003-2333@clientofsabre.com1</mes:MessageId>\n" +
+            "            <mes:Timestamp>2015-09-28T12:12:17</mes:Timestamp>\n" +
+            "         </mes:MessageData>\n" +
+            "      </mes:MessageHeader>\n" +
+            "   </soapenv:Header>\n" +
+            "   <soapenv:Body>\n" +
+            "      <ns:TravelItineraryReadRQ Version=\"3.5.0\">\n" +
+            "         <ns:MessagingDetails>\n" +
+            "            <ns:SubjectAreas>\n" +
+            "               <ns:SubjectArea>FULL</ns:SubjectArea>\n" +
+            "               <ns:SubjectArea>POPULATE_IS_PAST</ns:SubjectArea>\n" +
+            "            </ns:SubjectAreas>\n" +
+            "         </ns:MessagingDetails>\n" +
+            "         <ns:UniqueID ID=\"AAAAAA\"/>\n" +
+            "      </ns:TravelItineraryReadRQ>\n" +
+            "   </soapenv:Body>\n" +
+            "</soapenv:Envelope>"
+            }
 
     };
 }

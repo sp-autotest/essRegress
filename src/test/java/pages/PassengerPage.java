@@ -61,11 +61,13 @@ public class PassengerPage extends Page {
     @Step("Указать фамилию: {1}")
     private void setLastName(SelenideElement card, String lastName){
         card.$$(byXpath("descendant::input[@type='text']")).get(0).setValue(lastName);
+        System.out.println("Last Name = " + lastName);
     }
 
     @Step("Указать имя: {1}")
     private void setFirstName(SelenideElement card, String firstName){
         card.$$(byXpath("descendant::input[@type='text']")).get(1).setValue(firstName);
+        System.out.println("First Name = " + firstName);
     }
 
     @Step("Указать день рождения: {1}")
