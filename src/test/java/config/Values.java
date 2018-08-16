@@ -37,6 +37,8 @@ public class Values {
     public static String office_login = "";
     public static String office_password = "";
 
+    public static String backdoor_host = "https://ws.ess.test.aeroflot.ru/test.php?PNR=";
+
     public static String card[][] = {
         {"4154810047474554", "12", "2019", "314", "TEST TEST"}, //0 - Visa
         //{"2202000000000002", "12", "2019", "123", "TEST TEST"}, //1 - МИР
