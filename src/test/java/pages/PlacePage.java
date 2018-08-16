@@ -35,19 +35,22 @@ public class PlacePage extends Page {
     @Step("Извлечь PNR")
     public void getPNR(){
         for (int i=0; i<30; i++) {
-            if ($$(byXpath("//div[@class='text text--inline']")).size()>0) break;
-            Sleep(1);
+            if ($$(byXpath("//div[@class='text text--inline']")).size()>0) {
+                Sleep(1);
+                if ($$(byXpath("//div[@class='text text--inline']")).size() > 0) break;
+            }
         }
-        String text = $(byXpath("//div[contains(@class, 'cart__item-title--uppercase')]")).getText();
-        pnr = text.substring(text.length()-6);
-        System.out.println("PNR = " + pnr);
-        addAdditionalServices();
-        //Sleep(1000);
+        if ($$(byXpath("//h1[text()='Вход в тестовую среду системы ЕПР']")).size()>0) {
+            int start = url().indexOf("&PNR") + 5;
+            pnr = url().substring(start, start + 6);
+            System.out.println("PNR = " + pnr);
+        } else {
+            String text = $(byXpath("//div[contains(@class, 'cart__item-title--uppercase')]")).getText();
+            pnr = text.substring(text.length() - 6);
+            System.out.println("PNR = " + pnr);
+        }
+
     }
 
-    @Step("Действие X, добавить дополнительные авиационные услуги")
-    private void addAdditionalServices() {
-        new SoapRequest().addAdditionalAviaServices();
-    }
 
 }

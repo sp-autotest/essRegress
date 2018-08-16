@@ -7,10 +7,13 @@ import io.qameta.allure.Step;
 import soap.SoapRequest;
 
 import static com.codeborne.selenide.Condition.exactText;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
+import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.url;
+import static config.Values.backdoor_host;
 import static config.Values.pnr;
 import static org.testng.AssertJUnit.assertTrue;
 
@@ -29,6 +32,20 @@ public class ChoosePage extends Page {
         System.out.println("URL = " + url());
         if ((!Values.cur.equals("RUB"))&(Values.currencyChange.equals("soap"))) changeCurrency();
         clickEnvironment();
+    }
+
+    @Step("Действие 4, добавить доп. услуги")
+    public void step4_8() {
+        checkChoosePage();
+        System.out.println("URL = " + url());
+        if ((!Values.cur.equals("RUB"))&(Values.currencyChange.equals("soap"))) changeCurrency();
+        addAdditionalServices();
+        open(Values.backdoor_host + Values.pnr);
+        String link = $(byXpath("//a")).shouldBe(visible).getText().
+                replaceFirst("Language=RU", "Language="+Values.lang[Values.ln][2].toUpperCase());
+        System.out.println("Backdoor link = " + link);
+        open(link);
+        Sleep(500);
     }
 
     @Step("Действие {0}, выбор стенда")
@@ -70,6 +87,9 @@ public class ChoosePage extends Page {
         new SoapRequest().changeCurrency();
     }
 
-
+    @Step("Действие 5, добавить дополнительные авиационные услуги")
+    private void addAdditionalServices() {
+        new SoapRequest().addAdditionalAviaServices();
+    }
 
 }
