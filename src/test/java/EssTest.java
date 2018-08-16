@@ -25,7 +25,6 @@ import java.util.Date;
 import java.util.List;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.Selenide.open;
-import static com.codeborne.selenide.WebDriverRunner.source;
 import static pages.Page.*;
 
 @Listeners({AllureOnEventListener.class})  //"слушатель" для Allure-отчета
@@ -638,12 +637,11 @@ public class EssTest {
         List<Flight> flightList = searchPg.step2();
         List<Passenger> passList = createPassengers(initData);
         new PassengerPage().step3(passList);
-        new PlacePage().getPNR();
-
-        /*new PlacePage().clickPay();
+        new PlacePage().clickPay();
         ChoosePage choosePg = new ChoosePage();
-        choosePg.step4();
+        choosePg.step4_8();
 
+/*
 
         EssPage essPg = new EssPage();
         essPg.step6();
