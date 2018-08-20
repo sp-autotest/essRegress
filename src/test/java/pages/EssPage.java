@@ -257,6 +257,7 @@ public class EssPage extends Page {
         String format = Values.lang[ln][3];
         String month = new SimpleDateFormat("MMMM", new Locale(Values.lang[ln][2])).format(flightList.get(i-1).start);
         if (month.length()>5) format = format.replaceFirst("MMMM", "MMM.");
+        if (month.equals("Сентябрь")) format = format.replaceFirst("MMM", "сент");
         String dd = new SimpleDateFormat(format, new Locale(Values.lang[ln][2])).format(flightList.get(i-1).start);
         dd = dd + new SimpleDateFormat("HH:mm").format(flightList.get(i-1).end);
         System.out.println("Locale = " + dd);
@@ -290,7 +291,7 @@ public class EssPage extends Page {
     @Step("Полетная страховка отсутствует в корзине")
     private void checkMissFlyInsuranceInCard(){
         $("#left-column-insurance-block").$(byXpath("descendant::div[text()='" + text[0][ln] + "']"))
-                .shouldNotBe(exist);
+                .shouldNotBe(visible).shouldNotBe(exist);
     }
 
     @Step("Нажать кнопку «Добавить в заказ» для полетной страховки")
@@ -376,6 +377,7 @@ public class EssPage extends Page {
 
     @Step("Проверка общей суммы заказа")
     private void checkTotalAndFlyPrices(){
+        Sleep(3);
         String flyPrice = $(byXpath("//div[@class='cart__item-price']")).getText().replaceAll("\\D+","");
         Values.price.total = $("#cart-total-incarts").$(byXpath("descendant::div[@class='cart__item-price']")).getText().replaceAll("\\D+","");
         System.out.println("Total price = " + Values.price.total);

@@ -164,8 +164,8 @@ public class EssTest {
                 "MOW",//город "откуда"
                 "PRG",//город "куда"
                 null,//город "пересадка" для сложных маршрутов
-                addMonthAndDays(new Date(),0,15),//дата "туда": плюс 1 месяц от текущей
-                addMonthAndDays(new Date(),0,17),//дата "назад": плюс 1 месяц и 2 дня от текущей
+                addMonthAndDays(new Date(),1,0),//дата "туда": плюс 1 месяц от текущей
+                addMonthAndDays(new Date(),1,2),//дата "назад": плюс 1 месяц и 2 дня от текущей
                 2,//взрослых
                 0,//детей
                 0//младенцев
@@ -235,8 +235,8 @@ public class EssTest {
                 "MOW",//город "откуда"
                 "PRG",//город "куда"
                 null,//город "пересадка" для сложных маршрутов
-                addMonthAndDays(new Date(),0,15),//дата "туда": плюс 1 месяц от текущей
-                addMonthAndDays(new Date(),0,17),//дата "назад": плюс 1 месяц и 2 дня от текущей
+                addMonthAndDays(new Date(),1,0),//дата "туда": плюс 1 месяц от текущей
+                addMonthAndDays(new Date(),1,2),//дата "назад": плюс 1 месяц и 2 дня от текущей
                 2,//взрослых
                 2,//детей
                 1//младенцев
@@ -288,8 +288,8 @@ public class EssTest {
                 "MOW",
                 "PRG",
                 null,
-                addMonthAndDays(new Date(),0,15),
-                addMonthAndDays(new Date(),0,17),
+                addMonthAndDays(new Date(),1,0),
+                addMonthAndDays(new Date(),1,2),
                 2,
                 0,
                 0
@@ -346,8 +346,8 @@ public class EssTest {
                 "MOW",
                 "PRG",
                 null,
-                addMonthAndDays(new Date(),0,15),
-                addMonthAndDays(new Date(),0,17),
+                addMonthAndDays(new Date(),1,0),
+                addMonthAndDays(new Date(),1,2),
                 2,
                 0,
                 0
@@ -399,8 +399,8 @@ public class EssTest {
                 "MOW",//город "откуда"
                 "LAX",//город "куда"
                 null,//город "пересадка" для сложных маршрутов
-                addMonthAndDays(new Date(),0,15),//дата "туда": плюс 1 месяц от текущей
-                addMonthAndDays(new Date(),0,17),//дата "назад": плюс 1 месяц и 2 дня от текущей
+                addMonthAndDays(new Date(),1,0),//дата "туда": плюс 1 месяц от текущей
+                addMonthAndDays(new Date(),1,2),//дата "назад": плюс 1 месяц и 2 дня от текущей
                 1,//взрослых
                 1,//детей
                 0//младенцев
@@ -473,7 +473,7 @@ public class EssTest {
                 "MOW",//город "откуда"
                 "LAX",//город "куда"
                 null,//город "пересадка" для сложных маршрутов
-                addMonthAndDays(new Date(),0,15),//дата "туда": плюс 1 месяц от текущей
+                addMonthAndDays(new Date(),1,0),//дата "туда": плюс 1 месяц от текущей
                 null,//дата "назад"
                 1,//взрослых
                 4,//детей
