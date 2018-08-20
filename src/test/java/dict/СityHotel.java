@@ -7,7 +7,7 @@ import java.util.HashMap;
  */
 public class СityHotel {
 
-    private HashMap<String, String> map;
+    private static HashMap<String, String> map;
 
     public СityHotel() {
         map = new HashMap<>();

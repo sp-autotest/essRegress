@@ -24,11 +24,11 @@ public class PaymentPage extends Page {
     }
 
     @Step("Действие 15, проверка формы оплаты")
-    public void checkPaymentForm2() {
+    public void checkPaymentForm2(boolean equalCityAndCurrency) {
         System.out.println("\t15. Checking Payment form");
         new EprPage().clickPayButton();
         selectCardPay();
-        checkTotalPrice2();  //отключили временно
+        checkTotalPrice2(equalCityAndCurrency);  //отключили временно
         checkTransportPrice(); // отключили временно
     }
 
@@ -69,15 +69,17 @@ public class PaymentPage extends Page {
         //assertTrue("Стоимость «Заплатить» на кнопке некорректна", button.equals(Values.price.total));
     }
 
-    @Step("Проверка стоимости на оплату(без аренды авто)")
-    private void checkTotalPrice2() {
+    @Step("Проверка стоимости на оплату")
+    private void checkTotalPrice2(boolean equalCityAndCurrency) {
         String price = $(byXpath("//div[@class='cart__item-price ng-binding']")).getText().replaceAll("\\D+","");
         System.out.println(Values.price.total);
         System.out.println(price);
-        assertTrue("Стоимость «К ОПЛАТЕ ВСЕГО» некорректна" +
-                   "\nОжидалось : " + Values.price.total + "\nФактически: " + price,
-                   price.equals(Values.price.total));
-
+        System.out.println("Валюта услуги равна валюте бронирования? " + equalCityAndCurrency);
+        if (!equalCityAndCurrency) {
+            assertTrue("Стоимость «К ОПЛАТЕ ВСЕГО» некорректна" +
+                            "\nОжидалось : " + Values.price.total + "\nФактически: " + price,
+                    price.equals(Values.price.total));
+        }
         String now = $(byXpath("//div[contains(@translate,'now2')]/following-sibling::div")).getText().replaceAll("\\D+","");
         System.out.println(now);
         assertTrue("Стоимость «К оплате сейчас» некорректна" +

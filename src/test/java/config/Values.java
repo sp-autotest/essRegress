@@ -1,5 +1,6 @@
 package config;
 
+import dict.CityCurrency;
 import dict.NationalityName;
 import struct.Auto;
 import struct.Flight;
@@ -24,6 +25,7 @@ public class Values {
     public static Auto auto;
     public static Hotel hotel;
     public static СityHotel cityHotel = new СityHotel();
+    public static CityCurrency cityCurrency = new CityCurrency();
     public static NationalityName nationalityName = new NationalityName();
     public static String currencyChange = "link"; //параметр определяет метод смены валюты.
                                                   //Возможные значения:

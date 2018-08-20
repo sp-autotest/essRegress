@@ -263,7 +263,7 @@ public class EssTest {
         choosePg.chooseTestStend("13");//шаг 13
         new EprPage().checkDataOnPayPage("14", flightList, passList, test, timer);//шаг 14
         PaymentPage paymentPg = new PaymentPage();
-        paymentPg.checkPaymentForm2();//шаг 15
+        paymentPg.checkPaymentForm2(Values.cityCurrency.checkCityAndCurrencyEqual(initData.getCityTo(),currency));//шаг 15
         paymentPg.setCardDetails("16");//шаг 16
         new ResultPage(passList).checkServicesData("17", test);//шаг 17
     }
