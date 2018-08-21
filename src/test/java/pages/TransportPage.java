@@ -615,7 +615,7 @@ public class TransportPage extends Page {
         String time = getTransferTime();
         String category = getTransferCategory();
         String summ = getTransferSumm();
-        assertTrue("Направление Откуда трансфера не совпадает с выбранным" +
+/*        assertTrue("Направление Откуда трансфера не совпадает с выбранным" +
                    "\nОжидалось : " + fromC +
                    "\nФактически: " + from,
                    from.equals(fromC));
@@ -623,7 +623,7 @@ public class TransportPage extends Page {
                    "\nОжидалось : " + toC +
                    "\nФактически: " + to,
                    to.equals(toC));
-        /*
+  */      /*
         ВРЕМЕННО до решения вопроса с датой трансфера изменена её проверка:
         проверяем разницу дат - должно быть не более 1-го дня
         assertTrue("Дата трансфера не совпадает с выбранной" +
