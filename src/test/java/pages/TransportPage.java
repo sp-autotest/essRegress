@@ -231,6 +231,7 @@ public class TransportPage extends Page {
         setTransferDate(new SimpleDateFormat("d.MM.yyyy").format(date));
         setTransferText();
         setTransferTime();
+        screenShot("скриншот");
         compareDirection(dir);
     }
 
