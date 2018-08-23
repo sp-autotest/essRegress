@@ -275,14 +275,14 @@ public class ResultPage extends Page {
         String from = row.$(byXpath("div[1]/div[2]")).getText();
         System.out.println("Transfer from = " + from);
         String fromC = (ln==0) ? "Курский, Москва" : "Kurskiy, Moscow";
-       // assertTrue("Направление Откуда трансфера не корректно" +
-       //         "\nОжидалось : " + fromC + "\nФактически: " + from, from.equals(fromC));
+        assertTrue("Направление Откуда трансфера не корректно" +
+                "\nОжидалось : " + fromC + "\nФактически: " + from, from.equals(fromC));
 
         String to = row.$(byXpath("div[2]/div[2]")).getText();
         System.out.println("Transfer to = " + to);
         String toC = (ln==0) ? "Белорусский, Москва" : "Belorussky, Moscow";
-        //assertTrue("Направление Куда трансфера не корректно" +
-        //        "\nОжидалось : " + toC + "\nФактически: " + to, to.equals(toC));
+        assertTrue("Направление Куда трансфера не корректно" +
+                "\nОжидалось : " + toC + "\nФактически: " + to, to.equals(toC));
 
         String date = row.$(byXpath("div[1]/div[3]")).getText();
         System.out.println("Transfer date = " + date);
@@ -307,8 +307,8 @@ public class ResultPage extends Page {
         System.out.println("date = " + date);
         System.out.println("dateC2 = " + dateC2);
         if (!date.equals(dateC2)) {
-           // assertTrue("Дата трансфера не корректна" +
-             //       "\nОжидалось : " + dateC + "\nФактически: " + date, date.equals(dateC));
+            assertTrue("Дата трансфера не корректна" +
+                    "\nОжидалось : " + dateC + "\nФактически: " + date, date.equals(dateC));
         }
         //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

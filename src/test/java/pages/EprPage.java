@@ -283,22 +283,22 @@ public class EprPage extends Page {
         String from = group.$(byXpath("descendant::div[@ng-bind='item.details.from']")).getText();
         System.out.println("Transfer from = " + from);
         String fromC = (ln==0) ? "Курский, Москва" : "Kurskiy, Moscow";
-       // assertTrue("Направление Откуда трансфера не корректно" +
-         //          "\nОжидалось : " + fromC + "\nФактически: " + from, from.equals(fromC));
+        assertTrue("Направление Откуда трансфера не корректно" +
+                   "\nОжидалось : " + fromC + "\nФактически: " + from, from.equals(fromC));
 
         String to = group.$(byXpath("descendant::div[@ng-bind='item.details.to']")).getText();
         System.out.println("Transfer to = " + to);
         String toC = (ln==0) ? "Белорусский, Москва" : "Belorussky, Moscow";
-        //assertTrue("Направление Куда трансфера не корректно" +
-          //         "\nОжидалось : " + toC + "\nФактически: " + to, to.equals(toC));
+        assertTrue("Направление Куда трансфера не корректно" +
+                   "\nОжидалось : " + toC + "\nФактически: " + to, to.equals(toC));
 
         String date = group.$(byXpath("descendant::div[@ng-bind='item.details.date']")).getText();
         System.out.println("Transfer date = " + date);
         String dateC;
         dateC = new SimpleDateFormat("E, dd MMMM", new Locale(Values.lang[ln][2])).format(d);
         if (ln == 6) dateC = date;//невозможно воспроизвести формат даты для китайского, убрать когда сообщат формат
-        //assertTrue("Дата трансфера не корректна" +
-        //           "\nОжидалось : " + dateC + "\nФактически: " + date, date.equals(dateC));
+        assertTrue("Дата трансфера не корректна" +
+                   "\nОжидалось : " + dateC + "\nФактически: " + date, date.equals(dateC));
 
         String price = group.$(byXpath("descendant::span[@class='h-text--bold checkout-item__item-price ng-binding']")).getText().replaceAll("\\D+","");
         System.out.println("Transfer price = " + price);
