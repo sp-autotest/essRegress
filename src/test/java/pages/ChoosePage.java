@@ -45,7 +45,6 @@ public class ChoosePage extends Page {
                 replaceFirst("Language=RU", "Language="+Values.lang[Values.ln][2].toUpperCase());
         System.out.println("Backdoor link = " + link);
         open(link);
-        Sleep(500);
     }
 
     @Step("Действие {0}, выбор стенда")
