@@ -76,17 +76,25 @@ public class EprPage extends Page {
             checkFlyInsurance(passList);
             checkMedicalInsurance(passList);
             checkAllInsurancePrice();
+            checkAccommodation();
+        }
+        if (test == 8) {
+            screenShot("Скриншот");
+            checkFlyInsurance(passList);
+            checkMedicalInsurance(passList);
+            checkAllInsurancePrice();
+            checkTotalCount();
         }
 
-        if ((test == 1)|(test == 5)) checkAccommodation();
+        if (test == 1) checkAccommodation();
         if (getWebDriver().manage().window().getSize().getWidth() < 1280) {
             SelenideElement el = $(byXpath("//div[@data-toggle-target='toggle-TRANSPORT']")).shouldBe(visible);
             scrollWithOffset(el, 0, -100);
             el.click(); //раскрыть блок Транспорт
         }
-        if ((test == 2)|(test == 5)) checkTransport();
-        if ((test == 3)|(test == 5)) {
-            checkAeroexpress(flyList.get(0).from_orig);
+        if ((test == 2)|(test == 5)|(test == 8)) checkTransport();
+        if ((test == 3)|(test == 5)|(test == 8)) {
+            checkAeroexpress(flyList.get(0).from_orig, passList.size());
             checkTransfer(flyList.get(0).start);
         }
     }
@@ -162,15 +170,18 @@ public class EprPage extends Page {
         SelenideElement row = $(byXpath("//div[@data-toggle-id='toggle-safe']/descendant::div[@role='row'][1]"));
         row.scrollTo();
         String insurance = row.getText();
-        String price = row.$(byXpath("descendant::span[contains(@class,'__item-price')]")).getText().replaceAll("\\D+","");
-        System.out.println("fly insurance = " + price);
+        String iprice = row.$(byXpath("descendant::span[contains(@class,'__item-price')]")).getText().replaceAll("\\D+","");
+        System.out.println("fly insurance = " + iprice);
         String fullName;
         for (int i=0; i<passList.size(); i++){
             fullName = (passList.get(i).getLastname() + " " + passList.get(i).getFirstname()).toUpperCase();
             assertTrue("Полетная страховка не содержит пассажира " + fullName, insurance.contains(fullName));
         }
+        System.out.println(Values.price.iflight);
         assertTrue("Стоимость полетной страховки отличается от забронированной" +
-                "\nОжидалось : " + Values.price.iflight + "\nФактически: " + price, Values.price.iflight.equals(price));
+                   "\nОжидалось : " + Values.price.iflight +
+                   "\nФактически: " + iprice,
+                   iprice.equals(Values.price.iflight));
     }
 
     @Step("Проверка медицинской страховки")
@@ -205,7 +216,8 @@ public class EprPage extends Page {
 
     @Step("Проверка данных транспортной услуги")
     private void checkTransport(){
-        SelenideElement row = $(byXpath("//div[@data-toggle-id='toggle-TRANSPORT']"));
+        SelenideElement row = $(byXpath("//div[@ng-switch-when='Europcar'][@class='ng-scope']"));
+
         row.scrollTo();
         String name = row.$(byXpath("descendant::div[@ng-bind='item.details.carName']")).getText();
         System.out.println(name);
@@ -240,13 +252,10 @@ public class EprPage extends Page {
     }
 
     @Step("Проверка данных услуги Аэроэкспресс")
-    private void checkAeroexpress(String aero) {
-        SelenideElement group = $(byXpath("//div[@data-toggle-id='toggle-TRANSPORT']"));
-        group.scrollTo();
-        ElementsCollection row = group.$$(byXpath("//div[@ng-repeat='item in items']"));
-        for (int i = 0; i < row.size()-1; i++) {//последняя строка - это трансфер
-            SelenideElement aRow = row.get(i);
-            String name = aRow.$(byXpath("descendant::div[@ng-bind='item.details.description']")).getText();
+    private void checkAeroexpress(String aero, int tickets) {
+        SelenideElement row = $(byXpath("//div[@ng-switch-when='AeroExpress'][@class='ng-scope']"));
+        row.scrollTo();
+            String name = row.$(byXpath("descendant::div[@ng-bind='item.details.description']")).getText();
             name = name.substring(name.indexOf(",") + 2);
             name = name.substring(0, name.indexOf(","));
             System.out.println(name);
@@ -257,24 +266,15 @@ public class EprPage extends Page {
                     "\nОжидалось : " + text[20][ln] + " -> " + text[21][ln] +
                     "\nФактически: " + name, name.equals(text[20][ln] + " -> " + text[21][ln]));
 
-            String count = aRow.$(byXpath("descendant::span[@translate-plural='paymentPage.passengers']/..")).getText().replaceAll("\\D+", "");
+            String count = row.$(byXpath("descendant::span[@translate-plural='paymentPage.passengers']/..")).getText().replaceAll("\\D+", "");
             System.out.println("passengers = " + count);
             assertTrue("Количество билетов на Аэроэкспресс не корректно" +
-                    "\nОжидалось : 2\nФактически: " + count, count.equals("2"));
+                    "\nОжидалось : " + tickets + "\nФактически: " + count, stringIntoInt(count) == tickets);
 
-            String price = aRow.$(byXpath("descendant::span[contains(@class,'checkout-item__item-price')]")).getText().replaceAll("\\D+", "");
+            String price = row.$(byXpath("descendant::span[contains(@class,'checkout-item__item-price')]")).getText().replaceAll("\\D+", "");
             System.out.println("price = " + price);
-            int p = stringIntoInt(Values.price.aeroexpress) / 2;
             assertTrue("Стоимость билета на Аэроэкспресс не корректна" +
-                    "\nОжидалось : " + p + "\nФактически: " + price, stringIntoInt(price) == p);
-        }
-        if (getWebDriver().manage().window().getSize().getWidth() > 1279) {//сумма есть только в широких разрешениях
-            String summ = group.$(byXpath("descendant::span[@class='h-color--black h-fz--14 ng-binding']")).getText().replaceAll("\\D+", "");
-            System.out.println("Aeroexpress summ = " + summ);
-            assertTrue("Общая сумма билетов на Аэроэкспресс не корректна" +
-                    "\nОжидалось : " + Values.price.aeroexpress +
-                    "\nФактически: " + summ, summ.equals(Values.price.aeroexpress));
-        }
+                    "\nОжидалось : " + Values.price.aeroexpress + "\nФактически: " + price, price.equals(Values.price.aeroexpress));
     }
 
     @Step("Проверка данных услуги Трансфера")
@@ -305,14 +305,6 @@ public class EprPage extends Page {
         assertTrue("Cтоимость трансфера не корректна" +
                    "\nОжидалось : " + Values.price.transfer +
                    "\nФактически: " + price, price.equals(Values.price.transfer));
-        if (getWebDriver().manage().window().getSize().getWidth() > 1279) {//сумма есть только в широких разрешениях
-            SelenideElement trans = $(byXpath("//div[@data-toggle-id='toggle-TRANSPORT']"));
-            String summ = trans.$(byXpath("descendant::span[@class='h-color--black h-fz--14 ng-binding'][2]")).getText().replaceAll("\\D+", "");
-            System.out.println("Transfer summ = " + summ);
-            assertTrue("Сумма трансфера не корректна" +
-                    "\nОжидалось : " + Values.price.transfer +
-                    "\nФактически: " + summ, summ.equals(Values.price.transfer));
-        }
     }
 
     @Step("Проверка данных услуги проживания")
@@ -378,6 +370,15 @@ public class EprPage extends Page {
         cal.setTime(d);
         cal.add(Calendar.DAY_OF_MONTH, 1);
         return cal.getTime();
+    }
+
+    @Step("Проверка «К ОПЛАТЕ ВСЕГО»")
+    private void checkTotalCount(){
+        String totalCount = $(byXpath("//div[@class='cart__item-price ng-binding']")).getText();
+        System.out.println("TOTAL COUNT = " + totalCount);
+        System.out.println(Values.price.total);
+
+
     }
 
 }
