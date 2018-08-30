@@ -62,7 +62,7 @@ public class TransportPage extends Page {
         screenShot("Скриншот");
 
 //      проверка временно отключена, до фикса бага
-//      checkAllPrice(getInsurancePrice(), beforePrice, getCarPrice());
+      checkAllPrice(getInsurancePrice(), beforePrice, getCarPrice());//пробное включение, 29.08.18
 
         price.nationalTransport = getAllCarPrice();
         price.transport = getEuroAllCarPrice();
@@ -399,6 +399,11 @@ public class TransportPage extends Page {
         }
         String transportPrice = $("#left-column-transport").$(byXpath("descendant::div[@class='cart__item-priceondemand-item-price']")).getText().replaceAll("\\D+","");
         summ = summ + stringIntoInt(transportPrice);
+        /*учитываем доп. услуги питания и выбора места*/
+        if (Values.price.place != null) summ = summ + stringIntoInt(Values.price.place);
+        if (Values.price.entree != null) summ = summ + stringIntoInt(Values.price.entree);
+        if (Values.price.dessert != null) summ = summ + stringIntoInt(Values.price.dessert);
+        /**/
         String totalPrice = $("#cart-total-incarts").$(byXpath("descendant::div[@class='cart__item-price']")).getText().replaceAll("\\D+","");
         System.out.println("Total price = " + totalPrice);
         assertTrue("Общая сумма заказа некорректна" +
@@ -697,6 +702,7 @@ public class TransportPage extends Page {
 
     @Step("Действие 18, Нажать Продолжить")
     public void clickRepeatedlyContinue() {
+        System.out.println("\t18. Click Continue");
         if (getWebDriver().manage().window().getSize().getWidth() < 1280) {
             $("#left-column-insurance-block").click();//раскрыть блок Страховка
             Sleep(1);
