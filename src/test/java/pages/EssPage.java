@@ -3,10 +3,10 @@ package pages;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import config.Values;
+import dict.AddService;
 import dict.NationalityName;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
-//import ru.yandex.qatools.allure.annotations.Step;
 import io.qameta.allure.Step;
 import struct.Flight;
 import struct.Passenger;
@@ -74,6 +74,56 @@ public class EssPage extends Page {
             checkDateData(i+1, flightList, flights);
             checkDurationData(i+1, flightList, flights);
         }
+    }
+
+    @Step("Действие 7, Проверка данных в блоке «ВЫБОР МЕСТ»")
+    public void checkSelectPlaceStep() {
+        System.out.println("\t7 Check Prereserved place");
+        String code = "0B5"; //код услуги "Предварительный выбор места"
+        String etalon = Values.addService.getServiceByCodeAndLanguage(code, Values.ln) + " (1)";
+        SelenideElement place = $(byXpath("//div[@class='cart__item cart__item--last']"));
+        String nameOfService = place.$(byXpath("descendant::div[@class='cart__item-priceondemand-item-title']"))
+                .shouldBe(visible).getText();
+        assertTrue("Некорректное название услуги в блоке «ВЫБОР МЕСТ»" +
+                    "\nОжидалось : " + etalon +
+                    "\nФактически: " + nameOfService,
+                    nameOfService.equals(etalon));
+        Values.price.place = place.$(byXpath("descendant::div[@class='cart__item-priceondemand-item-price']"))
+                .shouldBe(visible).getText().replaceAll("\\D+", "");
+        System.out.println("Select place price = " + Values.price.place);
+    }
+
+    @Step("Действие 8, Проверка данных в блоке «ВЫБОР ПИТАНИЯ»")
+    public void checkSelectFoodStep() {
+        System.out.println("\t8. Check food");
+        ElementsCollection cart_item = $$(byXpath("//div[@class='cart__item cart__item--last']"));
+        assertTrue("Блоков с доп.услугами недостаточно" +
+                   "\nОжидалось : 2" +
+                   "\nФактически: " + cart_item.size(),
+                   cart_item.size() == 2);
+        ElementsCollection eat = cart_item.get(1).$$(byXpath("descendant::div[@class='cart__item-priceondemand-item-title']"));
+
+        String code = "0B3"; //код услуги "Закуска Сырная"
+        String etalon = Values.addService.getServiceByCodeAndLanguage(code, Values.ln) + " (1)";
+        String nameOfService = eat.get(0).shouldBe(visible).getText();
+        assertTrue("Некорректное название услуги основного блюда в блоке «ВЫБОР ПИТАНИЯ»" +
+                   "\nОжидалось : " + etalon +
+                   "\nФактически: " + nameOfService,
+                   nameOfService.equals(etalon));
+        Values.price.entree = eat.get(0).$(byXpath("following-sibling::div[@class='cart__item-priceondemand-item-price']"))
+                .shouldBe(visible).getText().replaceAll("\\D+", "");
+        System.out.println("Price of " + nameOfService + " = " + Values.price.entree);
+
+        code = "019"; //код услуги "Десерт Шоколадная тарталетка"
+        etalon = AddService.getServiceByCodeAndLanguage(code, Values.ln) + " (1)";
+        nameOfService = eat.get(1).shouldBe(visible).getText();
+        assertTrue("Некорректное название услуги десерта в блоке «ВЫБОР ПИТАНИЯ»" +
+                   "\nОжидалось : " + etalon +
+                   "\nФактически: " + nameOfService,
+                   nameOfService.equals(etalon));
+        Values.price.dessert = eat.get(1).$(byXpath("following-sibling::div[@class='cart__item-priceondemand-item-price']"))
+                .shouldBe(visible).getText().replaceAll("\\D+", "");
+        System.out.println("Price of " + nameOfService + " = " + Values.price.dessert);
     }
 
     @Step("Действие 8, Проверка данных в блоке «Страховка»")
@@ -366,6 +416,11 @@ public class EssPage extends Page {
             System.out.println("Item[" + (i+1) + "] price = " + itemPrice);
         }
         Sleep(3);
+        /*учитываем доп. услуги питания и выбора места*/
+        if (Values.price.place != null) summ = summ + stringIntoInt(Values.price.place);
+        if (Values.price.entree != null) summ = summ + stringIntoInt(Values.price.entree);
+        if (Values.price.dessert != null) summ = summ + stringIntoInt(Values.price.dessert);
+        /**/
         String totalPrice = $("#cart-total-incarts").$(byXpath("descendant::div[@class='cart__item-price']")).getText().replaceAll("\\D+","");
         System.out.println("Total price = " + totalPrice);
         Values.price.total = totalPrice;
