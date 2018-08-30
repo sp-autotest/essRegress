@@ -577,7 +577,7 @@ public class EssTest {
     @Description("Карта VISA;\nНаправление перелета: туда-обратно;\n" +
     "Состав бронирования авиаперелета, билеты: 1 взрослый, 2 ребенка;" +
     "Дополнительные услуги: «Выбор мест», «Питание», «Мед.страховка», «Авто», «Аэроэкспресс», «Трансфер»")
-    @Test(priority = 8, description = "Раздел 8", groups = {"part8"}, dataProvider= "data", enabled = true)
+    @Test(priority = 8, description = "Раздел 8", groups = {"part8"}, dataProvider= "data", enabled = false)
     public void section8(String browser, String resolution, String language, String currency) {
         runBrowser(browser, resolution);
         int test = 8;
