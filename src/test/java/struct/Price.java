@@ -12,5 +12,8 @@ public class Price {
     public String transfer; //стоимость трансфера
     public String nationalTransport; //стоимость аренды автомобиля в национальной валюте
     public String hotel; //стоимось проживания в отеле
+    public String place = null; //стоимось за Предварительный выбор мест
+    public String entree = null; //стоимось основного блюда
+    public String dessert = null; //стоимось дессерта
     public String total; //общая стоимость
 }
