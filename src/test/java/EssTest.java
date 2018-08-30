@@ -88,38 +88,6 @@ public class EssTest {
         Values.auto = new Auto();
         Values.hotel = new Hotel();
         Values.errors.clear();//очистить массив неблокирующих ошибок перед каждым тестом
-        /*browserName = startData[currentRow][0].toString();
-        String res = startData[currentRow][1].toString();
-        int browserWidth = stringIntoInt(res.substring(0, res.indexOf("x")));//взять ширину браузера из строки с разрешением
-        int browserHeight = stringIntoInt(res.substring(res.indexOf("x")+1));//взять высоту браузера из строки с разрешением
-
-        com.codeborne.selenide.Configuration.browser = browserName;   //браузер для тестов
-        com.codeborne.selenide.Configuration.timeout = 60000;         //максимальный интервал ожидания вебэлементов в милисекундах
-        com.codeborne.selenide.Configuration.savePageSource = false;  //не сохранять дополнительные настройки
-        WebDriver myWebDriver = null;
-        switch (browserName) {
-            case "chrome":
-                ChromeOptions options = new ChromeOptions();  //создать обьект для установки опций браузера хром
-                options.addArguments("--disable-infobars");   //убрать в браузере полосу infobars
-                options.addArguments("--disable-dev-tools");  //отключить в браузере dev-tools
-                myWebDriver = new ChromeDriver(options);  //создать вебдрайвер с  указанными выше опциями
-                break;
-            case "firefox":
-                myWebDriver = new FirefoxDriver();
-                break;
-            case "ie":
-                myWebDriver = new InternetExplorerDriver();
-                break;
-            case "opera":
-                OperaOptions oOptions = new OperaOptions();
-                oOptions.setBinary("C:\\Program Files\\Opera\\launcher.exe");
-                myWebDriver = new OperaDriver(oOptions);
-                break;
-        }
-        WebDriverRunner.setWebDriver(myWebDriver); //запуск браузера
-        myWebDriver.manage().window().setSize(new Dimension(browserWidth, browserHeight));*/
-        //if (currentRow>=(rows-1)) currentRow = 0;
-        //else currentRow++;
     }
 
     @AfterMethod
@@ -552,8 +520,8 @@ public class EssTest {
                 "MOW",//город "откуда"
                 "PRG",//город "куда"
                 null,//город "пересадка" для сложных маршрутов
-                addMonthAndDays(new Date(),0,15),//дата "туда": плюс 1 месяц от текущей
-                addMonthAndDays(new Date(),0,17),//дата "назад": плюс 1 месяц и 2 дня от текущей
+                addMonthAndDays(new Date(),1,0),//дата "туда": плюс 1 месяц от текущей
+                addMonthAndDays(new Date(),1,2),//дата "назад": плюс 1 месяц и 2 дня от текущей
                 3,//взрослых
                 2,//детей
                 1//младенцев
@@ -607,9 +575,9 @@ public class EssTest {
     }
 
     @Description("Карта VISA;\nНаправление перелета: туда-обратно;\n" +
-    "Состав бронирования авиаперелета, билеты: 1 взрослый, 2 ребенка, 1 младенец;" +
+    "Состав бронирования авиаперелета, билеты: 1 взрослый, 2 ребенка;" +
     "Дополнительные услуги: «Выбор мест», «Питание», «Мед.страховка», «Авто», «Аэроэкспресс», «Трансфер»")
-    @Test(priority = 8, description = "Раздел 8", groups = {"part8"}, dataProvider= "data", enabled = false)
+    @Test(priority = 8, description = "Раздел 8", groups = {"part8"}, dataProvider= "data", enabled = true)
     public void section8(String browser, String resolution, String language, String currency) {
         runBrowser(browser, resolution);
         int test = 8;
@@ -625,11 +593,11 @@ public class EssTest {
                 "MOW",//город "откуда"
                 "PRG",//город "куда"
                 null,//город "пересадка" для сложных маршрутов
-                addMonthAndDays(new Date(),0,15),//дата "туда": плюс 1 месяц от текущей
-                addMonthAndDays(new Date(),0,17),//дата "назад": плюс 1 месяц и 2 дня от текущей
+                addMonthAndDays(new Date(),1,0),//дата "туда": плюс 1 месяц от текущей
+                addMonthAndDays(new Date(),1,2),//дата "назад": плюс 1 месяц и 2 дня от текущей
                 1,//взрослых
                 2,//детей
-                1//младенцев
+                0//младенцев
         );
         open(Values.host + Values.lang[Values.ln][2]);
         SearchPage searchPg = new SearchPage(initData);
@@ -640,47 +608,25 @@ public class EssTest {
         new PlacePage().clickPay();
         ChoosePage choosePg = new ChoosePage();
         choosePg.step4_8();
-
-/*
-
         EssPage essPg = new EssPage();
         essPg.step6();
+        essPg.checkSelectPlaceStep();//проверка выбора мест
+        essPg.checkSelectFoodStep();//проверка основного блюда и десерта
         boolean timer = essPg.checkTimer();
-        essPg.step7(flightList);
-        essPg.step8_5();
+        essPg.step8();
         essPg.step9("RANDOM");
         TransportPage transportPg = new TransportPage();
         transportPg.step10(test);//шаг 10
         transportPg.step11_5();//шаг 11
-
         transportPg.checkAeroexpressPassengerLogic();//шаг 11
         transportPg.addAeroexpressTickets();//шаг 13
         String dir = transportPg.setTransferLocations();//шаг 14
         transportPg.clickSelectStandartButton();//шаг 15
         transportPg.setTransferAdditionalInfo(flightList.get(0).start, dir);//шаг 16
         transportPg.selectTransfer(flightList.get(0).start, dir);//шаг 17
-
-
-        HotelPage hotelPg = new HotelPage(initData);
-        hotelPg.clickResidenceButton("15");//шаг 15
-        hotelPg.checkHotelFilter();//шаг 16
-        hotelPg.checkHotelLogic(flightList, passList);//шаг 17
-        //искать нештрафную комнату
-        int room = -1;
-        for (int i=0; i<=9; i++) {
-            hotelPg.selectHotel(i);//шаг 21
-            room = hotelPg.selectRoomType();//шаг 22
-            if (room>=0) break;
-        }
-        //------------------------
-        hotelPg.clickBookButton(room);//шаг 23
-        hotelPg.clickPayInCart();//шаг 24
-        choosePg.chooseTestStend("25");//шаг 25
-        new EprPage().checkDataOnPayPage("26", flightList, passList, test, timer);//шаг 26
-        PaymentPage paymentPg = new PaymentPage();
-        paymentPg.checkPaymentForm1("27");//шаг 27
-        paymentPg.setCardDetails("28");//шаг 28
-        new ResultPage(passList).checkServicesData5(flightList.get(0));//шаг 29*/
+        transportPg.clickRepeatedlyContinue();//шаг 18
+        choosePg.chooseTestStend("19");//шаг 19
+        new EprPage().checkDataOnPayPage("20", flightList, passList, test, timer);//шаг 20
     }
 
 
@@ -788,10 +734,7 @@ public class EssTest {
                 o[i*6 + j][7] = natio[j][3];
                 o[i*6 + j][8] = natio[j][4];
                 o[i*6 + j][9] = natio[j][5];
-/*                System.out.println("DATA7[" + (i*6+j) + "] = " + o[i*6 + j][0] + " " + o[i*6 + j][1] +
-                " " + o[i*6 + j][2] + " " + o[i*6 + j][3] + " " + o[i*6 + j][4] + " " + o[i*6 + j][5] +
-                " " + o[i*6 + j][6] + " " + o[i*6 + j][7] + " " + o[i*6 + j][8] + " " + o[i*6 + j][9]);
-  */          }
+            }
         }
         return o;
     }
