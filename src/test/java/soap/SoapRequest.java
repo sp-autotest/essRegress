@@ -2,7 +2,6 @@ package soap;
 
 import config.Values;
 import org.w3c.dom.Document;
-//import ru.yandex.qatools.allure.annotations.Step;
 import io.qameta.allure.Step;
 import org.xml.sax.SAXException;
 import struct.InitialsAdditionalServices;
@@ -15,6 +14,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import static org.testng.AssertJUnit.assertTrue;
+import static org.testng.AssertJUnit.assertFalse;
 
 /**
  * Created by mycola on 21.02.2018.
@@ -56,12 +56,12 @@ public class SoapRequest {
         req = String.format(add.getUpdateReservationOperation(), token, Values.pnr);
         req = replaceInitials(req, initials);
         response = callSoapRequest(req);
-        //assertTrue("Ошибка в 4.SOAP \"ANCS Inventory is not available\"", response.contains("ANCS Inventory is not available"));
+        assertFalse("Ошибка в 4.SOAP \"ANCS Inventory is not available\"", response.contains("ANCS Inventory is not available"));
         //5
         req = String.format(add.getUpdateReservationOperation1(), token, Values.pnr);
         req = replaceInitials(req, initials);
         response = callSoapRequest(req);
-        //assertTrue("Ошибка в 5.SOAP \"ANCS Inventory is not available\"", response.contains("ANCS Inventory is not available"));
+        assertFalse("Ошибка в 5.SOAP \"ANCS Inventory is not available\"", response.contains("ANCS Inventory is not available"));
         //6
         req = String.format(add.getSabreCommandQ(), token, "*AES");
         callSoapRequest(req);
