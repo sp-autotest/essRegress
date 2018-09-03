@@ -30,10 +30,10 @@ import static pages.Page.*;
 @Listeners({AllureOnEventListener.class})  //"слушатель" для Allure-отчета
 
 public class EssTest {
-    //private int currentRow = 0;
-    //private int rows = 0;
+
     private Object[][] startData;
     private Object[][] startData7; //исходные данные для 7-го раздела
+    private Object[][] startData8; //исходные данные для 8-го раздела
     private String browserName = "chrome";//браузер, по умолчанию хром
 
     @BeforeClass/* Метод, выполняющийся перед началом тест-сьюта */
@@ -44,6 +44,7 @@ public class EssTest {
         Values.office_password = System.getProperty("officepassword", "");//получить пароль АРМ ESS из дженкинса
         startData = getStartUpParameters();//сформировать dataProvider из парамеров дженкинса
         startData7 = getStartUpParameters7(startData);
+        startData8 = getStartUpParameters8(startData);
     }
 
     @Step("Запуск браузера")
@@ -111,6 +112,11 @@ public class EssTest {
     @DataProvider(name="data7")
     public Object[][] parseLocaleData7() {
         return startData7;
+    }
+
+    @DataProvider(name="data8")
+    public Object[][] parseLocaleData8() {
+        return startData8;
     }
 
     @Description("Карта VISA;\nНаправление перелета: туда-обратно;\n" +
@@ -231,7 +237,7 @@ public class EssTest {
         choosePg.chooseTestStend("13");//шаг 13
         new EprPage().checkDataOnPayPage("14", flightList, passList, test, timer);//шаг 14
         PaymentPage paymentPg = new PaymentPage();
-        paymentPg.checkPaymentForm2(Values.cityCurrency.checkCityAndCurrencyEqual(initData.getCityTo(),currency));//шаг 15
+        paymentPg.checkPaymentForm2(Values.city.checkCityAndCurrencyEqual(initData.getCityTo(),currency));//шаг 15
         paymentPg.setCardDetails("16");//шаг 16
         new ResultPage(passList).checkServicesData("17", test);//шаг 17
     }
@@ -577,22 +583,22 @@ public class EssTest {
     @Description("Карта VISA;\nНаправление перелета: туда-обратно;\n" +
     "Состав бронирования авиаперелета, билеты: 1 взрослый, 2 ребенка;" +
     "Дополнительные услуги: «Выбор мест», «Питание», «Мед.страховка», «Авто», «Аэроэкспресс», «Трансфер»")
-    @Test(priority = 8, description = "Раздел 8", groups = {"part8"}, dataProvider= "data", enabled = false)
-    public void section8(String browser, String resolution, String language, String currency) {
+    @Test(priority = 8, description = "Раздел 8", groups = {"part8"}, dataProvider= "data8", enabled = false)
+    public void section8(String browser, String resolution, String language, String currency, String city) {
         runBrowser(browser, resolution);
         int test = 8;
         Values.ln = getLanguageNumber(language);
         Values.cur = currency;
 
-        System.out.println("==========================================================" +
+        System.out.println("=============================================================" +
                 "\n*** AUTOTEST *** : section 8, " + browser + ", " + resolution + ", " +
-                Values.lang[Values.ln][2].toUpperCase() + ", " + Values.cur +
-                "\n==========================================================");
+                Values.lang[Values.ln][2].toUpperCase() + ", " + Values.cur + ", " + city +
+                "\n=============================================================");
 
         InitialData initData = new InitialData(
                 "MOW",//город "откуда"
-                "PRG",//город "куда"
-                null,//город "пересадка" для сложных маршрутов
+                city, //город "куда"
+                null, //город "пересадка" для сложных маршрутов
                 addMonthAndDays(new Date(),1,0),//дата "туда": плюс 1 месяц от текущей
                 addMonthAndDays(new Date(),1,2),//дата "назад": плюс 1 месяц и 2 дня от текущей
                 1,//взрослых
@@ -613,7 +619,8 @@ public class EssTest {
         essPg.checkSelectPlaceStep();//проверка выбора мест
         essPg.checkSelectFoodStep();//проверка основного блюда и десерта
         boolean timer = essPg.checkTimer();
-        essPg.step8();
+        if (city.equals("LAX")) essPg.step8_5();
+        else essPg.step8();
         essPg.step9("RANDOM");
         TransportPage transportPg = new TransportPage();
         transportPg.step10(test);//шаг 10
@@ -713,6 +720,7 @@ public class EssTest {
     }
 
     private Object[][] getStartUpParameters7(Object[][] sData){
+        int n;
         String natio[][] = {
                 {"us", "us", "us", "us", "us", "us"},
                 {"us", "ru", "az", "us", "ru", "ru"},
@@ -724,16 +732,34 @@ public class EssTest {
         Object[][] o = new Object[sData.length*natio.length][10];
         for (int i=0; i<sData.length; i++){
             for (int j=0; j<natio.length; j++) {
-                o[i*6 + j][0] = sData[i][0];
-                o[i*6 + j][1] = sData[i][1];
-                o[i*6 + j][2] = sData[i][2];
-                o[i*6 + j][3] = sData[i][3];
-                o[i*6 + j][4] = natio[j][0];
-                o[i*6 + j][5] = natio[j][1];
-                o[i*6 + j][6] = natio[j][2];
-                o[i*6 + j][7] = natio[j][3];
-                o[i*6 + j][8] = natio[j][4];
-                o[i*6 + j][9] = natio[j][5];
+                n = i*6 + j;
+                o[n][0] = sData[i][0];
+                o[n][1] = sData[i][1];
+                o[n][2] = sData[i][2];
+                o[n][3] = sData[i][3];
+                o[n][4] = natio[j][0];
+                o[n][5] = natio[j][1];
+                o[n][6] = natio[j][2];
+                o[n][7] = natio[j][3];
+                o[n][8] = natio[j][4];
+                o[n][9] = natio[j][5];
+            }
+        }
+        return o;
+    }
+
+    private Object[][] getStartUpParameters8(Object[][] sData){
+        int n;
+        String city[] = {"PRG", "LAX"};
+        Object[][] o = new Object[sData.length*city.length][5];
+        for (int i=0; i<sData.length; i++){
+            for (int j=0; j<city.length; j++) {
+                n = i*2 + j;
+                o[n][0] = sData[i][0];
+                o[n][1] = sData[i][1];
+                o[n][2] = sData[i][2];
+                o[n][3] = sData[i][3];
+                o[n][4] = city[j];
             }
         }
         return o;
