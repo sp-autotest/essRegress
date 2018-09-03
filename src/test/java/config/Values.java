@@ -1,13 +1,11 @@
 package config;
 
 import dict.AddService;
-import dict.CityCurrency;
 import dict.NationalityName;
 import struct.Auto;
-import struct.Flight;
 import struct.Hotel;
 import struct.Price;
-import dict.СityHotel;
+import dict.СityInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +23,7 @@ public class Values {
     public static Price price;
     public static Auto auto;
     public static Hotel hotel;
-    public static СityHotel cityHotel = new СityHotel();
-    public static CityCurrency cityCurrency = new CityCurrency();
+    public static СityInfo city = new СityInfo();
     public static AddService addService = new AddService();
     public static NationalityName nationalityName = new NationalityName();
     public static String currencyChange = "link"; //параметр определяет метод смены валюты.

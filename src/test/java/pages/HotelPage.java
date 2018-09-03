@@ -25,12 +25,10 @@ import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
-import static config.Values.cityHotel;
 import static config.Values.ln;
 import static config.Values.text;
 import static java.lang.String.format;
 import static org.testng.AssertJUnit.assertTrue;
-import static org.testng.AssertJUnit.assertFalse;
 
 /**
  * Created by mycola on 15.03.2018.
@@ -45,7 +43,7 @@ public class HotelPage extends Page {
 
     @Step("Форма дополнительных услуг «Проживание» открылась")
     private void checkHotelFormAppear() {
-        String header = format(text[17][ln], cityHotel.getCity(initData.getCityTo()).split(",")[ln]);
+        String header = format(text[17][ln], Values.city.getCity(initData.getCityTo(), ln));
         $(byXpath("//h1[contains(text(),'" + header + "')]")).shouldBe(visible);
         System.out.println("Accommodation form appeared");
     }
@@ -440,10 +438,9 @@ public class HotelPage extends Page {
 
     @Step("Нажать кнопку сортировки по звездности")
     private void clickSortByStarsButton(){
-        $(byXpath("//button[@data-order-by='Category']")).click();
+        $(byXpath("//button[@data-order-by='Category']")).scrollTo().shouldBe(visible).click();
         waitPlane();
-        String header = format(text[17][ln], cityHotel.getCity(initData.getCityTo()).split(",")[ln]);
-        $(byXpath("//h1[contains(text(),'" + header + "')]")).shouldBe(visible);
+        checkHotelFormAppear();
     }
 
     @Step("Проверить сортировку по убыванию звездности")
