@@ -78,9 +78,9 @@ public class EssPage extends Page {
 
     @Step("Действие 7, Проверка данных в блоке «ВЫБОР МЕСТ»")
     public void checkSelectPlaceStep() {
-        System.out.println("\t7 Check Prereserved place");
+        System.out.println("\t7. Check Prereserved place");
         String code = "0B5"; //код услуги "Предварительный выбор места"
-        String etalon = Values.addService.getServiceByCodeAndLanguage(code, Values.ln) + " (1)";
+        String etalon = AddService.getServiceByCodeAndLanguage(code, Values.ln) + " (1)";
         SelenideElement place = $(byXpath("//div[@class='cart__item cart__item--last']"));
         String nameOfService = place.$(byXpath("descendant::div[@class='cart__item-priceondemand-item-title']"))
                 .shouldBe(visible).getText();
@@ -104,7 +104,7 @@ public class EssPage extends Page {
         ElementsCollection eat = cart_item.get(1).$$(byXpath("descendant::div[@class='cart__item-priceondemand-item-title']"));
 
         String code = "0B3"; //код услуги "Закуска Сырная"
-        String etalon = Values.addService.getServiceByCodeAndLanguage(code, Values.ln) + " (1)";
+        String etalon = AddService.getServiceByCodeAndLanguage(code, Values.ln) + " (1)";
         String nameOfService = eat.get(0).shouldBe(visible).getText();
         assertTrue("Некорректное название услуги основного блюда в блоке «ВЫБОР ПИТАНИЯ»" +
                    "\nОжидалось : " + etalon +
@@ -407,6 +407,7 @@ public class EssPage extends Page {
     private void checkTotalAndInsurensPrices(){
         String itemPrice;
         String flyPrice = $(byXpath("//div[contains(@class,'cart__item-price cart__item-price--hovered')]")).scrollTo().getText().replaceAll("\\D+","");
+        Values.price.fly = flyPrice;
         int summ = stringIntoInt(flyPrice);
         System.out.println("Fly price = " + flyPrice);
         ElementsCollection items = $("#left-column-insurance-block").$$(byXpath("descendant::div[@class='cart__item-priceondemand-item-price']"));
