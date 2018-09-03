@@ -292,6 +292,7 @@ public class TransportPage extends Page {
                 cars.get(i).click();
                 break;
             }
+            Sleep(1);
         }
         $("#button_top_price").shouldBe(visible);
     }
