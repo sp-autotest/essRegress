@@ -4,6 +4,7 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import config.Values;
 //import ru.yandex.qatools.allure.annotations.Step;
+import dict.AddService;
 import io.qameta.allure.Step;
 import struct.Flight;
 import struct.Passenger;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Locale;
 
 import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
@@ -83,6 +85,9 @@ public class EprPage extends Page {
             checkFlyInsurance(passList);
             checkMedicalInsurance(passList);
             checkAllInsurancePrice();
+            checkSelectPlaceService();
+            checkEntreeService();
+            checkDessertService();
             checkTotalCount();
         }
 
@@ -372,13 +377,77 @@ public class EprPage extends Page {
         return cal.getTime();
     }
 
-    @Step("Проверка «К ОПЛАТЕ ВСЕГО»")
+    @Step("Проверка «К оплате сейчас»")
     private void checkTotalCount(){
-        String totalCount = $(byXpath("//div[@class='cart__item-price ng-binding']")).getText();
+        String totalCount = $(byXpath("//div[@class='cart__item-priceondemand-item-price ng-binding']"))
+                .getText().replaceAll("\\D+","");//к оплате сейчас
+        int total = stringIntoInt(Values.price.fly) +
+                stringIntoInt(Values.price.iflight) +
+                stringIntoInt(Values.price.imedical) +
+                stringIntoInt(Values.price.aeroexpress) +
+                stringIntoInt(Values.price.transfer) +
+                stringIntoInt(Values.price.place) +
+                stringIntoInt(Values.price.entree) +
+                stringIntoInt(Values.price.dessert);
+
+        System.out.println("-----------------------");
         System.out.println("TOTAL COUNT = " + totalCount);
-        System.out.println(Values.price.total);
+        System.out.println("total summ = " + total);
+        System.out.println(Values.price.fly);
+        System.out.println(Values.price.iflight);
+        System.out.println(Values.price.imedical);
+        System.out.println(Values.price.aeroexpress);
+        System.out.println(Values.price.transfer);
+        System.out.println(Values.price.place);
+        System.out.println(Values.price.entree);
+        System.out.println(Values.price.dessert);
+        System.out.println("-----------------------");
 
+    }
 
+    @Step("Проверка услуги «Выбор мест»")
+    public void checkSelectPlaceService() {
+        System.out.println("Check Prereserved place");
+        String code = "0B5"; //код услуги "Предварительный выбор места"
+        String etalon = AddService.getServiceByCodeAndLanguage(code, Values.ln);
+        SelenideElement place = $(byText(etalon)).shouldBe(visible);
+        String price = place.$(byXpath("../../../preceding-sibling::div[@class='checkout-item__left-container']"))
+                .shouldBe(visible).getText().replaceAll("\\D+","");
+        System.out.println("Prereserved place count = " + price);
+        assertTrue("Стоимость услуги выбора метса некорректна" +
+                   "\nОжидалось : " + Values.price.place +
+                   "\nФактически: " + price,
+                   price.equals(Values.price.place));
+    }
+
+    @Step("Проверка услуги «Основное блюдо»")
+    public void checkEntreeService() {
+        System.out.println("Check Entree");
+        String code = "0B3"; //код услуги "Закуска Сырная"
+        String etalon = AddService.getServiceByCodeAndLanguage(code, Values.ln);
+        SelenideElement entree = $(byText(etalon)).shouldBe(visible);
+        String price = entree.$(byXpath("../../../preceding-sibling::div[@class='checkout-item__left-container']"))
+                .shouldBe(visible).getText().replaceAll("\\D+","");
+        System.out.println("Entree count = " + price);
+        assertTrue("Стоимость основного блюда некорректна" +
+                   "\nОжидалось : " + Values.price.entree +
+                   "\nФактически: " + price,
+                   price.equals(Values.price.entree));
+    }
+
+    @Step("Проверка услуги «Основное блюдо»")
+    public void checkDessertService() {
+        System.out.println("Check Dessert");
+        String code = "019"; //код услуги "Десерт Шоколадная тарталетка"
+        String etalon = AddService.getServiceByCodeAndLanguage(code, Values.ln);
+        SelenideElement entree = $(byText(etalon)).shouldBe(visible);
+        String price = entree.$(byXpath("../../../preceding-sibling::div[@class='checkout-item__left-container']"))
+                .shouldBe(visible).getText().replaceAll("\\D+","");
+        System.out.println("Dessert count = " + price);
+        assertTrue("Стоимость десерта некорректна" +
+                   "\nОжидалось : " + Values.price.dessert +
+                   "\nФактически: " + price,
+                   price.equals(Values.price.dessert));
     }
 
 }
