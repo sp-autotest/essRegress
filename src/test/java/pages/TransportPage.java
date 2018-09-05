@@ -390,7 +390,9 @@ public class TransportPage extends Page {
         String flyPrice = $(byXpath("//div[contains(@class,'cart__item-price cart__item-price--hovered')]")).getText().replaceAll("\\D+","");
         int summ = stringIntoInt(flyPrice);
         Actions actions = new Actions(getWebDriver());
-        actions.moveToElement($("#left-column-insurance-block").toWebElement(),1,1).build().perform();
+        actions.moveToElement($("#left-column-transport").toWebElement(),10,10).perform();
+        Sleep(1);
+        actions.moveToElement($("#left-column-insurance-block").toWebElement(),10,10).perform();
         Sleep(1);
         ElementsCollection items = $("#left-column-insurance-block").$$(byXpath("descendant::div[@class='cart__item-priceondemand-item-price']"));
         for (int i=0; i<items.size(); i++) {
