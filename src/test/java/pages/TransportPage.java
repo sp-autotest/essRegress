@@ -286,13 +286,18 @@ public class TransportPage extends Page {
     @Step("Выбрать автомобиль")
     private void selectCar(){
         Sleep(1);
-        ElementsCollection cars = $$(byXpath("//a[@class='auto-card__button']"));
-        for (int i=0; i<cars.size(); i++) {
-            if (cars.get(i).isDisplayed()){
+        ElementsCollection cars;
+        int i;
+        for (int time=0; time<10; time++) {
+            cars = $$(byXpath("//a[@class='auto-card__button']"));
+            for (i = 0; i < cars.size(); i++) {
+                if (cars.get(i).isDisplayed()) break;
+            }
+            if (cars.get(i).isDisplayed()) {
                 cars.get(i).click();
                 break;
             }
-            Sleep(1);
+            Sleep(2);
         }
         $("#button_top_price").shouldBe(visible);
     }
