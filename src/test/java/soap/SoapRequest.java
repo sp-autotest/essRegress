@@ -42,40 +42,41 @@ public class SoapRequest {
         AdditionalServiceRequests.setPriceByCurrency();
         AdditionalServiceRequests add = new AdditionalServiceRequests();
         //1
-        String response = callSoapRequest(add.getSessionCreateRQ());
+        String req = add.getSessionCreateRQ();
+        String response = callSoapRequest(req, req.split("~~")[0]);
         String token = getToken(response);
         //2
-        String req = String.format(add.getTravelItineraryReadRQ(), token, Values.pnr);
-        callSoapRequest(req);
+        req = String.format(add.getTravelItineraryReadRQ(), token, Values.pnr);
+        callSoapRequest(req, req.split("~~")[0]);
         //3
         req = String.format(add.getGetReservationOperation(), token, Values.pnr);
-        response = callSoapRequest(req);
+        response = callSoapRequest(req, req.split("~~")[0]);
         InitialsAdditionalServices initials = new InitialsAdditionalServices(response);
         System.out.println(initials.toString());
         //4
         req = String.format(add.getUpdateReservationOperation(), token, Values.pnr);
         req = replaceInitials(req, initials);
-        response = callSoapRequest(req);
+        response = callSoapRequest(req, req.split("~~")[0]);
         assertFalse("Ошибка в 4.SOAP \"ANCS Inventory is not available\"", response.contains("ANCS Inventory is not available"));
         //5
         req = String.format(add.getUpdateReservationOperation1(), token, Values.pnr);
         req = replaceInitials(req, initials);
-        response = callSoapRequest(req);
+        response = callSoapRequest(req, req.split("~~")[0]);
         assertFalse("Ошибка в 5.SOAP \"ANCS Inventory is not available\"", response.contains("ANCS Inventory is not available"));
         //6
         req = String.format(add.getSabreCommandQ(), token, "*AES");
-        callSoapRequest(req);
+        callSoapRequest(req, req.split("~~")[0]);
         //7
         req = String.format(add.getSabreCommandQ(), token, "ER");
-        callSoapRequest(req);
+        callSoapRequest(req, req.split("~~")[0]);
         //8
-        callSoapRequest(req);
+        callSoapRequest(req, req.split("~~")[0]);
     }
 
-    @Step("SOAP запрос: {0}")
-    private String callSoapRequest(String req) {
+    @Step("SOAP запрос: {1}")
+    private String callSoapRequest(String req, String action) {
         String[] arr = req.split("~~");
-        String action = arr[0];
+        //String action = arr[0];
         String host = arr[1];
         String request = arr[2];
         //System.out.println("Request: " + request);
