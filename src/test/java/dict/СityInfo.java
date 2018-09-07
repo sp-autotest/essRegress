@@ -24,8 +24,7 @@ public class СityInfo {
 
     public boolean checkCityAndCurrencyEqual(String city, String cur) {
         String currency = map.get(city).getCurrency();
-        if ((null != currency)&&(currency.equals(cur))) return true;
-        return false;
+        return (null != currency) && (currency.equals(cur));
     }
 
     private static class CityData {
@@ -33,19 +32,19 @@ public class СityInfo {
         private String engName;
         private String currency;
 
-        public CityData(String rusName, String engName, String currency) {
+        private CityData(String rusName, String engName, String currency) {
             this.rusName = rusName;
             this.engName = engName;
             this.currency = currency;
         }
 
-        public String getRusName() {
+        private String getRusName() {
             return rusName;
         }
-        public String getEngName() {
+        private String getEngName() {
             return engName;
         }
-        public String getCurrency() {
+        private String getCurrency() {
             return currency;
         }
     }
