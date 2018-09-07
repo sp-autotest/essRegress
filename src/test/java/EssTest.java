@@ -497,7 +497,7 @@ public class EssTest {
         paymentPg.setCardDetails("28");//шаг 28
         new ResultPage(passList).checkServicesData5(flightList.get(0));//шаг 29
     }
-
+/*
     @Description("Карта VISA;\nНаправление перелета: туда-обратно;\n" +
             "Состав бронирования авиаперелета, билеты: 3 взрослых, 2 ребенка, 1 младенец;" +
             "Дополнительные услуги: «Мед.страховка», «Авто», «Аэроэкспресс», «Трансфер», «Отель»")
@@ -577,9 +577,9 @@ public class EssTest {
         PaymentPage paymentPg = new PaymentPage();
         paymentPg.checkPaymentForm1("27");//шаг 27
         paymentPg.setCardDetails("28");//шаг 28
-        new ResultPage(passList).checkServicesData5(flightList.get(0));//шаг 29*/
+        new ResultPage(passList).checkServicesData5(flightList.get(0));//шаг 29
     }
-
+*/
     @Description("Карта VISA;\nНаправление перелета: туда-обратно;\n" +
     "Состав бронирования авиаперелета, билеты: 1 взрослый, 2 ребенка;" +
     "Дополнительные услуги: «Выбор мест», «Питание», «Мед.страховка», «Авто», «Аэроэкспресс», «Трансфер»")
