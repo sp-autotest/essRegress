@@ -172,12 +172,7 @@ public class TransportPage extends Page {
         System.out.println("\t14. Set transfer locations");
         $("#iway_transfer_page").scrollTo();
         setTransferRouteFrom("1202");
-        $(byXpath("//div[@id='transfer_options_list']/descendant::div[@class='frame__container']")).shouldBe(visible);
-        setTransferRouteTo("1202");
-        $(byXpath("//div[@id='transfer_options_list']/descendant::div[@class='frame__container']")).shouldNotBe(visible);
         setTransferRouteTo("1200");
-        $(byXpath("//div[@id='transfer_options_list']/descendant::div[@class='frame__container']")).shouldBe(visible);
-        Sleep(2); //задержка в трансфере между селектом направления и кликом по кнопке Выбрать
         return $("#iway_change_city").getText() + " — " + $("#iway_change_city1").getText();
     }
 
@@ -187,6 +182,7 @@ public class TransportPage extends Page {
         int n = $$(byXpath("//select[@id='iway_change_city']/option[@value='" + v + "']")).size();
         assertTrue("Ж/д вокзал Курский (Москва) в селекте не обнаружен", n>0);
         $("#iway_change_city").selectOptionByValue(v);
+        waitPriceChange();
     }
 
     @Step("Выбрать маршрут «Куда» - ж/д вокзал Белорусский (Москва)")
@@ -195,6 +191,7 @@ public class TransportPage extends Page {
         int n = $$(byXpath("//select[@id='iway_change_city1']/option[@value='" + v + "']")).size();
         assertTrue("Ж/д вокзал Белорусский (Москва) в селекте не обнаружен", n>0);
         $("#iway_change_city1").selectOptionByValue(v);
+        waitPriceChange();
     }
 
     @Step("Действие 15, Нажать на кнопку «Выбрать» для категории Стандарт")
@@ -717,6 +714,19 @@ public class TransportPage extends Page {
         }
         $(byXpath("//a[@class='cart__item-counter-link']")).click();
         waitPlane();
+    }
+
+    @Step("Ожидание изменения цены трансфера")
+    private void waitPriceChange() {
+        int i = 0;
+        String newPrice;
+        String price = $(byXpath("//p[contains(@class,'text--title-h3')]")).getText();
+        while (i<20){
+            Sleep(1);
+            newPrice = $(byXpath("//p[contains(@class,'text--title-h3')]")).getText();
+            if (!price.equals(newPrice)) break;
+            i++;
+        }
     }
 
 
