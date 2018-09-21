@@ -320,11 +320,10 @@ public class EssPage extends Page {
         String duration = "";
         String time = flights.get(i-1).$(byXpath("descendant::div[@class='h-color--gray h-mt--4']")).getText();
         time = time.substring(time.indexOf("("), time.indexOf(")")-1);
-        for (int c = 0; c < time.length(); c++) {
-            if (Character.isDigit(time.charAt(c))) {
-                duration = duration + time.charAt(c);
-            }
-        }
+        String[] t = time.split(" ");
+        String min = t[1].replaceAll("\\D+","");
+        duration = t[0].replaceAll("\\D+","") + min;
+        if (min.equals("0")) duration = duration + "0";
         System.out.println("duration = " + duration);
         assertTrue("Длительность авиаперелета не совпадает с забронированной" +
                    "\nОжидалось : " + flightList.get(i-1).duration +

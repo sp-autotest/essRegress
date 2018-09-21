@@ -217,7 +217,9 @@ public class SearchPage extends Page {
             long occurrencesCount = temp.chars().filter(ch -> ch == ':').count();//велосипед:
             if (temp.contains("：")) occurrencesCount++;                         //в японском и китайском двоеточия разные
             if (occurrencesCount>2) temp = temp.substring(0,temp.length()-3);    //отбрасываем секунды, если они есть
-            duration = duration + temp.replaceAll("\\D+","") + " ";
+            temp = temp.replaceAll("\\D+","");
+            if (temp.length()<3) temp = temp + "00";
+            duration = duration + temp + " ";
         }
     }
 
