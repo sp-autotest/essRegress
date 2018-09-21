@@ -134,7 +134,9 @@ public class EprPage extends Page {
                    "\nОжидалось : " + f.number.replace(" ", "") + "\nФактически: " + number,
                    number.equals(f.number.replace(" ", "")));
 
-        String duration = flight.$(byXpath("descendant::span[@duration='route.duration']")).getText().replaceAll("[^0-9]", "");
+        String dur = flight.$(byXpath("descendant::span[@duration='route.duration']")).getText();
+        String duration = dur.replaceAll("[^0-9]", "");
+        if (dur.contains(" 0 ")) duration = duration + "0";
         System.out.print(duration + " ");
         assertTrue("Длительность перелета в маршруте отличается от забронированного" +
                    "\nОжидалось : " + f.duration + "\nФактически: " + duration, duration.equals(f.duration));
