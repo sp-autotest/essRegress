@@ -587,10 +587,16 @@ public class TransportPage extends Page {
         System.out.println(dir);
         String direction = $(byXpath("//div[@id='trip_hi']/h3")).getText();
         System.out.println(direction);
-        assertTrue("Направления на форме с доп.информацией не совпадают с выбранными" +
-                   "\nОжидалось : " + dir +
-                   "\nФактически: " + direction,
-                   dir.equals(direction));
+        String[] etalon = dir.split("—");
+        String[] fact = direction.split("—");
+        assertTrue("Направление «Откуда» не содержится в выбранном" +
+                   "\nОжидалось : " + etalon[0] +
+                   "\nФактически: " + fact[0],
+                   etalon[0].contains(fact[0]));
+        assertTrue("Направление «Куда» не содержится в выбранном" +
+                   "\nОжидалось : " + etalon[1] +
+                   "\nФактически: " + fact[1],
+                   etalon[1].contains(fact[1]));
     }
 
     @Step("Нажать кнопку «Выбрать»")
@@ -629,11 +635,11 @@ public class TransportPage extends Page {
         assertTrue("Направление Откуда трансфера не совпадает с выбранным" +
                    "\nОжидалось : " + fromC +
                    "\nФактически: " + from,
-                   from.equals(fromC));
+                   fromC.contains(from));
         assertTrue("Направление Куда трансфера не совпадает с выбранным" +
                    "\nОжидалось : " + toC +
                    "\nФактически: " + to,
-                   to.equals(toC));
+                   toC.contains(to));
         /*
         ВРЕМЕННО до решения вопроса с датой трансфера изменена её проверка:
         проверяем разницу дат - должно быть не более 1-го дня

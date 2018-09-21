@@ -283,7 +283,7 @@ public class EssPage extends Page {
     @Step("Проверка данных о {0}-м маршруте")
     private void checkFlightData(int i, List<Flight> flightList, ElementsCollection flights){
         String flight = flights.get(i-1).$(byXpath("descendant::div[@class='cart__item-details-item']")).getText().trim();
-        String expected = flightList.get(i-1).from+" → "+flightList.get(i-1).to;
+        String expected = flightList.get(i-1).from+"—"+flightList.get(i-1).to;
         assertTrue("Маршрут не совпадает с забронированным" +
                    "\nОжидалось : " + expected +
                    "\nФактически: " + flight,
@@ -464,7 +464,8 @@ public class EssPage extends Page {
 
     @Step("Переместить мышку в блок маршрутов")
     private void moveMouseToFlight() {
-        WebElement el = $(byXpath("//div[@data-toggle-id='cart-booking']")).toWebElement();
+        //WebElement el = $(byXpath("//div[@data-toggle-id='cart-booking']")).toWebElement();
+        WebElement el = $(byXpath("//p[@class='cart__booking-code']")).toWebElement();
         Actions actions = new Actions(getWebDriver());
         actions.moveToElement(el).perform();
         Sleep(1);
