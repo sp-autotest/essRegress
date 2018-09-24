@@ -227,6 +227,7 @@ public class HotelPage extends Page {
         price = price.replaceAll("\\D+","");
         System.out.println("Room price = " + price);
         Values.price.hotel = price;
+        screenShot("Скриншот");
         rooms.get(room).$(byXpath("descendant::div[@class='hotel-room__buy-button-wrapper']")).shouldBe(visible).click();
         checkHotelFormAppear();
         checkHotelCartPrice();
