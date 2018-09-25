@@ -214,6 +214,8 @@ public class HotelPage extends Page {
         System.out.println("\t23. Click botton \"Book\"");
         ElementsCollection rooms = $$(byXpath("//li[@class='hotel-room']"));
         SelenideElement textprice = rooms.get(room).$(byXpath("descendant::div[@class='hotel-room__buy-price']")).shouldBe(visible);
+        textprice.scrollTo();
+        screenShot("Скриншот");
         System.out.println("Room text price = " + textprice.getAttribute("textContent"));
         String price = "";
         if (Values.cur.equals("RUB")) {
@@ -227,7 +229,6 @@ public class HotelPage extends Page {
         price = price.replaceAll("\\D+","");
         System.out.println("Room price = " + price);
         Values.price.hotel = price;
-        screenShot("Скриншот");
         rooms.get(room).$(byXpath("descendant::div[@class='hotel-room__buy-button-wrapper']")).shouldBe(visible).click();
         checkHotelFormAppear();
         checkHotelCartPrice();
