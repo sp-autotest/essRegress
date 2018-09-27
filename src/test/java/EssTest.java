@@ -410,7 +410,7 @@ public class EssTest {
         hotelPg.clickResidenceButton("15");//шаг 15
         hotelPg.checkHotelFilter();//шаг 16
         hotelPg.checkHotelLogic(flightList, passList);//шаг 17
-        //искать нештрафную комнату
+        //искать не штрафную комнату
         int room = -1;
         for (int i=0; i<=9; i++) {
             hotelPg.selectHotel(i);//шаг 21
