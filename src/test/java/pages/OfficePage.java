@@ -5,6 +5,7 @@ import com.codeborne.selenide.SelenideElement;
 import config.Values;
 //import ru.yandex.qatools.allure.annotations.Step;
 import io.qameta.allure.Step;
+import struct.CollectData;
 import struct.Flight;
 import struct.Passenger;
 
@@ -23,6 +24,12 @@ import static org.testng.AssertJUnit.assertTrue;
 
 
 public class OfficePage extends Page{
+
+    private CollectData collectData;
+
+    public OfficePage(CollectData collectData) {
+        this.collectData = collectData;
+    }
 
     @Step("Форма «Заказы» открылась")
     private void checkOrderFormAppear() {
@@ -110,10 +117,10 @@ public class OfficePage extends Page{
 
     @Step("Проверить сумму оплаченного тарифа")
     private void checkTariff(){
-        String tarif = Values.price.total + Values.cur;
+        String tarif = Values.reportData[collectData.getTest()].getPrice().total + collectData.getCur();
         String itogo = $(byXpath("//td[text()='Итого:']/following-sibling::td[2]")).getText();
         itogo = itogo.replace(" ", "");
-        if (Values.cur.equals("RUB")|Values.cur.equals("CNY")) itogo = itogo.replaceFirst(",00", "");
+        if (collectData.getCur().equals("RUB")|collectData.getCur().equals("CNY")) itogo = itogo.replaceFirst(",00", "");
         else itogo = itogo.replaceFirst(",", "");
         assertTrue("Сумма оплаченного тарифа не совпадает с забронированной" +
                    "\nОжидалось: " + tarif +

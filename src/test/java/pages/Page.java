@@ -40,15 +40,15 @@ public class Page {
     }
 
     @Step("Запись результатов")
-    public static void resultat(){
-        logPNR(Values.pnr);
+    public static void resultat(int test){
+        logPNR(Values.getPNR(test));
         logCardNumber(Values.card[0][0]);
-        logDocuments(Values.docs);
+        logDocuments(Values.getDOC(test));
     }
 
     @Step("Неблокирующие ошибки")
-    public static void nonBlockingErrors(){
-        for (String e : Values.errors) logDoc(e);
+    public static void nonBlockingErrors(int test){
+        for (String e : Values.getERR(test)) logDoc(e);
     }
 
     @Step("PNR: {0}")
@@ -158,5 +158,7 @@ public class Page {
         }
         return parsingDate;
     }
+
+
 
 }

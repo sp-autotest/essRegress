@@ -8,8 +8,10 @@ import dict.NationalityName;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import io.qameta.allure.Step;
+import struct.CollectData;
 import struct.Flight;
 import struct.Passenger;
+import struct.Price;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -28,6 +30,12 @@ import static org.testng.AssertJUnit.assertTrue;
  * Created by mycola on 22.02.2018.
  */
 public class EssPage extends Page {
+
+    private CollectData collectData;
+
+    public EssPage(CollectData collectData) {
+        this.collectData = collectData;
+    }
 
     @Step("Действие 6, Проверка формы ESS")
     public void step6() {
@@ -80,7 +88,7 @@ public class EssPage extends Page {
     public void checkSelectPlaceStep() {
         System.out.println("\t7. Check Prereserved place");
         String code = "0B5"; //код услуги "Предварительный выбор места"
-        String etalon = AddService.getServiceByCodeAndLanguage(code, Values.ln) + " (1)";
+        String etalon = AddService.getServiceByCodeAndLanguage(code, collectData.getLn()) + " (1)";
         SelenideElement place = $(byXpath("//div[@class='cart__item cart__item--last']"));
         String nameOfService = place.$(byXpath("descendant::div[@class='cart__item-priceondemand-item-title']"))
                 .shouldBe(visible).getText();
@@ -88,9 +96,9 @@ public class EssPage extends Page {
                     "\nОжидалось : " + etalon +
                     "\nФактически: " + nameOfService,
                     nameOfService.equals(etalon));
-        Values.price.place = place.$(byXpath("descendant::div[@class='cart__item-priceondemand-item-price']"))
+        Values.reportData[collectData.getTest()].getPrice().place = place.$(byXpath("descendant::div[@class='cart__item-priceondemand-item-price']"))
                 .shouldBe(visible).getText().replaceAll("\\D+", "");
-        System.out.println("Select place price = " + Values.price.place);
+        System.out.println("Select place price = " + Values.reportData[collectData.getTest()].getPrice().place);
     }
 
     @Step("Действие 8, Проверка данных в блоке «ВЫБОР ПИТАНИЯ»")
@@ -104,26 +112,26 @@ public class EssPage extends Page {
         ElementsCollection eat = cart_item.get(1).$$(byXpath("descendant::div[@class='cart__item-priceondemand-item-title']"));
 
         String code = "0B3"; //код услуги "Закуска Сырная"
-        String etalon = AddService.getServiceByCodeAndLanguage(code, Values.ln) + " (1)";
+        String etalon = AddService.getServiceByCodeAndLanguage(code, collectData.getLn()) + " (1)";
         String nameOfService = eat.get(0).shouldBe(visible).getText();
         assertTrue("Некорректное название услуги основного блюда в блоке «ВЫБОР ПИТАНИЯ»" +
                    "\nОжидалось : " + etalon +
                    "\nФактически: " + nameOfService,
                    nameOfService.equals(etalon));
-        Values.price.entree = eat.get(0).$(byXpath("following-sibling::div[@class='cart__item-priceondemand-item-price']"))
+        Values.reportData[collectData.getTest()].getPrice().entree = eat.get(0).$(byXpath("following-sibling::div[@class='cart__item-priceondemand-item-price']"))
                 .shouldBe(visible).getText().replaceAll("\\D+", "");
-        System.out.println("Price of " + nameOfService + " = " + Values.price.entree);
+        System.out.println("Price of " + nameOfService + " = " + Values.reportData[collectData.getTest()].getPrice().entree);
 
         code = "019"; //код услуги "Десерт Шоколадная тарталетка"
-        etalon = AddService.getServiceByCodeAndLanguage(code, Values.ln) + " (1)";
+        etalon = AddService.getServiceByCodeAndLanguage(code, collectData.getLn()) + " (1)";
         nameOfService = eat.get(1).shouldBe(visible).getText();
         assertTrue("Некорректное название услуги десерта в блоке «ВЫБОР ПИТАНИЯ»" +
                    "\nОжидалось : " + etalon +
                    "\nФактически: " + nameOfService,
                    nameOfService.equals(etalon));
-        Values.price.dessert = eat.get(1).$(byXpath("following-sibling::div[@class='cart__item-priceondemand-item-price']"))
+        Values.reportData[collectData.getTest()].getPrice().dessert = eat.get(1).$(byXpath("following-sibling::div[@class='cart__item-priceondemand-item-price']"))
                 .shouldBe(visible).getText().replaceAll("\\D+", "");
-        System.out.println("Price of " + nameOfService + " = " + Values.price.dessert);
+        System.out.println("Price of " + nameOfService + " = " + Values.reportData[collectData.getTest()].getPrice().dessert);
     }
 
     @Step("Действие 8, Проверка данных в блоке «Страховка»")
@@ -147,18 +155,18 @@ public class EssPage extends Page {
         System.out.println("\t8. Check Insurance group");
         int n = 0;
         for (Passenger p : passengerList) {
-            if (!p.getNationality().equals(NationalityName.getNationalityByLanguage("us", ln))) n++;
+            if (!p.getNationality().equals(NationalityName.getNationalityByLanguage("us", collectData.getLn()))) n++;
         }
         screenShot("Скриншот");
         if (n>0) {
             String summ = $("#left-column-insurance-block").$(byXpath("descendant::" +
                     "div[@class='cart__item-priceondemand-item-price']")).getText().trim();
-            Values.price.iflight = summ.replaceAll("\\D+", "");
-            int s = stringIntoInt(Values.price.iflight);
+            Values.reportData[collectData.getTest()].getPrice().iflight = summ.replaceAll("\\D+", "");
+            int s = stringIntoInt(Values.reportData[collectData.getTest()].getPrice().iflight);
             System.out.println("Summ = " + s);
             String price = $(byXpath("//div[@class='frame__heading frame__heading--icon frame__heading--icon-safe']/span")).getText();
             price = price.substring(0, price.indexOf("(")).replaceAll("\\D+", "");
-            if (Values.cur.equals("EUR") | Values.cur.equals("USD")) {
+            if (collectData.getCur().equals("EUR") | collectData.getCur().equals("USD")) {
                 if (price.length() == 1) price = price + "00";
                 if (price.length() == 2) price = price + "0";
             }
@@ -168,7 +176,7 @@ public class EssPage extends Page {
             System.out.println("price * n = " + p * n);
             assertTrue("Общая сумма страховки не равняется сумме страховок каждого пассажира" +
                     "\nОжидалось : " + p * n +
-                    "\nФактически: " + Values.price.iflight , s == p * n);
+                    "\nФактически: " + Values.reportData[collectData.getTest()].getPrice().iflight , s == p * n);
         } else checkMissFlyInsuranceInCard();
     }
 
@@ -189,7 +197,7 @@ public class EssPage extends Page {
         System.out.println("\t9. Delete Fly Insurance");
         clickFlyInsuranceButton();
         checkMissFlyInsuranceInCard();
-        checkFlyInsuranceButton(Values.text[5][ln]);
+        checkFlyInsuranceButton(Values.text[5][collectData.getLn()]);
         checkTotalAndFlyPrices();
         screenShot("Скриншот");
     }
@@ -244,12 +252,12 @@ public class EssPage extends Page {
 
     @Step("Блок полетной страховки")
     private void checkFlightInsurance(){
-        $(byXpath("//div[contains(text(),'" + text[0][ln] + "')]")).shouldBe(visible);
+        $(byXpath("//div[contains(text(),'" + text[0][collectData.getLn()] + "')]")).shouldBe(visible);
     }
 
     @Step("Блок медицинской страховки")
     private void checkMedicalInsurance(){
-        $(byXpath("//div[contains(text(),'" + text[1][ln] + "')][contains(@class,'icon-medicial')]")).shouldBe(visible);
+        $(byXpath("//div[contains(text(),'" + text[1][collectData.getLn()] + "')][contains(@class,'icon-medicial')]")).shouldBe(visible);
     }
 
     @Step("Блок корзины")
@@ -264,20 +272,21 @@ public class EssPage extends Page {
 
     @Step("Транспорт")
     private void checkTransport(){
-        $("#left-column-transport").shouldBe(visible).shouldBe(exactText(text[2][ln]));
+        $("#left-column-transport").shouldBe(visible).shouldBe(exactText(text[2][collectData.getLn()]));
     }
 
     @Step("Проживание")
     private void checkDwelling(){
-        $(byXpath("//div[@class='cart__item']")).shouldBe(visible).shouldBe(exactText(text[3][ln]));
+        $(byXpath("//div[@class='cart__item']")).shouldBe(visible).shouldBe(exactText(text[3][collectData.getLn()]));
     }
 
     @Step("Проверка данных о стоимости")
     private void checkPriceData(){
         String price = $(byXpath("//div[@class='cart__item-price']")).getText().replaceAll("\\D+","");
         assertTrue("Стоимость не совпадает c указанной при бронировании" +
-                   "\nОжидалось: " + Values.price.fly +"\nФактически: " + price,
-                   price.equals(Values.price.fly));
+                   "\nОжидалось: " + Values.reportData[collectData.getTest()].getPrice().fly +
+                   "\nФактически: " + price,
+                   price.equals(Values.reportData[collectData.getTest()].getPrice().fly));
     }
 
     @Step("Проверка данных о {0}-м маршруте")
@@ -304,11 +313,11 @@ public class EssPage extends Page {
         String date = flights.get(i-1).$(byXpath("descendant::div[@class='h-color--gray h-mt--4']")).getText().replace(" ", "");
         date = date.substring(0, date.indexOf("("));
         System.out.println("Site = " + date);
-        String format = Values.lang[ln][3];
-        String month = new SimpleDateFormat("MMMM", new Locale(Values.lang[ln][2])).format(flightList.get(i-1).start);
+        String format = Values.lang[collectData.getLn()][3];
+        String month = new SimpleDateFormat("MMMM", new Locale(Values.lang[collectData.getLn()][2])).format(flightList.get(i-1).start);
         if (month.length()>5) format = format.replaceFirst("MMMM", "MMM.");
         if (month.equals("Сентябрь")) format = format.replaceFirst("MMM", "сент");
-        String dd = new SimpleDateFormat(format, new Locale(Values.lang[ln][2])).format(flightList.get(i-1).start);
+        String dd = new SimpleDateFormat(format, new Locale(Values.lang[collectData.getLn()][2])).format(flightList.get(i-1).start);
         dd = dd + new SimpleDateFormat("HH:mm").format(flightList.get(i-1).end);
         System.out.println("Locale = " + dd);
         assertTrue("Дата авиаперелета не совпадает с забронированной"+
@@ -334,12 +343,12 @@ public class EssPage extends Page {
     @Step("Полетная страховка в корзине")
     private void checkFlyInsuranceInCard(){
         $("#left-column-insurance-block").$(byXpath("descendant::div[@class='cart__item-priceondemand-item-title']"))
-                .shouldBe(exist).shouldBe(visible).shouldBe(exactText(text[0][ln]));
+                .shouldBe(exist).shouldBe(visible).shouldBe(exactText(text[0][collectData.getLn()]));
     }
 
     @Step("Полетная страховка отсутствует в корзине")
     private void checkMissFlyInsuranceInCard(){
-        $("#left-column-insurance-block").$(byXpath("descendant::div[text()='" + text[0][ln] + "']"))
+        $("#left-column-insurance-block").$(byXpath("descendant::div[text()='" + text[0][collectData.getLn()] + "']"))
                 .shouldNotBe(visible).shouldNotBe(exist);
     }
 
@@ -353,22 +362,22 @@ public class EssPage extends Page {
     private  void checkPriceOfFlyInsurance(){
         String summ = $("#left-column-insurance-block").$(byXpath("descendant::" +
                 "div[@class='cart__item-priceondemand-item-price']")).getText().trim();
-        Values.price.iflight = summ.replaceAll("\\D+","");
-        int s = stringIntoInt(Values.price.iflight);
+        Values.reportData[collectData.getTest()].getPrice().iflight = summ.replaceAll("\\D+","");
+        int s = stringIntoInt(Values.reportData[collectData.getTest()].getPrice().iflight);
         System.out.println("Summ = " + s);
         String price = $(byXpath("//div[@class='frame__heading frame__heading--icon frame__heading--icon-safe']/span")).getText();
         price = price.substring(0, price.indexOf("(")).replaceAll("\\D+","");
-        if (Values.cur.equals("EUR")|Values.cur.equals("USD")) {
+        if (collectData.getCur().equals("EUR")|collectData.getCur().equals("USD")) {
             if (price.length() == 1) price = price + "00";
             if (price.length() == 2) price = price + "0";
         }
         int p = stringIntoInt(price);
         System.out.println("price = " + p);
-        System.out.println("ticket = " + ticket);
-        System.out.println("price * ticket = " + p*ticket);
+        System.out.println("ticket = " + collectData.getTicket());
+        System.out.println("price * ticket = " + p*collectData.getTicket());
         assertTrue("Общая сумма страховки не равняется сумме страховок каждого пассажира" +
-                "\nОжидалось : " + Values.price.iflight +
-                "\nФактически: " + p*ticket, s == p*ticket);
+                "\nОжидалось : " + Values.reportData[collectData.getTest()].getPrice().iflight +
+                "\nФактически: " + p*collectData.getTicket(), s == p*collectData.getTicket());
     }
 
     @Step("Нажать кнопку «Добавить в заказ»")
@@ -376,7 +385,7 @@ public class EssPage extends Page {
         SelenideElement ins = $("#medIns" + type);
         ins.scrollTo();
         ins.$(byXpath("descendant::a[contains(@class,'button--micro-padding')]"))
-                .shouldBe(visible).shouldBe(exactText(text[5][ln])).click();
+                .shouldBe(visible).shouldBe(exactText(text[5][collectData.getLn()])).click();
     }
 
     @Step("Проверка стоимости медицинской страховки")
@@ -387,26 +396,27 @@ public class EssPage extends Page {
         System.out.println("Type of medical insurance = " + name);
         SelenideElement p = $(byXpath("//div[@class='cart__item-priceondemand-item-title']" +
                 "[contains(text(),'" + name + "')]")).shouldBe(visible);
-        Values.price.imedical = p.$(byXpath("following-sibling::div[@class='cart__item-priceondemand-item-price']")).getText().replaceAll("\\D+","");
-        System.out.println("Med price = " + Values.price.imedical);
+        Values.reportData[collectData.getTest()].getPrice().imedical = p.$(byXpath("following-sibling::div[@class='cart__item-priceondemand-item-price']")).getText().replaceAll("\\D+","");
+        System.out.println("Med price = " + Values.reportData[collectData.getTest()].getPrice().imedical);
         assertTrue("Стоимость страхования в корзине не совпадает с указанной в блоке" +
                    "\nОжидалось : " + price +
-                   "\nФактически: " + Values.price.imedical,
-                   price.equals(Values.price.imedical));
+                   "\nФактически: " + Values.reportData[collectData.getTest()].getPrice().imedical,
+                   price.equals(Values.reportData[collectData.getTest()].getPrice().imedical));
         Sleep(3);
     }
 
     @Step("Проверка кнопки «В заказе»")
     private void checkMedicalButtonName(String type){
         $("#medIns" + type).$(byXpath("descendant::a[contains(@class,'button--micro-padding')]"))
-                .shouldBe(visible).shouldBe(exactText(text[6][ln])).scrollTo();
+                .shouldBe(visible).shouldBe(exactText(text[6][collectData.getLn()])).scrollTo();
     }
 
     @Step("Проверка общей суммы заказа (включает в себя стоимость услуг страхования)")
     private void checkTotalAndInsurensPrices(){
+        Price price = Values.reportData[collectData.getTest()].getPrice();
         String itemPrice;
         String flyPrice = $(byXpath("//div[contains(@class,'cart__item-price cart__item-price--hovered')]")).scrollTo().getText().replaceAll("\\D+","");
-        Values.price.fly = flyPrice;
+        Values.reportData[collectData.getTest()].getPrice().fly = flyPrice;
         int summ = stringIntoInt(flyPrice);
         System.out.println("Fly price = " + flyPrice);
         ElementsCollection items = $("#left-column-insurance-block").$$(byXpath("descendant::div[@class='cart__item-priceondemand-item-price']"));
@@ -417,29 +427,29 @@ public class EssPage extends Page {
         }
         Sleep(3);
         /*учитываем доп. услуги питания и выбора места*/
-        if (Values.price.place != null) summ = summ + stringIntoInt(Values.price.place);
-        if (Values.price.entree != null) summ = summ + stringIntoInt(Values.price.entree);
-        if (Values.price.dessert != null) summ = summ + stringIntoInt(Values.price.dessert);
+        if (price.place != null) summ = summ + stringIntoInt(price.place);
+        if (price.entree != null) summ = summ + stringIntoInt(price.entree);
+        if (price.dessert != null) summ = summ + stringIntoInt(price.dessert);
         /**/
         String totalPrice = $("#cart-total-incarts").$(byXpath("descendant::div[@class='cart__item-price']")).getText().replaceAll("\\D+","");
         System.out.println("Total price = " + totalPrice);
-        Values.price.total = totalPrice;
+        Values.reportData[collectData.getTest()].getPrice().total = totalPrice;
         assertTrue("Общая сумма заказа некорректна" +
                    "\nОжидалось : " + summ +
-                   "\nФактически: " + Values.price.total,
-                   abs(summ - stringIntoInt(Values.price.total))<2);
+                   "\nФактически: " + totalPrice,
+                   abs(summ - stringIntoInt(totalPrice))<2);
     }
 
     @Step("Проверка общей суммы заказа")
     private void checkTotalAndFlyPrices(){
         Sleep(3);
         String flyPrice = $(byXpath("//div[@class='cart__item-price']")).getText().replaceAll("\\D+","");
-        Values.price.total = $("#cart-total-incarts").$(byXpath("descendant::div[@class='cart__item-price']")).getText().replaceAll("\\D+","");
-        System.out.println("Total price = " + Values.price.total);
+        Values.reportData[collectData.getTest()].getPrice().total = $("#cart-total-incarts").$(byXpath("descendant::div[@class='cart__item-price']")).getText().replaceAll("\\D+","");
+        System.out.println("Total price = " + Values.reportData[collectData.getTest()].getPrice().total);
         assertTrue("Общая сумма заказа некорректна" +
-                   "\nОжидалось : " + Values.price.total +
+                   "\nОжидалось : " + Values.reportData[collectData.getTest()].getPrice().total +
                    "\nФактически: " + flyPrice,
-                   flyPrice.equals(Values.price.total));
+                   flyPrice.equals(Values.reportData[collectData.getTest()].getPrice().total));
     }
 
 
@@ -463,7 +473,6 @@ public class EssPage extends Page {
 
     @Step("Переместить мышку в блок маршрутов")
     private void moveMouseToFlight() {
-        //WebElement el = $(byXpath("//div[@data-toggle-id='cart-booking']")).toWebElement();
         WebElement el = $(byXpath("//p[@class='cart__booking-code']")).toWebElement();
         Actions actions = new Actions(getWebDriver());
         actions.moveToElement(el).perform();

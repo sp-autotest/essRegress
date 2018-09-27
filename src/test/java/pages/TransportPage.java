@@ -6,7 +6,10 @@ import config.Values;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.interactions.Actions;
 import io.qameta.allure.Step;
+import struct.CollectData;
 import struct.Flight;
+import struct.Price;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -27,10 +30,16 @@ import static org.testng.AssertJUnit.assertTrue;
  */
 public class TransportPage extends Page {
 
+    private CollectData collectData;
+
+    public TransportPage(CollectData collectData) {
+        this.collectData = collectData;
+    }
+
     @Step("Действие 10, Нажать на кнопку «Транспорт»")
     public void step10(int test) {
         System.out.println("\t10. Click Transport button");
-        new EssPage().clickTransportButton();
+        new EssPage(collectData).clickTransportButton();
         checkTransportBlock();
         if (test == 1) {
             screenShot("Скриншот");
@@ -60,12 +69,9 @@ public class TransportPage extends Page {
         int beforePrice = getCarPrice();
         addInsurance();
         screenShot("Скриншот");
-
-//      проверка временно отключена, до фикса бага
-      checkAllPrice(getInsurancePrice(), beforePrice, getCarPrice());//пробное включение, 29.08.18
-
-        price.nationalTransport = getAllCarPrice();
-        price.transport = getEuroAllCarPrice();
+        checkAllPrice(getInsurancePrice(), beforePrice, getCarPrice());//пробное включение, 29.08.18
+        Values.reportData[collectData.getTest()].getPrice().nationalTransport = getAllCarPrice();
+        Values.reportData[collectData.getTest()].getPrice().transport = getEuroAllCarPrice();
         clickRentButton();
         screenShot("Скриншот");
         checkTranspotrPriceInCard();
@@ -82,8 +88,8 @@ public class TransportPage extends Page {
         System.out.println("\t11. Rent Auto");
         selectCar();
         screenShot("Скриншот");
-        price.nationalTransport = getAllCarPrice();
-        price.transport = getEuroAllCarPrice();
+        Values.reportData[collectData.getTest()].getPrice().nationalTransport = getAllCarPrice();
+        Values.reportData[collectData.getTest()].getPrice().transport = getEuroAllCarPrice();
         clickRentButton();
         screenShot("Скриншот");
         checkTranspotrPriceInCard();
@@ -130,30 +136,30 @@ public class TransportPage extends Page {
         switch (flightList.get(0).from_orig) {
             case "SVO":
                 dir = directions.get(0).getText();
-                assertTrue("Направление \"Из города\" некорректно\nОжидалось : " + text[18][ln] + "\nФактически: " + dir, dir.equals(text[18][ln]));
+                assertTrue("Направление \"Из города\" некорректно\nОжидалось : " + text[18][collectData.getLn()] + "\nФактически: " + dir, dir.equals(text[18][collectData.getLn()]));
                 dir = directions.get(1).getText();
-                assertTrue("Направление \"В аэропорт\" некорректно\nОжидалось : " + text[19][ln] + "\nФактически: " + dir, dir.equals(text[19][ln]));
+                assertTrue("Направление \"В аэропорт\" некорректно\nОжидалось : " + text[19][collectData.getLn()] + "\nФактически: " + dir, dir.equals(text[19][collectData.getLn()]));
                 break;
             case "VKO":
                 dir = directions.get(0).getText();
-                assertTrue("Направление \"Из города\" некорректно\nОжидалось : " + text[20][ln] + "\nФактически: " + dir, dir.equals(text[20][ln]));
+                assertTrue("Направление \"Из города\" некорректно\nОжидалось : " + text[20][collectData.getLn()] + "\nФактически: " + dir, dir.equals(text[20][collectData.getLn()]));
                 dir = directions.get(1).getText();
-                assertTrue("Направление \"В аэропорт\" некорректно\nОжидалось : " + text[21][ln] + "\nФактически: " + dir, dir.equals(text[21][ln]));
+                assertTrue("Направление \"В аэропорт\" некорректно\nОжидалось : " + text[21][collectData.getLn()] + "\nФактически: " + dir, dir.equals(text[21][collectData.getLn()]));
                 break;
         }
         /*Обратно*/
         switch (flightList.get(flightList.size()-1).to_orig) {
             case "SVO":
                 dir = directions.get(2).getText();
-                assertTrue("Направление \"Из аэропорта\" некорректно\nОжидалось : " + text[19][ln] + "\nФактически: " + dir, dir.equals(text[19][ln]));
+                assertTrue("Направление \"Из аэропорта\" некорректно\nОжидалось : " + text[19][collectData.getLn()] + "\nФактически: " + dir, dir.equals(text[19][collectData.getLn()]));
                 dir = directions.get(3).getText();
-                assertTrue("Направление \"В город\" некорректно\nОжидалось : " + text[18][ln] + "\nФактически: " + dir, dir.equals(text[18][ln]));
+                assertTrue("Направление \"В город\" некорректно\nОжидалось : " + text[18][collectData.getLn()] + "\nФактически: " + dir, dir.equals(text[18][collectData.getLn()]));
                 break;
             case "VKO":
                 dir = directions.get(2).getText();
-                assertTrue("Направление \"Из аэропорта\" некорректно\nОжидалось : " + text[21][ln] + "\nФактически: " + dir, dir.equals(text[21][ln]));
+                assertTrue("Направление \"Из аэропорта\" некорректно\nОжидалось : " + text[21][collectData.getLn()] + "\nФактически: " + dir, dir.equals(text[21][collectData.getLn()]));
                 dir = directions.get(3).getText();
-                assertTrue("Направление \"В город\" некорректно\nОжидалось : " + text[20][ln] + "\nФактически: " + dir, dir.equals(text[20][ln]));
+                assertTrue("Направление \"В город\" некорректно\nОжидалось : " + text[20][collectData.getLn()] + "\nФактически: " + dir, dir.equals(text[20][collectData.getLn()]));
                 break;
         }
     }
@@ -202,7 +208,7 @@ public class TransportPage extends Page {
         for (int i=0; i<categories.size(); i++){
             String cat = categories.get(i).$(byXpath("descendant::h3")).getText();
             System.out.println(cat);
-            if (cat.equals(Values.text[26][ln])){ //Стандарт
+            if (cat.equals(Values.text[26][collectData.getLn()])){ //Стандарт
                 price = categories.get(i).$(byXpath("div/div[4]")).getText();//.replaceAll("\\D+","");
                 price = price.substring(0, price.indexOf(" "));
                 int startMinor = price.indexOf(".");
@@ -219,7 +225,7 @@ public class TransportPage extends Page {
             }
         }
         checkTransferAdditionalForm();
-        Values.price.transfer = price;
+        Values.reportData[collectData.getTest()].getPrice().transfer = price;
     }
 
     @Step("Действие 16, Заполнить и проверить форму трансфера")
@@ -250,7 +256,7 @@ public class TransportPage extends Page {
     @Step("Проверка перехода в раздел «Транспорт»")
     private void checkTransportBlock(){
         $(byXpath("//div[@id='left-column-transport'][contains(@class,'--active')]")).
-                shouldBe(visible).shouldBe(exactText(text[2][ln]));
+                shouldBe(visible).shouldBe(exactText(text[2][collectData.getLn()]));
     }
 
     @Step("Проверка наличия фильтра для поиска автомобиля")
@@ -275,7 +281,7 @@ public class TransportPage extends Page {
         for (int i=0; i< gears.size(); i++) {
             if (gears.get(i).isDisplayed()) {
                 System.out.println("Gear =" + gears.get(i).getText());
-                assertTrue("Фильтр по трансмиссии не сработал.", gears.get(i).getText().equals(text[7][ln]));
+                assertTrue("Фильтр по трансмиссии не сработал.", gears.get(i).getText().equals(text[7][collectData.getLn()]));
             }
         }
     }
@@ -314,25 +320,25 @@ public class TransportPage extends Page {
 
     @Step("Проверка кнопки «В заказе»")
     private void checkRentButtonName(){
-        $(byXpath("//div[@class='auto-card__button-top']")).shouldBe(visible).shouldBe(exactText(text[6][ln]));
+        $(byXpath("//div[@class='auto-card__button-top']")).shouldBe(visible).shouldBe(exactText(text[6][collectData.getLn()]));
     }
 
     @Step("Проверка кнопки «Изменить выбранные опции»")
     private void checkOptionsButton(){
         assertTrue("Кнопка не обнаружена", $(byXpath("//div[@class='auto-selected__options-button']/a"))
-                .getText().equals(text[8][ln]));
+                .getText().equals(text[8][collectData.getLn()]));
     }
 
     @Step("Проверка кнопки «Изменить время и место»")
     private void checkTimeButton(){
         assertTrue("Кнопка не обнаружена", $(byXpath("//div[@class='auto-selected__rent-button']/a"))
-                .getText().trim().equals(text[9][ln]));
+                .getText().trim().equals(text[9][collectData.getLn()]));
     }
 
     @Step("Проверка кнопки «Изменить страховку»")
     private void checkInsuranceButton(){
         assertTrue("Кнопка не обнаружена", $(byXpath("//div[@class='auto-selected__options-button'][2]/a"))
-                .getText().equals(text[10][ln]));
+                .getText().equals(text[10][collectData.getLn()]));
     }
 
     private int getInsurancePrice(){
@@ -380,10 +386,9 @@ public class TransportPage extends Page {
         String leftPrice = $("#left-column-transport").$(byXpath("descendant::div[@class='cart__item-priceondemand-item-price']")).getText().replaceAll("\\D+","");
         System.out.println("Transport price = " + leftPrice);
         assertTrue("Стоимость аренды авто в корзине не совпадает с указанной в блоке" +
-                "\nОжидалось : " + price.nationalTransport +
+                "\nОжидалось : " + Values.reportData[collectData.getTest()].getPrice().nationalTransport +
                 "\nФактически: " + leftPrice,
-                price.nationalTransport.equals(leftPrice));
-  ////временно отключена проверка
+                Values.reportData[collectData.getTest()].getPrice().nationalTransport.equals(leftPrice));
     }
 
     @Step("Проверка общей суммы заказа (включает в себя стоимость транспортных услуг)")
@@ -405,9 +410,10 @@ public class TransportPage extends Page {
         String transportPrice = $("#left-column-transport").$(byXpath("descendant::div[@class='cart__item-priceondemand-item-price']")).getText().replaceAll("\\D+","");
         summ = summ + stringIntoInt(transportPrice);
         /*учитываем доп. услуги питания и выбора места*/
-        if (Values.price.place != null) summ = summ + stringIntoInt(Values.price.place);
-        if (Values.price.entree != null) summ = summ + stringIntoInt(Values.price.entree);
-        if (Values.price.dessert != null) summ = summ + stringIntoInt(Values.price.dessert);
+        Price price = Values.reportData[collectData.getTest()].getPrice();
+        if (price.place != null) summ = summ + stringIntoInt(price.place);
+        if (price.entree != null) summ = summ + stringIntoInt(price.entree);
+        if (price.dessert != null) summ = summ + stringIntoInt(price.dessert);
         /**/
         String totalPrice = $("#cart-total-incarts").$(byXpath("descendant::div[@class='cart__item-price']")).getText().replaceAll("\\D+","");
         System.out.println("Total price = " + totalPrice);
@@ -418,21 +424,21 @@ public class TransportPage extends Page {
     }
 
     private void saveTransportData(){
-        Values.auto.name = $(byXpath("//div[@class='auto-card__title']")).getText();
-        System.out.println("Auto = " + Values.auto.name);
+        Values.reportData[collectData.getTest()].getAuto().name = $(byXpath("//div[@class='auto-card__title']")).getText();
+        System.out.println("Auto = " + Values.reportData[collectData.getTest()].getAuto().name);
         ElementsCollection ec = $$(byXpath("//div[@class='auto-selected__rent-element-text']"));
         for(int i = 0; i<ec.size(); i++) System.out.println("Auto = " + ec.get(i).getText());
-        Values.auto.receiveLocation = ec.get(0).getText();
+        Values.reportData[collectData.getTest()].getAuto().receiveLocation = ec.get(0).getText();
         String receiveDate = ec.get(1).getText() + ec.get(2).getText();
         try {
-            Values.auto.receiveDate = new SimpleDateFormat("dd.MM.yyyyHH:mm").parse(receiveDate);
+            Values.reportData[collectData.getTest()].getAuto().receiveDate = new SimpleDateFormat("dd.MM.yyyyHH:mm").parse(receiveDate);
         }catch (ParseException e) {
             System.out.println("Parsing date error");
         }
-        Values.auto.returnLocation = ec.get(3).getText();
+        Values.reportData[collectData.getTest()].getAuto().returnLocation = ec.get(3).getText();
         String returnDate = ec.get(4).getText() + ec.get(5).getText();
         try {
-            Values.auto.returnDate = new SimpleDateFormat("dd.MM.yyyyHH:mm").parse(returnDate);
+            Values.reportData[collectData.getTest()].getAuto().returnDate = new SimpleDateFormat("dd.MM.yyyyHH:mm").parse(returnDate);
         }catch (ParseException e) {
             System.out.println("Parsing date error");
         }
@@ -441,25 +447,25 @@ public class TransportPage extends Page {
     @Step("Проверка отображения раздела «Билеты на аэроэкспресс»")
     private void checkAeroexpressForm(){
         SelenideElement h = $(byXpath("//div[@class='axpholder']")).shouldBe(exist).shouldBe(visible);
-        h.$(byXpath("descendant::h2")).shouldBe(exactText(text[16][ln]));
+        h.$(byXpath("descendant::h2")).shouldBe(exactText(text[16][collectData.getLn()]));
     }
 
     @Step("Проверка отображения раздела «Прокат автомобилей»")
     private void checkCarRentalForm(){
         SelenideElement h = $(byXpath("//div[@class='carholder']")).shouldBe(exist).shouldBe(visible);
-        h.$(byXpath("descendant::h2")).shouldBe(exactText(text[24][ln]));
+        h.$(byXpath("descendant::h2")).shouldBe(exactText(text[24][collectData.getLn()]));
     }
 
     @Step("Проверка отображения раздела «Бронирование трансфера»")
     private void checkTransferForm(){
         SelenideElement h = $("#iway_transfer_page").shouldBe(exist).shouldBe(visible);
-        h.$(byXpath("descendant::h2")).shouldBe(exactText(text[25][ln]));
+        h.$(byXpath("descendant::h2")).shouldBe(exactText(text[25][collectData.getLn()]));
     }
 
     @Step("Проверка отсутствия услуги «Аэроэкспресс» в корзине")
     private void checkAeroexpressInCard(){
         String service = "";
-        if (ln == 0) {
+        if (collectData.getLn() == 0) {
             service = "Аэроэкспресс";
         }else {
             service = "Aeroexpress";
@@ -477,9 +483,9 @@ public class TransportPage extends Page {
     private void checkAeroexpressTikets(){
         int count = stringIntoInt($("#countTickets_").getText().replaceAll("\\D+",""));
         assertTrue("Количество билетов Аэроэкспресс, выбранных для поездки, отличается от количества пассажиров" +
-                        "\nОжидалось : " + ticket +
+                        "\nОжидалось : " + collectData.getTicket() +
                         "\nФактически: " + count,
-                        count == ticket);
+                        count == collectData.getTicket());
     }
 
     @Step("Проверить общую стоимость для всех пассажиров")
@@ -502,9 +508,9 @@ public class TransportPage extends Page {
         //int summ = stringIntoInt(price.fly) + stringIntoInt(price.iflight) + stringIntoInt(price.imedical);
         String totalPrice = $("#cart-total-incarts").$(byXpath("descendant::div[@class='cart__item-price']")).getText().replaceAll("\\D+","");
         assertTrue("Сумма \"Всего к оплате\" не корректна" +
-                        "\nОжидалось : " + Values.price.total +
+                        "\nОжидалось : " + Values.reportData[collectData.getTest()].getPrice().total +
                         "\nФактически: " + totalPrice,
-                        totalPrice.equals(Values.price.total));
+                        totalPrice.equals(Values.reportData[collectData.getTest()].getPrice().total));
     }
 
     @Step("Проверка отсутствия услуг в блоке Транспорт")
@@ -519,7 +525,7 @@ public class TransportPage extends Page {
         int n = 0;
         for (int i=0; i<chb.size(); i++) if (chb.get(i).isSelected()) n++;
         assertTrue("Для поездки на Аэроэкспресс выбраны не все пассажиры" +
-                   "\nОжидалось : " + ticket + "\nФактически: " + n, n == ticket);
+                   "\nОжидалось : " + collectData.getTicket() + "\nФактически: " + n, n == collectData.getTicket());
     }
 
     @Step("Проверить изменение общей стоимости Аэроэкспресс")
@@ -545,7 +551,7 @@ public class TransportPage extends Page {
             Sleep(1);
         }
         String service = "";
-        if (ln == 0) service = "Аэроэкспресс (";
+        if (collectData.getLn() == 0) service = "Аэроэкспресс (";
         else service = "Aeroexpress (";
         SelenideElement aero = transport.$(byXpath("descendant::div[contains(text(),'"+ service +"')]")).shouldBe(visible);
         //String leftPrice = transport.$(byXpath("descendant::div[@class='cart__item-priceondemand-item-price']")).getText().replaceAll("\\D+","");
@@ -555,12 +561,12 @@ public class TransportPage extends Page {
                    "\nОжидалось : " + price +
                    "\nФактически: " + leftPrice,
                    price.equals(leftPrice));
-        Values.price.aeroexpress = price;
+        Values.reportData[collectData.getTest()].getPrice().aeroexpress = price;
     }
 
     @Step("Проверить наличие формы дополнительной информации о трансфере")
     private void checkTransferAdditionalForm(){
-        $(byXpath("//h2[text()='"+Values.text[26][ln]+"']")).shouldBe(visible);//Стандарт
+        $(byXpath("//h2[text()='"+Values.text[26][collectData.getLn()]+"']")).shouldBe(visible);//Стандарт
     }
 
     @Step("Указать дату трансфера")
@@ -590,13 +596,13 @@ public class TransportPage extends Page {
         String[] etalon = dir.split("—");
         String[] fact = direction.split("—");
         assertTrue("Направление «Откуда» не содержится в выбранном" +
-                   "\nОжидалось : " + etalon[0] +
-                   "\nФактически: " + fact[0],
-                   etalon[0].contains(fact[0]));
+                        "\nОжидалось : " + etalon[0] +
+                        "\nФактически: " + fact[0],
+                etalon[0].contains(fact[0]));
         assertTrue("Направление «Куда» не содержится в выбранном" +
-                   "\nОжидалось : " + etalon[1] +
-                   "\nФактически: " + fact[1],
-                   etalon[1].contains(fact[1]));
+                        "\nОжидалось : " + etalon[1] +
+                        "\nФактически: " + fact[1],
+                etalon[1].contains(fact[1]));
     }
 
     @Step("Нажать кнопку «Выбрать»")
@@ -611,13 +617,13 @@ public class TransportPage extends Page {
             transport.click();//раскрыть блок Транспорт
             Sleep(1);
         }
-        SelenideElement transfer = transport.$(byXpath("descendant::div[contains(text(),'"+ Values.text[27][ln] +"')]")).shouldBe(visible);
+        SelenideElement transfer = transport.$(byXpath("descendant::div[contains(text(),'"+ Values.text[27][collectData.getLn()] +"')]")).shouldBe(visible);
         String leftPrice = transfer.$(byXpath("parent::div/div[@class='cart__item-priceondemand-item-price']")).getText().replaceAll("\\D+","");
         System.out.println("Transfer price = " + leftPrice);
         assertTrue("Сумма трансфера в корзине не совпадает с рассчитанной" +
-                   "\nОжидалось : " + Values.price.transfer +
+                   "\nОжидалось : " + Values.reportData[collectData.getTest()].getPrice().transfer +
                    "\nФактически: " + leftPrice,
-                   Values.price.transfer.equals(leftPrice));
+                   Values.reportData[collectData.getTest()].getPrice().transfer.equals(leftPrice));
     }
 
     @Step("Проверить наличие и сумму трансфера в окне")
@@ -627,8 +633,8 @@ public class TransportPage extends Page {
         String to = getTransferTo();
         String toC = dir.substring(dir.indexOf("—")+2);
         String tdate = getTransferDate();
-        String dateC = new SimpleDateFormat("dd MMMM, E", new Locale(Values.lang[ln][2])).format(date);
-        if (ln==6) tdate = dateC; //убрать когда выяснится формат даты трансфера в китайском языке
+        String dateC = new SimpleDateFormat("dd MMMM, E", new Locale(Values.lang[collectData.getLn()][2])).format(date);
+        if (collectData.getLn()==6) tdate = dateC; //убрать когда выяснится формат даты трансфера в китайском языке
         String time = getTransferTime();
         String category = getTransferCategory();
         String summ = getTransferSumm();
@@ -651,7 +657,7 @@ public class TransportPage extends Page {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         cal.add(Calendar.DAY_OF_MONTH, 1);
-        String dateC2 = new SimpleDateFormat("dd MMMM, E", new Locale(Values.lang[ln][2])).format(cal.getTime());
+        String dateC2 = new SimpleDateFormat("dd MMMM, E", new Locale(Values.lang[collectData.getLn()][2])).format(cal.getTime());
         System.out.println("tdate = " + tdate);
         System.out.println("dateC2 = " + dateC2);
         if (!tdate.equals(dateC2)) {
@@ -669,13 +675,13 @@ public class TransportPage extends Page {
                    "\nФактически: " + time,
                    time.equals("00:00"));
         assertTrue("Категория трансфера не совпадает с выбранной" +
-                   "\nОжидалось : " + text[26][ln] +
+                   "\nОжидалось : " + text[26][collectData.getLn()] +
                    "\nФактически: " + category,
-                   category.equals(text[26][ln]));
+                   category.equals(text[26][collectData.getLn()]));
         assertTrue("Сумма трансфера не совпадает с расчитанной" +
-                   "\nОжидалось : " + price.transfer +
+                   "\nОжидалось : " + Values.reportData[collectData.getTest()].getPrice().transfer +
                    "\nФактически: " + summ,
-                   summ.equals(price.transfer));
+                   summ.equals(Values.reportData[collectData.getTest()].getPrice().transfer));
     }
 
     private String getTransferFrom(){

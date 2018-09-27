@@ -1,21 +1,26 @@
 package pages;
 
-//import ru.yandex.qatools.allure.annotations.Step;
+import config.Values;
 import io.qameta.allure.Step;
-import soap.SoapRequest;
+import struct.CollectData;
 
-import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.WebDriverRunner.url;
-import static config.Values.pnr;
+//import static config.Values.pnr;
 
 
 /**
  * Created by mycola on 22.02.2018.
  */
 public class PlacePage extends Page {
+
+    private CollectData collectData;
+
+    public PlacePage(CollectData collectData) {
+        this.collectData = collectData;
+    }
 
     @Step("Кликнуть \"Оплатить\" на странице выбора места")
     public void clickPay() {
@@ -34,6 +39,7 @@ public class PlacePage extends Page {
 
     @Step("Извлечь PNR")
     public void getPNR(){
+        String pnr;
         for (int i=0; i<30; i++) {
             if ($$(byXpath("//div[@class='text text--inline']")).size()>0) {
                 Sleep(1);
@@ -43,13 +49,12 @@ public class PlacePage extends Page {
         if ($$(byXpath("//h1[text()='Вход в тестовую среду системы ЕПР']")).size()>0) {
             int start = url().indexOf("&PNR") + 5;
             pnr = url().substring(start, start + 6);
-            System.out.println("PNR = " + pnr);
         } else {
             String text = $(byXpath("//div[contains(@class, 'cart__item-title--uppercase')]")).getText();
             pnr = text.substring(text.length() - 6);
-            System.out.println("PNR = " + pnr);
         }
-
+        Values.setPNR(collectData.getTest(), pnr);
+        System.out.println("PNR = " + pnr);
     }
 
 

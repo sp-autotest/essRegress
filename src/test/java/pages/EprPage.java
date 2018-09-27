@@ -3,11 +3,9 @@ package pages;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import config.Values;
-//import ru.yandex.qatools.allure.annotations.Step;
 import dict.AddService;
 import io.qameta.allure.Step;
-import struct.Flight;
-import struct.Passenger;
+import struct.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -22,7 +20,6 @@ import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
-import static config.Values.ln;
 import static config.Values.text;
 import static java.lang.Math.abs;
 import static org.testng.AssertJUnit.assertTrue;
@@ -33,6 +30,11 @@ import static org.testng.AssertJUnit.assertTrue;
 public class EprPage extends Page {
 
     private static int MINUTES_LIMIT = 100;
+    private CollectData collectData;
+
+    public EprPage(CollectData collectData) {
+        this.collectData = collectData;
+    }
 
     @Step("Действие {0}, проверка данных на странице оплаты")
     public void checkDataOnPayPage(String n, List<Flight> flyList, List<Passenger> passList, int test, boolean timer) {
@@ -145,7 +147,7 @@ public class EprPage extends Page {
         start = start.substring(start.indexOf(",")+1) + " " + new SimpleDateFormat("yyyy").format(f.start);
         Date dStart = new Date();
         try {
-            dStart = new SimpleDateFormat("dd MMMM HH:mm yyyy", new Locale(Values.lang[ln][2])).parse(start);
+            dStart = new SimpleDateFormat("dd MMMM HH:mm yyyy", new Locale(Values.lang[collectData.getLn()][2])).parse(start);
             System.out.print("["+dStart+"] ");
         }catch (ParseException e) {
             System.out.println("Дата нераспаршена");
@@ -160,7 +162,7 @@ public class EprPage extends Page {
         end = end.substring(0, end.indexOf(",")) + " " + new SimpleDateFormat("yyyy").format(f.end);
         Date dEnd = new Date();
         try {
-            dEnd = new SimpleDateFormat("dd MMMM HH:mm yyyy", new Locale(Values.lang[ln][2])).parse(end);
+            dEnd = new SimpleDateFormat("dd MMMM HH:mm yyyy", new Locale(Values.lang[collectData.getLn()][2])).parse(end);
             System.out.println("["+dEnd+"] ");
         }catch (ParseException e) {
             System.out.println("Дата нераспаршена");
@@ -184,11 +186,11 @@ public class EprPage extends Page {
             fullName = (passList.get(i).getLastname() + " " + passList.get(i).getFirstname()).toUpperCase();
             assertTrue("Полетная страховка не содержит пассажира " + fullName, insurance.contains(fullName));
         }
-        System.out.println(Values.price.iflight);
+        System.out.println(Values.reportData[collectData.getTest()].getPrice().iflight);
         assertTrue("Стоимость полетной страховки отличается от забронированной" +
-                   "\nОжидалось : " + Values.price.iflight +
+                   "\nОжидалось : " + Values.reportData[collectData.getTest()].getPrice().iflight +
                    "\nФактически: " + iprice,
-                   iprice.equals(Values.price.iflight));
+                   iprice.equals(Values.reportData[collectData.getTest()].getPrice().iflight));
     }
 
     @Step("Проверка медицинской страховки")
@@ -204,11 +206,13 @@ public class EprPage extends Page {
             assertTrue("Медицинская страховка не содержит пассажира " + fullName, insurance.contains(fullName));
         }
         assertTrue("Стоимость медицинской страховки отличается от забронированной" +
-                   "\nОжидалось : " + Values.price.imedical + "\nФактически: " + price,
-                   Values.price.imedical.equals(price));
+                   "\nОжидалось : " + Values.reportData[collectData.getTest()].getPrice().imedical +
+                   "\nФактически: " + price,
+                   Values.reportData[collectData.getTest()].getPrice().imedical.equals(price));
         assertTrue("Название медицинской страховки не корректно" +
-                   "\nОжидалось : " + Values.text[1][ln] + "\nФактически: " + insurance,
-                   insurance.contains(Values.text[1][ln]));
+                   "\nОжидалось : " + Values.text[1][collectData.getLn()] +
+                   "\nФактически: " + insurance,
+                   insurance.contains(Values.text[1][collectData.getLn()]));
     }
 
     @Step("Проверка общей стоимости всех страховок")
@@ -216,46 +220,52 @@ public class EprPage extends Page {
         String price = $(byXpath("//div[@data-toggle-id='toggle-safe']/descendant::" +
                 "div[@class='checkout-item__left-container']")).getText().replaceAll("\\D+","");
         System.out.println("all insurances= " + price);
-        int allPrice = stringIntoInt(Values.price.iflight) + stringIntoInt(Values.price.imedical);
+        int allPrice = stringIntoInt(Values.reportData[collectData.getTest()].getPrice().iflight) +
+                stringIntoInt(Values.reportData[collectData.getTest()].getPrice().imedical);
         assertTrue("Общая стоимость всех страховок некорректна" +
                    "\nОжидалось : " + allPrice + "\nФактически: " + price, stringIntoInt(price) == allPrice);
     }
 
     @Step("Проверка данных транспортной услуги")
     private void checkTransport(){
+        ReportData rData = Values.reportData[collectData.getTest()];
         SelenideElement row = $(byXpath("//div[@ng-switch-when='Europcar'][@class='ng-scope']"));
 
         row.scrollTo();
         String name = row.$(byXpath("descendant::div[@ng-bind='item.details.carName']")).getText();
         System.out.println(name);
         assertTrue("Название авто отличается от забронированного" +
-                   "\nОжидалось : " + Values.auto.name + "\nФактически: " + name, Values.auto.name.equals(name));
+                   "\nОжидалось : " + rData.getAuto().name + "\nФактически: " + name,
+                   rData.getAuto().name.equals(name));
 
         String receiveLocation = row.$(byXpath("descendant::div[@ng-bind='item.details.receiveLocation']")).getText();
         System.out.println(receiveLocation);
         assertTrue("Место получения отличается от забронированного" +
-                   "\nОжидалось : " + Values.auto.receiveLocation + "\nФактически: " + receiveLocation,
-                   Values.auto.receiveLocation.equals(receiveLocation));
+                   "\nОжидалось : " + rData.getAuto().receiveLocation + "\nФактически: " + receiveLocation,
+                   rData.getAuto().receiveLocation.equals(receiveLocation));
 
         String receiveDate = row.$(byXpath("descendant::div[@ng-bind='item.details.receiveDate']")).getText();
         receiveDate = receiveDate.substring(receiveDate.indexOf(",")+1);
         System.out.println(receiveDate);
-        assertTrue("Дата получения отличается от забронированной", Values.auto.receiveDate.equals(stringToDate(receiveDate)));
+        assertTrue("Дата получения отличается от забронированной",
+                rData.getAuto().receiveDate.equals(stringToDate(receiveDate)));
 
         String returnLocation = row.$(byXpath("descendant::div[@ng-bind='item.details.returnLocation']")).getText();
         System.out.println(returnLocation);
-        assertTrue("Место возврата отличается от забронированного", Values.auto.returnLocation.equals(returnLocation));
+        assertTrue("Место возврата отличается от забронированного",
+                rData.getAuto().returnLocation.equals(returnLocation));
 
         String returnDate = row.$(byXpath("descendant::div[@ng-bind='item.details.returnDate']")).getText();
         returnDate = returnDate.substring(returnDate.indexOf(",")+1);
         System.out.println(returnDate);
-        assertTrue("Дата возврата отличается от забронированной", Values.auto.returnDate.equals(stringToDate(returnDate)));
+        assertTrue("Дата возврата отличается от забронированной",
+                rData.getAuto().returnDate.equals(stringToDate(returnDate)));
 
         String price = row.$(byXpath("descendant::span[contains(@class,'__item-price')]")).getText().replaceAll("\\D+","");
         System.out.println(price);
         assertTrue("Стоимость аренды автомобиля отличается от забронированной" +
-                   "\nОжидалось :" + Values.price.transport +
-                   "\nФактически:" + price, Values.price.transport.equals(price));////отключили временно
+                   "\nОжидалось :" + rData.getPrice().transport +
+                   "\nФактически:" + price, rData.getPrice().transport.equals(price));
     }
 
     @Step("Проверка данных услуги Аэроэкспресс")
@@ -267,11 +277,11 @@ public class EprPage extends Page {
             name = name.substring(0, name.indexOf(","));
             System.out.println(name);
             if (aero.equals("SVO")) assertTrue("Направление в Аэроэкспресс некорректно" +
-                    "\nОжидалось : " + text[28][ln] + " -> " + text[29][ln] +
-                    "\nФактически: " + name, name.equals(text[28][ln] + " -> " + text[29][ln]));
+                    "\nОжидалось : " + text[28][collectData.getLn()] + " -> " + text[29][collectData.getLn()] +
+                    "\nФактически: " + name, name.equals(text[28][collectData.getLn()] + " -> " + text[29][collectData.getLn()]));
             if (aero.equals("VKO")) assertTrue("Направление в Аэроэкспресс некорректно" +
-                    "\nОжидалось : " + text[20][ln] + " -> " + text[21][ln] +
-                    "\nФактически: " + name, name.equals(text[20][ln] + " -> " + text[21][ln]));
+                    "\nОжидалось : " + text[20][collectData.getLn()] + " -> " + text[21][collectData.getLn()] +
+                    "\nФактически: " + name, name.equals(text[20][collectData.getLn()] + " -> " + text[21][collectData.getLn()]));
 
             String count = row.$(byXpath("descendant::span[@translate-plural='paymentPage.passengers']/..")).getText().replaceAll("\\D+", "");
             System.out.println("passengers = " + count);
@@ -281,7 +291,8 @@ public class EprPage extends Page {
             String price = row.$(byXpath("descendant::span[contains(@class,'checkout-item__item-price')]")).getText().replaceAll("\\D+", "");
             System.out.println("price = " + price);
             assertTrue("Стоимость билета на Аэроэкспресс не корректна" +
-                    "\nОжидалось : " + Values.price.aeroexpress + "\nФактически: " + price, price.equals(Values.price.aeroexpress));
+                       "\nОжидалось : " + Values.reportData[collectData.getTest()].getPrice().aeroexpress +
+                       "\nФактически: " + price, price.equals(Values.reportData[collectData.getTest()].getPrice().aeroexpress));
     }
 
     @Step("Проверка данных услуги Трансфера")
@@ -289,29 +300,29 @@ public class EprPage extends Page {
         SelenideElement group = $(byXpath("//div[@ng-switch-when='Transfer'][@class='ng-scope']"));
         String from = group.$(byXpath("descendant::div[@ng-bind='item.details.from']")).getText();
         System.out.println("Transfer from = " + from);
-        String fromC = (ln==0) ? "Курский, Москва" : "Kurskiy, Moscow";
+        String fromC = (collectData.getLn()==0) ? "Курский, Москва" : "Kurskiy, Moscow";
         assertTrue("Направление Откуда трансфера не корректно" +
                    "\nОжидалось : " + fromC + "\nФактически: " + from, from.equals(fromC));
 
         String to = group.$(byXpath("descendant::div[@ng-bind='item.details.to']")).getText();
         System.out.println("Transfer to = " + to);
-        String toC = (ln==0) ? "Белорусский, Москва" : "Belorussky, Moscow";
+        String toC = (collectData.getLn()==0) ? "Белорусский, Москва" : "Belorussky, Moscow";
         assertTrue("Направление Куда трансфера не корректно" +
                    "\nОжидалось : " + toC + "\nФактически: " + to, to.equals(toC));
 
         String date = group.$(byXpath("descendant::div[@ng-bind='item.details.date']")).getText();
         System.out.println("Transfer date = " + date);
         String dateC;
-        dateC = new SimpleDateFormat("E, dd MMMM", new Locale(Values.lang[ln][2])).format(d);
-        if (ln == 6) dateC = date;//невозможно воспроизвести формат даты для китайского, убрать когда сообщат формат
+        dateC = new SimpleDateFormat("E, dd MMMM", new Locale(Values.lang[collectData.getLn()][2])).format(d);
+        if (collectData.getLn() == 6) dateC = date;//невозможно воспроизвести формат даты для китайского, убрать когда сообщат формат
         assertTrue("Дата трансфера не корректна" +
                    "\nОжидалось : " + dateC + "\nФактически: " + date, date.equals(dateC));
 
         String price = group.$(byXpath("descendant::span[@class='h-text--bold checkout-item__item-price ng-binding']")).getText().replaceAll("\\D+","");
         System.out.println("Transfer price = " + price);
         assertTrue("Cтоимость трансфера не корректна" +
-                   "\nОжидалось : " + Values.price.transfer +
-                   "\nФактически: " + price, price.equals(Values.price.transfer));
+                   "\nОжидалось : " + Values.reportData[collectData.getTest()].getPrice().transfer +
+                   "\nФактически: " + price, price.equals(Values.reportData[collectData.getTest()].getPrice().transfer));
     }
 
     @Step("Проверка данных услуги проживания")
@@ -323,20 +334,20 @@ public class EprPage extends Page {
         String eDate = row.$(byXpath("descendant::div[@ng-bind='categoryItem.details.dateTo']")).getText();
         String price = row.$(byXpath("descendant::span[contains(@class,'__item-price')]")).getText().replaceAll("\\D+","");
         System.out.println("Cheking accommodation service: \n"+name+"\n"+sDate+"\n"+eDate+"\n"+price);
-        assertTrue("Название отеля отличается от забронированного", name.contains(Values.hotel.name));
+        assertTrue("Название отеля отличается от забронированного", name.contains(Values.reportData[collectData.getTest()].getHotel().name));
 //        assertTrue("Звездность отеля отличается от забронированной", name.contains(" " + Values.hotel.star + "*"));
-        assertTrue("Дата заселения отличается от забронированной", Values.hotel.accDate.equals(sTd(sDate)));
-        assertTrue("Дата выезда отличается от забронированной", Values.hotel.depDate.equals(sTd(eDate)));
-        int delta = abs(stringIntoInt(price)-stringIntoInt(Values.price.hotel));
+        assertTrue("Дата заселения отличается от забронированной", Values.reportData[collectData.getTest()].getHotel().accDate.equals(sTd(sDate)));
+        assertTrue("Дата выезда отличается от забронированной", Values.reportData[collectData.getTest()].getHotel().depDate.equals(sTd(eDate)));
+        int delta = abs(stringIntoInt(price)-stringIntoInt(Values.reportData[collectData.getTest()].getPrice().hotel));
         assertTrue("Стоимость проживания отличается от забронированной" +
-                "\nОжидалось : " + Values.price.hotel +
+                "\nОжидалось : " + Values.reportData[collectData.getTest()].getPrice().hotel +
                 "\nФактически: " + price, delta <= 2);
     }
 
     private Date stringToDate(String d) {
         Date parsingDate=null;
         try {
-            parsingDate = new SimpleDateFormat("dd MMMM yyyy, HH:mm", new Locale(Values.lang[ln][2])).parse(d);
+            parsingDate = new SimpleDateFormat("dd MMMM yyyy, HH:mm", new Locale(Values.lang[collectData.getLn()][2])).parse(d);
         }catch (ParseException e) {
             System.out.println("Parsing date error");
         }
@@ -346,7 +357,7 @@ public class EprPage extends Page {
     private Date sTd(String d) {
         Date parsingDate=null;
         try {
-            parsingDate = new SimpleDateFormat("dd MMMM yyyy", new Locale(Values.lang[ln][2])).parse(d);
+            parsingDate = new SimpleDateFormat("dd MMMM yyyy", new Locale(Values.lang[collectData.getLn()][2])).parse(d);
         }catch (ParseException e) {
             System.out.println("Parsing date error");
         }
@@ -381,28 +392,29 @@ public class EprPage extends Page {
 
     @Step("Проверка «К оплате сейчас»")
     private void checkTotalCount(){
+        Price price = Values.reportData[collectData.getTest()].getPrice();
         String totalCount = $(byXpath("//div[@class='cart__item-priceondemand-item-price ng-binding']"))
                 .getText().replaceAll("\\D+","");//к оплате сейчас
-        int total = stringIntoInt(Values.price.fly) +
-                stringIntoInt(Values.price.iflight) +
-                stringIntoInt(Values.price.imedical) +
-                stringIntoInt(Values.price.aeroexpress) +
-                stringIntoInt(Values.price.transfer) +
-                stringIntoInt(Values.price.place) +
-                stringIntoInt(Values.price.entree) +
-                stringIntoInt(Values.price.dessert);
+        int total = stringIntoInt(price.fly) +
+                stringIntoInt(price.iflight) +
+                stringIntoInt(price.imedical) +
+                stringIntoInt(price.aeroexpress) +
+                stringIntoInt(price.transfer) +
+                stringIntoInt(price.place) +
+                stringIntoInt(price.entree) +
+                stringIntoInt(price.dessert);
 
         System.out.println("-----------------------");
         System.out.println("TOTAL COUNT = " + totalCount);
         System.out.println("total summ = " + total);
-        System.out.println(Values.price.fly);
-        System.out.println(Values.price.iflight);
-        System.out.println(Values.price.imedical);
-        System.out.println(Values.price.aeroexpress);
-        System.out.println(Values.price.transfer);
-        System.out.println(Values.price.place);
-        System.out.println(Values.price.entree);
-        System.out.println(Values.price.dessert);
+        System.out.println(price.fly);
+        System.out.println(price.iflight);
+        System.out.println(price.imedical);
+        System.out.println(price.aeroexpress);
+        System.out.println(price.transfer);
+        System.out.println(price.place);
+        System.out.println(price.entree);
+        System.out.println(price.dessert);
         System.out.println("-----------------------");
 
     }
@@ -411,45 +423,45 @@ public class EprPage extends Page {
     public void checkSelectPlaceService() {
         System.out.println("Check Prereserved place");
         String code = "0B5"; //код услуги "Предварительный выбор места"
-        String etalon = AddService.getServiceByCodeAndLanguage(code, Values.ln);
+        String etalon = AddService.getServiceByCodeAndLanguage(code, collectData.getLn());
         SelenideElement place = $(byText(etalon)).shouldBe(visible);
         String price = place.$(byXpath("../../../preceding-sibling::div[@class='checkout-item__left-container']"))
                 .shouldBe(visible).getText().replaceAll("\\D+","");
         System.out.println("Prereserved place count = " + price);
         assertTrue("Стоимость услуги выбора метса некорректна" +
-                   "\nОжидалось : " + Values.price.place +
+                   "\nОжидалось : " + Values.reportData[collectData.getTest()].getPrice().place +
                    "\nФактически: " + price,
-                   price.equals(Values.price.place));
+                   price.equals(Values.reportData[collectData.getTest()].getPrice().place));
     }
 
     @Step("Проверка услуги «Основное блюдо»")
     public void checkEntreeService() {
         System.out.println("Check Entree");
         String code = "0B3"; //код услуги "Закуска Сырная"
-        String etalon = AddService.getServiceByCodeAndLanguage(code, Values.ln);
+        String etalon = AddService.getServiceByCodeAndLanguage(code, collectData.getLn());
         SelenideElement entree = $(byText(etalon)).shouldBe(visible);
         String price = entree.$(byXpath("../../../preceding-sibling::div[@class='checkout-item__left-container']"))
                 .shouldBe(visible).getText().replaceAll("\\D+","");
         System.out.println("Entree count = " + price);
         assertTrue("Стоимость основного блюда некорректна" +
-                   "\nОжидалось : " + Values.price.entree +
+                   "\nОжидалось : " + Values.reportData[collectData.getTest()].getPrice().entree +
                    "\nФактически: " + price,
-                   price.equals(Values.price.entree));
+                   price.equals(Values.reportData[collectData.getTest()].getPrice().entree));
     }
 
     @Step("Проверка услуги «Основное блюдо»")
     public void checkDessertService() {
         System.out.println("Check Dessert");
         String code = "019"; //код услуги "Десерт Шоколадная тарталетка"
-        String etalon = AddService.getServiceByCodeAndLanguage(code, Values.ln);
+        String etalon = AddService.getServiceByCodeAndLanguage(code, collectData.getLn());
         SelenideElement entree = $(byText(etalon)).shouldBe(visible);
         String price = entree.$(byXpath("../../../preceding-sibling::div[@class='checkout-item__left-container']"))
                 .shouldBe(visible).getText().replaceAll("\\D+","");
         System.out.println("Dessert count = " + price);
         assertTrue("Стоимость десерта некорректна" +
-                   "\nОжидалось : " + Values.price.dessert +
+                   "\nОжидалось : " + Values.reportData[collectData.getTest()].getPrice().dessert +
                    "\nФактически: " + price,
-                   price.equals(Values.price.dessert));
+                   price.equals(Values.reportData[collectData.getTest()].getPrice().dessert));
     }
 
 }

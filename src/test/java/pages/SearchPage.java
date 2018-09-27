@@ -4,8 +4,8 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import config.Values;
 import org.openqa.selenium.JavascriptExecutor;
-//import ru.yandex.qatools.allure.annotations.Step;
 import io.qameta.allure.Step;
+import struct.CollectData;
 import struct.Flight;
 import struct.InitialData;
 import java.util.ArrayList;
@@ -16,8 +16,6 @@ import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static config.Values.lang;
-import static config.Values.ln;
-import static config.Values.ticket;
 
 /**
  * Created by mycola on 20.02.2018.
@@ -28,9 +26,11 @@ public class SearchPage extends Page {
     String duration = "";
 
     private InitialData initData;
+    private CollectData collectData;
 
-    public SearchPage(InitialData initData) {
+    public SearchPage(InitialData initData, CollectData collectData) {
         this.initData = initData;
+        this.collectData = collectData;
     }
 
     @Step("Действие 1, поиск рейсов")
@@ -69,7 +69,7 @@ public class SearchPage extends Page {
             $(byXpath("//div[@class='header__menu-icon']/..")).shouldBe(visible).click();
         }
         $(byXpath("//div[@class='header__select-items']")).shouldBe(visible).click();
-        $(byXpath("//div[text()='" + lang[ln][1] + "']")).shouldBe(visible).click();
+        $(byXpath("//div[text()='" + lang[collectData.getLn()][1] + "']")).shouldBe(visible).click();
         $(byXpath("//input[@class='input__text-input']")).shouldBe(visible);
     }
 
@@ -107,21 +107,21 @@ public class SearchPage extends Page {
     private void addAdult() {
         $$(byXpath("//div[@class='input-counter']")).get(0).
                 $(byXpath("div[@class='input-counter__plus']")).shouldBe(visible).click();
-        ticket++;
+        collectData.inkTicket();
     }
 
     @Step("Добавить ребенка")
     private void addChild() {
         $$(byXpath("//div[@class='input-counter']")).get(1).
                 $(byXpath("div[@class='input-counter__plus']")).shouldBe(visible).click();
-        ticket++;
+        collectData.inkTicket();
     }
 
     @Step("Добавить младенца")
     private void addInfant() {
         $$(byXpath("//div[@class='input-counter']")).get(2).
                 $(byXpath("div[@class='input-counter__plus']")).shouldBe(visible).click();
-        ticket++;
+        collectData.inkTicket();
     }
 
     @Step("Нажать \"Закрыть\"")
@@ -162,8 +162,8 @@ public class SearchPage extends Page {
     }
 
     private void saveFlightData() {
-        Values.price.fly = $(byXpath("//div[@class='cart__item-price js-popover']")).getText().replaceAll("\\D+","");
-        System.out.println("Fly price = " + Values.price.fly);
+        Values.reportData[collectData.getTest()].getPrice().fly = $(byXpath("//div[@class='cart__item-price js-popover']")).getText().replaceAll("\\D+","");
+        System.out.println("Fly price = " + Values.reportData[collectData.getTest()].getPrice().fly);
         Flight f;
         String d;
         ElementsCollection groups = $$(byXpath("//div[@class='flight-search flight-search--active']"));

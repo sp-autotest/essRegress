@@ -8,9 +8,7 @@ import org.testng.ITestResult;
 import java.io.IOException;
 
 import static listeners.ScreenShoter.makeScreenshot;
-import static pages.Page.logDoc;
-import static pages.Page.nonBlockingErrors;
-import static pages.Page.resultat;
+import static pages.Page.*;
 
 /**
  * Created by mycola on 20.02.2018.
@@ -22,41 +20,45 @@ public class AllureOnEventListener implements ITestListener {
 
     @Override
     public void onTestSuccess(ITestResult result) {
-        resultat();
-        if (Values.errors.size()>0) nonBlockingErrors();
+        int number = stringIntoInt(result.getMethod().getMethodName().replaceAll("\\D+", ""));
+        resultat(number);
+        if (Values.getERR(number).size()>0) nonBlockingErrors(number);
     }
 
     @Override
     public void onTestFailure(ITestResult result) {
+        int number = stringIntoInt(result.getMethod().getMethodName().replaceAll("\\D+", ""));
         try {
             makeScreenshot("Скриншот");
         } catch (IOException e) {
             e.printStackTrace();
         }
-        resultat();
-        if (Values.errors.size()>0) nonBlockingErrors();
+        resultat(number);
+        if (Values.getERR(number).size()>0) nonBlockingErrors(number);
     }
 
     @Override
     public void onTestSkipped(ITestResult result) {
+        int number = stringIntoInt(result.getMethod().getMethodName().replaceAll("\\D+", ""));
         try {
             makeScreenshot("Скриншот");
         } catch (IOException e) {
             e.printStackTrace();
         }
-        resultat();
-        if (Values.errors.size()>0) nonBlockingErrors();
+        resultat(number);
+        if (Values.getERR(number).size()>0) nonBlockingErrors(number);
     }
 
     @Override
     public void onTestFailedButWithinSuccessPercentage(ITestResult result) {
+        int number = stringIntoInt(result.getMethod().getMethodName().replaceAll("\\D+", ""));
         try {
             makeScreenshot("Скриншот");
         } catch (IOException e) {
             e.printStackTrace();
         }
-        resultat();
-        if (Values.errors.size()>0) nonBlockingErrors();
+        resultat(number);
+        if (Values.getERR(number).size()>0) nonBlockingErrors(number);
     }
 
     @Override

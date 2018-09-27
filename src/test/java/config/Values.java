@@ -6,6 +6,7 @@ import struct.Auto;
 import struct.Hotel;
 import struct.Price;
 import dict.СityInfo;
+import struct.ReportData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,48 +16,38 @@ import java.util.List;
  */
 public class Values {
 
-    public static int ln;
-    public static int ticket;
-    public static String pnr;
-    public static String cur;
-    public static String docs;
-    public static Price price;
-    public static Auto auto;
-    public static Hotel hotel;
     public static СityInfo city = new СityInfo();
     public static AddService addService = new AddService();
     public static NationalityName nationalityName = new NationalityName();
+
+    public static ReportData[] reportData = new ReportData[10];
     public static String currencyChange = "link"; //параметр определяет метод смены валюты.
                                                   //Возможные значения:
                                                   //    link - с помощью подмены параметров в линке
                                                   //    soap - с помощью soap-запросов
-    public static String phone = "";
     public static String email = "tafl@software-provider.ru";
     public static String host = "https://afl-test.test.aeroflot.ru/sb/app/ru-";
-
+    public static String backdoor_host = "https://ws.ess.test.aeroflot.ru/test.php?PNR=";
     public static String office_host = "https://office.ess.test.aeroflot.ru/";
     public static String office_login = "";
     public static String office_password = "";
 
-    public static String backdoor_host = "https://ws.ess.test.aeroflot.ru/test.php?PNR=";
 
     public static String card[][] = {
         {"4154810047474554", "12", "2019", "314", "TEST TEST"}, //0 - Visa
         //{"2202000000000002", "12", "2019", "123", "TEST TEST"}, //1 - МИР
     };
 
-    public static List<String> errors = new ArrayList<>();
-
     public static String lang[][] = {
-        {"Russian", "русский", "ru", "ddMMMMyyyy,HH:mm—", "Россия"},
-        {"English", "english", "en", "ddMMMyyyy,HH:mm—", "Russia"},
-        {"German", "deutsch", "de", "ddMMMyyyy,HH:mm—", "Russland"},
-        {"Spanish", "español", "es", "ddMMMyyyy,HH:mm—", "Rusia"},
-        {"Italian", "italiano", "it", "ddMMMyyyy,HH:mm—", "Russia"},
-        {"French", "le français", "fr", "ddMMMyyyy,HH:mm—", "Russie"},
-        {"Chinese", "中文", "zh", "ddM月yyyy,HH:mm—", "俄罗斯"},
-        {"Korean", "한국어", "ko", "ddMMMyyyy,HH:mm—", "러시아"},
-        {"Japanese", "日本語", "ja", "ddMMMMyyyy,HH:mm—", "ロシア"},
+            {"Russian", "русский", "ru", "ddMMMMyyyy,HH:mm—", "Россия"},
+            {"English", "english", "en", "ddMMMyyyy,HH:mm—", "Russia"},
+            {"German", "deutsch", "de", "ddMMMyyyy,HH:mm—", "Russland"},
+            {"Spanish", "español", "es", "ddMMMyyyy,HH:mm—", "Rusia"},
+            {"Italian", "italiano", "it", "ddMMMyyyy,HH:mm—", "Russia"},
+            {"French", "le français", "fr", "ddMMMyyyy,HH:mm—", "Russie"},
+            {"Chinese", "中文", "zh", "ddM月yyyy,HH:mm—", "俄罗斯"},
+            {"Korean", "한국어", "ko", "ddMMMyyyy,HH:mm—", "러시아"},
+            {"Japanese", "日本語", "ja", "ddMMMMyyyy,HH:mm—", "ロシア"},
     };
 
     public static String text[][] = {
@@ -92,5 +83,30 @@ public class Values {
             {"Шереметьево", "Sheremetyevo", "Sheremetyevo", "Sheremetiévo", "Sheremetyevo", "Chérémétiévo", "谢列梅捷沃", "셰레메티예보", "シェレメーチエヴォ"},
       /*30*/{"Билет №", "Ticket No.", "Ticket-Nr.", "N.° de billete", "Biglietto n.", "Ticket N°", "票据编号", "항공권 번호", "チケット番号"}
     };
+
+    public static String getPNR(int i) {
+        return reportData[i].getPnr();
+    }
+
+    public static void setPNR(int i, String pnr) {
+        reportData[i].setPnr(pnr);
+    }
+
+    public static String getDOC(int i) {
+        return reportData[i].getDocs();
+    }
+
+    public static void setDOC(int i, String doc) {
+        reportData[i].setDocs(doc);
+    }
+
+    public static List<String> getERR(int i) {
+        return reportData[i].getErrors();
+    }
+
+    public static void addERR(int i, String error) {
+        reportData[i].addError(error);
+    }
+
 
 }

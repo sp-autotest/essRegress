@@ -1,6 +1,7 @@
 package soap;
 
 import config.Values;
+import struct.CollectData;
 
 /**
  * Created by mycola on 21.02.2018.
@@ -114,7 +115,7 @@ public class RequestsData {
             "    <soap:Body>\n" +
             "        <ns4:SabreCommandLLSRQ TimeStamp=\"2013-07-04Thu11:46:20\" Version=\"2003A.TsabreXML1.6.1\" PrimaryLangID=\"en-us\" xmlns:ns1=\"http://www.ebxml.org/namespaces/messageHeader\" xmlns:ns2=\"http://www.w3.org/1999/xlink\" xmlns:ns3=\"http://www.w3.org/2000/09/xmldsig#\" xmlns:ns4=\"http://webservices.sabre.com/sabreXML/2003/07\" xmlns:ns5=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ns6=\"http://schemas.xmlsoap.org/ws/2002/12/secext\">\n" +
             "            <ns4:Request Output=\"SCREEN\" MDRSubset=\"\" CDATA=\"true\">\n" +
-            "                <ns4:HostCommand>*"+ Values.pnr +"</ns4:HostCommand>\n" +
+            "                <ns4:HostCommand>*PNRPNR</ns4:HostCommand>\n" +
             "            </ns4:Request>\n" +
             "        </ns4:SabreCommandLLSRQ>\n" +
             "    </soap:Body>\n" +

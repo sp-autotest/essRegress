@@ -1,12 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="TestSuite"  >
+<suite name="TestSuite" thread-count="3" parallel="tests" >
     <listeners>
         <listener class-name="listeners.MyTransformer" />
     </listeners>
-    <test name="Аэрофлот, Ess">
+    <test name="Ess, thread1">
         <classes>
             <class name="EssTest">
+                <methods>
+                    <include name="section1" />
+                    <include name="section4" />
+                    <include name="section7" />
+                </methods>
+            </class>
+        </classes>
+    </test>
+    <test name="Ess, thread2">
+        <classes>
+            <class name="EssTest">
+                <methods>
+                    <include name="section2" />
+                    <include name="section5" />
+                    <include name="section8" />
+                </methods>
+            </class>
+        </classes>
+    </test>
+    <test name="Ess, thread3">
+        <classes>
+            <class name="EssTest">
+                <methods>
+                    <include name="section3" />
+                    <include name="section6" />
+                </methods>
             </class>
         </classes>
     </test>

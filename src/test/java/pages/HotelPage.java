@@ -7,8 +7,8 @@ import config.Values;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
-//import ru.yandex.qatools.allure.annotations.Step;
 import io.qameta.allure.Step;
+import struct.CollectData;
 import struct.Flight;
 import struct.InitialData;
 import struct.Passenger;
@@ -25,7 +25,6 @@ import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
-import static config.Values.ln;
 import static config.Values.text;
 import static java.lang.String.format;
 import static org.testng.AssertJUnit.assertTrue;
@@ -36,14 +35,16 @@ import static org.testng.AssertJUnit.assertTrue;
 public class HotelPage extends Page {
 
     private InitialData initData;
+    private CollectData collectData;
 
-    public HotelPage(InitialData initData) {
+    public HotelPage(InitialData initData, CollectData collectData) {
         this.initData = initData;
+        this.collectData = collectData;
     }
 
     @Step("Форма дополнительных услуг «Проживание» открылась")
     private void checkHotelFormAppear() {
-        String header = format(text[17][ln], Values.city.getCity(initData.getCityTo(), ln));
+        String header = format(text[17][collectData.getLn()], Values.city.getCity(initData.getCityTo(), collectData.getLn()));
         $(byXpath("//h1[contains(text(),'" + header + "')]")).shouldBe(visible);
         System.out.println("Accommodation form appeared");
     }
@@ -83,8 +84,8 @@ public class HotelPage extends Page {
         String d2 = $(byXpath("//input[@name='hotel_max_date']")).getValue();
         System.out.println("booking period = " + d1 + " - " + d2);
         try {
-            Values.hotel.accDate = new SimpleDateFormat("yyyy-MM-dd").parse(d1);
-            Values.hotel.depDate = new SimpleDateFormat("yyyy-MM-dd").parse(d2);
+            Values.reportData[collectData.getTest()].getHotel().accDate = new SimpleDateFormat("yyyy-MM-dd").parse(d1);
+            Values.reportData[collectData.getTest()].getHotel().depDate = new SimpleDateFormat("yyyy-MM-dd").parse(d2);
         }catch (ParseException e) {
             System.out.println("Parsing date error");
         }
@@ -189,12 +190,12 @@ public class HotelPage extends Page {
             ElementsCollection rules = rooms.get(i).$$(byXpath("descendant::div[@class='wrapper']"));
             if (rules.size()>0) {
                 System.out.println("Room" + i + " Cancel Rules = " + rules.get(0).getAttribute("textContent"));
-                if (rules.get(0).getText().contains(Values.text[22][ln])) {//если условие отмены содержит текст "Бесплатно"
-                    period = rules.get(0).$(byXpath("//div[text()='" + Values.text[22][ln] + "']/..")).getAttribute("textContent");
-                    period = period.replaceFirst(Values.text[22][ln], "");
+                if (rules.get(0).getText().contains(Values.text[22][collectData.getLn()])) {//если условие отмены содержит текст "Бесплатно"
+                    period = rules.get(0).$(byXpath("//div[text()='" + Values.text[22][collectData.getLn()] + "']/..")).getAttribute("textContent");
+                    period = period.replaceFirst(Values.text[22][collectData.getLn()], "");
                     System.out.println("period = " + period);
-                    if (period.contains(Values.text[23][ln])) {//если условие отмены содержит текст "До"
-                        period = period.replaceFirst(Values.text[23][ln], "");
+                    if (period.contains(Values.text[23][collectData.getLn()])) {//если условие отмены содержит текст "До"
+                        period = period.replaceFirst(Values.text[23][collectData.getLn()], "");
                         period = period.substring(period.indexOf(":")+2);
                         System.out.println("period = " + period);
                         if (sTd(period.trim()).after(new Date())) {//если условие отмены содержит дату после текущей
@@ -218,7 +219,7 @@ public class HotelPage extends Page {
         screenShot("Скриншот");
         System.out.println("Room text price = " + textprice.getAttribute("textContent"));
         String price = "";
-        if (Values.cur.equals("RUB")) {
+        if (collectData.getCur().equals("RUB")) {
             price = textprice.innerHtml();
             price = price.substring(0, price.indexOf("<"));
         } else {
@@ -228,7 +229,7 @@ public class HotelPage extends Page {
         }
         price = price.replaceAll("\\D+","");
         System.out.println("Room price = " + price);
-        Values.price.hotel = price;
+        Values.reportData[collectData.getTest()].getPrice().hotel = price;
         rooms.get(room).$(byXpath("descendant::div[@class='hotel-room__buy-button-wrapper']")).shouldBe(visible).click();
         checkHotelFormAppear();
         checkHotelCartPrice();
@@ -484,25 +485,25 @@ public class HotelPage extends Page {
         p = p.substring(0, p.indexOf(" "));
         p = p.replaceAll("\\D+","");
         System.out.println("Hotel price = " + p);
-        Values.hotel.price = p;
-        SelenideElement hotel = $(byXpath("//div[text()='" + text[3][ln] + "']")).shouldBe(visible);
+        Values.reportData[collectData.getTest()].getHotel().price = p;
+        SelenideElement hotel = $(byXpath("//div[text()='" + text[3][collectData.getLn()] + "']")).shouldBe(visible);
         String cartPrice = hotel.$(byXpath("following::div[@class='cart__item-pricelist-item-price']")).getText().replaceAll("\\D+","");
         System.out.println("Hotel cart price = " + cartPrice);
         String totalPrice = $("#cart-total-incarts").$(byXpath("descendant::div[@class='cart__item-price']")).getText().replaceAll("\\D+","");
         System.out.println("Total price = " + totalPrice);
-        Values.price.total = totalPrice;
+        Values.reportData[collectData.getTest()].getPrice().total = totalPrice;
     }
 
     @Step("Проверка кнопки «В заказе»")
     private void checkRentButtonName(){
         $(byXpath("//div[@class='hotel-selected__card-order-text']")).
-                shouldBe(visible).shouldBe(Condition.text(text[6][ln]));
+                shouldBe(visible).shouldBe(Condition.text(text[6][collectData.getLn()]));
     }
 
     private Date stringToDate(String d) {
         Date parsingDate=null;
         try {
-            parsingDate = new SimpleDateFormat("dd MMMM yyyy", new Locale(Values.lang[ln][2])).parse(d);
+            parsingDate = new SimpleDateFormat("dd MMMM yyyy", new Locale(Values.lang[collectData.getLn()][2])).parse(d);
         }catch (ParseException e) {
             System.out.println("Parsing date error");
         }
@@ -512,7 +513,7 @@ public class HotelPage extends Page {
     private Date sTd(String d) {
         Date parsingDate=null;
         try {
-            parsingDate = new SimpleDateFormat("dd.MM.yyyy", new Locale(Values.lang[ln][2])).parse(d);
+            parsingDate = new SimpleDateFormat("dd.MM.yyyy", new Locale(Values.lang[collectData.getLn()][2])).parse(d);
         }catch (ParseException e) {
             System.out.println("Parsing date error");
         }
@@ -526,12 +527,12 @@ public class HotelPage extends Page {
 
     @Step("Проверка номера телефона бронирования")
     private void checkPhone(){
-        $("#phone-contents-inserted-value").shouldBe(visible).shouldBe(Condition.text(Values.phone));
+        $("#phone-contents-inserted-value").shouldBe(visible).shouldBe(Condition.text(collectData.getPhone()));
     }
 
     private void saveHotelData(){
-        Values.hotel.name = $(byXpath("//a[@class='hotel-selected__card-title']")).getText();
-        Values.hotel.star = $$(byXpath("//div[@class='hotel-selected__card-stars']" +
+        Values.reportData[collectData.getTest()].getHotel().name = $(byXpath("//a[@class='hotel-selected__card-title']")).getText();
+        Values.reportData[collectData.getTest()].getHotel().star = $$(byXpath("//div[@class='hotel-selected__card-stars']" +
                 "/descendant::div[@class='stars-item stars-item--mark']")).size();
     }
 

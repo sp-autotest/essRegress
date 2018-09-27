@@ -1,15 +1,20 @@
 package soap;
 
-import config.Values;
+import struct.CollectData;
 
 public class AdditionalServiceRequests {
 
+    private static String currency;
     private static String ENTREE_PRICE = "1";
     private static String DESSERT_PRICE = "2";
     private static String ADDOPTION_PRICE = "3";
 
+    public AdditionalServiceRequests(CollectData collectData) {
+        currency = collectData.getCur();
+    }
+
     public static void setPriceByCurrency() {
-        switch (Values.cur) {
+        switch (currency) {
             case "RUB":
                 ENTREE_PRICE = "1750";
                 DESSERT_PRICE = "975";

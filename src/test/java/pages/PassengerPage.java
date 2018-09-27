@@ -3,8 +3,8 @@ package pages;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import config.Values;
-//import ru.yandex.qatools.allure.annotations.Step;
 import io.qameta.allure.Step;
+import struct.CollectData;
 import struct.Passenger;
 
 import java.util.Date;
@@ -23,10 +23,16 @@ import static com.codeborne.selenide.WebDriverRunner.url;
  */
 public class PassengerPage extends Page {
 
+    private CollectData collectData;
+
+    public PassengerPage(CollectData collectData) {
+        this.collectData = collectData;
+    }
+
     @Step("Действие 3, информация о пассажирах")
     public void step3(List<Passenger> passengerList) {
         checkPageAppear();
-        if ((!Values.cur.equals("RUB"))&(Values.currencyChange.equals("link"))) currencyChange(Values.cur);
+        if ((!collectData.getCur().equals("RUB"))&(Values.currencyChange.equals("link"))) currencyChange(collectData.getCur());
         ElementsCollection cards = $$(byXpath("//div[@class='passenger-card']"));
         for (int i=0; i < cards.size(); i++) fillPassengerData(cards.get(i), passengerList.get(i));
         setEmail();
@@ -105,10 +111,9 @@ public class PassengerPage extends Page {
 
     @Step("Указать телефон")
     private void setPhone(){
-        String phone = getRandomNumberString(10);
+        String phone = collectData.getPhone();
         SelenideElement block = $(byXpath("//div[contains(@class,'--icon-contacts')]/following-sibling::div"));
         block.$$(byXpath("descendant::input[@type='text']")).get(1).setValue(phone);
-        Values.phone = phone;
     }
 
     @Step("Согласиться с правилами")

@@ -2,8 +2,6 @@ package struct;
 
 import java.util.Calendar;
 import java.util.Date;
-
-import static config.Values.ln;
 import static config.Values.lang;
 import static pages.Page.getRandomString;
 import static pages.Page.getRandomNumberLimit;
@@ -23,7 +21,7 @@ public class Passenger {
     private String nationality; //национальность
     private String country; //страна выдачи
 
-    public Passenger(String type) {
+    public Passenger(String type, int ln) {
         this.gender = getRandomNumberLimit(2);
         this.firstname = getRandomString(4);
         this.lastname = getRandomString(8);

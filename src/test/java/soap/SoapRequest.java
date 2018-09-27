@@ -4,6 +4,7 @@ import config.Values;
 import org.w3c.dom.Document;
 import io.qameta.allure.Step;
 import org.xml.sax.SAXException;
+import struct.CollectData;
 import struct.InitialsAdditionalServices;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -22,7 +23,11 @@ import static org.testng.AssertJUnit.assertFalse;
 public class SoapRequest {
 
     public static String token = "";
+    private CollectData collectData;
 
+    public SoapRequest(CollectData collectData) {
+        this.collectData = collectData;
+    }
 
     public void changeCurrency() {
         try {
@@ -39,27 +44,28 @@ public class SoapRequest {
         }
     }
     public void addAdditionalAviaServices() {
+        String pnr = Values.getPNR(collectData.getTest());
         AdditionalServiceRequests.setPriceByCurrency();
-        AdditionalServiceRequests add = new AdditionalServiceRequests();
+        AdditionalServiceRequests add = new AdditionalServiceRequests(collectData);
         //1
         String req = add.getSessionCreateRQ();
         String response = callSoapRequest(req, req.split("~~")[0]);
         String token = getToken(response);
         //2
-        req = String.format(add.getTravelItineraryReadRQ(), token, Values.pnr);
+        req = String.format(add.getTravelItineraryReadRQ(), token, pnr);
         callSoapRequest(req, req.split("~~")[0]);
         //3
-        req = String.format(add.getGetReservationOperation(), token, Values.pnr);
+        req = String.format(add.getGetReservationOperation(), token, pnr);
         response = callSoapRequest(req, req.split("~~")[0]);
         InitialsAdditionalServices initials = new InitialsAdditionalServices(response);
         System.out.println(initials.toString());
         //4
-        req = String.format(add.getUpdateReservationOperation(), token, Values.pnr);
+        req = String.format(add.getUpdateReservationOperation(), token, pnr);
         req = replaceInitials(req, initials);
         response = callSoapRequest(req, req.split("~~")[0]);
         assertFalse("Ошибка в 4.SOAP \"ANCS Inventory is not available\"", response.contains("ANCS Inventory is not available"));
         //5
-        req = String.format(add.getUpdateReservationOperation1(), token, Values.pnr);
+        req = String.format(add.getUpdateReservationOperation1(), token, pnr);
         req = replaceInitials(req, initials);
         response = callSoapRequest(req, req.split("~~")[0]);
         assertFalse("Ошибка в 5.SOAP \"ANCS Inventory is not available\"", response.contains("ANCS Inventory is not available"));
@@ -150,10 +156,13 @@ public class SoapRequest {
             request = r1.concat(token).concat(r2);
         }
         if (n == 2) {
-            request = request.replaceFirst(">AAA<", ">AAA" + modifyPCC(Values.cur) + "<");
+            request = request.replaceFirst(">AAA<", ">AAA" + modifyPCC(collectData.getCur()) + "<");
+        }
+        if (n == 3) {
+            request = request.replaceFirst("PNRPNR", Values.getPNR(collectData.getTest()));
         }
         if (n == 5) {
-            request = request.replaceFirst("HostCommand>", "HostCommand>" + command(Values.cur));
+            request = request.replaceFirst("HostCommand>", "HostCommand>" + command(collectData.getCur()));
             //System.out.println(request);
         }
 
@@ -271,7 +280,7 @@ public class SoapRequest {
         request = request.replaceAll("CLASS_OF_SERVICE", ini.getClassOfService());
         request = request.replaceAll("OWNING_CARRIERCODE", ini.getOwningCarrierCode());
         request = request.replaceAll("BOOKING_STATUS", ini.getActionCode());
-        request = request.replaceAll("CURRENCY_CODE", Values.cur);
+        request = request.replaceAll("CURRENCY_CODE", collectData.getCur());
         return request;
     }
 

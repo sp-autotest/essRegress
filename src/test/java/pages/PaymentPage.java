@@ -2,12 +2,12 @@ package pages;
 
 import com.codeborne.selenide.SelenideElement;
 import config.Values;
-//import ru.yandex.qatools.allure.annotations.Step;
 import io.qameta.allure.Step;
+import struct.CollectData;
+
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
-import static config.Values.ln;
 import static org.testng.AssertJUnit.assertTrue;
 
 /**
@@ -15,10 +15,16 @@ import static org.testng.AssertJUnit.assertTrue;
  */
 public class PaymentPage extends Page {
 
+    private CollectData collectData;
+
+    public PaymentPage(CollectData collectData) {
+        this.collectData = collectData;
+    }
+
     @Step("Действие {0}, проверка формы оплаты")
     public void checkPaymentForm1(String n) {
         System.out.println("\t" + n + ". Checking Payment form");
-        new EprPage().clickPayButton();
+        new EprPage(collectData).clickPayButton();
         selectCardPay();
         checkTotalPrice1(n+"03");
     }
@@ -26,7 +32,7 @@ public class PaymentPage extends Page {
     @Step("Действие 15, проверка формы оплаты")
     public void checkPaymentForm2(boolean equalCityAndCurrency) {
         System.out.println("\t15. Checking Payment form");
-        new EprPage().clickPayButton();
+        new EprPage(collectData).clickPayButton();
         selectCardPay();
         checkTotalPrice2(equalCityAndCurrency);  //отключили временно
         checkTransportPrice(); // отключили временно
@@ -47,22 +53,23 @@ public class PaymentPage extends Page {
 
     @Step("Проверка стоимости на оплату")
     private void checkTotalPrice1(String n) {
+        String priceTotal = Values.reportData[collectData.getTest()].getPrice().total;
         String price = $(byXpath("//div[@class='cart__item-price ng-binding']")).getText().replaceAll("\\D+","");
         System.out.println(price);
-        if (!Values.price.total.equals(price)){
+        if (!priceTotal.equals(price)){
             String text = "Ошибка: [" + n + "] Стоимость на странице оплаты картой не корректна, " +
-                        "ожидалось: " + Values.price.total + ", фактически: " + price;
-            Values.errors.add(text);
+                        "ожидалось: " + priceTotal + ", фактически: " + price;
+            Values.addERR(collectData.getTest(), text);
             logDoc(text);
             screenShot("Скриншот");
         }//неблокирующая проверка
         //assertTrue("Стоимость «К ОПЛАТЕ ВСЕГО» некорректна", price.equals(Values.price.total));
         String button = $(byXpath("//span[contains(@ng-bind-html,'payAmountText')]")).getText().replaceAll("\\D+","");
         System.out.println(button);
-        if (!Values.price.total.equals(button)){
+        if (!priceTotal.equals(button)){
             String text = "Ошибка: [" + n + "] Стоимость на кнопке страницы оплаты картой не корректна, " +
-                        "ожидалось: " + Values.price.total + ", фактически:" + button;
-            Values.errors.add(text);
+                        "ожидалось: " + priceTotal + ", фактически:" + button;
+            Values.addERR(collectData.getTest(), text);
             logDoc(text);
             screenShot("Скриншот");
         }//неблокирующая проверка
@@ -71,42 +78,44 @@ public class PaymentPage extends Page {
 
     @Step("Проверка стоимости на оплату")
     private void checkTotalPrice2(boolean equalCityAndCurrency) {
+        String priceTotal = Values.reportData[collectData.getTest()].getPrice().total;
         String price = $(byXpath("//div[@class='cart__item-price ng-binding']")).getText().replaceAll("\\D+","");
-        System.out.println(Values.price.total);
+        System.out.println(priceTotal);
         System.out.println(price);
         System.out.println("Валюта услуги равна валюте бронирования? " + equalCityAndCurrency);
         if (!equalCityAndCurrency) {
             assertTrue("Стоимость «К ОПЛАТЕ ВСЕГО» некорректна" +
-                            "\nОжидалось : " + Values.price.total + "\nФактически: " + price,
-                    price.equals(Values.price.total));
+                       "\nОжидалось : " + priceTotal + "\nФактически: " + price,
+                       price.equals(priceTotal));
         }
         String now = $(byXpath("//div[contains(@translate,'now2')]/following-sibling::div")).getText().replaceAll("\\D+","");
         System.out.println(now);
         assertTrue("Стоимость «К оплате сейчас» некорректна" +
-                   "\nОжидалось : " + Values.price.total + "\nФактически: " + now,
-                   now.equals(Values.price.total));
+                   "\nОжидалось : " + priceTotal + "\nФактически: " + now,
+                   now.equals(priceTotal));
 
         String button = $(byXpath("//span[contains(@ng-bind-html,'payAmountText')]")).getText().replaceAll("\\D+","");
         System.out.println(button);
         assertTrue("Стоимость «Заплатить» на кнопке некорректна" +
-                   "\nОжидалось : " + Values.price.total + "\nФактически: " + button,
-                   button.equals(Values.price.total));
+                   "\nОжидалось : " + priceTotal + "\nФактически: " + button,
+                   button.equals(priceTotal));
     }
 
     @Step("Проверка стоимости аренды автомобиля")
     private void checkTransportPrice() {
+        String priceTransport = Values.reportData[collectData.getTest()].getPrice().transport;
         String inplace = $(byXpath("//div[contains(@translate,'onSite')]/following-sibling::div")).getText().replaceAll("\\D+","");
         System.out.println("«На месте» = " + inplace);
-        System.out.println("«Transport» = " + Values.price.transport);
+        System.out.println("«Transport» = " + priceTransport);
         assertTrue("Стоимость «На месте» некорректна" +
-                   "\nОжидалось : " + Values.price.transport + "\nФактически: " + inplace,
-                   inplace.equals(Values.price.transport));
+                   "\nОжидалось : " + priceTransport + "\nФактически: " + inplace,
+                   inplace.equals(priceTransport));
 
         String comment = $(byXpath("//div[@class='order-price__table-data-price ng-binding']")).getText().replaceAll("\\D+","");
         System.out.println(comment);
         assertTrue("Стоимость аренды авто в комментарии некорректна" +
-                   "\nОжидалось : " + Values.price.transport + "\nФактически: " + comment,
-                   comment.equals(Values.price.transport));
+                   "\nОжидалось : " + priceTransport + "\nФактически: " + comment,
+                   comment.equals(priceTransport));
     }
 
     @Step("Заполнить поле \"Номер карты\"")
@@ -143,7 +152,7 @@ public class PaymentPage extends Page {
     private void checkPaySuccessfull() {
         String text = $(byXpath("//div[contains(@translate,'paymentSuccessful')]")).shouldBe(visible).getText();
         System.out.println("SUCCESS = " + text);
-        assertTrue("Сообщение об успешной оплате отсутствует", text.equals(Values.text[11][ln]));
+        assertTrue("Сообщение об успешной оплате отсутствует", text.equals(Values.text[11][collectData.getLn()]));
     }
 
     @Step("Открыть способ оплаты банковской картой")
