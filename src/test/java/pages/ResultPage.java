@@ -201,8 +201,10 @@ public class ResultPage extends Page {
         }
         String name = row.$(byXpath("child::div[1]")).getText();
         System.out.println("Hotel = " + name);
-        assertTrue("Название отеля отличается от забронированного",
-                Values.reportData[collectData.getTest()].getHotel().name.equals(name));
+        assertTrue("Название отеля отличается от забронированного" +
+                   "\nОжидалось : " + Values.reportData[collectData.getTest()].getHotel().name +
+                   "\nФактически: " + name,
+                   Values.reportData[collectData.getTest()].getHotel().name.equals(name));
 
         String sDate = row.$(byXpath("child::div[2]")).getText();
         int s = row.$(byXpath("child::div[2]/span")).getText().length();
