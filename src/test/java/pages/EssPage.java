@@ -317,6 +317,7 @@ public class EssPage extends Page {
         String month = new SimpleDateFormat("MMMM", new Locale(Values.lang[collectData.getLn()][2])).format(flightList.get(i-1).start);
         if (month.length()>5) format = format.replaceFirst("MMMM", "MMM.");
         if (month.equals("Сентябрь")) format = format.replaceFirst("MMM", "сент");
+        if (month.equals("Ноябрь")) format = format.replaceFirst("MMM", "нояб");
         String dd = new SimpleDateFormat(format, new Locale(Values.lang[collectData.getLn()][2])).format(flightList.get(i-1).start);
         dd = dd + new SimpleDateFormat("HH:mm").format(flightList.get(i-1).end);
         System.out.println("Locale = " + dd);

@@ -32,6 +32,7 @@ public class PlacePage extends Page {
                     //break;
                 }
             }
+            if ($$(byXpath("//span[@class='next__button-inner']")).size()>0) clickNextButton();
             if ($$(byXpath("//h1[text()='Вход в тестовую среду системы ЕПР']")).size()>0) break;
             Sleep(2);
         }
@@ -57,5 +58,9 @@ public class PlacePage extends Page {
         System.out.println("PNR = " + pnr);
     }
 
+    @Step("Нажать кнопку Продолжить")
+    private void clickNextButton(){
+        $(byXpath("//span[@class='next__button-inner']")).click();
+    }
 
 }
