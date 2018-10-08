@@ -4,16 +4,19 @@ import struct.CollectData;
 
 public class AdditionalServiceRequests {
 
+    private CollectData collectData;
     private static String currency;
     private static String ENTREE_PRICE = "1";
     private static String DESSERT_PRICE = "2";
     private static String ADDOPTION_PRICE = "3";
 
     public AdditionalServiceRequests(CollectData collectData) {
-        currency = collectData.getCur();
+        this.collectData = collectData;
+        currency = this.collectData.getCur();
     }
 
     public static void setPriceByCurrency() {
+        System.out.println("currency in soap = " + currency);
         switch (currency) {
             case "RUB":
                 ENTREE_PRICE = "1750";

@@ -45,8 +45,8 @@ public class SoapRequest {
     }
     public void addAdditionalAviaServices() {
         String pnr = Values.getPNR(collectData.getTest());
-        AdditionalServiceRequests.setPriceByCurrency();
         AdditionalServiceRequests add = new AdditionalServiceRequests(collectData);
+        add.setPriceByCurrency();
         //1
         String req = add.getSessionCreateRQ();
         String response = callSoapRequest(req, req.split("~~")[0]);

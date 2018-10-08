@@ -41,7 +41,7 @@ public class ChoosePage extends Page {
     @Step("Действие 4, добавить доп. услуги")
     public void step4_8() {
         checkChoosePage();
-        System.out.println("URL = " + url());
+        System.out.println("[" + collectData.getTest() + "] URL = " + url());
         if ((!collectData.getCur().equals("RUB"))&(Values.currencyChange.equals("soap"))) changeCurrency();
         addAdditionalServices();
         open(Values.backdoor_host + Values.getPNR(collectData.getTest()));
@@ -93,6 +93,7 @@ public class ChoosePage extends Page {
 
     @Step("Действие 5, добавить дополнительные авиационные услуги")
     private void addAdditionalServices() {
+        System.out.println("Add aditional services");
         new SoapRequest(collectData).addAdditionalAviaServices();
     }
 

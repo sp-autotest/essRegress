@@ -344,7 +344,7 @@ public class EssPage extends Page {
     @Step("Полетная страховка в корзине")
     private void checkFlyInsuranceInCard(){
         $("#left-column-insurance-block").$(byXpath("descendant::div[@class='cart__item-priceondemand-item-title']"))
-                .shouldBe(exist).shouldBe(visible).shouldBe(exactText(text[0][collectData.getLn()]));
+                .shouldBe(exactText(text[0][collectData.getLn()]));
     }
 
     @Step("Полетная страховка отсутствует в корзине")
