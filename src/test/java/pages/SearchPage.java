@@ -5,6 +5,7 @@ import com.codeborne.selenide.SelenideElement;
 import config.Values;
 import org.openqa.selenium.JavascriptExecutor;
 import io.qameta.allure.Step;
+import struct.City;
 import struct.CollectData;
 import struct.Flight;
 import struct.InitialData;
@@ -31,12 +32,14 @@ public class SearchPage extends Page {
     public SearchPage(InitialData initData, CollectData collectData) {
         this.initData = initData;
         this.collectData = collectData;
+        clickAcceptCookiesButton();
+        countrySelect();
     }
 
     @Step("Действие 1, поиск рейсов")
     public void step1() {
-        clickAcceptCookiesButton();
-        countrySelect();
+        //clickAcceptCookiesButton();
+        //countrySelect();
         if (null != initData.getCityFrom()) setFrom(initData.getCityFrom());
         if (null != initData.getCityTo()) setTo(initData.getCityTo());
         if (null != initData.getDateThere()) setThere(initData.getDateThere());
@@ -49,7 +52,49 @@ public class SearchPage extends Page {
         clickSearchButton();
     }
 
-    @Step("Действие 2, выбор рейсов")
+    @Step("Действие 1, выбор городов")
+    public boolean setFlightCity(int caseNumber, City city) {
+        switch (caseNumber) {
+            case 1:
+                if (city.getHour() > 0) return false;
+                initData.setCityFrom(city.getCode());
+                initData.setCityTo("MOW");
+                break;
+            case 2:
+                if (city.getHour() < 0) return false;
+                initData.setCityFrom(city.getCode());
+                initData.setCityTo("MOW");
+                break;
+            case 3:
+                if (city.getHour() > 0) return false;
+                initData.setCityFrom("MOW");
+                initData.setCityTo(city.getCode());
+                break;
+        }
+        setFrom(initData.getCityFrom());
+        setTo(initData.getCityTo());
+        clickPassengers();
+        clickPassengers();
+        clickSearchButton();
+        return true;
+    }
+
+    @Step("Действие 2, выбор даты перелета")
+    public void setFlightDate(int period) {
+        switch (period) {
+            case 1:
+                initData.setDateThere("20012019");
+                break;
+            case 2:
+                initData.setDateThere("20032019");
+                break;
+            case 3:
+                initData.setDateThere("01092019");
+        }
+        setThere(initData.getDateThere());
+    }
+
+    @Step("Действие 3, выбор рейсов")
     public List<Flight> step2() {
         selectRandomFlight();
         clickBuyButton();
@@ -61,7 +106,6 @@ public class SearchPage extends Page {
         clickPassengersButton();
         return flightList;
     }
-
 
     @Step("Выбрать язык: {0}")
     private void selectLocale() {
