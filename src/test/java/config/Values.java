@@ -27,6 +27,7 @@ public class Values {
                                                   //    soap - с помощью soap-запросов
     public static String email = "tafl@software-provider.ru";
     public static String host = "https://afl-test.test.aeroflot.ru/sb/app/ru-";
+    public static String city_table_host = "https://www.aeroflot.ru/ru-ru/flight/ways_map_table";
     public static String backdoor_host = "https://ws.ess.test.aeroflot.ru/test.php?PNR=";
     public static String office_host = "https://office.ess.test.aeroflot.ru/";
     public static String office_login = "";
