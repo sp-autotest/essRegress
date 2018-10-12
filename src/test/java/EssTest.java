@@ -25,6 +25,7 @@ import java.util.List;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.source;
+import static org.testng.AssertJUnit.assertTrue;
 import static pages.Page.*;
 
 @Listeners({AllureOnEventListener.class})  //"слушатель" для Allure-отчета
@@ -108,6 +109,15 @@ public class EssTest {
     @DataProvider(name="data8")
     public Object[][] parseLocaleData8() {
         return startData8;
+    }
+
+    @DataProvider(name="data9")
+    public Object[][] parseLocaleData9() {
+        return new Object[][] {
+                /*{1,1}, {1,2},*/ {1,3}, /*{1,4}, {1,5}, {1,6}, {1,7}, {1,8},
+                {2,1}, /*{2,2}, {2,3}, {2,4}, {2,5}, {2,6}, {2,7}, {2,8},
+                {3,1}, {3,2}, {3,3}, {3,4}, {3,5}, {3,6}, {3,7}, {3,8}*/
+        };
     }
 
     @Description("Карта VISA;\nНаправление перелета: туда-обратно;\n" +
@@ -665,7 +675,55 @@ public class EssTest {
         new EprPage(collectData).checkDataOnPayPage("20", flightList, passList, test, timer);//шаг 20
     }
 
+/*
+    @Description("Карта VISA;\nНаправление перелета: в одну сторону;\n" +
+            "Состав бронирования авиаперелета, билеты: 1 взрослый;" +
+            "Дополнительные услуги: «Трансфер»")
+    @Test(priority = 9, description = "Раздел 9", groups = {"part9"}, dataProvider= "data9", enabled = false)
+    public void section9(int period, int caseNumber) {
+        runBrowser("chrome", "1920x1080");
+        int test = 9;
+        CollectData collectData = new CollectData();
+        collectData.setPhone(getRandomNumberString(10));
+        collectData.setLn(getLanguageNumber("Russian"));
+        collectData.setCur("RUB");
+        collectData.setTest(9);
+        System.out.println("START");
+        clearReportData(collectData.getTest());
 
+        System.out.println("==========================================================" +
+                "\n*** AUTOTEST *** : section 9, chrome, 1920x1080, RUS, RUB" +
+                "\n==========================================================");
+        open(Values.city_table_host);
+        List<City> cities = new CityPage().getCityList();
+        open(Values.host + "ru");
+        InitialData initData = new InitialData(null, null, null, null, null, 1, 0, 0);
+        SearchPage searchPg = new SearchPage(initData, collectData);
+        SearchFramePage searchFramePg = new SearchFramePage();
+        searchPg.setFlightDate(period);
+        boolean result = false;
+        for (City city : cities) {
+            if (!searchPg.setFlightCity(caseNumber, city)) continue;
+            System.out.println(city.toString());
+            if (searchFramePg.searchFlight(caseNumber)) {
+                result = true;
+                break;
+            }
+        }
+        assertTrue("Перелет, соответствующий условию, отсутствует", result);
+
+        List<Passenger> passList = createPassengers(initData, collectData.getLn());
+        new PassengerPage(collectData).step3(passList);
+        PlacePage placePg = new PlacePage(collectData);
+        List<Flight> flightList = placePg.getFlightData();
+        placePg.clickPay();
+        ChoosePage choosePg = new ChoosePage(collectData);
+        choosePg.step4();
+        EssPage essPg = new EssPage(collectData);
+
+        Sleep(10);
+    }
+*/
     private List<Passenger> createPassengers(InitialData initData, int ln) {
         List<Passenger> passengerList = new ArrayList<Passenger>();
         for (int i=0; i<initData.getAdult(); i++) {
@@ -793,6 +851,7 @@ public class EssTest {
         }
         return o;
     }
+
 
     private void clearReportData(int number) {
         Values.setPNR(number, "");
