@@ -1,8 +1,13 @@
 package pages;
 
+import com.codeborne.selenide.Condition;
 import config.Values;
 import io.qameta.allure.Step;
 import struct.CollectData;
+import struct.Flight;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
@@ -36,6 +41,19 @@ public class PlacePage extends Page {
             if ($$(byXpath("//h1[text()='Вход в тестовую среду системы ЕПР']")).size()>0) break;
             Sleep(2);
         }
+    }
+
+    @Step("Извлечь дату/время перелета")
+    public List<Flight> getFlightData(){
+        for (int i=0; i<60; i++) {
+            if ($$(byXpath("//div[@class='cart__item-pricelist']")).size()>0) break;
+            Sleep(2);
+        }
+        $(byXpath("//div[@class='cart__item-pricelist']")).shouldBe(Condition.visible);
+        List<Flight> flightList = new ArrayList<Flight>();
+
+
+        return flightList;
     }
 
     @Step("Извлечь PNR")
