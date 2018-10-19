@@ -154,9 +154,14 @@ public class EssTest {
         List<Flight> flightList = searchPg.step2();
         List<Passenger> passList = createPassengers(initData, collectData.getLn());
         new PassengerPage(collectData).step3(passList);
-        new PlacePage(collectData).clickPay();
+        //new PlacePage(collectData).clickPay();
+
+        PlacePage placePg = new PlacePage(collectData);  //new
+        placePg.getPNR();
+        placePg.goBackDoor();
+
         ChoosePage choosePg = new ChoosePage(collectData);
-        choosePg.step4();
+        //choosePg.step4();
         EssPage essPg = new EssPage(collectData);
         essPg.step6();
         boolean timer = essPg.checkTimer();
@@ -230,9 +235,14 @@ public class EssTest {
         List<Flight> flightList = searchPg.step2();
         List<Passenger> passList = createPassengers(initData, collectData.getLn());
         new PassengerPage(collectData).step3(passList);
-        new PlacePage(collectData).clickPay();
+        //new PlacePage(collectData).clickPay();
+
+        PlacePage placePg = new PlacePage(collectData);  //new
+        placePg.getPNR();
+        placePg.goBackDoor();
+
         ChoosePage choosePg = new ChoosePage(collectData);
-        choosePg.step4();
+        //choosePg.step4();
         EssPage essPg = new EssPage(collectData);
         essPg.step6();
         boolean timer = essPg.checkTimer();
