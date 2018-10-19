@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
@@ -102,7 +103,8 @@ public class PlacePage extends Page {
     @Step("Зайти в витрину с бэкдора")
     public void goBackDoor() {
         open(Values.backdoor_host + Values.getPNR(collectData.getTest()));
-        String link = $(byXpath("//a")).shouldBe(Condition.visible).getText();
+        String link = $(byXpath("//a")).shouldBe(visible).getText().
+                replaceFirst("Language=RU", "Language="+Values.lang[collectData.getLn()][2].toUpperCase());
         System.out.println("Backdoor link = " + link);
         open(link);
     }
