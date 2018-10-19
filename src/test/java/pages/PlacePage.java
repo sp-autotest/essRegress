@@ -8,8 +8,6 @@ import io.qameta.allure.Step;
 import struct.CollectData;
 import struct.Flight;
 
-import java.io.File;
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -19,6 +17,7 @@ import java.util.Locale;
 import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
+import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.url;
 
 
@@ -40,12 +39,6 @@ public class PlacePage extends Page {
                 Sleep(1);
                 if ($$(byXpath("//div[@class='text text--inline']")).size()>0) {
                     $(byXpath("//div[@class='text text--inline']")).click();
-                    File autoIt = new File("basic.exe");
-                    try {
-                        Runtime.getRuntime().exec(autoIt.getAbsolutePath());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
                 }
             }
             if ($$(byXpath("//span[@class='next__button-inner']")).size()>0) clickNextButton();
@@ -104,6 +97,14 @@ public class PlacePage extends Page {
         }
         Values.setPNR(collectData.getTest(), pnr);
         System.out.println("PNR = " + pnr);
+    }
+
+    @Step("Зайти в витрину с бэкдора")
+    public void goBackDoor() {
+        open(Values.backdoor_host + Values.getPNR(collectData.getTest()));
+        String link = $(byXpath("//a")).shouldBe(Condition.visible).getText();
+        System.out.println("Backdoor link = " + link);
+        open(link);
     }
 
     @Step("Нажать кнопку Продолжить")

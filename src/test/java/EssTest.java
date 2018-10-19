@@ -24,8 +24,6 @@ import java.util.Date;
 import java.util.List;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.Selenide.open;
-import static com.codeborne.selenide.WebDriverRunner.source;
-import static org.testng.AssertJUnit.assertTrue;
 import static pages.Page.*;
 
 @Listeners({AllureOnEventListener.class})  //"слушатель" для Allure-отчета
@@ -350,16 +348,21 @@ public class EssTest {
         List<Flight> flightList = searchPg.step2();
         List<Passenger> passList = createPassengers(initData, collectData.getLn());
         new PassengerPage(collectData).step3(passList);
-        new PlacePage(collectData).clickPay();
+        //new PlacePage(collectData).clickPay();
+
+        PlacePage placePg = new PlacePage(collectData);  //new
+        placePg.getPNR();
+        placePg.goBackDoor();
+
         ChoosePage choosePg = new ChoosePage(collectData);
-        choosePg.step4();
+        //choosePg.step4();
         EssPage essPg = new EssPage(collectData);
         essPg.step6();
         boolean timer = essPg.checkTimer();
         essPg.step7(flightList);
         essPg.step8();
         essPg.deleteFlyInsurance();//шаг 9
-        essPg.clickPayInCart();//шаг 10
+        essPg.clickPayInCart("10");//шаг 10
         choosePg.chooseTestStend("11");//шаг 11
         new EprPage(collectData).checkDataOnPayPage("12", flightList, passList, test, timer);//шаг 12
         PaymentPage paymentPg = new PaymentPage(collectData);
@@ -674,14 +677,13 @@ public class EssTest {
         choosePg.chooseTestStend("19");//шаг 19
         new EprPage(collectData).checkDataOnPayPage("20", flightList, passList, test, timer);//шаг 20
     }
-
 /*
     @Description("Карта VISA;\nНаправление перелета: в одну сторону;\n" +
             "Состав бронирования авиаперелета, билеты: 1 взрослый;" +
             "Дополнительные услуги: «Трансфер»")
-    @Test(priority = 9, description = "Раздел 9", groups = {"part9"}, dataProvider= "data9", enabled = false)
+    @Test(priority = 9, description = "Раздел 9", groups = {"part9"}, dataProvider= "data9")
     public void section9(int period, int caseNumber) {
-        runBrowser("chrome", "1920x1080");
+        runBrowser("chrome", "1280x1024");
         int test = 9;
         CollectData collectData = new CollectData();
         collectData.setPhone(getRandomNumberString(10));
@@ -694,7 +696,6 @@ public class EssTest {
         System.out.println("==========================================================" +
                 "\n*** AUTOTEST *** : section 9, chrome, 1920x1080, RUS, RUB" +
                 "\n==========================================================");
-        open(Values.city_table_host);
         List<City> cities = new CityPage().getCityList();
         open(Values.host + "ru");
         InitialData initData = new InitialData(null, null, null, null, null, 1, 0, 0);
@@ -703,8 +704,8 @@ public class EssTest {
         searchPg.setFlightDate(period);
         boolean result = false;
         for (City city : cities) {
-            if (!searchPg.setFlightCity(caseNumber, city)) continue;
             System.out.println(city.toString());
+            if (!searchPg.setFlightCity(caseNumber, city)) continue;
             if (searchFramePg.searchFlight(caseNumber)) {
                 result = true;
                 break;
@@ -720,8 +721,29 @@ public class EssTest {
         ChoosePage choosePg = new ChoosePage(collectData);
         choosePg.step4();
         EssPage essPg = new EssPage(collectData);
+        essPg.checkDateOnESS(flightList);//шаг 5
 
-        Sleep(10);
+        TransportPage transportPg = new TransportPage(collectData);
+        transportPg.step10(test);
+
+        String dir = transportPg.setTransferLocations();//шаг 14
+        transportPg.clickSelectStandartButton();//шаг 15
+        Date transferDate = flightList.get(0).start;
+        transportPg.setTransferAdditionalInfo(transferDate, dir);//шаг 16
+        transportPg.selectTransferAndCheckDate(transferDate);//шаг 17
+
+        essPg.clickPayInCart("6");//шаг 6
+        choosePg.chooseTestStend("7");//шаг 7
+        EprPage eprPg = new EprPage(collectData);
+        eprPg.checkDateOnEPR(flightList);//шаг 8
+        eprPg.checkTransferDate(transferDate);
+
+
+        OfficePage officePg = new OfficePage(collectData);
+        officePg.authorization();//шаг 17
+        officePg.searchOrder(Values.getPNR(collectData.getTest()));//шаг 18
+        officePg.checkDateOnARM(Values.getPNR(collectData.getTest()), flightList);//шаг 19
+        officePg.checkSabre();//ifu 20
     }
 */
     private List<Passenger> createPassengers(InitialData initData, int ln) {
