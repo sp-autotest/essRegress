@@ -52,7 +52,7 @@ public class EssPage extends Page {
         checkDateTime();
         checkPrice();
         checkFlightInsurance();
-        checkMedicalInsurance();
+        //checkMedicalInsurance();  //временно отключено 19.10.18
         checkCart();
         checkNextButton();
         checkTransport();
@@ -70,6 +70,23 @@ public class EssPage extends Page {
         System.out.println("Timer value on ESS not found");
         return false;
     }
+
+    @Step("Действие 5, Проверка даты/времени на ESS")
+    public void checkDateOnESS(List<Flight> flightList) {
+        System.out.println("\t5. Check ESS form");
+        checkPageAppear();
+        countrySelect();
+        if (getWebDriver().manage().window().getSize().getWidth() < 1280) {
+            $("#left-column-insurance-block").click();//раскрыть блок Страховка
+            Sleep(1);
+        }else moveMouseToFlight();
+        screenShot("Скриншот");
+        ElementsCollection flights = $$(byXpath("//div[@class='cart__item-details']"));
+        for (int i = 0; i < flights.size(); i++) {
+            checkDateData(i+1, flightList, flights);
+        }
+    }
+
 
     @Step("Действие 7, Проверка данных в блоке «Перелет»")
     public void step7(List<Flight> flightList) {
@@ -202,8 +219,8 @@ public class EssPage extends Page {
         screenShot("Скриншот");
     }
 
-    @Step("Действие 10, Нажать Оплатить в корзине")
-    public void clickPayInCart() {
+    @Step("Действие {0}, Нажать Оплатить в корзине")
+    public void clickPayInCart(String step) {
         System.out.println("\t10. Click Pay in cart");
         if (getWebDriver().manage().window().getSize().getWidth() < 1280) {
             $("#left-column-insurance-block").click();//раскрыть блок Страховка
