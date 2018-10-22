@@ -92,7 +92,7 @@ public class ChoosePage extends Page {
     }
 
     @Step("Действие 5, добавить дополнительные авиационные услуги")
-    private void addAdditionalServices() {
+    public void addAdditionalServices() {
         System.out.println("Add aditional services");
         new SoapRequest(collectData).addAdditionalAviaServices();
     }
