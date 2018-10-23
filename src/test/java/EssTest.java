@@ -1,10 +1,13 @@
 import com.codeborne.selenide.WebDriverRunner;
 import config.Values;
 import dict.NationalityName;
+import io.qameta.allure.Attachment;
 import io.qameta.allure.Step;
 import listeners.AllureOnEventListener;
 import listeners.MyTransformer;
 import org.openqa.selenium.Dimension;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -83,6 +86,7 @@ public class EssTest {
 
     @AfterMethod
     public void stop(ITestResult testResult) throws IOException {
+        makeScreenshot("Скриншот");
         getWebDriver().quit();
         // костыль, для того чтобы закрыть оперу, т.к. в ее драйвере есть баг
         // https://github.com/operasoftware/operachromiumdriver/issues/44
@@ -116,6 +120,11 @@ public class EssTest {
                 {2,1}, /*{2,2}, {2,3}, {2,4}, {2,5}, {2,6}, {2,7}, {2,8},
                 {3,1}, {3,2}, {3,3}, {3,4}, {3,5}, {3,6}, {3,7}, {3,8}*/
         };
+    }
+
+    @Attachment(value = "{0}", type = "image/png")
+    private static byte[] makeScreenshot(String name) {
+        return ((TakesScreenshot)getWebDriver()).getScreenshotAs(OutputType.BYTES);
     }
 
     @Description("Карта VISA;\nНаправление перелета: туда-обратно;\n" +
