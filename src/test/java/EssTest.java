@@ -1,13 +1,10 @@
-import com.codeborne.selenide.WebDriverRunner;
+import com.codeborne.selenide.*;
 import config.Values;
 import dict.NationalityName;
-import io.qameta.allure.Attachment;
 import io.qameta.allure.Step;
 import listeners.AllureOnEventListener;
 import listeners.MyTransformer;
 import org.openqa.selenium.Dimension;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
