@@ -52,10 +52,10 @@ public class Page {
         for (String e : Values.getERR(test)) logDoc(e);
     }
 
-    @Step("PNR: {0}")
+    //@Step("PNR: {0}")
     public static void logPNR(String pnr){
         String link = "https://office.ess.test.aeroflot.ru/search?Query=" + pnr;
-        Allure.addAttachment("Результат", "text/plain", link);
+        Allure.addAttachment(pnr, "text/html", link);
     }
 
     @Step("Номер карты: {0}")
