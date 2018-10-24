@@ -206,7 +206,7 @@ public class SearchPage extends Page {
     }
 
     private void saveFlightData() {
-        Values.reportData[collectData.getTest()].getPrice().fly = $(byXpath("//div[@class='cart__item-price js-popover']")).getText().replaceAll("\\D+","");
+        Values.reportData[collectData.getTest()].getPrice().fly = $(byXpath("//div[@class='cart__item-info h-ml--auto']")).getText().replaceAll("\\D+","");
         System.out.println("Fly price = " + Values.reportData[collectData.getTest()].getPrice().fly);
         Flight f;
         String d;
