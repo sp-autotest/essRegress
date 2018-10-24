@@ -3,6 +3,7 @@ package pages;
 import com.codeborne.selenide.SelenideElement;
 import config.Values;
 import io.qameta.allure.Allure;
+import io.qameta.allure.model.Link;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import io.qameta.allure.Step;
@@ -56,6 +57,10 @@ public class Page {
     public static void logPNR(String pnr){
         String link = "https://office.ess.test.aeroflot.ru/search?Query=" + pnr;
         Allure.addAttachment(pnr, "text/html", link);
+        Link link1 = new Link();
+        link1.setName(pnr);
+        link1.setUrl("https://office.ess.test.aeroflot.ru/search?Query=" + pnr);
+        Allure.addLinks(link1);
     }
 
     @Step("Номер карты: {0}")
