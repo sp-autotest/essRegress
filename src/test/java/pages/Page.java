@@ -2,6 +2,7 @@ package pages;
 
 import com.codeborne.selenide.SelenideElement;
 import config.Values;
+import io.qameta.allure.Allure;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import io.qameta.allure.Step;
@@ -52,7 +53,10 @@ public class Page {
     }
 
     @Step("PNR: {0}")
-    public static void logPNR(String pnr){}
+    public static void logPNR(String pnr){
+        String link = "https://office.ess.test.aeroflot.ru/search?Query=" + pnr;
+        Allure.addAttachment("Результат", "text/plain", link);
+    }
 
     @Step("Номер карты: {0}")
     public static void logCardNumber(String number){}
