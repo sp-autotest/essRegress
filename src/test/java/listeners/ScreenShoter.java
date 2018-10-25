@@ -16,7 +16,7 @@ public class ScreenShoter {
 
     private  ScreenShoter(){};
 
-    @Attachment(value = "{0}", type = "image/jpg")
+    @Attachment(value = "{0}", type = "image/jpeg")
     public static byte[] makeScreenshot(String name) throws IOException {
         return ((TakesScreenshot)getWebDriver()).getScreenshotAs(OutputType.BYTES);
     }
