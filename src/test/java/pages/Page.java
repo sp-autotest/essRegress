@@ -68,7 +68,8 @@ public class Page {
 
     public static void logDocuments(String doc){
         Link link = new Link();
-        String retval = doc.replaceAll(", ", "\n");
+        String retval = " ";
+        if (null != doc) retval = doc.replaceAll(", ", "\n");
         link.setName("Документы: " + retval);
         Allure.addLinks(link);
     }
