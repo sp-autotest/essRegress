@@ -44,6 +44,9 @@ public class Page {
 
     @Step("Запись результатов")
     public static void resultat(int test){
+        Allure.addLinks(new Link()
+                .withName("PNR: " + Values.getPNR(test))
+                .withUrl("https://office.ess.test.aeroflot.ru/search?Query=" + Values.getPNR(test)));
         logPNR(Values.getPNR(test));
         logCardNumber(Values.card[0][0]);
         logDocuments(Values.getDOC(test));
@@ -54,25 +57,19 @@ public class Page {
         for (String e : Values.getERR(test)) logDoc(e);
     }
 
-    public static void logPNR(String pnr){
-        Link link = new Link();
-        link.setName("PNR: " + pnr);
-        link.setUrl("https://office.ess.test.aeroflot.ru/search?Query=" + pnr);
-        Allure.addLinks(link);
-    }
+    @Step("PNR: {0}")
+    public static void logPNR(String pnr){}
 
-    public static void logCardNumber(String number){
-        Label label = new Label().withName("Номер карты: ").withValue(number);
-        Allure.addLabels(label);
-    }
+    @Step("Номер карты: {0}")
+    public static void logCardNumber(String number){}
 
+    @Step("Документы:")
     public static void logDocuments(String doc){
-        Label label = new Label();
-        String retval = " ";
-        if (null != doc) retval = doc.replaceAll(", ", "\n");
-        label.setName("Документы: ");
-        label.setValue(retval);
-        Allure.addLabels(label);
+        try {
+            for (String retval : doc.split(", ")) {
+                logDoc(retval);
+            }
+        }catch (NullPointerException ex) {System.out.println("The step of parsing documents is not achieved"); }
     }
 
     @Step("{0}")
