@@ -5,6 +5,7 @@ import org.openqa.selenium.TakesScreenshot;
 import io.qameta.allure.Attachment;
 //import ru.yandex.qatools.allure.annotations.Attachment;
 
+import java.io.File;
 import java.io.IOException;
 
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
@@ -17,8 +18,8 @@ public class ScreenShoter {
     private  ScreenShoter(){};
 
     @Attachment(value = "{0}", type = "image/jpeg")
-    public static byte[] makeScreenshot(String name) throws IOException {
-        return ((TakesScreenshot)getWebDriver()).getScreenshotAs(OutputType.BYTES);
+    public static File makeScreenshot(String name) throws IOException {
+        return ((TakesScreenshot)getWebDriver()).getScreenshotAs(OutputType.FILE);
     }
 
 }
