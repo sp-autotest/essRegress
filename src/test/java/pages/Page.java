@@ -53,26 +53,24 @@ public class Page {
         for (String e : Values.getERR(test)) logDoc(e);
     }
 
-    //@Step("PNR: {0}")
     public static void logPNR(String pnr){
-        String link = "https://office.ess.test.aeroflot.ru/search?Query=" + pnr;
-        Allure.addAttachment(pnr, "text/html", link);
-        Link link1 = new Link();
-        link1.setName(pnr);
-        link1.setUrl("https://office.ess.test.aeroflot.ru/search?Query=" + pnr);
-        Allure.addLinks(link1);
+        Link link = new Link();
+        link.setName("PNR: " + pnr);
+        link.setUrl("https://office.ess.test.aeroflot.ru/search?Query=" + pnr);
+        Allure.addLinks(link);
     }
 
-    @Step("Номер карты: {0}")
-    public static void logCardNumber(String number){}
+    public static void logCardNumber(String number){
+        Link link = new Link();
+        link.setName("Номер карты: " + number);
+        Allure.addLinks(link);
+    }
 
-    @Step("Документы:")
     public static void logDocuments(String doc){
-        try {
-            for (String retval : doc.split(", ")) {
-                logDoc(retval);
-            }
-        }catch (NullPointerException ex) {System.out.println("The step of parsing documents is not achieved"); }
+        Link link = new Link();
+        String retval = doc.replaceAll(", ", "\n");
+        link.setName("Документы: " + retval);
+        Allure.addLinks(link);
     }
 
     @Step("{0}")
