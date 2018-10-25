@@ -3,6 +3,7 @@ package pages;
 import com.codeborne.selenide.SelenideElement;
 import config.Values;
 import io.qameta.allure.Allure;
+import io.qameta.allure.model.Label;
 import io.qameta.allure.model.Link;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -61,17 +62,17 @@ public class Page {
     }
 
     public static void logCardNumber(String number){
-        Link link = new Link();
-        link.setName("Номер карты: " + number);
-        Allure.addLinks(link);
+        Label label = new Label().withName("Номер карты: ").withValue(number);
+        Allure.addLabels(label);
     }
 
     public static void logDocuments(String doc){
-        Link link = new Link();
+        Label label = new Label();
         String retval = " ";
         if (null != doc) retval = doc.replaceAll(", ", "\n");
-        link.setName("Документы: " + retval);
-        Allure.addLinks(link);
+        label.setName("Документы: ");
+        label.setValue(retval);
+        Allure.addLabels(label);
     }
 
     @Step("{0}")
