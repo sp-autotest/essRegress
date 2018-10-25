@@ -3,7 +3,6 @@ package pages;
 import com.codeborne.selenide.SelenideElement;
 import config.Values;
 import io.qameta.allure.Allure;
-import io.qameta.allure.model.Label;
 import io.qameta.allure.model.Link;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
