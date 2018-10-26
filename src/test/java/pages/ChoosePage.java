@@ -52,7 +52,7 @@ public class ChoosePage extends Page {
     }
 
     @Step("Действие {0}, выбор стенда")
-    public void chooseTestStend (String n) {
+    public void chooseTestStend (int n) {
         System.out.println("\t" + n + ". Choose Test Stend");
         $("h1").shouldBe(exactText("Вход в тестовую среду системы ЕПР"));
         System.out.println("[" + collectData.getTest() + "] URL = " + url());
@@ -91,7 +91,7 @@ public class ChoosePage extends Page {
         new SoapRequest(collectData).changeCurrency();
     }
 
-    @Step("Действие 5, добавить дополнительные авиационные услуги")
+    @Step("Добавить дополнительные авиационные услуги (SOAP)")
     public void addAdditionalServices() {
         System.out.println("Add aditional services");
         new SoapRequest(collectData).addAdditionalAviaServices();
