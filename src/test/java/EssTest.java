@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.List;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.Selenide.open;
+import static org.testng.AssertJUnit.assertTrue;
 import static pages.Page.*;
 
 @Listeners({AllureOnEventListener.class})  //"слушатель" для Allure-отчета
@@ -178,16 +179,14 @@ public class EssTest {
         hotelPg.checkHotelLogic(15, flightList, passList);//шаг 15
         hotelPg.checkFiltration();//шаг 16
         hotelPg.checkSorting();//шаг 17
-
         //искать нештрафную комнату
         int room = -1;
-        for (int i=0; i<=9; i++) {
+        for (int i=0; i<9; i++) {
             hotelPg.selectHotel(i, 18);//шаг 18
             room = hotelPg.selectRoomType(19);//шаг 19
             if (room>=0) break;
         }
-        //------------------------
-
+        assertTrue("Не удалось найти отель с подходящими условиями отмены бронирования", room != -1);
         hotelPg.clickBookButton(room, 20);//шаг 20
         hotelPg.checkPassengersData(passList, 21);//шаг 21
         hotelPg.clickPayInCart(22);//шаг 22
@@ -457,12 +456,12 @@ public class EssTest {
         hotelPg.checkHotelLogic(20, flightList, passList);//шаг 20
         //искать нештрафную комнату
         int room = -1;
-        for (int i=0; i<=9; i++) {
+        for (int i=0; i<9; i++) {
             hotelPg.selectHotel(i, 21);//шаг 21
             room = hotelPg.selectRoomType(22);//шаг 22
             if (room>=0) break;
         }
-        //------------------------
+        assertTrue("Не удалось найти отель с подходящими условиями отмены бронирования", room != -1);
         hotelPg.clickBookButton(room, 23);//шаг 23
         hotelPg.clickPayInCart(24);//шаг 24
         choosePg.chooseTestStend(25);//шаг 25
@@ -538,12 +537,12 @@ public class EssTest {
         hotelPg.checkHotelLogic(20, flightList, passList);//шаг 20
         //искать нештрафную комнату
         int room = -1;
-        for (int i=0; i<=9; i++) {
+        for (int i=0; i<9; i++) {
             hotelPg.selectHotel(i,21);//шаг 21
             room = hotelPg.selectRoomType(22);//шаг 22
             if (room>=0) break;
         }
-        //------------------------
+        assertTrue("Не удалось найти отель с подходящими условиями отмены бронирования", room != -1);
         hotelPg.clickBookButton(room, 23);//шаг 23
         hotelPg.clickPayInCart(24);//шаг 24
         choosePg.chooseTestStend(25);//шаг 25
