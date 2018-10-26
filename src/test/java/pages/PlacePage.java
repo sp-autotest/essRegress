@@ -80,7 +80,7 @@ public class PlacePage extends Page {
         return flightList;
     }
 
-    @Step("Извлечь PNR")
+    @Step("Действие 4, Извлечь PNR")
     public void getPNR(){
         String pnr;
         for (int i=0; i<30; i++) {
@@ -100,7 +100,7 @@ public class PlacePage extends Page {
         System.out.println("PNR = " + pnr);
     }
 
-    @Step("Зайти в витрину с бэкдора")
+    @Step("Действие 5, Зайти в витрину с бэкдора")
     public void goBackDoor() {
         open(Values.backdoor_host + Values.getPNR(collectData.getTest()));
         String link = $(byXpath("//a")).shouldBe(visible).getText().

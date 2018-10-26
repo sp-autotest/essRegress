@@ -43,7 +43,7 @@ public class OfficePage extends Page{
         System.out.println("Order details Tab appeared");
     }
 
-    @Step("Действие 17, Переход в АРМ ESS")
+    @Step("Действие 16, Переход в АРМ ESS")
     public void authorization (){
         System.out.println("\t17. Redirect to office ESS");
         open(Values.office_host);
@@ -57,7 +57,7 @@ public class OfficePage extends Page{
         checkOrderFormAppear();
     }
 
-    @Step("Действие 18, Поиск заказа с PNR = {0}")
+    @Step("Действие 17, Поиск заказа с PNR = {0}")
     public void searchOrder (String pnr) {
         System.out.println("\t18. Search order with PNR = "+pnr);
         setQueryField(pnr);
@@ -65,7 +65,7 @@ public class OfficePage extends Page{
         checkOrderIsFound(pnr);
     }
 
-    @Step("Действие 19, Открыть детализацию заказа {0}")
+    @Step("Действие 18, Открыть детализацию заказа {0}")
     public void openOrderDetails (String pnr, List<Flight> flyList, List<Passenger> passList) {
         System.out.println("\t19. Open order details");
         //String parentHandle = getWebDriver().getWindowHandle();

@@ -60,7 +60,7 @@ public class EssPage extends Page {
     }
 
     //проверка таймера изменена на основании задачи 2663
-    @Step("Действие 6, Проверка таймера")
+    @Step("Проверка таймера")
     public boolean checkTimer() {
         ElementsCollection timers = $$(byXpath("//div[@class='cart__item-counter-time']"));
         if ((timers.size() > 0) && (timers.get(0).isDisplayed())) {
@@ -100,10 +100,16 @@ public class EssPage extends Page {
             checkDurationData(i+1, flightList, flights);
         }
     }
+    @Step("Действие 7, Проверка добавления дополнительных авиа услуг")
+    public  void checkAdditionalServices() {
+        System.out.println("\t7. Check Additional Services");
+        checkSelectPlaceStep();
+        checkSelectFoodStep();
+    }
 
-    @Step("Действие 7, Проверка данных в блоке «ВЫБОР МЕСТ»")
-    public void checkSelectPlaceStep() {
-        System.out.println("\t7. Check Prereserved place");
+    @Step("Проверка данных в блоке «ВЫБОР МЕСТ»")
+    private void checkSelectPlaceStep() {
+        System.out.println("Check Prereserved place");
         String code = "0B5"; //код услуги "Предварительный выбор места"
         String etalon = AddService.getServiceByCodeAndLanguage(code, collectData.getLn()) + " (1)";
         SelenideElement place = $(byXpath("//div[@class='cart__item cart__item--last']"));
@@ -118,9 +124,9 @@ public class EssPage extends Page {
         System.out.println("Select place price = " + Values.reportData[collectData.getTest()].getPrice().place);
     }
 
-    @Step("Действие 8, Проверка данных в блоке «ВЫБОР ПИТАНИЯ»")
-    public void checkSelectFoodStep() {
-        System.out.println("\t8. Check food");
+    @Step("Проверка данных в блоке «ВЫБОР ПИТАНИЯ»")
+    private void checkSelectFoodStep() {
+        System.out.println("Check food");
         ElementsCollection cart_item = $$(byXpath("//div[@class='cart__item cart__item--last']"));
         assertTrue("Блоков с доп.услугами недостаточно" +
                    "\nОжидалось : 2" +
@@ -220,7 +226,7 @@ public class EssPage extends Page {
     }
 
     @Step("Действие {0}, Нажать Оплатить в корзине")
-    public void clickPayInCart(String step) {
+    public void clickPayInCart(int n) {
         System.out.println("\t10. Click Pay in cart");
         if (getWebDriver().manage().window().getSize().getWidth() < 1280) {
             $("#left-column-insurance-block").click();//раскрыть блок Страховка

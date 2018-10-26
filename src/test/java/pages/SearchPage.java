@@ -94,7 +94,7 @@ public class SearchPage extends Page {
         setThere(initData.getDateThere());
     }
 
-    @Step("Действие 3, выбор рейсов")
+    @Step("Действие 2, выбор рейсов")
     public List<Flight> step2() {
         selectRandomFlight();
         clickBuyButton();

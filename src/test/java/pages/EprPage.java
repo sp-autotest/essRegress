@@ -37,7 +37,7 @@ public class EprPage extends Page {
     }
 
     @Step("Действие {0}, проверка данных на странице оплаты")
-    public void checkDataOnPayPage(String n, List<Flight> flyList, List<Passenger> passList, int test, boolean timer) {
+    public void checkDataOnPayPage(int n, List<Flight> flyList, List<Passenger> passList, int test, boolean timer) {
         System.out.println("\t" + n + ". Checking data on Pay page");
         screenShot("Скриншот");
         if (!timer) checkTimer();//добавлена проверка значения таймера согласно задачи 2663

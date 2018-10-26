@@ -22,7 +22,7 @@ public class PaymentPage extends Page {
     }
 
     @Step("Действие {0}, проверка формы оплаты")
-    public void checkPaymentForm1(String n) {
+    public void checkPaymentForm1(int n) {
         System.out.println("\t" + n + ". Checking Payment form");
         new EprPage(collectData).clickPayButton();
         selectCardPay();
@@ -39,7 +39,7 @@ public class PaymentPage extends Page {
     }
 
     @Step("Действие {0}, ввод реквизитов карточки и оплата")
-    public void setCardDetails(String n) {
+    public void setCardDetails(int n) {
         System.out.println("\t" + n + ". Filling bank card details and click Pay");
         selectCardPay();
         setPan();

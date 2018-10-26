@@ -59,9 +59,9 @@ public class ResultPage extends Page {
         checkTotalPrice(n);
     }
 
-    @Step("Действие 23, проверка страницы результатов оплаты")
+    @Step("Действие 22, проверка страницы результатов оплаты")
     public void checkServicesData3(Flight flight) {
-        System.out.println("\t23. Cheking final page with pay result");
+        System.out.println("\t22. Cheking final page with pay result");
         checkPageAppear();
         ElementsCollection services = $$(byXpath("//div[@id='frame-additionalServices']/descendant::div[@role='row']"));
         services.get(0).scrollTo();

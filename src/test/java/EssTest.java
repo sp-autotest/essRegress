@@ -173,30 +173,30 @@ public class EssTest {
         transportPg.checkAeroexpressPassengersList();//шаг 11
         transportPg.checkAeroexpressLogic(flightList);//шаг 12
         HotelPage hotelPg = new HotelPage(initData, collectData);
-        hotelPg.clickResidenceButton("15");//шаг 15
-        hotelPg.checkHotelFilter();//шаг 16
-        hotelPg.checkHotelLogic(flightList, passList);//шаг 17
-        hotelPg.checkFiltration();//шаг 19
-        hotelPg.checkSorting();//шаг 20
+        hotelPg.clickResidenceButton(13);//шаг 13
+        hotelPg.checkHotelFilter(14);//шаг 14
+        hotelPg.checkHotelLogic(15, flightList, passList);//шаг 15
+        hotelPg.checkFiltration();//шаг 16
+        hotelPg.checkSorting();//шаг 17
 
         //искать нештрафную комнату
         int room = -1;
         for (int i=0; i<=9; i++) {
-            hotelPg.selectHotel(i);//шаг 21
-            room = hotelPg.selectRoomType();//шаг 22
+            hotelPg.selectHotel(i, 18);//шаг 18
+            room = hotelPg.selectRoomType(19);//шаг 19
             if (room>=0) break;
         }
         //------------------------
 
-        hotelPg.clickBookButton(room);//шаг 23
-        hotelPg.checkPassengersData(passList);//шаг 18
-        hotelPg.clickPayInCart();//шаг 24
-        choosePg.chooseTestStend("25");//шаг 25
-        new EprPage(collectData).checkDataOnPayPage("26", flightList, passList, test, timer);//шаг 26
+        hotelPg.clickBookButton(room, 20);//шаг 20
+        hotelPg.checkPassengersData(passList, 21);//шаг 21
+        hotelPg.clickPayInCart();//шаг 22
+        choosePg.chooseTestStend(23);//шаг 23
+        new EprPage(collectData).checkDataOnPayPage(24, flightList, passList, test, timer);//шаг 24
         PaymentPage paymentPg = new PaymentPage(collectData);
-        paymentPg.checkPaymentForm1("27");//шаг 27
-        paymentPg.setCardDetails("28");//шаг 28
-        new ResultPage(passList, collectData).checkServicesData("29", test);//шаг 29
+        paymentPg.checkPaymentForm1(25);//шаг 25
+        paymentPg.setCardDetails(26);//шаг 26
+        new ResultPage(passList, collectData).checkServicesData("27", test);//шаг 27
     }
 
     @Description("Карта VISA;\nHаправление перелета: туда-обратно;\n" +
@@ -238,26 +238,26 @@ public class EssTest {
         //new PlacePage(collectData).clickPay();
 
         PlacePage placePg = new PlacePage(collectData);  //new
-        placePg.getPNR();
-        placePg.goBackDoor();
+        placePg.getPNR();//шаг 4
+        placePg.goBackDoor();//шаг 5
 
         ChoosePage choosePg = new ChoosePage(collectData);
         //choosePg.step4();
         EssPage essPg = new EssPage(collectData);
-        essPg.step6();
+        essPg.step6();//шаг 6
         boolean timer = essPg.checkTimer();
-        essPg.step7(flightList);
-        essPg.step8();
-        essPg.step9("TEAM_SPORTS");
+        essPg.step7(flightList);//шаг 7
+        essPg.step8();//шаг 8
+        essPg.step9("TEAM_SPORTS");//шаг 9
         TransportPage transportPg = new TransportPage(collectData);
         transportPg.step10(test);
         transportPg.step11();
         transportPg.step12();
-        choosePg.chooseTestStend("13");//шаг 13
-        new EprPage(collectData).checkDataOnPayPage("14", flightList, passList, test, timer);//шаг 14
+        choosePg.chooseTestStend(13);//шаг 13
+        new EprPage(collectData).checkDataOnPayPage(14, flightList, passList, test, timer);//шаг 14
         PaymentPage paymentPg = new PaymentPage(collectData);
         paymentPg.checkPaymentForm2(Values.city.checkCityAndCurrencyEqual(initData.getCityTo(),currency));//шаг 15
-        paymentPg.setCardDetails("16");//шаг 16
+        paymentPg.setCardDetails(16);//шаг 16
         new ResultPage(passList, collectData).checkServicesData("17", test);//шаг 17
     }
 
@@ -301,19 +301,19 @@ public class EssTest {
         //new PlacePage(collectData).clickPay();//шаг 5
 
         PlacePage placePg = new PlacePage(collectData);  //new
-        placePg.getPNR();
-        placePg.goBackDoor();
+        placePg.getPNR();//шаг 4
+        placePg.goBackDoor();//шаг 5
 
         ChoosePage choosePg = new ChoosePage(collectData);
 //        choosePg.step4();//шаг 6
         EssPage essPg = new EssPage(collectData);
-        essPg.step6();//шаг 7
+        essPg.step6();//шаг 6
         boolean timer = essPg.checkTimer();
-        essPg.step7(flightList);//шаг 8
-        essPg.step8();//шаг 9
+        essPg.step7(flightList);//шаг 7
+        essPg.step8();//шаг 8
         TransportPage transportPg = new TransportPage(collectData);
         transportPg.step10(test);
-        transportPg.checkAeroexpressPassengerLogic();//шаг 11
+        transportPg.checkAeroexpressPassengerLogic(11);//шаг 11
         transportPg.checkAeroexpressLogic(flightList);//шаг 12
         transportPg.addAeroexpressTickets();//шаг 13
         String dir = transportPg.setTransferLocations();//шаг 14
@@ -321,13 +321,13 @@ public class EssTest {
         transportPg.setTransferAdditionalInfo(flightList.get(0).start, dir);//шаг 16
         transportPg.selectTransfer(flightList.get(0).start, dir);//шаг 17
         transportPg.clickRepeatedlyContinue();//шаг 18
-        choosePg.chooseTestStend("19");//шаг 19
+        choosePg.chooseTestStend(19);//шаг 19
         EprPage eprPg = new EprPage(collectData);
-        eprPg.checkDataOnPayPage("20", flightList, passList, test, timer);//шаг 20
-        eprPg.clickPayButton();//шаг 21
+        eprPg.checkDataOnPayPage(20, flightList, passList, test, timer);//шаг 20
+        eprPg.clickPayButton();
         PaymentPage paymentPg = new PaymentPage(collectData);
-        paymentPg.setCardDetails("22");//шаг 22
-        new ResultPage(passList, collectData).checkServicesData3(flightList.get(0));//шаг 23
+        paymentPg.setCardDetails(21);//шаг 21
+        new ResultPage(passList, collectData).checkServicesData3(flightList.get(0));//шаг 22
     }
 
     @Description("Карта VISA;\nНаправление перелета: туда-обратно;\n" +
@@ -366,28 +366,28 @@ public class EssTest {
         //new PlacePage(collectData).clickPay();
 
         PlacePage placePg = new PlacePage(collectData);  //new
-        placePg.getPNR();
-        placePg.goBackDoor();
+        placePg.getPNR();//шаг 4
+        placePg.goBackDoor();//шаг 5
 
         ChoosePage choosePg = new ChoosePage(collectData);
         //choosePg.step4();
         EssPage essPg = new EssPage(collectData);
-        essPg.step6();
+        essPg.step6();//шаг 6
         boolean timer = essPg.checkTimer();
-        essPg.step7(flightList);
-        essPg.step8();
+        essPg.step7(flightList);//шаг 7
+        essPg.step8();//шаг 8
         essPg.deleteFlyInsurance();//шаг 9
-        essPg.clickPayInCart("10");//шаг 10
-        choosePg.chooseTestStend("11");//шаг 11
-        new EprPage(collectData).checkDataOnPayPage("12", flightList, passList, test, timer);//шаг 12
+        essPg.clickPayInCart(10);//шаг 10
+        choosePg.chooseTestStend(11);//шаг 11
+        new EprPage(collectData).checkDataOnPayPage(12, flightList, passList, test, timer);//шаг 12
         PaymentPage paymentPg = new PaymentPage(collectData);
-        paymentPg.checkPaymentForm1("13");//шаг 13
-        paymentPg.setCardDetails("14");//шаг 14
+        paymentPg.checkPaymentForm1(13);//шаг 13
+        paymentPg.setCardDetails(14);//шаг 14
         new ResultPage(passList, collectData).checkServicesData("15", test);//шаг 15
         OfficePage officePg = new OfficePage(collectData);
-        officePg.authorization();//шаг 17
-        officePg.searchOrder(Values.getPNR(collectData.getTest()));//шаг 18
-        officePg.openOrderDetails(Values.getPNR(collectData.getTest()), flightList, passList);//шаг 19
+        officePg.authorization();//шаг 16
+        officePg.searchOrder(Values.getPNR(collectData.getTest()));//шаг 17
+        officePg.openOrderDetails(Values.getPNR(collectData.getTest()), flightList, passList);//шаг 18
     }
 
     @Description("Карта VISA;\nНаправление перелета: туда-обратно;\n" +
@@ -429,48 +429,47 @@ public class EssTest {
         //new PlacePage(collectData).clickPay();
 
         PlacePage placePg = new PlacePage(collectData);  //new
-        placePg.getPNR();
-        placePg.goBackDoor();
+        placePg.getPNR();//шаг 4
+        placePg.goBackDoor();//шаг 5
 
         ChoosePage choosePg = new ChoosePage(collectData);
 //        choosePg.step4();
         EssPage essPg = new EssPage(collectData);
-        essPg.step6();
+        essPg.step6();//шаг 6
         boolean timer = essPg.checkTimer();
-        essPg.step7(flightList);
-        essPg.step8_5();
-        essPg.step9("RANDOM");
+        essPg.step7(flightList);//шаг 7
+        essPg.step8_5();//шаг 8
+        essPg.step9("RANDOM");//шаг 9
         TransportPage transportPg = new TransportPage(collectData);
         transportPg.step10(test);//шаг 10
         transportPg.step11_5();//шаг 11
 
-        transportPg.checkAeroexpressPassengerLogic();//шаг 11
+        transportPg.checkAeroexpressPassengerLogic(12);//шаг 12
         transportPg.addAeroexpressTickets();//шаг 13
         String dir = transportPg.setTransferLocations();//шаг 14
         transportPg.clickSelectStandartButton();//шаг 15
         transportPg.setTransferAdditionalInfo(flightList.get(0).start, dir);//шаг 16
         transportPg.selectTransfer(flightList.get(0).start, dir);//шаг 17
 
-
         HotelPage hotelPg = new HotelPage(initData, collectData);
-        hotelPg.clickResidenceButton("15");//шаг 15
-        hotelPg.checkHotelFilter();//шаг 16
-        hotelPg.checkHotelLogic(flightList, passList);//шаг 17
+        hotelPg.clickResidenceButton(18);//шаг 18
+        hotelPg.checkHotelFilter(19);//шаг 19
+        hotelPg.checkHotelLogic(20, flightList, passList);//шаг 20
         //искать нештрафную комнату
         int room = -1;
         for (int i=0; i<=9; i++) {
-            hotelPg.selectHotel(i);//шаг 21
-            room = hotelPg.selectRoomType();//шаг 22
+            hotelPg.selectHotel(i, 21);//шаг 21
+            room = hotelPg.selectRoomType(22);//шаг 22
             if (room>=0) break;
         }
         //------------------------
-        hotelPg.clickBookButton(room);//шаг 23
+        hotelPg.clickBookButton(room, 23);//шаг 23
         hotelPg.clickPayInCart();//шаг 24
-        choosePg.chooseTestStend("25");//шаг 25
-        new EprPage(collectData).checkDataOnPayPage("26", flightList, passList, test, timer);//шаг 26
+        choosePg.chooseTestStend(25);//шаг 25
+        new EprPage(collectData).checkDataOnPayPage(26, flightList, passList, test, timer);//шаг 26
         PaymentPage paymentPg = new PaymentPage(collectData);
-        paymentPg.checkPaymentForm1("27");//шаг 27
-        paymentPg.setCardDetails("28");//шаг 28
+        paymentPg.checkPaymentForm1(27);//шаг 27
+        paymentPg.setCardDetails(28);//шаг 28
         new ResultPage(passList, collectData).checkServicesData5(flightList.get(0));//шаг 29
     }
 
@@ -514,17 +513,17 @@ public class EssTest {
         //new PlacePage(collectData).clickPay();
 
         PlacePage placePg = new PlacePage(collectData);  //new
-        placePg.getPNR();
-        placePg.goBackDoor();
+        placePg.getPNR();//шаг 4
+        placePg.goBackDoor();//шаг 5
 
         ChoosePage choosePg = new ChoosePage(collectData);
 //        choosePg.step4();
         EssPage essPg = new EssPage(collectData);
-        essPg.step6();
+        essPg.step6();//шаг 6
         boolean timer = essPg.checkTimer();
-        essPg.step7(flightList);
-        essPg.step8_5();
-        essPg.step9("RANDOM");
+        essPg.step7(flightList);//шаг 7
+        essPg.step8_5();//шаг 8
+        essPg.step9("RANDOM");//шаг 9
         TransportPage transportPg = new TransportPage(collectData);
         transportPg.step10(test);//шаг 10
         transportPg.step11_5();//шаг 11
@@ -534,24 +533,24 @@ public class EssTest {
         transportPg.setTransferAdditionalInfo(flightList.get(0).start, dir);//шаг 16
         transportPg.selectTransfer(flightList.get(0).start, dir);//шаг 17
         HotelPage hotelPg = new HotelPage(initData, collectData);
-        hotelPg.clickResidenceButton("15");//шаг 15
-        hotelPg.checkHotelFilter();//шаг 16
-        hotelPg.checkHotelLogic(flightList, passList);//шаг 17
+        hotelPg.clickResidenceButton(18);//шаг 18
+        hotelPg.checkHotelFilter(19);//шаг 19
+        hotelPg.checkHotelLogic(20, flightList, passList);//шаг 20
         //искать нештрафную комнату
         int room = -1;
         for (int i=0; i<=9; i++) {
-            hotelPg.selectHotel(i);//шаг 21
-            room = hotelPg.selectRoomType();//шаг 22
+            hotelPg.selectHotel(i,21);//шаг 21
+            room = hotelPg.selectRoomType(22);//шаг 22
             if (room>=0) break;
         }
         //------------------------
-        hotelPg.clickBookButton(room);//шаг 23
+        hotelPg.clickBookButton(room, 23);//шаг 23
         hotelPg.clickPayInCart();//шаг 24
-        choosePg.chooseTestStend("25");//шаг 25
-        new EprPage(collectData).checkDataOnPayPage("26", flightList, passList, test, timer);//шаг 26
+        choosePg.chooseTestStend(25);//шаг 25
+        new EprPage(collectData).checkDataOnPayPage(26, flightList, passList, test, timer);//шаг 26
         PaymentPage paymentPg = new PaymentPage(collectData);
-        paymentPg.checkPaymentForm1("27");//шаг 27
-        paymentPg.setCardDetails("28");//шаг 28
+        paymentPg.checkPaymentForm1(27);//шаг 27
+        paymentPg.setCardDetails(28);//шаг 28
         new ResultPage(passList, collectData).checkServicesData5(flightList.get(0));//шаг 29
     }
 
@@ -621,24 +620,24 @@ public class EssTest {
         transportPg.setTransferAdditionalInfo(flightList.get(0).start, dir);//шаг 16
         transportPg.selectTransfer(flightList.get(0).start, dir);//шаг 17
         HotelPage hotelPg = new HotelPage(initData, collectData);
-        hotelPg.clickResidenceButton("15");//шаг 15
-        hotelPg.checkHotelFilter();//шаг 16
-        hotelPg.checkHotelLogic(flightList, passList);//шаг 17
+        hotelPg.clickResidenceButton(15);//шаг 15
+        hotelPg.checkHotelFilter(16);//шаг 16
+        hotelPg.checkHotelLogic(17, flightList, passList);//шаг 17
         //искать нештрафную комнату
         int room = -1;
         for (int i=0; i<=9; i++) {
-            hotelPg.selectHotel(i);//шаг 21
-            room = hotelPg.selectRoomType();//шаг 22
+            hotelPg.selectHotel(i, 21);//шаг 21
+            room = hotelPg.selectRoomType(22);//шаг 22
             if (room>=0) break;
         }
         //------------------------
-        hotelPg.clickBookButton(room);//шаг 23
+        hotelPg.clickBookButton(room,23);//шаг 23
         hotelPg.clickPayInCart();//шаг 24
-        choosePg.chooseTestStend("25");//шаг 25
-        new EprPage(collectData).checkDataOnPayPage("26", flightList, passList, test, timer);//шаг 26
+        choosePg.chooseTestStend(25);//шаг 25
+        new EprPage(collectData).checkDataOnPayPage(26, flightList, passList, test, timer);//шаг 26
         PaymentPage paymentPg = new PaymentPage(collectData);
-        paymentPg.checkPaymentForm1("27");//шаг 27
-        paymentPg.setCardDetails("28");//шаг 28
+        paymentPg.checkPaymentForm1(27);//шаг 27
+        paymentPg.setCardDetails(28);//шаг 28
         new ResultPage(passList, collectData).checkServicesData5(flightList.get(0));//шаг 29
     }
 
@@ -681,32 +680,31 @@ public class EssTest {
     //    new PlacePage(collectData).clickPay();
 
         PlacePage placePg = new PlacePage(collectData);  //new
-        placePg.getPNR();
+        placePg.getPNR();//шаг 4
         ChoosePage choosePg = new ChoosePage(collectData);
         choosePg.addAdditionalServices();
-        placePg.goBackDoor();
+        placePg.goBackDoor();//шаг 5
 
         //choosePg.step4_8();
         EssPage essPg = new EssPage(collectData);
-        essPg.step6();
-        essPg.checkSelectPlaceStep();//проверка выбора мест
-        essPg.checkSelectFoodStep();//проверка основного блюда и десерта
+        essPg.step6();//шаг 6
+        essPg.checkAdditionalServices();//шаг 7 проверка выбора мест, основного блюда и десерта
         boolean timer = essPg.checkTimer();
-        if (city.equals("LAX")) essPg.step8_5();
-        else essPg.step8();
-        essPg.step9("RANDOM");
+        if (city.equals("LAX")) essPg.step8_5();//шаг 8
+        else essPg.step8();//шаг 8
+        essPg.step9("RANDOM");//шаг 9
         TransportPage transportPg = new TransportPage(collectData);
         transportPg.step10(test);//шаг 10
         transportPg.step11_5();//шаг 11
-        transportPg.checkAeroexpressPassengerLogic();//шаг 11
+        transportPg.checkAeroexpressPassengerLogic(12);//шаг 12
         transportPg.addAeroexpressTickets();//шаг 13
         String dir = transportPg.setTransferLocations();//шаг 14
         transportPg.clickSelectStandartButton();//шаг 15
         transportPg.setTransferAdditionalInfo(flightList.get(0).start, dir);//шаг 16
         transportPg.selectTransfer(flightList.get(0).start, dir);//шаг 17
         transportPg.clickRepeatedlyContinue();//шаг 18
-        choosePg.chooseTestStend("19");//шаг 19
-        new EprPage(collectData).checkDataOnPayPage("20", flightList, passList, test, timer);//шаг 20
+        choosePg.chooseTestStend(19);//шаг 19
+        new EprPage(collectData).checkDataOnPayPage(20, flightList, passList, test, timer);//шаг 20
     }
 /*
     @Description("Карта VISA;\nНаправление перелета: в одну сторону;\n" +

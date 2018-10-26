@@ -109,9 +109,9 @@ public class TransportPage extends Page {
         checkAeroexpressPricesIsNotAdded();
     }
 
-    @Step("Действие 11, Проверка логики отображения пассажиров Аэроэкспресса")
-    public void checkAeroexpressPassengerLogic() {
-        System.out.println("\t11. Check Aeroexpress passengers logic");
+    @Step("Действие {0}, Проверка логики отображения пассажиров Аэроэкспресса")
+    public void checkAeroexpressPassengerLogic(int n) {
+        System.out.println("\t" + n + ". Check Aeroexpress passengers logic");
         dropdownClick(1);
         checkAeroexpressPassengers();
         dropdownClick(0);
