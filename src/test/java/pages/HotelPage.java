@@ -238,9 +238,9 @@ public class HotelPage extends Page {
         screenShot("Скриншот");
     }
 
-    @Step("Действие 24, Нажать Оплатить в корзине")
-    public void clickPayInCart() {
-        System.out.println("\t24. Click Pay in cart");
+    @Step("Действие {0}, Нажать Оплатить в корзине")
+    public void clickPayInCart(int n) {
+        System.out.println("\t" + n + ". Click Pay in cart");
         $(byXpath("//a[@class='cart__item-counter-link']")).click();
         waitPlane();
     }

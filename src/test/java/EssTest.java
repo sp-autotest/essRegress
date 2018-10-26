@@ -190,7 +190,7 @@ public class EssTest {
 
         hotelPg.clickBookButton(room, 20);//шаг 20
         hotelPg.checkPassengersData(passList, 21);//шаг 21
-        hotelPg.clickPayInCart();//шаг 22
+        hotelPg.clickPayInCart(22);//шаг 22
         choosePg.chooseTestStend(23);//шаг 23
         new EprPage(collectData).checkDataOnPayPage(24, flightList, passList, test, timer);//шаг 24
         PaymentPage paymentPg = new PaymentPage(collectData);
@@ -464,7 +464,7 @@ public class EssTest {
         }
         //------------------------
         hotelPg.clickBookButton(room, 23);//шаг 23
-        hotelPg.clickPayInCart();//шаг 24
+        hotelPg.clickPayInCart(24);//шаг 24
         choosePg.chooseTestStend(25);//шаг 25
         new EprPage(collectData).checkDataOnPayPage(26, flightList, passList, test, timer);//шаг 26
         PaymentPage paymentPg = new PaymentPage(collectData);
@@ -545,7 +545,7 @@ public class EssTest {
         }
         //------------------------
         hotelPg.clickBookButton(room, 23);//шаг 23
-        hotelPg.clickPayInCart();//шаг 24
+        hotelPg.clickPayInCart(24);//шаг 24
         choosePg.chooseTestStend(25);//шаг 25
         new EprPage(collectData).checkDataOnPayPage(26, flightList, passList, test, timer);//шаг 26
         PaymentPage paymentPg = new PaymentPage(collectData);
@@ -632,7 +632,7 @@ public class EssTest {
         }
         //------------------------
         hotelPg.clickBookButton(room,23);//шаг 23
-        hotelPg.clickPayInCart();//шаг 24
+        hotelPg.clickPayInCart(24);//шаг 24
         choosePg.chooseTestStend(25);//шаг 25
         new EprPage(collectData).checkDataOnPayPage(26, flightList, passList, test, timer);//шаг 26
         PaymentPage paymentPg = new PaymentPage(collectData);
