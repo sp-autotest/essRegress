@@ -66,17 +66,24 @@ public class OfficePage extends Page{
     }
 
     @Step("Действие 18, Открыть детализацию заказа {0}")
-    public void openOrderDetails (String pnr, List<Flight> flyList, List<Passenger> passList) {
+    public void openOrderDetails (List<Flight> flyList, List<Passenger> passList) {
         System.out.println("\t19. Open order details");
-        //String parentHandle = getWebDriver().getWindowHandle();
+        String pnr = Values.getPNR(collectData.getTest());
         clickOrder(pnr);
-        //switchFromFirstPageToSecond(parentHandle);
         checkOrderDetailsTabAppear(pnr);
         checkServices();
         checkFlight(flyList);
         checkPassengers(passList);
         checkTariff();
     }
+
+    public String getTransferNumberFromArm() {
+        authorization();
+        searchOrder(Values.getPNR(collectData.getTest()));
+        openTransfer();
+        return getVoucherNumber();
+    }
+
 
     @Step("Ввести логин")
     private void setLogin(){
@@ -201,5 +208,22 @@ public class OfficePage extends Page{
     }
 
 
+    @Step("Открыть раздел \"Трансфер\"")
+    private void openTransfer(){
+        System.out.println("Open Transfer details");
+        String pnr = Values.getPNR(collectData.getTest());
+        clickOrder(pnr);
+        clickTransfer();
+    }
+
+    @Step("Открыть заказ {0}")
+    private void clickTransfer(){
+        $(byXpath("//a[contains(@href, 'transfer/view')]")).click();
+    }
+
+    @Step("Извлечь номер ваучера")
+    private String getVoucherNumber(){
+        return $(byXpath("//table/tbody/tr/td[3]")).getText();
+    }
 
 }

@@ -4,6 +4,7 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import config.Values;
 import io.qameta.allure.Step;
+import org.openqa.selenium.JavascriptExecutor;
 import struct.CollectData;
 import struct.Flight;
 import struct.Passenger;
@@ -20,6 +21,8 @@ import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
+import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
+import static com.codeborne.selenide.WebDriverRunner.source;
 import static com.codeborne.selenide.WebDriverRunner.url;
 import static config.Values.*;
 import static org.testng.AssertJUnit.assertTrue;
@@ -282,7 +285,12 @@ public class ResultPage extends Page {
     private void checkTransfer(SelenideElement row, Date d) {
         ElementsCollection docs = row.$$(byXpath("div[4]/a"));
         for (SelenideElement doc : docs) {
-            Values.setDOC(collectData.getTest(), Values.getDOC(collectData.getTest()) + "Трансфер:" + doc.getText() + ", ");
+            String transferDoc = doc.getText();
+            if (transferDoc.contains(text[15][collectData.getLn()])) {
+                transferDoc = transferDoc + getTransferNumber();
+            }
+            Values.setDOC(collectData.getTest(), Values.getDOC(collectData.getTest()) + "Трансфер:" + transferDoc + ", ");
+            System.out.println(transferDoc);
         }
         String from = row.$(byXpath("div[1]/div[2]")).getText();
         System.out.println("Transfer from = " + from);
@@ -379,6 +387,18 @@ public class ResultPage extends Page {
         String afterText = el.$(byXpath("div[2]")).getText();
         allText = allText.substring(beforeText.length()+1);
         return allText.substring(0, allText.length() - afterText.length()-1);
+    }
+
+    private String getTransferNumber() {
+        //лезем в арм за номером ваучера трансфера
+        String parentHandle = getWebDriver().getWindowHandle();
+        ((JavascriptExecutor) getWebDriver()).
+                executeScript("window.open(arguments[0])", Values.office_host);
+        switchFromFirstPageToSecond(parentHandle);
+        String numberOfVoucher = new OfficePage(collectData).getTransferNumberFromArm();
+        getWebDriver().switchTo().window(parentHandle);
+        System.out.println(numberOfVoucher);
+        return numberOfVoucher;
     }
 
 }

@@ -386,7 +386,7 @@ public class EssTest {
         OfficePage officePg = new OfficePage(collectData);
         officePg.authorization();//шаг 16
         officePg.searchOrder(Values.getPNR(collectData.getTest()));//шаг 17
-        officePg.openOrderDetails(Values.getPNR(collectData.getTest()), flightList, passList);//шаг 18
+        officePg.openOrderDetails(flightList, passList);//шаг 18
     }
 
     @Description("Карта VISA;\nНаправление перелета: туда-обратно;\n" +
