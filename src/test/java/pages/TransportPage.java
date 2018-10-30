@@ -18,10 +18,12 @@ import java.util.List;
 import java.util.Locale;
 
 import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Selectors.byName;
 import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
+import static com.codeborne.selenide.WebDriverRunner.source;
 import static config.Values.*;
 import static org.testng.AssertJUnit.assertTrue;
 
@@ -46,6 +48,7 @@ public class TransportPage extends Page {
             checkAeroexpressForm();
             checkAeroexpressInCard();
         }
+        if (test == 2 | test == 5 | test == 8) checkCarEnabled();
         if (test == 2) {
             checkCarFilter();
             screenShot("Скриншот");
@@ -271,6 +274,41 @@ public class TransportPage extends Page {
         $("#auto\\/manual").shouldBe(visible).shouldBe(enabled);
         $(byXpath("//button[@onclick='priceSort(this);']")).shouldBe(visible).shouldBe(enabled);
         $(byXpath("//button[@onclick='sizeSort(this);']")).shouldBe(visible).shouldBe(enabled);
+    }
+
+    @Step("Проверка наличия авто")
+    private void checkCarEnabled() {
+        for (int i = 0; i<15; i++) {
+            //15 секунд ожидаем прогрузки картинок авто
+            ElementsCollection cards = $$(byXpath("//div[@class='auto-card']"));
+            if (cards.size() == 0) Sleep(1);
+            else break;
+        }
+        if ($$(byXpath("//div[@class='auto-card']")).size() == 0){
+            //устанавливаем время выдачи на 10 утра
+            $(byName("stationReceive")).scrollTo();
+            SelenideElement el = $("#ecTimeReceive");
+            el.click();
+            SelenideElement hour = $(byXpath("//div[@class='timepicker-popup__hours']/a"));
+            SelenideElement minute = $(byXpath("//div[@class='timepicker-popup__minutes']/a"));
+            while (!el.getValue().contains("10:")) {
+                hour.click();
+                System.out.println(el.getValue());
+            }
+            while (!el.getValue().contains(":00")) {
+                minute.click();
+                System.out.println(el.getValue());
+            }
+            $(byXpath("//label[@class='input__label']")).click();
+            Sleep(5);
+        }
+        for (int i = 0; i<15; i++) {
+            //15 секунд ожидаем прогрузки картинок авто
+            ElementsCollection cards = $$(byXpath("//div[@class='auto-card']"));
+            if (cards.size() == 0) Sleep(1);
+            else break;
+        }
+        assertTrue("Автомобили для аренды отсутствуют", $$(byXpath("//div[@class='auto-card']")).size() > 0);
     }
 
     @Step("Проверка поиска авто с АКПП")
