@@ -287,7 +287,7 @@ public class ResultPage extends Page {
         for (SelenideElement doc : docs) {
             String transferDoc = doc.getText();
             if (transferDoc.contains(text[15][collectData.getLn()])) {
-                transferDoc = transferDoc + getTransferNumber();
+                transferDoc = transferDoc + " " + getTransferNumber();
             }
             Values.setDOC(collectData.getTest(), Values.getDOC(collectData.getTest()) + "Трансфер:" + transferDoc + ", ");
             System.out.println(transferDoc);
@@ -389,6 +389,7 @@ public class ResultPage extends Page {
         return allText.substring(0, allText.length() - afterText.length()-1);
     }
 
+    @Step("Получить номер ваучера трансфера из АРМ")
     private String getTransferNumber() {
         //лезем в арм за номером ваучера трансфера
         String parentHandle = getWebDriver().getWindowHandle();
@@ -397,7 +398,6 @@ public class ResultPage extends Page {
         switchFromFirstPageToSecond(parentHandle);
         String numberOfVoucher = new OfficePage(collectData).getTransferNumberFromArm();
         getWebDriver().switchTo().window(parentHandle);
-        System.out.println(numberOfVoucher);
         return numberOfVoucher;
     }
 

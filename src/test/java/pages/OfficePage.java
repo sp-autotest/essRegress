@@ -57,9 +57,29 @@ public class OfficePage extends Page{
         checkOrderFormAppear();
     }
 
+    @Step("Переход в АРМ ESS")
+    public void authorizationStep (){
+        open(Values.office_host);
+        Sleep(1);
+        ElementsCollection login = $$(byName("login"));
+        if (login.size()>0) {
+            setLogin();
+            setPassword();
+            clickEnterButton();
+        }
+        checkOrderFormAppear();
+    }
+
     @Step("Действие 17, Поиск заказа с PNR = {0}")
     public void searchOrder (String pnr) {
         System.out.println("\t18. Search order with PNR = "+pnr);
+        setQueryField(pnr);
+        clickSearchButton();
+        checkOrderIsFound(pnr);
+    }
+
+    @Step("Поиск заказа с PNR = {0}")
+    public void searchOrderStep (String pnr) {
         setQueryField(pnr);
         clickSearchButton();
         checkOrderIsFound(pnr);
@@ -78,8 +98,8 @@ public class OfficePage extends Page{
     }
 
     public String getTransferNumberFromArm() {
-        authorization();
-        searchOrder(Values.getPNR(collectData.getTest()));
+        authorizationStep();
+        searchOrderStep(Values.getPNR(collectData.getTest()));
         openTransfer();
         return getVoucherNumber();
     }
