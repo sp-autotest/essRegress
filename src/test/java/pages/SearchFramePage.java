@@ -25,7 +25,22 @@ public class SearchFramePage extends Page {
                 result = searchFlight1();
                 break;
             case 3:
-                result = searchFlight3();
+                result = searchFlight7("00:","00:");
+                break;
+            case 4:
+                result = searchFlight7("00:", "00:");
+                break;
+            case 5:
+                result = searchFlight7("23:","23:");
+                break;
+            case 6:
+                result = searchFlight7("23:", "23:");
+                break;
+            case 7:
+                result = searchFlight7("23:", "00:");
+                break;
+            case 8:
+                result = searchFlight7("23:", "00:");
                 break;
         }
         if (result) {
@@ -43,6 +58,7 @@ public class SearchFramePage extends Page {
         ElementsCollection flights = $$(byXpath("//div[@class='flight-search__inner']"));
         if (flights.size() > 0) {
             for (SelenideElement flight : flights) {
+                if (flight.$$(byXpath("descendant::button")).size() == 0) continue; //Пропускаем рейсы без кнопки <ВЫБРАТЬ РЕЙС>
                 ElementsCollection plusDay = flight
                         .$$(byXpath("descendant::span[@class='time-destination__plusday']"));
                 if (plusDay.size() > 0) {
@@ -62,23 +78,19 @@ public class SearchFramePage extends Page {
         return result;
     }
 
-    @Step("Вылет из Москвы после полуночи, но не позднее 01:00 по Москве")
-    private boolean searchFlight3() {
+    @Step("Вылет после {0}00, но не позднее {1}59 по Москве")
+    private boolean searchFlight7(String leftTime, String rightTime) {
         boolean result = false;
         $(byXpath("//div[contains(@class,'frame__heading')]")).shouldBe(visible);
         Sleep(2);
         ElementsCollection flights = $$(byXpath("//div[@class='flight-search__inner']"));
         if (flights.size() > 0) {
             for (SelenideElement flight : flights) {
+                if (flight.$$(byXpath("descendant::button")).size() == 0) continue; //Пропускаем рейсы без кнопки <ВЫБРАТЬ РЕЙС>
                 SelenideElement time = flight.$(byXpath("descendant::div[@class='time-destination__from']/div"));
                 System.out.println("Time = " + time.getText());
-                if (time.getText().contains("00:")) {
-                    System.out.println("Time is exist!!!!!");
-                    //убрать , єто пересадки
-                    ElementsCollection overDay = flight.$$(byXpath("descendant::div[@class='flight-search__transfer']"));
-                    if (overDay.size() > 0) continue;
-                    //убрать
-
+                if (time.getText().contains(leftTime) | time.getText().contains(rightTime)) {
+                    System.out.println("Time exist!!!!!");
                     flight.click();
                     result = true;
                     break;
