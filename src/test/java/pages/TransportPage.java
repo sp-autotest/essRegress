@@ -249,6 +249,14 @@ public class TransportPage extends Page {
         checkTransferAllData(date, dir);
     }
 
+    @Step("Действие 17, Нажать кнопку «Выбрать»")
+    public void selectTransferAndCheckDate(Date date) {
+        System.out.println("\t17. Click Select button in transfer form");
+        clickSelectButton();
+        checkTransferDate(date);
+        screenShot("скриншот");
+    }
+
     @Step("Действие 18, Нажать Продолжить")
     public void clickContinue() {
         System.out.println("\t18. Click Continue button");
@@ -724,6 +732,19 @@ public class TransportPage extends Page {
                    summ.equals(Values.reportData[collectData.getTest()].getPrice().transfer));
     }
 
+    @Step("Проверить дату/время трансфера в ESS")
+    private void checkTransferDate(Date date) {
+        String tdate = getTransferDate();
+        String dateC = new SimpleDateFormat("dd MMMM, E", new Locale(Values.lang[collectData.getLn()][2])).format(date);
+        String time = getTransferTime();
+        assertTrue("Дата трансфера не совпадает с выбранной" +
+                "\nОжидалось: " + dateC +
+                "\nФакически: " + tdate, tdate.equals(dateC));
+        assertTrue("Время трансфера не совпадает с выбранным" +
+                "\nОжидалось : 00:00" +
+                "\nФактически: " + time, time.equals("00:00"));
+    }
+
     private String getTransferFrom(){
         return $(byXpath("//div[@class='text h-clearfix h-mb--16 h-fz--14']")).getText().trim();
     }
@@ -773,10 +794,12 @@ public class TransportPage extends Page {
         int i = 0;
         String newPrice;
         String price = $(byXpath("//p[contains(@class,'text--title-h3')]")).getText();
-        while (i<20){
+        while (i<10){
             Sleep(1);
-            newPrice = $(byXpath("//p[contains(@class,'text--title-h3')]")).getText();
-            if (!price.equals(newPrice)) break;
+            if ($(byXpath("//p[contains(@class,'text--title-h3')]")).exists()) {
+                newPrice = $(byXpath("//p[contains(@class,'text--title-h3')]")).getText();
+                if (!price.equals(newPrice)) break;
+            }
             i++;
         }
     }

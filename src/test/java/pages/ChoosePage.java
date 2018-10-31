@@ -7,6 +7,7 @@ import soap.SoapRequest;
 import struct.CollectData;
 
 import static com.codeborne.selenide.Condition.exactText;
+import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
@@ -62,7 +63,7 @@ public class ChoosePage extends Page {
 
     @Step("Подождать страницу выбора стенда")
     private void checkChoosePage(){
-        $("h1").shouldBe(exactText("Вход в тестовую среду системы ЕПР"));
+        $("h1").shouldBe(text("Вход в тестовую среду системы ЕПР"));
         int start = url().indexOf("&PNR") + 5;
         String pnr = url().substring(start, start + 6);
         Values.setPNR(collectData.getTest(), pnr);

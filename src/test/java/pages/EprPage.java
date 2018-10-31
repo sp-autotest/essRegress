@@ -61,6 +61,7 @@ public class EprPage extends Page {
         screenShot("Скриншот");
         for (int i = 0; i < flights.size(); i++) {
             checkFlight(i + 1, flyList.get(i), flights.get(i));
+            checkFlightDate(i + 1, flyList.get(i), flights.get(i));
         }
         if (getWebDriver().manage().window().getSize().getWidth() < 1280) {
             SelenideElement el = $(byXpath("//div[@data-toggle-target='toggle-safe']")).shouldBe(visible);
@@ -106,6 +107,36 @@ public class EprPage extends Page {
         }
     }
 
+    @Step("Действие 8, проверка даты/времени на EPR")
+    public void checkDateOnEPR(List<Flight> flyList) {
+        System.out.println("\t11. Checking data on Pay page");
+        ElementsCollection flights = null;
+        for (int i=0; i<30; i++) {
+            Sleep(1);
+            flights = $$(byXpath("//div[@class='flight__row']"));
+            if (flights.size()>0) break;
+            assertTrue("Не обнаружено данных о перелете на странице оплаты", i!=19);
+        }
+        screenShot("Скриншот");
+        for (int i = 0; i < flights.size(); i++) {
+            checkFlightDate(i + 1, flyList.get(i), flights.get(i));
+        }
+
+    }
+
+    @Step("Действие 10, Проверка даты услуги Трансфера")
+    public void checkTransferDate(Date d) {
+        SelenideElement group = $(byXpath("//div[@ng-switch-when='Transfer'][@class='ng-scope']"));
+        group.scrollTo();
+        screenShot("Скриншот");
+        String date = group.$(byXpath("descendant::div[@ng-bind='item.details.date']")).getText();
+        System.out.println("Transfer date = " + date);
+        String dateC;
+        dateC = new SimpleDateFormat("E, dd MMMM", new Locale(Values.lang[collectData.getLn()][2])).format(d);
+        assertTrue("Дата трансфера не корректна" +
+                "\nОжидалось : " + dateC + "\nФактически: " + date, date.equals(dateC));
+    }
+
     @Step("Проверка фамилии и имени {0}-го пассажира")
     private void checkPassengerName(int i, Passenger p, SelenideElement passenger){
         String pass = passenger.$(byXpath("child::div[2]")).getText();
@@ -116,7 +147,6 @@ public class EprPage extends Page {
 
     @Step("Проверка данных о {0}-м маршруте")
     private void checkFlight(int i, Flight f, SelenideElement flight){
-        boolean overnight = false;
         String from = flight.$(byXpath("descendant::div[@class='flight__direction-airport-code ng-binding']")).getText();
         if (from.equals("SVO")|from.equals("VKO")) from = "MOW";
         System.out.print(from + " / ");
@@ -142,7 +172,11 @@ public class EprPage extends Page {
         System.out.print(duration + " ");
         assertTrue("Длительность перелета в маршруте отличается от забронированного" +
                    "\nОжидалось : " + f.duration + "\nФактически: " + duration, duration.equals(f.duration));
+    }
 
+    @Step("Проверка даты/времени в {0}-м маршруте")
+    private void checkFlightDate(int i, Flight f, SelenideElement flight){
+        boolean overnight = false;
         String start = flight.$(byXpath("descendant::div[@class='flight__date ng-binding']")).getText();
         start = start.substring(start.indexOf(",")+1) + " " + new SimpleDateFormat("yyyy").format(f.start);
         Date dStart = new Date();

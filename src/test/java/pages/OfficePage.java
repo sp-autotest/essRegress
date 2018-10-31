@@ -3,14 +3,15 @@ package pages;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import config.Values;
-//import ru.yandex.qatools.allure.annotations.Step;
 import io.qameta.allure.Step;
+import soap.SoapRequest;
 import struct.CollectData;
 import struct.Flight;
 import struct.Passenger;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.text;
@@ -20,6 +21,7 @@ import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static org.testng.AssertJUnit.assertTrue;
 
 
@@ -76,6 +78,38 @@ public class OfficePage extends Page{
         setQueryField(pnr);
         clickSearchButton();
         checkOrderIsFound(pnr);
+    }
+    @Step("Действие 19, Проверка даты/времени в АРМ, заказ {0}")
+    public void checkDateOnARM (String pnr, List<Flight> flyList) {
+        System.out.println("\t19. Open ans check order details");
+        clickOrder(pnr);
+        checkOrderDetailsTabAppear(pnr);
+        clickTransfer();
+        screenShot("Скриншот");
+        checkDateTime(flyList);
+        checkTransferDateTime(flyList);
+        checkTransferDateTimeInLog(flyList);
+    }
+
+    @Step("Действие 20, Проверка даты/времени в Sabre")
+    public void checkSabre() {
+        System.out.println("\t20. Check log in Sabre");
+        String response = new SoapRequest(collectData).setPNRtoSabreCommand();
+        String[] lines = response.substring(response.indexOf("[ 1 "), response.indexOf("TKT/TIME")-10).split("CDATA");
+        String end = null;
+        for (String s : lines) {
+            if (s.contains("/E]")) {
+                System.out.println(s);
+                String begin = s.substring(12, 17) + s.substring(32, 36);
+                if (s.substring(44, 46).equals("/E")) {
+                    end = s.substring(12, 17) + s.substring(38, 42);
+                } else {
+                    end = s.substring(45, 50) + s.substring(38, 42);
+                }
+                System.out.println(begin);
+                System.out.println(end);
+            }
+        }
     }
 
     @Step("Поиск заказа с PNR = {0}")
@@ -139,6 +173,12 @@ public class OfficePage extends Page{
     private void clickOrder(String pnr){
         String link = $(byXpath("//td/a[text()='" + pnr + "']")).getAttribute("href");
         open(link);
+        Sleep(3);
+    }
+
+    @Step("Нажать ТРАНСФЕР")
+    private void clickTransfer(){
+        $(byXpath("//a[contains(@href,'/transfer/view')]")).click();
         Sleep(3);
     }
 
@@ -236,14 +276,48 @@ public class OfficePage extends Page{
         clickTransfer();
     }
 
-    @Step("Открыть заказ {0}")
-    private void clickTransfer(){
-        $(byXpath("//a[contains(@href, 'transfer/view')]")).click();
-    }
-
     @Step("Извлечь номер ваучера")
     private String getVoucherNumber(){
         return $(byXpath("//table/tbody/tr/td[3]")).getText();
+    }
+
+    @Step("Проверить дату/время перелета")
+    private void checkDateTime(List<Flight> flyList){
+        ElementsCollection rows = $$(byXpath("//h5[text()='Перелет']/following-sibling::table/tbody/tr"));
+        for (int i=0; i<rows.size(); i++){
+            String date = rows.get(i).$(byXpath("td[5]")).getText();
+            String dates = new SimpleDateFormat("HH:mm/").format(flyList.get(i).start);
+            dates = dates + new SimpleDateFormat("HH:mm dd.MM.yyyy").format(flyList.get(i).end);
+            assertTrue("Дата/время " + (i+1) +"-го рейса не совпадает с забронированным" +
+                            "\nОжидалось : " + dates +
+                            "\nФактически: " + date,
+                    dates.equals(date));
+        }
+    }
+
+    @Step("Проверить дату/время трансфера на странице")
+    private void checkTransferDateTime(List<Flight> flyList){
+        String date = $(byXpath("//td[@style='white-space:nowrap;']")).getText();
+        String dates = "00:00 " + new SimpleDateFormat("dd MMM yyyy", new Locale("en")).format(flyList.get(0).start);
+        assertTrue("Дата/время трансфера на странице не совпадает с забронированным" +
+                        "\nОжидалось : " + dates +
+                        "\nФактически: " + date,
+                dates.equals(date));
+    }
+
+    @Step("Проверить дату/время трансфера в логе")
+    private void checkTransferDateTimeInLog(List<Flight> flyList){
+        String parentHandle = getWebDriver().getWindowHandle();
+        $("#logTable").$(byXpath("descendant::a[contains(text(),'Input.json')]")).click();
+        switchFromFirstPageToSecond(parentHandle);
+        String date = $(byXpath("//pre")).getText();
+        int start = date.indexOf("dateArrival") + 14;
+        date = date.substring(start, start + 16);
+        String dates = new SimpleDateFormat("yyyy-MM-dd").format(flyList.get(0).start) + " 00:00";
+        assertTrue("Дата/время трансфера в логе не совпадает с забронированным" +
+                        "\nОжидалось : " + dates +
+                        "\nФактически: " + date,
+                dates.equals(date));
     }
 
 }

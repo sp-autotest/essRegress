@@ -79,6 +79,18 @@ public class SoapRequest {
         callSoapRequest(req, req.split("~~")[0]);
     }
 
+    public String setPNRtoSabreCommand() {
+        String pnr = Values.getPNR(collectData.getTest());
+        AdditionalServiceRequests add = new AdditionalServiceRequests(collectData);
+        //1
+        String req = add.getSessionCreateRQ();
+        String response = callSoapRequest(req, req.split("~~")[0]);
+        String token = getToken(response);
+        //2
+        req = String.format(add.getSabreCommandQ(), token, "*" + pnr);
+        return callSoapRequest(req, req.split("~~")[0]);
+    }
+
     @Step("SOAP запрос: {1}")
     private String callSoapRequest(String req, String action) {
         String[] arr = req.split("~~");
@@ -134,7 +146,7 @@ public class SoapRequest {
         try {
             respond = rd.readLine();
             while ((line = rd.readLine()) != null)
-                respond = line;
+                respond = respond + line;
 
         } catch (IOException e1) {
             e1.printStackTrace();

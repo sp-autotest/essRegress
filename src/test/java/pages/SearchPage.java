@@ -70,6 +70,30 @@ public class SearchPage extends Page {
                 initData.setCityFrom("MOW");
                 initData.setCityTo(city.getCode());
                 break;
+            case 4:
+                if (city.getHour() < 0) return false;
+                initData.setCityFrom("MOW");
+                initData.setCityTo(city.getCode());
+                break;
+            case 5:
+                if (city.getHour() > 0) return false;
+                initData.setCityFrom("MOW");
+                initData.setCityTo(city.getCode());
+                break;
+            case 6:
+                if (city.getHour() < 0) return false;
+                initData.setCityFrom("MOW");
+                initData.setCityTo(city.getCode());
+                break;
+            case 7:
+                if (city.getHour() > 0) return false;
+                initData.setCityFrom(city.getCode());
+                initData.setCityTo("MOW");
+                break;
+            case 8:
+                if (city.getHour() < 0) return false;
+                initData.setCityFrom(city.getCode());
+                initData.setCityTo("MOW");
         }
         setFrom(initData.getCityFrom());
         setTo(initData.getCityTo());

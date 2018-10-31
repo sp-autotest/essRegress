@@ -113,7 +113,7 @@ public class EssTest {
     @DataProvider(name="data9")
     public Object[][] parseLocaleData9() {
         return new Object[][] {
-                /*{1,1}, {1,2},*/ {1,3}, /*{1,4}, {1,5}, {1,6}, {1,7}, {1,8},
+                /*{1,1}, {1,2}, */{1,3}/*, {1,4}, {1,5}, {1,6}, {1,7}, {1,8},
                 {2,1}, /*{2,2}, {2,3}, {2,4}, {2,5}, {2,6}, {2,7}, {2,8},
                 {3,1}, {3,2}, {3,3}, {3,4}, {3,5}, {3,6}, {3,7}, {3,8}*/
         };
@@ -760,8 +760,8 @@ public class EssTest {
         transportPg.setTransferAdditionalInfo(transferDate, dir);//шаг 16
         transportPg.selectTransferAndCheckDate(transferDate);//шаг 17
 
-        essPg.clickPayInCart("6");//шаг 6
-        choosePg.chooseTestStend("7");//шаг 7
+        essPg.clickPayInCart(6);//шаг 6
+        choosePg.chooseTestStend(7);//шаг 7
         EprPage eprPg = new EprPage(collectData);
         eprPg.checkDateOnEPR(flightList);//шаг 8
         eprPg.checkTransferDate(transferDate);
