@@ -366,9 +366,7 @@ public class TransportPage extends Page {
 
     @Step("Проверка кнопки «В заказе»")
     private void checkRentButtonName(){
-        String textButton = text[6][collectData.getLn()];
-        if (collectData.getLn() == 8) textButton = "注文内容"; //тут японское название кнопки "В заказе" еще не переделали
-        $(byXpath("//div[@class='auto-card__button-top']")).shouldBe(visible).shouldBe(exactText(textButton));
+        $(byXpath("//div[@class='auto-card__button-top']")).shouldBe(visible).shouldBe(exactText(text[6][collectData.getLn()]));
     }
 
     @Step("Проверка кнопки «Изменить выбранные опции»")

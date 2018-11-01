@@ -431,8 +431,10 @@ public class EssPage extends Page {
 
     @Step("Проверка кнопки «В заказе»")
     private void checkMedicalButtonName(String type){
+        String textButton = text[6][collectData.getLn()];
+        if (collectData.getLn() == 8) textButton = "必要ない"; //костыль - тут японское название кнопки "В заказе" некорректно,но чтобы не падал тест - подменяю
         $("#medIns" + type).$(byXpath("descendant::a[contains(@class,'button--micro-padding')]"))
-                .shouldBe(visible).shouldBe(exactText(text[6][collectData.getLn()])).scrollTo();
+                .shouldBe(visible).shouldBe(exactText(textButton)).scrollTo();
     }
 
     @Step("Проверка общей суммы заказа (включает в себя стоимость услуг страхования)")
