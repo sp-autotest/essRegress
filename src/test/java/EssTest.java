@@ -113,8 +113,8 @@ public class EssTest {
     @DataProvider(name="data9")
     public Object[][] parseLocaleData9() {
         return new Object[][] {
-                /*{1,1}, {1,2}, */{1,3}/*, {1,4}, {1,5}, {1,6}, {1,7}, {1,8},
-                {2,1}, /*{2,2}, {2,3}, {2,4}, {2,5}, {2,6}, {2,7}, {2,8},
+                {1,1}, {1,2}, {1,3}, {1,4}, {1,5}, {1,6}, {1,7}, {1,8}/*,
+                {2,1}, {2,2}, {2,3}, {2,4}, {2,5}, {2,6}, {2,7}, {2,8},
                 {3,1}, {3,2}, {3,3}, {3,4}, {3,5}, {3,6}, {3,7}, {3,8}*/
         };
     }
@@ -722,30 +722,27 @@ public class EssTest {
         clearReportData(collectData.getTest());
 
         System.out.println("==========================================================" +
-                "\n*** AUTOTEST *** : section 9, chrome, 1920x1080, RUS, RUB" +
+                "\n*** AUTOTEST *** : section 9, chrome, 1280x1024, RUS, RUB" +
                 "\n==========================================================");
         List<City> cities = new CityPage().getCityList();
         open(Values.host + "ru");
         InitialData initData = new InitialData(null, null, null, null, null, 1, 0, 0);
         SearchPage searchPg = new SearchPage(initData, collectData);
         SearchFramePage searchFramePg = new SearchFramePage();
+        List<Flight> flightList = new ArrayList<Flight>();
+
         searchPg.setFlightDate(period);
-        boolean result = false;
         for (City city : cities) {
             System.out.println(city.toString());
             if (!searchPg.setFlightCity(caseNumber, city)) continue;
-            if (searchFramePg.searchFlight(caseNumber)) {
-                result = true;
-                break;
-            }
+            flightList = searchFramePg.searchFlight(caseNumber);
+            if (flightList.size() > 0) break;
         }
-        assertTrue("Перелет, соответствующий условию, отсутствует", result);
+        assertTrue("Перелет, соответствующий условию, отсутствует", flightList.size() > 0);
 
         List<Passenger> passList = createPassengers(initData, collectData.getLn());
         new PassengerPage(collectData).step3(passList);
-        PlacePage placePg = new PlacePage(collectData);
-        List<Flight> flightList = placePg.getFlightData();
-        placePg.clickPay();
+        new PlacePage(collectData).clickPay();
         ChoosePage choosePg = new ChoosePage(collectData);
         choosePg.step4();
         EssPage essPg = new EssPage(collectData);
@@ -770,8 +767,8 @@ public class EssTest {
         OfficePage officePg = new OfficePage(collectData);
         officePg.authorization();//шаг 17
         officePg.searchOrder(Values.getPNR(collectData.getTest()));//шаг 18
-        officePg.checkDateOnARM(Values.getPNR(collectData.getTest()), flightList);//шаг 19
-        officePg.checkSabre();//ifu 20
+        officePg.checkDateOnARM(flightList);//шаг 19
+        officePg.checkSabre(flightList);//ifu 20
     }
 */
     private List<Passenger> createPassengers(InitialData initData, int ln) {
@@ -901,7 +898,6 @@ public class EssTest {
         }
         return o;
     }
-
 
     private void clearReportData(int number) {
         Values.setPNR(number, "");

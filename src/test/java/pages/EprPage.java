@@ -110,16 +110,15 @@ public class EprPage extends Page {
     @Step("Действие 8, проверка даты/времени на EPR")
     public void checkDateOnEPR(List<Flight> flyList) {
         System.out.println("\t11. Checking data on Pay page");
-        ElementsCollection flights = null;
         for (int i=0; i<30; i++) {
             Sleep(1);
-            flights = $$(byXpath("//div[@class='flight__row']"));
-            if (flights.size()>0) break;
+            if ($(byXpath("//div[@class='flight__row']")).exists()) break;
             assertTrue("Не обнаружено данных о перелете на странице оплаты", i!=19);
         }
         screenShot("Скриншот");
+        ElementsCollection flights = $$(byXpath("//div[@class='flight__row']"));
         for (int i = 0; i < flights.size(); i++) {
-            checkFlightDate(i + 1, flyList.get(i), flights.get(i));
+            checkFlightDateNew(i + 1, flyList.get(i), flights.get(i));
         }
 
     }
@@ -190,7 +189,6 @@ public class EprPage extends Page {
                    "\nОжидалось : " + f.start + "\nФактически: " + dStart, dStart.equals(f.start));
 
         String end = flight.$(byXpath("descendant::div[@class='flight__date ng-binding'][2]")).getText();
-
         if (end.contains("+1")) overnight = true;
         end = end.substring(end.indexOf(",")+1);
         end = end.substring(0, end.indexOf(",")) + " " + new SimpleDateFormat("yyyy").format(f.end);
@@ -206,6 +204,35 @@ public class EprPage extends Page {
         else expectedDate = f.end;
         assertTrue("Время/дата прилета отличается от забронированного" +
                    "\nОжидалось : " + expectedDate + "\nФактически: " + dEnd, dEnd.equals(expectedDate));
+    }
+
+    @Step("Проверка даты/времени в {0}-м маршруте")
+    private void checkFlightDateNew(int i, Flight f, SelenideElement flight){
+        String start = flight.$(byXpath("descendant::div[@class='flight__date ng-binding']")).getText()
+                + " " + new SimpleDateFormat("yyyy").format(f.start);
+        Date dStart = new Date();
+        try {
+            dStart = new SimpleDateFormat("E, dd MMMM HH:mm yyyy", new Locale("ru")).parse(start);
+            System.out.println("["+dStart+"] ");
+        }catch (ParseException e) {
+            System.out.println("Дата вылета нераспаршена");
+        }
+        assertTrue("Время/дата вылета отличается от забронированного" +
+                "\nОжидалось : " + f.start + "\nФактически: " + dStart, dStart.equals(f.start));
+
+        SelenideElement endElement = flight.$(byXpath("descendant::div[@class='flight__date ng-binding'][2]"));
+        String end = endElement.$(byXpath("descendant::span[@class='h-text--nowrap ng-binding']")).getText()
+                + " " + endElement.$(byXpath("descendant::span[@class='h-text--bold h-color--black ng-binding']")).getText()
+                + " " + new SimpleDateFormat("yyyy").format(f.end);
+        Date dEnd = new Date();
+        try {
+            dEnd = new SimpleDateFormat("E, dd MMMM HH:mm yyyy", new Locale("ru")).parse(end);
+            System.out.println("["+dEnd+"] ");
+        }catch (ParseException e) {
+            System.out.println("Дата прилета нераспаршена");
+        }
+        assertTrue("Время/дата прилета отличается от забронированного" +
+                "\nОжидалось : " + f.end + "\nФактически: " + dEnd, dEnd.equals(f.end));
     }
 
     @Step("Проверка полетной страховки")

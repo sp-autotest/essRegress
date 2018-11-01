@@ -80,8 +80,9 @@ public class OfficePage extends Page{
         checkOrderIsFound(pnr);
     }
     @Step("Действие 19, Проверка даты/времени в АРМ, заказ {0}")
-    public void checkDateOnARM (String pnr, List<Flight> flyList) {
+    public void checkDateOnARM (List<Flight> flyList) {
         System.out.println("\t19. Open ans check order details");
+        String pnr = Values.getPNR(collectData.getTest());
         clickOrder(pnr);
         checkOrderDetailsTabAppear(pnr);
         clickTransfer();
@@ -92,22 +93,31 @@ public class OfficePage extends Page{
     }
 
     @Step("Действие 20, Проверка даты/времени в Sabre")
-    public void checkSabre() {
+    public void checkSabre(List<Flight> flyList) {
         System.out.println("\t20. Check log in Sabre");
         String response = new SoapRequest(collectData).setPNRtoSabreCommand();
         String[] lines = response.substring(response.indexOf("[ 1 "), response.indexOf("TKT/TIME")-10).split("CDATA");
+        int i = 0;
         String end = null;
         for (String s : lines) {
             if (s.contains("/E]")) {
                 System.out.println(s);
                 String begin = s.substring(12, 17) + s.substring(32, 36);
+                System.out.println(begin);
+                String bDate =  new SimpleDateFormat("ddMMMHHmm", new Locale("en")).format(flyList.get(i).start).toUpperCase();
+                assertTrue("Дата/время вылета в Sabre не совпадает с забронированным" +
+                        "\nОжидалось : " + bDate + "\nФактически: " + begin, bDate.equals(begin));
+
                 if (s.substring(44, 46).equals("/E")) {
                     end = s.substring(12, 17) + s.substring(38, 42);
                 } else {
                     end = s.substring(45, 50) + s.substring(38, 42);
                 }
-                System.out.println(begin);
                 System.out.println(end);
+                String eDate =  new SimpleDateFormat("ddMMMHHmm", new Locale("en")).format(flyList.get(i).end).toUpperCase();
+                assertTrue("Дата/время прилета в Sabre не совпадает с забронированным" +
+                           "\nОжидалось : " + eDate + "\nФактически: " + end, eDate.equals(end));
+                i++;
             }
         }
     }
@@ -286,12 +296,13 @@ public class OfficePage extends Page{
         ElementsCollection rows = $$(byXpath("//h5[text()='Перелет']/following-sibling::table/tbody/tr"));
         for (int i=0; i<rows.size(); i++){
             String date = rows.get(i).$(byXpath("td[5]")).getText();
-            String dates = new SimpleDateFormat("HH:mm/").format(flyList.get(i).start);
-            dates = dates + new SimpleDateFormat("HH:mm dd.MM.yyyy").format(flyList.get(i).end);
+            String dates = new SimpleDateFormat("HH:mm/").format(flyList.get(i).start)
+                       + new SimpleDateFormat("HH:mm").format(flyList.get(i).end) + " "
+                       + new SimpleDateFormat("dd.MM.yyyy").format(flyList.get(i).start);
             assertTrue("Дата/время " + (i+1) +"-го рейса не совпадает с забронированным" +
-                            "\nОжидалось : " + dates +
-                            "\nФактически: " + date,
-                    dates.equals(date));
+                       "\nОжидалось : " + dates +
+                       "\nФактически: " + date,
+                       dates.equals(date));
         }
     }
 
@@ -300,9 +311,9 @@ public class OfficePage extends Page{
         String date = $(byXpath("//td[@style='white-space:nowrap;']")).getText();
         String dates = "00:00 " + new SimpleDateFormat("dd MMM yyyy", new Locale("en")).format(flyList.get(0).start);
         assertTrue("Дата/время трансфера на странице не совпадает с забронированным" +
-                        "\nОжидалось : " + dates +
-                        "\nФактически: " + date,
-                dates.equals(date));
+                   "\nОжидалось : " + dates +
+                   "\nФактически: " + date,
+                   dates.equals(date));
     }
 
     @Step("Проверить дату/время трансфера в логе")

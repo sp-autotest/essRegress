@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static listeners.ScreenShoter.makeScreenshot;
@@ -165,5 +166,12 @@ public class Page {
     }
 
 
+    public String getNodeText(SelenideElement element) {
+        String text = element.getAttribute("textContent");
+        for (SelenideElement child : element.$$(byXpath("./*"))) {
+            text = text.replace(child.getText(), "");
+        }
+        return text;
+    }
 
 }

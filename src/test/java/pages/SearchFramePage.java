@@ -1,8 +1,16 @@
 package pages;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
+import struct.Flight;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byXpath;
@@ -15,8 +23,9 @@ import static com.codeborne.selenide.Selenide.$$;
 public class SearchFramePage extends Page {
 
     @Step("Действие 3, поиск рейсов")
-    public boolean searchFlight(int caseNumber) {
+    public List<Flight> searchFlight(int caseNumber) {
         boolean result = false;
+        List<Flight> flightList = new ArrayList<Flight>();
         switch (caseNumber) {
             case 1:
                 result = searchFlight1();
@@ -44,60 +53,82 @@ public class SearchFramePage extends Page {
                 break;
         }
         if (result) {
+            flightList = getFlightData();
             clickBuyButton();
             clickPassengersButton();
         }
-        return result;
+        return flightList;
     }
 
     @Step("Вылет до полуночи, прилет после полуночи")
     private boolean searchFlight1() {
-        boolean result = false;
         $(byXpath("//div[contains(@class,'frame__heading')]")).shouldBe(visible);
         Sleep(2);
         ElementsCollection flights = $$(byXpath("//div[@class='flight-search__inner']"));
         if (flights.size() > 0) {
             for (SelenideElement flight : flights) {
-                if (flight.$$(byXpath("descendant::button")).size() == 0) continue; //Пропускаем рейсы без кнопки <ВЫБРАТЬ РЕЙС>
-                ElementsCollection plusDay = flight
-                        .$$(byXpath("descendant::span[@class='time-destination__plusday']"));
-                if (plusDay.size() > 0) {
+                if (!flight.$(byXpath("descendant::button")).exists()) continue; //Пропускаем рейсы без кнопки <ВЫБРАТЬ РЕЙС>
+                if (flight.$(byXpath("descendant::span[@class='time-destination__plusday']")).exists()) {
                     flight.click();
-                    result = true;
-                    break;
+                    return true;
                 }
-                ElementsCollection overDay = flight
-                        .$$(byXpath("descendant::span[@class='h-color--orange']"));
-                if (overDay.size() > 0) {
+                if (flight.$(byXpath("descendant::span[@class='h-color--orange']")).exists()) {
                     flight.click();
-                    result = true;
-                    break;
+                    return true;
                 }
             }
         }
-        return result;
+        return false;
     }
 
     @Step("Вылет после {0}00, но не позднее {1}59 по Москве")
     private boolean searchFlight7(String leftTime, String rightTime) {
-        boolean result = false;
         $(byXpath("//div[contains(@class,'frame__heading')]")).shouldBe(visible);
         Sleep(2);
         ElementsCollection flights = $$(byXpath("//div[@class='flight-search__inner']"));
         if (flights.size() > 0) {
             for (SelenideElement flight : flights) {
-                if (flight.$$(byXpath("descendant::button")).size() == 0) continue; //Пропускаем рейсы без кнопки <ВЫБРАТЬ РЕЙС>
+                if (!flight.$(byXpath("descendant::button")).exists()) continue; //Пропускаем рейсы без кнопки <ВЫБРАТЬ РЕЙС>
                 SelenideElement time = flight.$(byXpath("descendant::div[@class='time-destination__from']/div"));
                 System.out.println("Time = " + time.getText());
                 if (time.getText().contains(leftTime) | time.getText().contains(rightTime)) {
                     System.out.println("Time exist!!!!!");
                     flight.click();
-                    result = true;
-                    break;
+                    return true;
                 }
             }
         }
-        return result;
+        return false;
+    }
+
+    @Step("Извлечь дату/время перелета")
+    private List<Flight> getFlightData(){
+        $(byXpath("//a[contains(@class,'modal__close')]")).shouldBe(visible);
+        List<Flight> flightList = new ArrayList<Flight>();
+
+        ElementsCollection flights = $$(byXpath("//div[@class='flight__row']/descendant::div[@class='flight__date']"));
+        for (int i = 0; i<flights.size(); i = i+2) {
+            Flight flight = new Flight();
+            String start = flights.get(i).text();
+            System.out.println(start);
+            try {
+                flight.start = new SimpleDateFormat("dd MMMM yyyy г., в HH:mm", new Locale("ru")).parse(start);
+                System.out.println("[" + flight.start + "] ");
+            } catch (ParseException e) {
+                System.out.println("Дата вылета нераспаршена: " + start);
+            }
+            String stop = getNodeText(flights.get(i+1))
+                    + flights.get(i+1).$(byXpath("descendant::span[@class='h-text--bold h-color--black']")).getText();
+            System.out.println(stop);
+            try {
+                flight.end = new SimpleDateFormat("dd MMMM yyyy г., в HH:mm", new Locale("ru")).parse(stop);
+                System.out.println("[" + flight.end + "] ");
+            } catch (ParseException e) {
+                System.out.println("Дата прилета нераспаршена: " + stop);
+            }
+            flightList.add(flight);
+        }
+        return flightList;
     }
 
     @Step("Нажать \"Купить\"")

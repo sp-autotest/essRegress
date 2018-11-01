@@ -38,8 +38,6 @@ public class SearchPage extends Page {
 
     @Step("Действие 1, поиск рейсов")
     public void step1() {
-        //clickAcceptCookiesButton();
-        //countrySelect();
         if (null != initData.getCityFrom()) setFrom(initData.getCityFrom());
         if (null != initData.getCityTo()) setTo(initData.getCityTo());
         if (null != initData.getDateThere()) setThere(initData.getDateThere());
