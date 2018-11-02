@@ -46,6 +46,10 @@ public class MyTransformer implements IAnnotationTransformer {
             enabled = System.getProperty("part8");
             System.out.println("part8 = " + enabled);
         }
+        if (annotation.getGroups()[0].equals("part9")) {
+            enabled = System.getProperty("part9");
+            System.out.println("part9 = " + enabled);
+        }
         if (enabled!=null) {
             annotation.setEnabled(enabled.equals("true"));
         }
