@@ -32,6 +32,7 @@
                 <methods>
                     <include name="section3" />
                     <include name="section6" />
+                    <include name="section9" />
                 </methods>
             </class>
         </classes>
