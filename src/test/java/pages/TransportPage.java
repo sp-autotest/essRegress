@@ -570,10 +570,8 @@ public class TransportPage extends Page {
         ElementsCollection chb = $(byXpath("//div[contains(@class,'dropdown--show')]")).$$(byXpath("descendant::input"));
         int n = 0;
         for (int i=0; i<chb.size(); i++) if (chb.get(i).isSelected()) n++;
-        /*ВРЕМЕННО ЗАКРЫТО 02.11.19
         assertTrue("Для поездки на Аэроэкспресс выбраны не все пассажиры" +
                    "\nОжидалось : " + collectData.getTicket() + "\nФактически: " + n, n == collectData.getTicket());
-                   */
     }
 
     @Step("Проверить изменение общей стоимости Аэроэкспресс")
