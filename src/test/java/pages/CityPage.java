@@ -20,7 +20,7 @@ import static com.codeborne.selenide.Selenide.open;
  */
 public class CityPage extends Page {
 
-    @Step("Действие 0, выбор рейсов")
+    @Step("Подготовка списка городов")
     public List<City> getCityList() {
         List<City> cities = new ArrayList<>();
         File citiesf = new File("cities.txt");

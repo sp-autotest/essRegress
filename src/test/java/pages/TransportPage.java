@@ -38,9 +38,9 @@ public class TransportPage extends Page {
         this.collectData = collectData;
     }
 
-    @Step("Действие 10, Нажать на кнопку «Транспорт»")
-    public void step10(int test) {
-        System.out.println("\t10. Click Transport button");
+    @Step("Действие {1}, Нажать на кнопку «Транспорт»")
+    public void step10(int test, int n) {
+        System.out.println("\t" + n + ". Click Transport button");
         new EssPage(collectData).clickTransportButton();
         checkTransportBlock();
         if (test == 1) {
@@ -176,9 +176,9 @@ public class TransportPage extends Page {
         checkAeroexpressInCart();
     }
 
-    @Step("Действие 14, Задать характеристики услуги «Бронирование трансфера»")
-    public String setTransferLocations() {
-        System.out.println("\t14. Set transfer locations");
+    @Step("Действие {0}, Задать характеристики услуги «Бронирование трансфера»")
+    public String setTransferLocations(int n) {
+        System.out.println("\t" + n + ". Set transfer locations");
         $("#iway_transfer_page").scrollTo();
         setTransferRouteFrom("1202");
         setTransferRouteTo("1200");
@@ -203,9 +203,9 @@ public class TransportPage extends Page {
         waitPriceChange();
     }
 
-    @Step("Действие 15, Нажать на кнопку «Выбрать» для категории Стандарт")
-    public void clickSelectStandartButton() {
-        System.out.println("\t15. Click Select button");
+    @Step("Действие {0}, Нажать на кнопку «Выбрать» для категории Стандарт")
+    public void clickSelectStandartButton(int n) {
+        System.out.println("\t" + n + ". Click Select button");
         String price = "";
         ElementsCollection categories = $("#transfer_options_list").$$(byXpath("descendant::div[@class='frame__container']"));
         for (int i=0; i<categories.size(); i++){
@@ -231,9 +231,9 @@ public class TransportPage extends Page {
         Values.reportData[collectData.getTest()].getPrice().transfer = price;
     }
 
-    @Step("Действие 16, Заполнить и проверить форму трансфера")
-    public void setTransferAdditionalInfo(Date date, String dir) {
-        System.out.println("\t16. Setting transfer form");
+    @Step("Действие {0}, Заполнить и проверить форму трансфера")
+    public void setTransferAdditionalInfo(int n, Date date, String dir) {
+        System.out.println("\t" + n + ". Setting transfer form");
         setTransferDate(new SimpleDateFormat("d.MM.yyyy").format(date));
         setTransferText();
         setTransferTime();
@@ -249,9 +249,9 @@ public class TransportPage extends Page {
         checkTransferAllData(date, dir);
     }
 
-    @Step("Действие 17, Нажать кнопку «Выбрать»")
+    @Step("Действие 10, Нажать кнопку «Выбрать»")
     public void selectTransferAndCheckDate(Date date) {
-        System.out.println("\t17. Click Select button in transfer form");
+        System.out.println("\t110. Click Select button in transfer form");
         clickSelectButton();
         checkTransferDate(date);
         screenShot("скриншот");

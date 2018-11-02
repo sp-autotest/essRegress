@@ -45,9 +45,9 @@ public class OfficePage extends Page{
         System.out.println("Order details Tab appeared");
     }
 
-    @Step("Действие 16, Переход в АРМ ESS")
-    public void authorization (){
-        System.out.println("\t17. Redirect to office ESS");
+    @Step("Действие {0}, Переход в АРМ ESS")
+    public void authorization (int n){
+        System.out.println("\t" + n + ". Redirect to office ESS");
         open(Values.office_host);
         Sleep(1);
         ElementsCollection login = $$(byName("login"));
@@ -72,16 +72,17 @@ public class OfficePage extends Page{
         checkOrderFormAppear();
     }
 
-    @Step("Действие 17, Поиск заказа с PNR = {0}")
-    public void searchOrder (String pnr) {
-        System.out.println("\t18. Search order with PNR = "+pnr);
+    @Step("Действие {0}, Поиск заказа с PNR = {0}")
+    public void searchOrder (int n) {
+        String pnr = Values.getPNR(collectData.getTest());
+        System.out.println("\t" + n + ". Search order with PNR = "+pnr);
         setQueryField(pnr);
         clickSearchButton();
         checkOrderIsFound(pnr);
     }
-    @Step("Действие 19, Проверка даты/времени в АРМ, заказ {0}")
+    @Step("Действие 17, Проверка даты/времени в АРМ, заказ {0}")
     public void checkDateOnARM (List<Flight> flyList) {
-        System.out.println("\t19. Open ans check order details");
+        System.out.println("\t17. Open ans check order details");
         String pnr = Values.getPNR(collectData.getTest());
         clickOrder(pnr);
         checkOrderDetailsTabAppear(pnr);
@@ -92,9 +93,9 @@ public class OfficePage extends Page{
         checkTransferDateTimeInLog(flyList);
     }
 
-    @Step("Действие 20, Проверка даты/времени в Sabre")
+    @Step("Действие 18, Проверка даты/времени в Sabre")
     public void checkSabre(List<Flight> flyList) {
-        System.out.println("\t20. Check log in Sabre");
+        System.out.println("\t18. Check log in Sabre");
         String response = new SoapRequest(collectData).setPNRtoSabreCommand();
         String[] lines = response.substring(response.indexOf("[ 1 "), response.indexOf("TKT/TIME")-10).split("CDATA");
         int i = 0;

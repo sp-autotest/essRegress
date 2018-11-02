@@ -22,7 +22,7 @@ import static com.codeborne.selenide.Selenide.$$;
  */
 public class SearchFramePage extends Page {
 
-    @Step("Действие 3, поиск рейсов")
+    @Step("Действие 2, Поиск рейсов")
     public List<Flight> searchFlight(int caseNumber) {
         boolean result = false;
         List<Flight> flightList = new ArrayList<Flight>();

@@ -113,9 +113,9 @@ public class EssTest {
     @DataProvider(name="data9")
     public Object[][] parseLocaleData9() {
         return new Object[][] {
-                {1,1}, {1,2}, {1,3}, {1,4}, {1,5}, {1,6}, {1,7}, {1,8}/*,
+                /*{1,1}, {1,2}, {1,3}, {1,4}, {1,5}, {1,6}, {1,7}, {1,8},*/ //первый временной отрезок прошел, по 30 марта 2019
                 {2,1}, {2,2}, {2,3}, {2,4}, {2,5}, {2,6}, {2,7}, {2,8},
-                {3,1}, {3,2}, {3,3}, {3,4}, {3,5}, {3,6}, {3,7}, {3,8}*/
+                {3,1}, {3,2}, {3,3}, {3,4}, {3,5}, {3,6}, {3,7}, {3,8}
         };
     }
 
@@ -170,7 +170,7 @@ public class EssTest {
         essPg.step8();
         essPg.step9("COMMON_SPORT");
         TransportPage transportPg = new TransportPage(collectData);
-        transportPg.step10(test);//шаг 10
+        transportPg.step10(test, 10);//шаг 10
         transportPg.checkAeroexpressPassengersList();//шаг 11
         transportPg.checkAeroexpressLogic(flightList);//шаг 12
         HotelPage hotelPg = new HotelPage(initData, collectData);
@@ -249,7 +249,7 @@ public class EssTest {
         essPg.step8();//шаг 8
         essPg.step9("TEAM_SPORTS");//шаг 9
         TransportPage transportPg = new TransportPage(collectData);
-        transportPg.step10(test);
+        transportPg.step10(test, 10);
         transportPg.step11();
         transportPg.step12();
         choosePg.chooseTestStend(13);//шаг 13
@@ -311,13 +311,13 @@ public class EssTest {
         essPg.step7(flightList);//шаг 7
         essPg.step8();//шаг 8
         TransportPage transportPg = new TransportPage(collectData);
-        transportPg.step10(test);
+        transportPg.step10(test, 10);
         transportPg.checkAeroexpressPassengerLogic(11);//шаг 11
         transportPg.checkAeroexpressLogic(flightList);//шаг 12
         transportPg.addAeroexpressTickets();//шаг 13
-        String dir = transportPg.setTransferLocations();//шаг 14
-        transportPg.clickSelectStandartButton();//шаг 15
-        transportPg.setTransferAdditionalInfo(flightList.get(0).start, dir);//шаг 16
+        String dir = transportPg.setTransferLocations(14);//шаг 14
+        transportPg.clickSelectStandartButton(15);//шаг 15
+        transportPg.setTransferAdditionalInfo(16, flightList.get(0).start, dir);//шаг 16
         transportPg.selectTransfer(flightList.get(0).start, dir);//шаг 17
         transportPg.clickRepeatedlyContinue();//шаг 18
         choosePg.chooseTestStend(19);//шаг 19
@@ -384,8 +384,8 @@ public class EssTest {
         paymentPg.setCardDetails(14);//шаг 14
         new ResultPage(passList, collectData).checkServicesData("15", test);//шаг 15
         OfficePage officePg = new OfficePage(collectData);
-        officePg.authorization();//шаг 16
-        officePg.searchOrder(Values.getPNR(collectData.getTest()));//шаг 17
+        officePg.authorization(16);//шаг 16
+        officePg.searchOrder(17);//шаг 17
         officePg.openOrderDetails(flightList, passList);//шаг 18
     }
 
@@ -440,14 +440,14 @@ public class EssTest {
         essPg.step8_5();//шаг 8
         essPg.step9("RANDOM");//шаг 9
         TransportPage transportPg = new TransportPage(collectData);
-        transportPg.step10(test);//шаг 10
+        transportPg.step10(test, 10);//шаг 10
         transportPg.step11_5();//шаг 11
 
         transportPg.checkAeroexpressPassengerLogic(12);//шаг 12
         transportPg.addAeroexpressTickets();//шаг 13
-        String dir = transportPg.setTransferLocations();//шаг 14
-        transportPg.clickSelectStandartButton();//шаг 15
-        transportPg.setTransferAdditionalInfo(flightList.get(0).start, dir);//шаг 16
+        String dir = transportPg.setTransferLocations(14);//шаг 14
+        transportPg.clickSelectStandartButton(15);//шаг 15
+        transportPg.setTransferAdditionalInfo(16, flightList.get(0).start, dir);//шаг 16
         transportPg.selectTransfer(flightList.get(0).start, dir);//шаг 17
 
         HotelPage hotelPg = new HotelPage(initData, collectData);
@@ -524,12 +524,12 @@ public class EssTest {
         essPg.step8_5();//шаг 8
         essPg.step9("RANDOM");//шаг 9
         TransportPage transportPg = new TransportPage(collectData);
-        transportPg.step10(test);//шаг 10
+        transportPg.step10(test, 10);//шаг 10
         transportPg.step11_5();//шаг 11
         transportPg.addAeroexpressTickets();//шаг 13
-        String dir = transportPg.setTransferLocations();//шаг 14
-        transportPg.clickSelectStandartButton();//шаг 15
-        transportPg.setTransferAdditionalInfo(flightList.get(0).start, dir);//шаг 16
+        String dir = transportPg.setTransferLocations(14);//шаг 14
+        transportPg.clickSelectStandartButton(15);//шаг 15
+        transportPg.setTransferAdditionalInfo(16, flightList.get(0).start, dir);//шаг 16
         transportPg.selectTransfer(flightList.get(0).start, dir);//шаг 17
         HotelPage hotelPg = new HotelPage(initData, collectData);
         hotelPg.clickResidenceButton(18);//шаг 18
@@ -611,12 +611,12 @@ public class EssTest {
         essPg.step8_7(passList);
         essPg.step9("RANDOM");
         TransportPage transportPg = new TransportPage(collectData);
-        transportPg.step10(test);//шаг 10
+        transportPg.step10(test, 10);//шаг 10
         transportPg.step11_5();//шаг 11
         transportPg.addAeroexpressTickets();//шаг 13
-        String dir = transportPg.setTransferLocations();//шаг 14
-        transportPg.clickSelectStandartButton();//шаг 15
-        transportPg.setTransferAdditionalInfo(flightList.get(0).start, dir);//шаг 16
+        String dir = transportPg.setTransferLocations(14);//шаг 14
+        transportPg.clickSelectStandartButton(15);//шаг 15
+        transportPg.setTransferAdditionalInfo(16, flightList.get(0).start, dir);//шаг 16
         transportPg.selectTransfer(flightList.get(0).start, dir);//шаг 17
         HotelPage hotelPg = new HotelPage(initData, collectData);
         hotelPg.clickResidenceButton(15);//шаг 15
@@ -693,19 +693,19 @@ public class EssTest {
         else essPg.step8();//шаг 8
         essPg.step9("RANDOM");//шаг 9
         TransportPage transportPg = new TransportPage(collectData);
-        transportPg.step10(test);//шаг 10
+        transportPg.step10(test, 10);//шаг 10
         transportPg.step11_5();//шаг 11
         transportPg.checkAeroexpressPassengerLogic(12);//шаг 12
         transportPg.addAeroexpressTickets();//шаг 13
-        String dir = transportPg.setTransferLocations();//шаг 14
-        transportPg.clickSelectStandartButton();//шаг 15
-        transportPg.setTransferAdditionalInfo(flightList.get(0).start, dir);//шаг 16
+        String dir = transportPg.setTransferLocations(14);//шаг 14
+        transportPg.clickSelectStandartButton(15);//шаг 15
+        transportPg.setTransferAdditionalInfo(16, flightList.get(0).start, dir);//шаг 16
         transportPg.selectTransfer(flightList.get(0).start, dir);//шаг 17
         transportPg.clickRepeatedlyContinue();//шаг 18
         choosePg.chooseTestStend(19);//шаг 19
         new EprPage(collectData).checkDataOnPayPage(20, flightList, passList, test, timer);//шаг 20
     }
-/*
+
     @Description("Карта VISA;\nНаправление перелета: в одну сторону;\n" +
             "Состав бронирования авиаперелета, билеты: 1 взрослый;" +
             "Дополнительные услуги: «Трансфер»")
@@ -731,11 +731,14 @@ public class EssTest {
         SearchFramePage searchFramePg = new SearchFramePage();
         List<Flight> flightList = new ArrayList<Flight>();
 
-        searchPg.setFlightDate(period);
-        for (City city : cities) {
-            System.out.println(city.toString());
-            if (!searchPg.setFlightCity(caseNumber, city)) continue;
-            flightList = searchFramePg.searchFlight(caseNumber);
+        for (int i=0; i<3; i++) {  //три попытки сменить дату вылета
+            searchPg.setFlightDate(period, i);
+            for (City city : cities) {
+                System.out.println(city.toString());
+                if (!searchPg.setFlightCity(caseNumber, city)) continue;
+                flightList = searchFramePg.searchFlight(caseNumber);
+                if (flightList.size() > 0) break;
+            }
             if (flightList.size() > 0) break;
         }
         assertTrue("Перелет, соответствующий условию, отсутствует", flightList.size() > 0);
@@ -749,28 +752,28 @@ public class EssTest {
         essPg.checkDateOnESS(flightList);//шаг 5
 
         TransportPage transportPg = new TransportPage(collectData);
-        transportPg.step10(test);
+        transportPg.step10(test, 6); //шаг 6
 
-        String dir = transportPg.setTransferLocations();//шаг 14
-        transportPg.clickSelectStandartButton();//шаг 15
+        String dir = transportPg.setTransferLocations(7);//шаг 7
+        transportPg.clickSelectStandartButton(8);//шаг 8
         Date transferDate = flightList.get(0).start;
-        transportPg.setTransferAdditionalInfo(transferDate, dir);//шаг 16
-        transportPg.selectTransferAndCheckDate(transferDate);//шаг 17
+        transportPg.setTransferAdditionalInfo(9, transferDate, dir);//шаг 9
+        transportPg.selectTransferAndCheckDate(transferDate);//шаг 10
 
-        essPg.clickPayInCart(6);//шаг 6
-        choosePg.chooseTestStend(7);//шаг 7
+        essPg.clickPayInCart(11);//шаг 11
+        choosePg.chooseTestStend(12);//шаг 12
         EprPage eprPg = new EprPage(collectData);
-        eprPg.checkDateOnEPR(flightList);//шаг 8
-        eprPg.checkTransferDate(transferDate);
+        eprPg.checkDateOnEPR(flightList);//шаг 13
+        eprPg.checkTransferDate(transferDate);//шаг 14
 
 
         OfficePage officePg = new OfficePage(collectData);
-        officePg.authorization();//шаг 17
-        officePg.searchOrder(Values.getPNR(collectData.getTest()));//шаг 18
-        officePg.checkDateOnARM(flightList);//шаг 19
-        officePg.checkSabre(flightList);//ifu 20
+        officePg.authorization(15);//шаг 15
+        officePg.searchOrder(16);//шаг 16
+        officePg.checkDateOnARM(flightList);//шаг 17
+        officePg.checkSabre(flightList);//шаг 18
     }
-*/
+
     private List<Passenger> createPassengers(InitialData initData, int ln) {
         List<Passenger> passengerList = new ArrayList<Passenger>();
         for (int i=0; i<initData.getAdult(); i++) {

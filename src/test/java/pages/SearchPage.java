@@ -9,6 +9,9 @@ import struct.City;
 import struct.CollectData;
 import struct.Flight;
 import struct.InitialData;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
@@ -50,7 +53,7 @@ public class SearchPage extends Page {
         clickSearchButton();
     }
 
-    @Step("Действие 1, выбор городов")
+    @Step("Действие 1, Поиск городов")
     public boolean setFlightCity(int caseNumber, City city) {
         switch (caseNumber) {
             case 1:
@@ -101,17 +104,17 @@ public class SearchPage extends Page {
         return true;
     }
 
-    @Step("Действие 2, выбор даты перелета")
-    public void setFlightDate(int period) {
+    @Step("Выбор даты перелета")
+    public void setFlightDate(int period, int i) {
         switch (period) {
             case 1:
-                initData.setDateThere("20012019");
+                initData.setDateThere(getIterationDate("14102019", i));
                 break;
             case 2:
-                initData.setDateThere("20032019");
+                initData.setDateThere(getIterationDate("14032019", i));
                 break;
             case 3:
-                initData.setDateThere("01092019");
+                initData.setDateThere(getIterationDate("01042019", i));
         }
         setThere(initData.getDateThere());
     }
@@ -304,5 +307,12 @@ public class SearchPage extends Page {
         if (cookies.size()>0) cookies.get(0).click();
     }
 
-
+    private String getIterationDate(String startDate, int iteration) {
+        try {
+            return addMonthAndDays(new SimpleDateFormat("ddMMyyyy").parse(startDate), 0, iteration*7);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

@@ -107,9 +107,9 @@ public class EprPage extends Page {
         }
     }
 
-    @Step("Действие 8, проверка даты/времени на EPR")
+    @Step("Действие 13, проверка даты/времени на EPR")
     public void checkDateOnEPR(List<Flight> flyList) {
-        System.out.println("\t11. Checking data on Pay page");
+        System.out.println("\t13. Checking data on Pay page");
         for (int i=0; i<30; i++) {
             Sleep(1);
             if ($(byXpath("//div[@class='flight__row']")).exists()) break;
@@ -123,8 +123,9 @@ public class EprPage extends Page {
 
     }
 
-    @Step("Действие 10, Проверка даты услуги Трансфера")
+    @Step("Действие 14, Проверка даты услуги Трансфера")
     public void checkTransferDate(Date d) {
+        System.out.println("\t13. Checking transfer date");
         SelenideElement group = $(byXpath("//div[@ng-switch-when='Transfer'][@class='ng-scope']"));
         group.scrollTo();
         screenShot("Скриншот");
