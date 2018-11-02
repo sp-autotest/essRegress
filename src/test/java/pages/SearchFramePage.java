@@ -1,9 +1,10 @@
 package pages;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import config.Values;
 import io.qameta.allure.Step;
+import struct.CollectData;
 import struct.Flight;
 
 import java.text.ParseException;
@@ -21,6 +22,12 @@ import static com.codeborne.selenide.Selenide.$$;
  * Created by mycola on 10.10.2018.
  */
 public class SearchFramePage extends Page {
+
+    private CollectData collectData;
+
+    public SearchFramePage(CollectData collectData) {
+        this.collectData = collectData;
+    }
 
     @Step("Действие 2, Поиск рейсов")
     public List<Flight> searchFlight(int caseNumber) {
@@ -90,9 +97,7 @@ public class SearchFramePage extends Page {
             for (SelenideElement flight : flights) {
                 if (!flight.$(byXpath("descendant::button")).exists()) continue; //Пропускаем рейсы без кнопки <ВЫБРАТЬ РЕЙС>
                 SelenideElement time = flight.$(byXpath("descendant::div[@class='time-destination__from']/div"));
-                System.out.println("Time = " + time.getText());
                 if (time.getText().contains(leftTime) | time.getText().contains(rightTime)) {
-                    System.out.println("Time exist!!!!!");
                     flight.click();
                     return true;
                 }
@@ -105,7 +110,6 @@ public class SearchFramePage extends Page {
     private List<Flight> getFlightData(){
         $(byXpath("//a[contains(@class,'modal__close')]")).shouldBe(visible);
         List<Flight> flightList = new ArrayList<Flight>();
-
         ElementsCollection flights = $$(byXpath("//div[@class='flight__row']/descendant::div[@class='flight__date']"));
         for (int i = 0; i<flights.size(); i = i+2) {
             Flight flight = new Flight();
@@ -117,6 +121,9 @@ public class SearchFramePage extends Page {
             } catch (ParseException e) {
                 System.out.println("Дата вылета нераспаршена: " + start);
             }
+            flight.from = flights.get(i).$(byXpath("preceding-sibling::div[@class='flight__direction']" +
+                    "/div[@class='flight__direction-city']")).getText().replace(",", "");
+
             String stop = getNodeText(flights.get(i+1))
                     + flights.get(i+1).$(byXpath("descendant::span[@class='h-text--bold h-color--black']")).getText();
             System.out.println(stop);
@@ -126,8 +133,15 @@ public class SearchFramePage extends Page {
             } catch (ParseException e) {
                 System.out.println("Дата прилета нераспаршена: " + stop);
             }
+            flight.to = flights.get(i+1).$(byXpath("preceding-sibling::div[@class='flight__direction']" +
+                    "/div[@class='flight__direction-city']")).getText().replace(",", "");
             flightList.add(flight);
         }
+        Values.setDOC(collectData.getTest(),  flightList.get(0).from + " -> " +
+                flightList.get(flightList.size()-1).to + ", вылет " +
+                new SimpleDateFormat("dd MMM. HH:mm -> ").format(flightList.get(0).start) +
+                new SimpleDateFormat("dd MMM. HH:mm").format(flightList.get(flightList.size()-1).end));
+        System.out.println(Values.getDOC(9));
         return flightList;
     }
 

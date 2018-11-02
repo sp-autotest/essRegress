@@ -728,7 +728,7 @@ public class EssTest {
         open(Values.host + "ru");
         InitialData initData = new InitialData(null, null, null, null, null, 1, 0, 0);
         SearchPage searchPg = new SearchPage(initData, collectData);
-        SearchFramePage searchFramePg = new SearchFramePage();
+        SearchFramePage searchFramePg = new SearchFramePage(collectData);
         List<Flight> flightList = new ArrayList<Flight>();
 
         for (int i=0; i<3; i++) {  //три попытки сменить дату вылета
