@@ -45,7 +45,10 @@ public class ChoosePage extends Page {
         System.out.println("[" + collectData.getTest() + "] URL = " + url());
         if ((!collectData.getCur().equals("RUB"))&(Values.currencyChange.equals("soap"))) changeCurrency();
         addAdditionalServices();
-        open(Values.backdoor_host + Values.getPNR(collectData.getTest()));
+        String backdoor;
+        if (env.equals("RC")) backdoor = Values.backdoor_host;
+        else backdoor = Values.backdoor_host.replace("ws.ess", "ws-nf.ess");
+        open(backdoor + Values.getPNR(collectData.getTest()));
         String link = $(byXpath("//a")).shouldBe(visible).getText().
                 replaceFirst("Language=RU", "Language="+Values.lang[collectData.getLn()][2].toUpperCase());
         System.out.println("Backdoor link = " + link);

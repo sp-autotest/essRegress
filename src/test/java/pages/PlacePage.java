@@ -29,6 +29,8 @@ public class PlacePage extends Page {
 
     private CollectData collectData;
 
+    private String env = System.getProperty("area", "RC");//получить имя площадки из дженкинса, при неудаче площадка=RC
+
     public PlacePage(CollectData collectData) {
         this.collectData = collectData;
     }
@@ -102,7 +104,10 @@ public class PlacePage extends Page {
 
     @Step("Действие 5, Зайти в витрину с бэкдора")
     public void goBackDoor() {
-        open(Values.backdoor_host + Values.getPNR(collectData.getTest()));
+        String backdoor;
+        if (env.equals("RC")) backdoor = Values.backdoor_host;
+        else backdoor = Values.backdoor_host.replace("ws.ess", "ws-nf.ess");
+        open(backdoor + Values.getPNR(collectData.getTest()));
         String link = $(byXpath("//a")).shouldBe(visible).getText().
                 replaceFirst("Language=RU", "Language="+Values.lang[collectData.getLn()][2].toUpperCase());
         System.out.println("Backdoor link = " + link);
