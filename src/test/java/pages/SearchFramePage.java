@@ -139,8 +139,8 @@ public class SearchFramePage extends Page {
         }
         Values.setDOC(collectData.getTest(),  flightList.get(0).from + " -> " +
                 flightList.get(flightList.size()-1).to + ", вылет " +
-                new SimpleDateFormat("dd MMM. HH:mm -> ").format(flightList.get(0).start) +
-                new SimpleDateFormat("dd MMM. HH:mm").format(flightList.get(flightList.size()-1).end));
+                new SimpleDateFormat("dd MMM. HH:mm -> ", new Locale("ru")).format(flightList.get(0).start) +
+                new SimpleDateFormat("dd MMM. HH:mm", new Locale("ru")).format(flightList.get(flightList.size()-1).end));
         System.out.println(Values.getDOC(9));
         return flightList;
     }
