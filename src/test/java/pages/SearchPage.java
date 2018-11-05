@@ -157,6 +157,9 @@ public class SearchPage extends Page {
         date = date.substring(0,2)+"."+date.substring(2,4)+"."+date.substring(4);
         SelenideElement el = $$(byXpath("//input[@class='input__text-input']")).get(2);
         while(!el.getValue().equals(date)) {
+            el.click();
+            JavascriptExecutor executor = (JavascriptExecutor) getWebDriver();
+            executor.executeScript("document.querySelectorAll('.input__text-input')[2].value = '';");
             el.setValue(date);
             Sleep(1);
         }
