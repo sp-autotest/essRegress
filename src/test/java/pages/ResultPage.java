@@ -60,6 +60,7 @@ public class ResultPage extends Page {
             assertTrue("Обнаружены дополнительные услуги", services.size() == 0);
         }
         checkTotalPrice(n);
+        screenShot("скриншот");
     }
 
     @Step("Действие 22, проверка страницы результатов оплаты")

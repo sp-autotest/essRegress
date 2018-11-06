@@ -140,6 +140,7 @@ public class OfficePage extends Page{
         checkFlight(flyList);
         checkPassengers(passList);
         checkTariff();
+        screenShot("Скриншот");
     }
 
     public String getTransferNumberFromArm() {

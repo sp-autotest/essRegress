@@ -219,6 +219,7 @@ public class EssPage extends Page {
     public void deleteFlyInsurance() {
         System.out.println("\t9. Delete Fly Insurance");
         clickFlyInsuranceButton();
+        screenShot("Скриншот");
         checkMissFlyInsuranceInCard();
         checkFlyInsuranceButton(Values.text[5][collectData.getLn()]);
         checkTotalAndFlyPrices();

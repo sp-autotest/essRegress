@@ -47,6 +47,7 @@ public class PaymentPage extends Page {
         setMonth();
         setYear();
         setCVC();
+        screenShot("Скриншот");
         clickPayButton();
         checkPaySuccessfull();
     }
