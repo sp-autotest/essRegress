@@ -111,10 +111,10 @@ public class SearchPage extends Page {
                 initData.setDateThere(getIterationDate("14102019", i));
                 break;
             case 2:
-                initData.setDateThere(getIterationDate("14032019", i));
+                initData.setDateThere(getIterationDate("20012019", i));
                 break;
             case 3:
-                initData.setDateThere(getIterationDate("01042019", i));
+                initData.setDateThere(getIterationDate("20042019", i));
         }
         setThere(initData.getDateThere());
     }
