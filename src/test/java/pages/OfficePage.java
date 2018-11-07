@@ -101,7 +101,7 @@ public class OfficePage extends Page{
     public void checkSabre(List<Flight> flyList) {
         System.out.println("\t18. Check log in Sabre");
         String response = new SoapRequest(collectData).setPNRtoSabreCommand();
-        Allure.addAttachment("Ответ Sabre", "text/xml", response.replace("><", ">\r\n<"));
+        Allure.addAttachment("Ответ Sabre", "text/xml", response/*.replace("><", ">\r\n<")*/);
         String[] lines = response.substring(response.indexOf("[ 1 "), response.indexOf("TKT/TIME")-10).split("CDATA");
         int i = 0;
         String end = null;
@@ -330,6 +330,7 @@ public class OfficePage extends Page{
         switchFromFirstPageToSecond(parentHandle);
         screenShot("Скриншот");
         String date = $(byXpath("//pre")).getText();
+        Allure.addAttachment("Лог", "application/json", date);
         int start = date.indexOf("dateArrival") + 14;
         date = date.substring(start, start + 16);
         String dates = new SimpleDateFormat("yyyy-MM-dd").format(flyList.get(0).start) + " 00:00";
