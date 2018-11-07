@@ -102,9 +102,7 @@ public class OfficePage extends Page{
     public void checkSabre(List<Flight> flyList) {
         System.out.println("\t18. Check log in Sabre");
         String response = new SoapRequest(collectData).setPNRtoSabreCommand();
-        Allure.addAttachment("Ответ Sabre", "text/xml", response/*.replace("><", ">\r\n<")*/);
-        attachXmlLog("Ответ Sabre", response);
-        attachXmlLog1("Ответ Sabre", response);
+        Allure.addAttachment("Ответ Sabre", "text/xml", response.replace("><", ">\r\n<"));
         String[] lines = response.substring(response.indexOf("[ 1 "), response.indexOf("TKT/TIME")-10).split("CDATA");
         int i = 0;
         String end = null;
@@ -331,11 +329,8 @@ public class OfficePage extends Page{
         String parentHandle = getWebDriver().getWindowHandle();
         $("#logTable").$(byXpath("descendant::a[contains(text(),'Input.json')]")).click();
         switchFromFirstPageToSecond(parentHandle);
-        screenShot("Скриншот");
         String date = $(byXpath("//pre")).getText();
-        Allure.addAttachment("Лог", "application/json", date);
-        attachJsonLog("Лог трансфера", date);
-        attachJsonLog1("Лог трансфера", date);
+        Allure.addAttachment("Лог трансфера", "application/json", date);
         int start = date.indexOf("dateArrival") + 14;
         date = date.substring(start, start + 16);
         String dates = new SimpleDateFormat("yyyy-MM-dd").format(flyList.get(0).start) + " 00:00";
@@ -343,26 +338,6 @@ public class OfficePage extends Page{
                         "\nОжидалось : " + dates +
                         "\nФактически: " + date,
                 dates.equals(date));
-    }
-
-    @Attachment(value = "{0}", type = "text/json")
-    public static String attachJsonLog(String attachName, String json) {
-        return json;
-    }
-
-    @Attachment(value = "{0}", type = "application/json")
-    public static String attachJsonLog1(String attachName, String json) {
-        return json;
-    }
-
-    @Attachment(value = "{0}", type = "text/xml")
-    public static String attachXmlLog(String attachName, String xml) {
-        return xml;
-    }
-
-    @Attachment(value = "{0}", type = "application/xml")
-    public static String attachXmlLog1(String attachName, String xml) {
-        return xml;
     }
 
 }
