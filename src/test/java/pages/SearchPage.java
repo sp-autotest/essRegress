@@ -144,7 +144,9 @@ public class SearchPage extends Page {
 
     @Step("Выбрать город вылета: {0}")
     private void setFrom(String city) {
-        $$(byXpath("//input[@class='input__text-input']")).get(0).shouldBe(visible).setValue(city);
+        SelenideElement cityFrom = $$(byXpath("//input[@class='input__text-input']")).get(0).shouldBe(visible);
+        cityFrom.clear();
+        cityFrom.setValue(city);
     }
 
     @Step("Выбрать город прибытия: {0}")

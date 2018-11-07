@@ -72,7 +72,7 @@ public class OfficePage extends Page{
         checkOrderFormAppear();
     }
 
-    @Step("Действие {0}, Поиск заказа с PNR = {0}")
+    @Step("Действие {0}, Поиск заказа по PNR")
     public void searchOrder (int n) {
         String pnr = Values.getPNR(collectData.getTest());
         System.out.println("\t" + n + ". Search order with PNR = "+pnr);
@@ -80,7 +80,7 @@ public class OfficePage extends Page{
         clickSearchButton();
         checkOrderIsFound(pnr);
     }
-    @Step("Действие 17, Проверка даты/времени в АРМ, заказ {0}")
+    @Step("Действие 17, Проверка даты/времени в АРМ")
     public void checkDateOnARM (List<Flight> flyList) {
         System.out.println("\t17. Open ans check order details");
         String pnr = Values.getPNR(collectData.getTest());
