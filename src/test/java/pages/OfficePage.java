@@ -3,13 +3,17 @@ package pages;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import config.Values;
+import io.qameta.allure.Allure;
 import io.qameta.allure.Step;
 import soap.SoapRequest;
+import struct.City;
 import struct.CollectData;
 import struct.Flight;
 import struct.Passenger;
 
+import java.io.*;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -97,6 +101,7 @@ public class OfficePage extends Page{
     public void checkSabre(List<Flight> flyList) {
         System.out.println("\t18. Check log in Sabre");
         String response = new SoapRequest(collectData).setPNRtoSabreCommand();
+        Allure.addAttachment("Ответ Sabre", "application/xml", response);
         String[] lines = response.substring(response.indexOf("[ 1 "), response.indexOf("TKT/TIME")-10).split("CDATA");
         int i = 0;
         String end = null;
@@ -323,6 +328,7 @@ public class OfficePage extends Page{
         String parentHandle = getWebDriver().getWindowHandle();
         $("#logTable").$(byXpath("descendant::a[contains(text(),'Input.json')]")).click();
         switchFromFirstPageToSecond(parentHandle);
+        screenShot("Скриншот");
         String date = $(byXpath("//pre")).getText();
         int start = date.indexOf("dateArrival") + 14;
         date = date.substring(start, start + 16);
