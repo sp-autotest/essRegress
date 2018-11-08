@@ -6,6 +6,7 @@ import io.qameta.allure.Step;
 import org.xml.sax.SAXException;
 import struct.CollectData;
 import struct.InitialsAdditionalServices;
+import struct.Soap;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -46,60 +47,63 @@ public class SoapRequest {
         AdditionalServiceRequests add = new AdditionalServiceRequests(collectData);
         add.setPriceByCurrency();
         //1
-        String req = add.getSessionCreateRQ();
-        String response = callSoapRequest(req, req.split("~~")[0]);
+        Soap soap = add.getSessionCreateRQ();
+        String response = callSoapRequest(soap);
         String token = getToken(response);
         //2
-        req = String.format(add.getTravelItineraryReadRQ(), token, pnr);
-        callSoapRequest(req, req.split("~~")[0]);
+        soap = add.getTravelItineraryReadRQ();
+        soap.setRequest(String.format(soap.getRequest(), token, pnr));
+        callSoapRequest(soap);
         //3
-        req = String.format(add.getGetReservationOperation(), token, pnr);
-        response = callSoapRequest(req, req.split("~~")[0]);
+        soap = add.getGetReservationOperation();
+        soap.setRequest(String.format(soap.getRequest(), token, pnr));
+        response = callSoapRequest(soap);
         InitialsAdditionalServices initials = new InitialsAdditionalServices(response);
         System.out.println(initials.toString());
         //4
-        req = String.format(add.getUpdateReservationOperation(), token, pnr);
-        req = replaceInitials(req, initials);
-        response = callSoapRequest(req, req.split("~~")[0]);
+        soap = add.getUpdateReservationOperation();
+        soap.setRequest(String.format(soap.getRequest(), token, pnr));
+        soap.setRequest(replaceInitials(soap.getRequest(), initials));
+        response = callSoapRequest(soap);
         assertFalse("Ошибка в 4.SOAP \"ANCS Inventory is not available\"", response.contains("ANCS Inventory is not available"));
         //5
-        req = String.format(add.getUpdateReservationOperation1(), token, pnr);
-        req = replaceInitials(req, initials);
-        response = callSoapRequest(req, req.split("~~")[0]);
+        soap = add.getUpdateReservationOperation1();
+        soap.setRequest(String.format(soap.getRequest(), token, pnr));
+        soap.setRequest(replaceInitials(soap.getRequest(), initials));
+        response = callSoapRequest(soap);
         assertFalse("Ошибка в 5.SOAP \"ANCS Inventory is not available\"", response.contains("ANCS Inventory is not available"));
         //6
-        req = String.format(add.getSabreCommandQ(), token, "*AES");
-        callSoapRequest(req, req.split("~~")[0]);
+        soap = add.getSabreCommand();
+        soap.setRequest(String.format(soap.getRequest(), token, "*AES"));
+        callSoapRequest(soap);
         //7
-        req = String.format(add.getSabreCommandQ(), token, "ER");
-        callSoapRequest(req, req.split("~~")[0]);
+        soap = add.getSabreCommand();
+        soap.setRequest(String.format(soap.getRequest(), token, "ER"));
+        callSoapRequest(soap);
         //8
-        callSoapRequest(req, req.split("~~")[0]);
+        callSoapRequest(soap);
     }
 
     public String setPNRtoSabreCommand() {
         String pnr = Values.getPNR(collectData.getTest());
         AdditionalServiceRequests add = new AdditionalServiceRequests(collectData);
         //1
-        String req = add.getSessionCreateRQ();
-        String response = callSoapRequest(req, req.split("~~")[0]);
+        Soap soap = add.getSessionCreateRQ();
+        String response = callSoapRequest(soap);
         String token = getToken(response);
         //2
-        req = String.format(add.getSabreCommandQ(), token, "*" + pnr);
-        return callSoapRequest(req, req.split("~~")[0]);
+        soap = add.getSabreCommand();
+        soap.setRequest(String.format(soap.getRequest(), token, "*" + pnr));
+        return callSoapRequest(soap);
     }
 
     @Step("SOAP запрос: {1}")
-    private String callSoapRequest(String req, String action) {
-        String[] arr = req.split("~~");
-        //String action = arr[0];
-        String host = arr[1];
-        String request = arr[2];
-        //System.out.println("Request: " + request);
+    private String callSoapRequest(Soap soap) {
+        //System.out.println("Request: " + soap.getRequest());
 
         URL url = null;
         try {
-            url = new URL(host);
+            url = new URL(soap.getHost());
         } catch (MalformedURLException e1) {
             e1.printStackTrace();
         }
@@ -111,43 +115,26 @@ public class SoapRequest {
         }
 
         connection.setRequestProperty("Content-Type", "text/xml;charset=UTF-8");
-        connection.setRequestProperty("SOAPAction", action);
-        connection.setRequestProperty("Content-Length", String.valueOf(request.length()));
-        connection.setRequestProperty("Host", host.replaceFirst("https://",""));
+        connection.setRequestProperty("SOAPAction", soap.getAction());
+        connection.setRequestProperty("Content-Length", String.valueOf(soap.getRequest().length()));
+        connection.setRequestProperty("Host", soap.getHost().replaceFirst("https://",""));
         connection.setRequestProperty("Connection", "Keep-Alive");
         connection.setRequestProperty("User-Agent", "Apache-HttpClient/4.1.1 (java 1.5)");
         connection.setDoOutput(true);
 
-        PrintWriter pw = null;
-        try {
-            pw = new PrintWriter(connection.getOutputStream());
-        } catch (IOException e2) {
-            e2.printStackTrace();
-        }
-        pw.write(String.valueOf(request));
-        pw.flush();
-
-        try {
-            connection.connect();
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
-        BufferedReader rd = null;
-        try {
-            rd = new BufferedReader(new InputStreamReader(
-                    connection.getInputStream()));
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
         String line;
         String respond = "";
         try {
+            PrintWriter pw = new PrintWriter(connection.getOutputStream());
+            pw.write(String.valueOf(soap.getRequest()));
+            pw.flush();
+            connection.connect();
+            BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             respond = rd.readLine();
             while ((line = rd.readLine()) != null)
                 respond = respond + line;
-
-        } catch (IOException e1) {
-            e1.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         System.out.println("Response: " + respond);
         return respond;

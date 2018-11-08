@@ -676,15 +676,9 @@ public class EssTest {
         List<Flight> flightList = searchPg.step2();
         List<Passenger> passList = createPassengers(initData, collectData.getLn());
         new PassengerPage(collectData).step3(passList);
-    //    new PlacePage(collectData).clickPay();
-
-        PlacePage placePg = new PlacePage(collectData);  //new
-        placePg.getPNR();//шаг 4
+        new PlacePage(collectData).clickPay();
         ChoosePage choosePg = new ChoosePage(collectData);
-        choosePg.addAdditionalServices();
-        placePg.goBackDoor();//шаг 5
-
-        //choosePg.step4_8();
+        choosePg.step4_8();
         EssPage essPg = new EssPage(collectData);
         essPg.step6();//шаг 6
         essPg.checkAdditionalServices();//шаг 7 проверка выбора мест, основного блюда и десерта

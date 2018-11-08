@@ -98,7 +98,7 @@ public class ChoosePage extends Page {
     }
 
     @Step("Добавить дополнительные авиационные услуги (SOAP)")
-    public void addAdditionalServices() {
+    private void addAdditionalServices() {
         System.out.println("Add aditional services");
         new SoapRequest(collectData).addAdditionalAviaServices();
     }

@@ -1,6 +1,7 @@
 package soap;
 
 import struct.CollectData;
+import struct.Soap;
 
 public class AdditionalServiceRequests {
 
@@ -40,106 +41,117 @@ public class AdditionalServiceRequests {
                 break;
         }
     }
-    public String getSessionCreateRQ() {
+    public Soap getSessionCreateRQ() {
         return sessionCreateRQ;
     }
-    public String getTravelItineraryReadRQ() {
+    public Soap getTravelItineraryReadRQ() {
         return travelItineraryReadRQ;
     }
-    public String getGetReservationOperation() {
+    public Soap getGetReservationOperation() {
         return getReservationOperation;
     }
-    public String getUpdateReservationOperation() {
+    public Soap getUpdateReservationOperation() {
         return updateReservationOperation;
     }
-    public String getUpdateReservationOperation1() {
+    public Soap getUpdateReservationOperation1() {
         return updateReservationOperation1;
     }
-    public String getSabreCommandQ() {
+    public Soap getSabreCommand() {
         return sabreCommand;
     }
 
-    private String sessionCreateRQ =
-            "\"OTA\"~~" +
-            "https://sws-crt.cert.havail.sabre.com~~" +//"https://sws-crt.cert.sabre.com~~" +
-            "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:sec=\"http://schemas.xmlsoap.org/ws/2002/12/secext\" xmlns:mes=\"http://www.ebxml.org/namespaces/messageHeader\" xmlns:ns=\"http://www.opentravel.org/OTA/2002/11\">" +
-            "<soapenv:Header>" +
-            "<sec:Security>" +
-            "<sec:UsernameToken>" +
-            "<sec:Username>970007</sec:Username>" +
-            "<sec:Password>id85u314</sec:Password>" +
-            "<Organization>SU</Organization>" +
-            "<Domain>SU</Domain>" +
-            "</sec:UsernameToken>" +
-            "</sec:Security>" +
-            "<mes:MessageHeader>" +
-            "<mes:From>" +
-            "<mes:PartyId>SoapUI</mes:PartyId>" +
-            "</mes:From>" +
-            "<mes:To>" +
-            "<mes:PartyId>Sabre</mes:PartyId>" +
-            "</mes:To>" +
-            "<mes:CPAId>SU</mes:CPAId>" +
-            "<mes:ConversationId>EMD tests</mes:ConversationId>" +
-            "<mes:Service mes:type=\"OTA\">SessionCreateRQ</mes:Service>" +
-            "<mes:Action>SessionCreateRQ</mes:Action>" +
-            "<mes:MessageData>" +
-            "<mes:MessageId>1000</mes:MessageId>" +
-            "<mes:Timestamp>2015-04-05T12:12:12</mes:Timestamp>" +
-            "</mes:MessageData>" +
-            "</mes:MessageHeader>" +
-            "</soapenv:Header>" +
-            "<soapenv:Body>" +
-            "<ns:SessionCreateRQ returnContextID=\"true\">" +
-            "<ns:POS>" +
-            "<ns:Source PseudoCityCode=\"SU\"/>" +
-            "</ns:POS>" +
-            "</ns:SessionCreateRQ>" +
-            "</soapenv:Body>" +
-            "</soapenv:Envelope>";
 
-    private String travelItineraryReadRQ =
-            "\"TravelItineraryReadRQ\"~~" +
-            "https://sws-crt.cert.sabre.com~~" +
-            "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:sec=\"http://schemas.xmlsoap.org/ws/2002/12/secext\" xmlns:mes=\"http://www.ebxml.org/namespaces/messageHeader\" xmlns:ns=\"http://webservices.sabre.com/sabreXML/2011/10\">\n" +
-            "   <soapenv:Header>\n" +
-            "      <sec:Security>\n" +
-            "         <sec:BinarySecurityToken>%s</sec:BinarySecurityToken>\n" + //token
-            "      </sec:Security>\n" +
-            "      <mes:MessageHeader>\n" +
-            "         <mes:From>\n" +
-            "            <mes:PartyId mes:type=\"urn:x12.org:IO5:01\">99999</mes:PartyId>\n" +
-            "         </mes:From>\n" +
-            "         <mes:To>\n" +
-            "            <mes:PartyId mes:type=\"urn:x12.org:IO5:01\">123123</mes:PartyId>\n" +
-            "            </mes:To>\n" +
-            "         <mes:CPAId>ipcc</mes:CPAId>\n" +
-            "         <mes:ConversationId>conversation_ID</mes:ConversationId>\n" +
-            "         <mes:Service>TravelItineraryReadRQ</mes:Service>\n" +
-            "         <mes:Action>TravelItineraryReadRQ</mes:Action>\n" +
-            "         <mes:MessageData>\n" +
-            "            <mes:MessageId>mid:20001209-133003-2333@clientofsabre.com1</mes:MessageId>\n" +
-            "            <mes:Timestamp>2015-09-28T12:12:17</mes:Timestamp>\n" +
-            "         </mes:MessageData>\n" +
-            "      </mes:MessageHeader>\n" +
-            "   </soapenv:Header>\n" +
-            "   <soapenv:Body>\n" +
-            "      <ns:TravelItineraryReadRQ Version=\"3.5.0\">\n" +
-            "         <ns:MessagingDetails>\n" +
-            "            <ns:SubjectAreas>\n" +
-            "               <ns:SubjectArea>FULL</ns:SubjectArea>\n" +
-            "               <ns:SubjectArea>POPULATE_IS_PAST</ns:SubjectArea>\n" +
-            "            </ns:SubjectAreas>\n" +
-            "         </ns:MessagingDetails>\n" +
-            "         <ns:UniqueID ID=\"%s\"/>\n" +  //pnr
-            "      </ns:TravelItineraryReadRQ>\n" +
-            "   </soapenv:Body>\n" +
-            "</soapenv:Envelope>";
+    private Soap sessionCreateRQ = new Soap(
+            "\"OTA\"",
+            "https://sws-crt.cert.havail.sabre.com",
+            "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" " +
+                    "xmlns:sec=\"http://schemas.xmlsoap.org/ws/2002/12/secext\" " +
+                    "xmlns:mes=\"http://www.ebxml.org/namespaces/messageHeader\" " +
+                    "xmlns:ns=\"http://www.opentravel.org/OTA/2002/11\">" +
+                    "<soapenv:Header>" +
+                    "<sec:Security>" +
+                    "<sec:UsernameToken>" +
+                    "<sec:Username>970007</sec:Username>" +
+                    "<sec:Password>id85u314</sec:Password>" +
+                    "<Organization>SU</Organization>" +
+                    "<Domain>SU</Domain>" +
+                    "</sec:UsernameToken>" +
+                    "</sec:Security>" +
+                    "<mes:MessageHeader>" +
+                    "<mes:From>" +
+                    "<mes:PartyId>SoapUI</mes:PartyId>" +
+                    "</mes:From>" +
+                    "<mes:To>" +
+                    "<mes:PartyId>Sabre</mes:PartyId>" +
+                    "</mes:To>" +
+                    "<mes:CPAId>SU</mes:CPAId>" +
+                    "<mes:ConversationId>EMD tests</mes:ConversationId>" +
+                    "<mes:Service mes:type=\"OTA\">SessionCreateRQ</mes:Service>" +
+                    "<mes:Action>SessionCreateRQ</mes:Action>" +
+                    "<mes:MessageData>" +
+                    "<mes:MessageId>1000</mes:MessageId>" +
+                    "<mes:Timestamp>2015-04-05T12:12:12</mes:Timestamp>" +
+                    "</mes:MessageData>" +
+                    "</mes:MessageHeader>" +
+                    "</soapenv:Header>" +
+                    "<soapenv:Body>" +
+                    "<ns:SessionCreateRQ returnContextID=\"true\">" +
+                    "<ns:POS>" +
+                    "<ns:Source PseudoCityCode=\"SU\"/>" +
+                    "</ns:POS>" +
+                    "</ns:SessionCreateRQ>" +
+                    "</soapenv:Body>" +
+                    "</soapenv:Envelope>");
 
-    private String getReservationOperation =
-            "\"GetReservationOperation\"~~" +
-            "https://sws-crt.cert.havail.sabre.com~~" +//"https://sws-crt.cert.sabre.com~~" +
-            "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:sec=\"http://schemas.xmlsoap.org/ws/2002/12/secext\" xmlns:mes=\"http://www.ebxml.org/namespaces/messageHeader\" xmlns:v1=\"http://webservices.sabre.com/pnrbuilder/v1_10\" xmlns:v11=\"http://services.sabre.com/res/or/v1_3\">\n" +
+    private Soap travelItineraryReadRQ = new Soap(
+            "\"TravelItineraryReadRQ\"",
+            "https://sws-crt.cert.sabre.com",
+            "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" " +
+                    "xmlns:sec=\"http://schemas.xmlsoap.org/ws/2002/12/secext\" " +
+                    "xmlns:mes=\"http://www.ebxml.org/namespaces/messageHeader\" " +
+                    "xmlns:ns=\"http://webservices.sabre.com/sabreXML/2011/10\">\n" +
+                    "   <soapenv:Header>\n" +
+                    "      <sec:Security>\n" +
+                    "         <sec:BinarySecurityToken>%s</sec:BinarySecurityToken>\n" + //token
+                    "      </sec:Security>\n" +
+                    "      <mes:MessageHeader>\n" +
+                    "         <mes:From>\n" +
+                    "            <mes:PartyId mes:type=\"urn:x12.org:IO5:01\">99999</mes:PartyId>\n" +
+                    "         </mes:From>\n" +
+                    "         <mes:To>\n" +
+                    "            <mes:PartyId mes:type=\"urn:x12.org:IO5:01\">123123</mes:PartyId>\n" +
+                    "            </mes:To>\n" +
+                    "         <mes:CPAId>ipcc</mes:CPAId>\n" +
+                    "         <mes:ConversationId>conversation_ID</mes:ConversationId>\n" +
+                    "         <mes:Service>TravelItineraryReadRQ</mes:Service>\n" +
+                    "         <mes:Action>TravelItineraryReadRQ</mes:Action>\n" +
+                    "         <mes:MessageData>\n" +
+                    "            <mes:MessageId>mid:20001209-133003-2333@clientofsabre.com1</mes:MessageId>\n" +
+                    "            <mes:Timestamp>2015-09-28T12:12:17</mes:Timestamp>\n" +
+                    "         </mes:MessageData>\n" +
+                    "      </mes:MessageHeader>\n" +
+                    "   </soapenv:Header>\n" +
+                    "   <soapenv:Body>\n" +
+                    "      <ns:TravelItineraryReadRQ Version=\"3.5.0\">\n" +
+                    "         <ns:MessagingDetails>\n" +
+                    "            <ns:SubjectAreas>\n" +
+                    "               <ns:SubjectArea>FULL</ns:SubjectArea>\n" +
+                    "               <ns:SubjectArea>POPULATE_IS_PAST</ns:SubjectArea>\n" +
+                    "            </ns:SubjectAreas>\n" +
+                    "         </ns:MessagingDetails>\n" +
+                    "         <ns:UniqueID ID=\"%s\"/>\n" +  //pnr
+                    "      </ns:TravelItineraryReadRQ>\n" +
+                    "   </soapenv:Body>\n" +
+                    "</soapenv:Envelope>");
+
+    private Soap getReservationOperation = new Soap(
+            "\"GetReservationOperation\"",
+            "https://sws-crt.cert.havail.sabre.com",
+            "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" " +
+            "xmlns:sec=\"http://schemas.xmlsoap.org/ws/2002/12/secext\" " +
+            "xmlns:mes=\"http://www.ebxml.org/namespaces/messageHeader\" " +
+            "xmlns:v1=\"http://webservices.sabre.com/pnrbuilder/v1_10\" " +
+            "xmlns:v11=\"http://services.sabre.com/res/or/v1_3\">\n" +
             "   <soapenv:Header>\n" +
             "      <sec:Security>\n" +
             "         <sec:BinarySecurityToken>%s</sec:BinarySecurityToken>\n" + //token
@@ -174,12 +186,16 @@ public class AdditionalServiceRequests {
             "         </v1:ReturnOptions>\n" +
             "      </v1:GetReservationRQ>\n" +
             "   </soapenv:Body>\n" +
-            "</soapenv:Envelope>";
+            "</soapenv:Envelope>");
 
-    private String updateReservationOperation =
-            "\"UpdateReservationOperation\"~~" +
-            "https://sws-crt.cert.havail.sabre.com~~" +
-            "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:sec=\"http://schemas.xmlsoap.org/ws/2002/12/secext\" xmlns:mes=\"http://www.ebxml.org/namespaces/messageHeader\" xmlns:v1=\"http://webservices.sabre.com/pnrbuilder/v1_16\" xmlns:v11=\"http://services.sabre.com/res/or/v1_9\">\n" +
+    private Soap updateReservationOperation = new Soap(
+            "\"UpdateReservationOperation\"",
+            "https://sws-crt.cert.havail.sabre.com",
+            "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" " +
+            "xmlns:sec=\"http://schemas.xmlsoap.org/ws/2002/12/secext\" " +
+            "xmlns:mes=\"http://www.ebxml.org/namespaces/messageHeader\" " +
+            "xmlns:v1=\"http://webservices.sabre.com/pnrbuilder/v1_16\" " +
+            "xmlns:v11=\"http://services.sabre.com/res/or/v1_9\">\n" +
             "   <soapenv:Header>\n" +
             "      <sec:Security>\n" +
             "         <sec:BinarySecurityToken>%s</sec:BinarySecurityToken>\n" +              //token
@@ -349,12 +365,16 @@ public class AdditionalServiceRequests {
             "          </v1:ReservationUpdateList>\n" +
             "      </v1:UpdateReservationRQ>\n" +
             "   </soapenv:Body>\n" +
-            "</soapenv:Envelope>";
+            "</soapenv:Envelope>");
 
-    private String updateReservationOperation1 =
-            "\"UpdateReservationOperation\"~~" +
-            "https://sws-crt.cert.havail.sabre.com~~" +
-            "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:sec=\"http://schemas.xmlsoap.org/ws/2002/12/secext\" xmlns:mes=\"http://www.ebxml.org/namespaces/messageHeader\" xmlns:v1=\"http://webservices.sabre.com/pnrbuilder/v1_16\" xmlns:v11=\"http://services.sabre.com/res/or/v1_9\">\n" +
+    private Soap updateReservationOperation1 = new Soap(
+            "\"UpdateReservationOperation\"",
+            "https://sws-crt.cert.havail.sabre.com",
+            "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" " +
+            "xmlns:sec=\"http://schemas.xmlsoap.org/ws/2002/12/secext\" " +
+            "xmlns:mes=\"http://www.ebxml.org/namespaces/messageHeader\" " +
+            "xmlns:v1=\"http://webservices.sabre.com/pnrbuilder/v1_16\" " +
+            "xmlns:v11=\"http://services.sabre.com/res/or/v1_9\">\n" +
             "   <soapenv:Header>\n" +
             "      <sec:Security>\n" +
             "         <sec:BinarySecurityToken>%s</sec:BinarySecurityToken>\n" +                    //token
@@ -454,12 +474,15 @@ public class AdditionalServiceRequests {
             "          </v1:ReservationUpdateList>\n" +
             "      </v1:UpdateReservationRQ>\n" +
             "   </soapenv:Body>\n" +
-            "</soapenv:Envelope>";
+            "</soapenv:Envelope>");
 
-    private String sabreCommand =
-            "\"OTA\"~~" +
-            "https://sws-crt.cert.havail.sabre.com~~" +
-            "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:sec=\"http://schemas.xmlsoap.org/ws/2002/12/secext\" xmlns:mes=\"http://www.ebxml.org/namespaces/messageHeader\" xmlns:ns=\"http://webservices.sabre.com/sabreXML/2003/07\">\n" +
+    private Soap sabreCommand = new Soap(
+            "\"OTA\"",
+            "https://sws-crt.cert.havail.sabre.com",
+            "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" " +
+            "xmlns:sec=\"http://schemas.xmlsoap.org/ws/2002/12/secext\" " +
+            "xmlns:mes=\"http://www.ebxml.org/namespaces/messageHeader\" " +
+            "xmlns:ns=\"http://webservices.sabre.com/sabreXML/2003/07\">\n" +
             "   <soapenv:Header>\n" +
             "      <sec:Security>\n" +
             "         <sec:BinarySecurityToken>%s</sec:BinarySecurityToken>\n" +   //token
@@ -488,5 +511,6 @@ public class AdditionalServiceRequests {
             "         </ns:Request>\n" +
             "      </ns:SabreCommandLLSRQ>\n" +
             "   </soapenv:Body>\n" +
-            "</soapenv:Envelope>";
+            "</soapenv:Envelope>");
+
 }
