@@ -1,7 +1,5 @@
 package soap;
 
-import config.Values;
-import struct.CollectData;
 
 /**
  * Created by mycola on 21.02.2018.

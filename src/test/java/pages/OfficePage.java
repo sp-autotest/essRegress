@@ -4,17 +4,13 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import config.Values;
 import io.qameta.allure.Allure;
-import io.qameta.allure.Attachment;
 import io.qameta.allure.Step;
 import soap.SoapRequest;
-import struct.City;
 import struct.CollectData;
 import struct.Flight;
 import struct.Passenger;
 
-import java.io.*;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -92,7 +88,7 @@ public class OfficePage extends Page{
         clickOrder(pnr);
         checkOrderDetailsTabAppear(pnr);
         clickTransfer();
-        screenShot("Скриншот");
+        screenShot();
         checkDateTime(flyList);
         checkTransferDateTime(flyList);
         checkTransferDateTimeInLog(flyList);
@@ -146,7 +142,7 @@ public class OfficePage extends Page{
         checkFlight(flyList);
         checkPassengers(passList);
         checkTariff();
-        screenShot("Скриншот");
+        screenShot();
     }
 
     public String getTransferNumberFromArm() {

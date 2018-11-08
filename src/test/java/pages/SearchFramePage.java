@@ -61,7 +61,7 @@ public class SearchFramePage extends Page {
         }
         if (result) {
             flightList = getFlightData();
-            screenShot("Скриншот");
+            screenShot();
             clickBuyButton();
             clickPassengersButton();
         }

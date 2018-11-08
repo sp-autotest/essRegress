@@ -216,7 +216,7 @@ public class HotelPage extends Page {
         ElementsCollection rooms = $$(byXpath("//li[@class='hotel-room']"));
         SelenideElement textprice = rooms.get(room).$(byXpath("descendant::div[@class='hotel-room__buy-price']")).shouldBe(visible);
         textprice.scrollTo();
-        screenShot("Скриншот");
+        screenShot();
         System.out.println("Room text price = " + textprice.getAttribute("textContent"));
         String price = "";
         if (collectData.getCur().equals("RUB")) {
@@ -235,7 +235,7 @@ public class HotelPage extends Page {
         checkHotelCartPrice();
         checkRentButtonName();
         saveHotelData();
-        screenShot("Скриншот");
+        screenShot();
     }
 
     @Step("Действие {0}, Нажать Оплатить в корзине")

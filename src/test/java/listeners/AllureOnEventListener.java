@@ -4,9 +4,7 @@ import config.Values;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
-
 import java.io.IOException;
-
 import static listeners.ScreenShoter.makeScreenshot;
 import static pages.Page.*;
 
@@ -29,7 +27,7 @@ public class AllureOnEventListener implements ITestListener {
     public void onTestFailure(ITestResult result) {
         int number = stringIntoInt(result.getMethod().getMethodName().replaceAll("\\D+", ""));
         try {
-            makeScreenshot("Скриншот");
+            makeScreenshot();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -41,7 +39,7 @@ public class AllureOnEventListener implements ITestListener {
     public void onTestSkipped(ITestResult result) {
         int number = stringIntoInt(result.getMethod().getMethodName().replaceAll("\\D+", ""));
         try {
-            makeScreenshot("Скриншот");
+            makeScreenshot();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -53,7 +51,7 @@ public class AllureOnEventListener implements ITestListener {
     public void onTestFailedButWithinSuccessPercentage(ITestResult result) {
         int number = stringIntoInt(result.getMethod().getMethodName().replaceAll("\\D+", ""));
         try {
-            makeScreenshot("Скриншот");
+            makeScreenshot();
         } catch (IOException e) {
             e.printStackTrace();
         }

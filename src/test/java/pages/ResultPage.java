@@ -22,7 +22,6 @@ import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
-import static com.codeborne.selenide.WebDriverRunner.source;
 import static com.codeborne.selenide.WebDriverRunner.url;
 import static config.Values.*;
 import static org.testng.AssertJUnit.assertTrue;
@@ -60,7 +59,7 @@ public class ResultPage extends Page {
             assertTrue("Обнаружены дополнительные услуги", services.size() == 0);
         }
         checkTotalPrice(n);
-        screenShot("скриншот");
+        screenShot();
     }
 
     @Step("Действие 22, проверка страницы результатов оплаты")
@@ -363,7 +362,7 @@ public class ResultPage extends Page {
                     "ожидалось: " + Values.reportData[collectData.getTest()].getPrice().total + ", фактически: " + totalPrice;
             Values.addERR(collectData.getTest(), text);
             logDoc(text);
-            screenShot("Скриншот");
+            screenShot();
         }
         /*проверка итоговой суммы оплаты сделана неблокирующей, т.к. это тоже ошибка в отображении EPR
         assertTrue("Сумма в Информации по оплате не совпадает с забронированной" +

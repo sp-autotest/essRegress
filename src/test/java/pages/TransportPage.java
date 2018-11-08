@@ -23,7 +23,6 @@ import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
-import static com.codeborne.selenide.WebDriverRunner.source;
 import static config.Values.*;
 import static org.testng.AssertJUnit.assertTrue;
 
@@ -44,18 +43,18 @@ public class TransportPage extends Page {
         new EssPage(collectData).clickTransportButton();
         checkTransportBlock();
         if (test == 1) {
-            screenShot("Скриншот");
+            screenShot();
             checkAeroexpressForm();
             checkAeroexpressInCard();
         }
         if (test == 2 | test == 5 | test == 8) checkCarEnabled();
         if (test == 2) {
             checkCarFilter();
-            screenShot("Скриншот");
+            screenShot();
             checkSelectedCars();
         }
         if ((test == 3)|(test == 5)) {
-            screenShot("Скриншот");
+            screenShot();
             checkAeroexpressForm();
             checkCarRentalForm();
             checkTransferForm();
@@ -68,15 +67,15 @@ public class TransportPage extends Page {
     public void step11() {
         System.out.println("\t11. Rent Auto");
         selectCar();
-        screenShot("Скриншот");
+        screenShot();
         int beforePrice = getCarPrice();
         addInsurance();
-        screenShot("Скриншот");
+        screenShot();
         checkAllPrice(getInsurancePrice(), beforePrice, getCarPrice());//пробное включение, 29.08.18
         Values.reportData[collectData.getTest()].getPrice().nationalTransport = getAllCarPrice();
         Values.reportData[collectData.getTest()].getPrice().transport = getEuroAllCarPrice();
         clickRentButton();
-        screenShot("Скриншот");
+        screenShot();
         checkTranspotrPriceInCard();
         checkRentButtonName();
         checkOptionsButton();
@@ -90,11 +89,11 @@ public class TransportPage extends Page {
     public void step11_5() {
         System.out.println("\t11. Rent Auto");
         selectCar();
-        screenShot("Скриншот");
+        screenShot();
         Values.reportData[collectData.getTest()].getPrice().nationalTransport = getAllCarPrice();
         Values.reportData[collectData.getTest()].getPrice().transport = getEuroAllCarPrice();
         clickRentButton();
-        screenShot("Скриншот");
+        screenShot();
         checkTranspotrPriceInCard();
         checkRentButtonName();
         checkOptionsButton();
@@ -222,7 +221,7 @@ public class TransportPage extends Page {
                 }
                 price = price.replaceAll("\\D+","");
                 System.out.println("transfer = " + price);
-                screenShot("скриншот");
+                screenShot();
                 categories.get(i).$(byXpath("descendant::a[contains(@class,'button')]")).click();
                 break;
             }
@@ -237,7 +236,7 @@ public class TransportPage extends Page {
         setTransferDate(new SimpleDateFormat("d.MM.yyyy").format(date));
         setTransferText();
         setTransferTime();
-        screenShot("скриншот");
+        screenShot();
         compareDirection(dir);
     }
 
@@ -254,7 +253,7 @@ public class TransportPage extends Page {
         System.out.println("\t110. Click Select button in transfer form");
         clickSelectButton();
         checkTransferDate(date);
-        screenShot("скриншот");
+        screenShot();
     }
 
     @Step("Действие 18, Нажать Продолжить")

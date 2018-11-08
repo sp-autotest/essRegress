@@ -46,7 +46,7 @@ public class EssPage extends Page {
             $("#left-column-insurance-block").click();//раскрыть блок Страховка
             Sleep(1);
         }else moveMouseToFlight();
-        screenShot("Скриншот");
+        screenShot();
         checkFlight();
         checkNumber();
         checkDateTime();
@@ -80,7 +80,7 @@ public class EssPage extends Page {
             $("#left-column-insurance-block").click();//раскрыть блок Страховка
             Sleep(1);
         }else moveMouseToFlight();
-        screenShot("Скриншот");
+        screenShot();
         ElementsCollection flights = $$(byXpath("//div[@class='cart__item-details']"));
         for (int i = 0; i < flights.size(); i++) {
             checkDateData(i+1, flightList, flights);
@@ -180,7 +180,7 @@ public class EssPage extends Page {
         for (Passenger p : passengerList) {
             if (!p.getNationality().equals(NationalityName.getNationalityByLanguage("us", collectData.getLn()))) n++;
         }
-        screenShot("Скриншот");
+        screenShot();
         if (n>0) {
             String summ = $("#left-column-insurance-block").$(byXpath("descendant::" +
                     "div[@class='cart__item-priceondemand-item-price']")).getText().trim();
@@ -208,22 +208,22 @@ public class EssPage extends Page {
         System.out.println("\t9. Add Medical Insurance");
         if (type.equals("RANDOM")) type = getRandomMedicalInsurance();
         clickAddMedicalButton(type);
-        screenShot("Скриншот");
+        screenShot();
         checkPriceOfMedicalInsurance(type);
         checkMedicalButtonName(type);
         checkTotalAndInsurensPrices();
-        screenShot("Скриншот");
+        screenShot();
     }
 
     @Step("Действие 9, Удалить услугу «Полётная страховка»")
     public void deleteFlyInsurance() {
         System.out.println("\t9. Delete Fly Insurance");
         clickFlyInsuranceButton();
-        screenShot("Скриншот");
+        screenShot();
         checkMissFlyInsuranceInCard();
         checkFlyInsuranceButton(Values.text[5][collectData.getLn()]);
         checkTotalAndFlyPrices();
-        screenShot("Скриншот");
+        screenShot();
     }
 
     @Step("Действие {0}, Нажать Оплатить в корзине")

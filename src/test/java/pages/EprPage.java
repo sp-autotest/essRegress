@@ -39,7 +39,7 @@ public class EprPage extends Page {
     @Step("Действие {0}, проверка данных на странице оплаты")
     public void checkDataOnPayPage(int n, List<Flight> flyList, List<Passenger> passList, int test, boolean timer) {
         System.out.println("\t" + n + ". Checking data on Pay page");
-        screenShot("Скриншот");
+        screenShot();
         if (!timer) checkTimer();//добавлена проверка значения таймера согласно задачи 2663
         ElementsCollection passengers = $$(byXpath("//div[contains(@ng-repeat,'passenger')]"));
         for (int i = 0; i < passengers.size(); i++) {
@@ -58,7 +58,7 @@ public class EprPage extends Page {
             if (flights.size()>0) break;
             assertTrue("Не обнаружено данных о перелете на странице оплаты", i!=19);
         }
-        screenShot("Скриншот");
+        screenShot();
         for (int i = 0; i < flights.size(); i++) {
             checkFlight(i + 1, flyList.get(i), flights.get(i));
             checkFlightDate(i + 1, flyList.get(i), flights.get(i));
@@ -69,7 +69,7 @@ public class EprPage extends Page {
             el.click(); //раскрыть блок Страховка
         }
         if (test<4) {
-            screenShot("Скриншот");
+            screenShot();
             checkFlyInsurance(passList);
         }
         if (test<3) {
@@ -77,14 +77,14 @@ public class EprPage extends Page {
             checkAllInsurancePrice();
         }
         if (test == 5) {
-            screenShot("Скриншот");
+            screenShot();
             checkFlyInsurance(passList);
             checkMedicalInsurance(passList);
             checkAllInsurancePrice();
             checkAccommodation();
         }
         if (test == 8) {
-            screenShot("Скриншот");
+            screenShot();
             checkFlyInsurance(passList);
             checkMedicalInsurance(passList);
             checkAllInsurancePrice();
@@ -115,7 +115,7 @@ public class EprPage extends Page {
             if ($(byXpath("//div[@class='flight__row']")).exists()) break;
             assertTrue("Не обнаружено данных о перелете на странице оплаты", i!=19);
         }
-        screenShot("Скриншот");
+        screenShot();
         ElementsCollection flights = $$(byXpath("//div[@class='flight__row']"));
         for (int i = 0; i < flights.size(); i++) {
             checkFlightDateNew(i + 1, flyList.get(i), flights.get(i));
@@ -128,7 +128,7 @@ public class EprPage extends Page {
         System.out.println("\t13. Checking transfer date");
         SelenideElement group = $(byXpath("//div[@ng-switch-when='Transfer'][@class='ng-scope']"));
         group.scrollTo();
-        screenShot("Скриншот");
+        screenShot();
         String date = group.$(byXpath("descendant::div[@ng-bind='item.details.date']")).getText();
         System.out.println("Transfer date = " + date);
         String dateC;

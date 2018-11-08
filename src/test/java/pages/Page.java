@@ -33,10 +33,10 @@ public class Page {
         }
     }
 
-    @Step("Скриншот")
-    public static void screenShot(String name){
+    //@Step("Скриншот")
+    public static void screenShot(){
         try {
-            makeScreenshot(name);
+            makeScreenshot();
         } catch (IOException e) {
             e.printStackTrace();
         }

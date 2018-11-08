@@ -47,7 +47,7 @@ public class PaymentPage extends Page {
         setMonth();
         setYear();
         setCVC();
-        screenShot("Скриншот");
+        screenShot();
         clickPayButton();
         checkPaySuccessfull();
     }
@@ -62,7 +62,7 @@ public class PaymentPage extends Page {
                         "ожидалось: " + priceTotal + ", фактически: " + price;
             Values.addERR(collectData.getTest(), text);
             logDoc(text);
-            screenShot("Скриншот");
+            screenShot();
         }//неблокирующая проверка
         //assertTrue("Стоимость «К ОПЛАТЕ ВСЕГО» некорректна", price.equals(Values.price.total));
         String button = $(byXpath("//span[contains(@ng-bind-html,'payAmountText')]")).getText().replaceAll("\\D+","");
@@ -72,7 +72,7 @@ public class PaymentPage extends Page {
                         "ожидалось: " + priceTotal + ", фактически:" + button;
             Values.addERR(collectData.getTest(), text);
             logDoc(text);
-            screenShot("Скриншот");
+            screenShot();
         }//неблокирующая проверка
         //assertTrue("Стоимость «Заплатить» на кнопке некорректна", button.equals(Values.price.total));
     }
