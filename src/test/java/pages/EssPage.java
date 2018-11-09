@@ -342,6 +342,7 @@ public class EssPage extends Page {
         if (month.length()>5) format = format.replaceFirst("MMMM", "MMM.");
         if (month.equals("Сентябрь")) format = format.replaceFirst("MMM", "сент");
         if (month.equals("Ноябрь")) format = format.replaceFirst("MMM", "нояб");
+        if (month.equals("Февраль")) format = format.replaceFirst("MMM", "февр");
         String dd = new SimpleDateFormat(format, new Locale(Values.lang[collectData.getLn()][2])).format(flightList.get(i-1).start);
         dd = dd + new SimpleDateFormat("HH:mm").format(flightList.get(i-1).end);
         System.out.println("Locale = " + dd);
