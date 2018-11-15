@@ -6,41 +6,11 @@ import struct.Soap;
 public class AdditionalServiceRequests {
 
     private CollectData collectData;
-    private static String currency;
-    private static String ENTREE_PRICE = "1";
-    private static String DESSERT_PRICE = "2";
-    private static String ADDOPTION_PRICE = "3";
 
     public AdditionalServiceRequests(CollectData collectData) {
         this.collectData = collectData;
-        currency = this.collectData.getCur();
     }
 
-    public static void setPriceByCurrency() {
-        System.out.println("currency in soap = " + currency);
-        switch (currency) {
-            case "RUB":
-                ENTREE_PRICE = "1750";
-                DESSERT_PRICE = "975";
-                ADDOPTION_PRICE = "2000";
-                break;
-            case "EUR":
-                ENTREE_PRICE = "17.55";
-                DESSERT_PRICE = "9.72";
-                ADDOPTION_PRICE = "20.01";
-                break;
-            case "USD":
-                ENTREE_PRICE = "21.75";
-                DESSERT_PRICE = "12.05";
-                ADDOPTION_PRICE = "23.12";
-                break;
-            case "CNY":
-                ENTREE_PRICE = "3500";
-                DESSERT_PRICE = "1950";
-                ADDOPTION_PRICE = "4000";
-                break;
-        }
-    }
     public Soap getSessionCreateRQ() {
         return sessionCreateRQ;
     }
@@ -258,15 +228,15 @@ public class AdditionalServiceRequests {
             "                  <v1:Endorsements>qui foedere</v1:Endorsements>\n" +
             "                  <v1:Quantity>1</v1:Quantity>\n" +
             "                  <v1:EquivalentPrice>\n" +
-            "                     <v1:Price>" + ENTREE_PRICE + "</v1:Price>\n" +
+            "                     <v1:Price>%3$s</v1:Price>\n" +
             "                     <v1:Currency>CURRENCY_CODE</v1:Currency>\n" +
             "                  </v1:EquivalentPrice>\n" +
             "                  <v1:TTLPrice>\n" +
-            "                     <v1:Price>" + ENTREE_PRICE + "</v1:Price>\n" +
+            "                     <v1:Price>%3$s</v1:Price>\n" +
             "                     <v1:Currency>CURRENCY_CODE</v1:Currency>\n" +
             "                  </v1:TTLPrice>\n" +
             "                  <v1:OriginalBasePrice>\n" +
-            "                     <v1:Price>" + ENTREE_PRICE + "</v1:Price>\n" +
+            "                     <v1:Price>%3$s</v1:Price>\n" +
             "                     <v1:Currency>CURRENCY_CODE</v1:Currency>\n" +
             "                  </v1:OriginalBasePrice>\n" +
             "                  <v1:RefundIndicator>Y</v1:RefundIndicator>\n" +
@@ -274,15 +244,15 @@ public class AdditionalServiceRequests {
             "                  <v1:InterlineIndicator>Y</v1:InterlineIndicator>\n" +
             "                  <v1:FeeApplicationIndicator>1</v1:FeeApplicationIndicator>\n" +
             "                  <v1:TotalOriginalBasePrice>\n" +
-            "                     <v1:Price>" + ENTREE_PRICE + "</v1:Price>\n" +
+            "                     <v1:Price>%3$s</v1:Price>\n" +
             "                     <v1:Currency>CURRENCY_CODE</v1:Currency>\n" +
             "                  </v1:TotalOriginalBasePrice>\n" +
             "                  <v1:TotalEquivalentPrice>\n" +
-            "                     <v1:Price>" + ENTREE_PRICE + "</v1:Price>\n" +
+            "                     <v1:Price>%3$s</v1:Price>\n" +
             "                     <v1:Currency>CURRENCY_CODE</v1:Currency>\n" +
             "                  </v1:TotalEquivalentPrice>\n" +
             "                  <v1:TotalTTLPrice>\n" +
-            "                     <v1:Price>" + ENTREE_PRICE + "</v1:Price>\n" +
+            "                     <v1:Price>%3$s</v1:Price>\n" +
             "                     <v1:Currency>CURRENCY_CODE</v1:Currency>\n" +
             "                  </v1:TotalTTLPrice>\n" +
             "                  <v1:TaxExemptIndicator>N</v1:TaxExemptIndicator>\n" +
@@ -326,15 +296,15 @@ public class AdditionalServiceRequests {
             "                  <v1:EMDType>2</v1:EMDType>\n" +
             "                  <v1:Quantity>1</v1:Quantity>\n" +
             "                  <v1:EquivalentPrice>\n" +
-            "                     <v1:Price>" + DESSERT_PRICE + "</v1:Price>\n" +
+            "                     <v1:Price>%4$s</v1:Price>\n" +
             "                     <v1:Currency>CURRENCY_CODE</v1:Currency>\n" +
             "                  </v1:EquivalentPrice>\n" +
             "                  <v1:TTLPrice>\n" +
-            "                     <v1:Price>" + DESSERT_PRICE + "</v1:Price>\n" +
+            "                     <v1:Price>%4$s</v1:Price>\n" +
             "                     <v1:Currency>CURRENCY_CODE</v1:Currency>\n" +
             "                  </v1:TTLPrice>\n" +
             "                  <v1:OriginalBasePrice>\n" +
-            "                     <v1:Price>" + DESSERT_PRICE + "</v1:Price>\n" +
+            "                     <v1:Price>%4$s</v1:Price>\n" +
             "                     <v1:Currency>CURRENCY_CODE</v1:Currency>\n" +
             "                  </v1:OriginalBasePrice>\n" +
             "                  <v1:RefundIndicator>Y</v1:RefundIndicator>\n" +
@@ -342,15 +312,15 @@ public class AdditionalServiceRequests {
             "                  <v1:InterlineIndicator>Y</v1:InterlineIndicator>\n" +
             "                  <v1:FeeApplicationIndicator>1</v1:FeeApplicationIndicator>\n" +
             "                  <v1:TotalOriginalBasePrice>\n" +
-            "                     <v1:Price>" + DESSERT_PRICE + "</v1:Price>\n" +
+            "                     <v1:Price>%4$s</v1:Price>\n" +
             "                     <v1:Currency>CURRENCY_CODE</v1:Currency>\n" +
             "                  </v1:TotalOriginalBasePrice>\n" +
             "                  <v1:TotalEquivalentPrice>\n" +
-            "                     <v1:Price>" + DESSERT_PRICE + "</v1:Price>\n" +
+            "                     <v1:Price>%4$s</v1:Price>\n" +
             "                     <v1:Currency>CURRENCY_CODE</v1:Currency>\n" +
             "                  </v1:TotalEquivalentPrice>\n" +
             "                  <v1:TotalTTLPrice>\n" +
-            "                     <v1:Price>" + DESSERT_PRICE + "</v1:Price>\n" +
+            "                     <v1:Price>%4$s</v1:Price>\n" +
             "                     <v1:Currency>CURRENCY_CODE</v1:Currency>\n" +
             "                  </v1:TotalTTLPrice>\n" +
             "                  <v1:TaxExemptIndicator>N</v1:TaxExemptIndicator>\n" +
@@ -436,15 +406,15 @@ public class AdditionalServiceRequests {
             "                  <v1:EMDType>2</v1:EMDType>\n" +                    //всегда такое значение
             "                  <v1:Quantity>1</v1:Quantity>\n" +
             "                  <v1:EquivalentPrice>\n" +
-            "                     <v1:Price>" + ADDOPTION_PRICE + "</v1:Price>\n" +
+            "                     <v1:Price>%3$s</v1:Price>\n" +
             "                     <v1:Currency>CURRENCY_CODE</v1:Currency>\n" +
             "                  </v1:EquivalentPrice>\n" +
             "                  <v1:TTLPrice>\n" +
-            "                     <v1:Price>" + ADDOPTION_PRICE + "</v1:Price>\n" +
+            "                     <v1:Price>%3$s</v1:Price>\n" +
             "                     <v1:Currency>CURRENCY_CODE</v1:Currency>\n" +
             "                  </v1:TTLPrice>\n" +
             "                  <v1:OriginalBasePrice>\n" +
-            "                     <v1:Price>" + ADDOPTION_PRICE + "</v1:Price>\n" +
+            "                     <v1:Price>%3$s</v1:Price>\n" +
             "                     <v1:Currency>CURRENCY_CODE</v1:Currency>\n" +
             "                  </v1:OriginalBasePrice>\n" +
             "                  <v1:RefundIndicator>Y</v1:RefundIndicator>\n" +
@@ -452,15 +422,15 @@ public class AdditionalServiceRequests {
             "                  <v1:InterlineIndicator>Y</v1:InterlineIndicator>\n" +
             "                  <v1:FeeApplicationIndicator>1</v1:FeeApplicationIndicator>\n" +
             "                  <v1:TotalOriginalBasePrice>\n" +
-            "                     <v1:Price>" + ADDOPTION_PRICE + "</v1:Price>\n" +
+            "                     <v1:Price>%3$s</v1:Price>\n" +
             "                     <v1:Currency>CURRENCY_CODE</v1:Currency>\n" +
             "                  </v1:TotalOriginalBasePrice>\n" +
             "                  <v1:TotalEquivalentPrice>\n" +
-            "                     <v1:Price>" + ADDOPTION_PRICE + "</v1:Price>\n" +
+            "                     <v1:Price>%3$s</v1:Price>\n" +
             "                     <v1:Currency>CURRENCY_CODE</v1:Currency>\n" +
             "                  </v1:TotalEquivalentPrice>\n" +
             "                  <v1:TotalTTLPrice>\n" +
-            "                     <v1:Price>" + ADDOPTION_PRICE + "</v1:Price>\n" +
+            "                     <v1:Price>%3$s</v1:Price>\n" +
             "                     <v1:Currency>CURRENCY_CODE</v1:Currency>\n" +
             "                  </v1:TotalTTLPrice>\n" +
             "                  <v1:TaxExemptIndicator>N</v1:TaxExemptIndicator>\n" +

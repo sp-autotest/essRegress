@@ -23,9 +23,14 @@ public class SoapRequest {
 
     public static String token = "";
     private CollectData collectData;
+    private String currency;
+    private String ENTREE_PRICE = "11";
+    private String DESSERT_PRICE = "22";
+    private String ADDOPTION_PRICE = "33";
 
     public SoapRequest(CollectData collectData) {
         this.collectData = collectData;
+        currency = this.collectData.getCur();
     }
 
     public void changeCurrency() {
@@ -45,43 +50,43 @@ public class SoapRequest {
     public void addAdditionalAviaServices() {
         String pnr = Values.getPNR(collectData.getTest());
         AdditionalServiceRequests add = new AdditionalServiceRequests(collectData);
-        add.setPriceByCurrency();
+        setPriceByCurrency();
         //1
         Soap soap = add.getSessionCreateRQ();
-        String response = callSoapRequest(soap);
+        String response = callSoapRequest(soap, soap.getAction());
         String token = getToken(response);
         //2
         soap = add.getTravelItineraryReadRQ();
         soap.setRequest(String.format(soap.getRequest(), token, pnr));
-        callSoapRequest(soap);
+        callSoapRequest(soap, soap.getAction());
         //3
         soap = add.getGetReservationOperation();
         soap.setRequest(String.format(soap.getRequest(), token, pnr));
-        response = callSoapRequest(soap);
+        response = callSoapRequest(soap, soap.getAction());
         InitialsAdditionalServices initials = new InitialsAdditionalServices(response);
         System.out.println(initials.toString());
         //4
         soap = add.getUpdateReservationOperation();
-        soap.setRequest(String.format(soap.getRequest(), token, pnr));
+        soap.setRequest(String.format(soap.getRequest(), token, pnr, ENTREE_PRICE, DESSERT_PRICE));
         soap.setRequest(replaceInitials(soap.getRequest(), initials));
-        response = callSoapRequest(soap);
+        response = callSoapRequest(soap, soap.getAction());
         assertFalse("Ошибка в 4.SOAP \"ANCS Inventory is not available\"", response.contains("ANCS Inventory is not available"));
         //5
         soap = add.getUpdateReservationOperation1();
-        soap.setRequest(String.format(soap.getRequest(), token, pnr));
+        soap.setRequest(String.format(soap.getRequest(), token, pnr, ADDOPTION_PRICE));
         soap.setRequest(replaceInitials(soap.getRequest(), initials));
-        response = callSoapRequest(soap);
+        response = callSoapRequest(soap, soap.getAction());
         assertFalse("Ошибка в 5.SOAP \"ANCS Inventory is not available\"", response.contains("ANCS Inventory is not available"));
         //6
         soap = add.getSabreCommand();
         soap.setRequest(String.format(soap.getRequest(), token, "*AES"));
-        callSoapRequest(soap);
+        callSoapRequest(soap, soap.getAction());
         //7
-        soap = add.getSabreCommand();
+        soap = new AdditionalServiceRequests(collectData).getSabreCommand();
         soap.setRequest(String.format(soap.getRequest(), token, "ER"));
-        callSoapRequest(soap);
+        callSoapRequest(soap, soap.getAction());
         //8
-        callSoapRequest(soap);
+        callSoapRequest(soap, soap.getAction());
     }
 
     public String setPNRtoSabreCommand() {
@@ -89,16 +94,16 @@ public class SoapRequest {
         AdditionalServiceRequests add = new AdditionalServiceRequests(collectData);
         //1
         Soap soap = add.getSessionCreateRQ();
-        String response = callSoapRequest(soap);
+        String response = callSoapRequest(soap, soap.getAction());
         String token = getToken(response);
         //2
         soap = add.getSabreCommand();
         soap.setRequest(String.format(soap.getRequest(), token, "*" + pnr));
-        return callSoapRequest(soap);
+        return callSoapRequest(soap, soap.getAction());
     }
 
     @Step("SOAP запрос: {1}")
-    private String callSoapRequest(Soap soap) {
+    private String callSoapRequest(Soap soap, String action) {
         //System.out.println("Request: " + soap.getRequest());
 
         URL url = null;
@@ -115,7 +120,7 @@ public class SoapRequest {
         }
 
         connection.setRequestProperty("Content-Type", "text/xml;charset=UTF-8");
-        connection.setRequestProperty("SOAPAction", soap.getAction());
+        connection.setRequestProperty("SOAPAction", action);
         connection.setRequestProperty("Content-Length", String.valueOf(soap.getRequest().length()));
         connection.setRequestProperty("Host", soap.getHost().replaceFirst("https://",""));
         connection.setRequestProperty("Connection", "Keep-Alive");
@@ -136,7 +141,7 @@ public class SoapRequest {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("Response: " + respond);
+        //System.out.println("Response: " + respond);
         return respond;
     }
 
@@ -281,5 +286,30 @@ public class SoapRequest {
         return request;
     }
 
+    private void setPriceByCurrency() {
+        System.out.println("currency in soap = " + currency);
+        switch (currency) {
+            case "RUB":
+                ENTREE_PRICE = "1750";
+                DESSERT_PRICE = "975";
+                ADDOPTION_PRICE = "2000";
+                break;
+            case "EUR":
+                ENTREE_PRICE = "17.55";
+                DESSERT_PRICE = "9.72";
+                ADDOPTION_PRICE = "20.01";
+                break;
+            case "USD":
+                ENTREE_PRICE = "21.75";
+                DESSERT_PRICE = "12.05";
+                ADDOPTION_PRICE = "23.12";
+                break;
+            case "CNY":
+                ENTREE_PRICE = "3500";
+                DESSERT_PRICE = "1950";
+                ADDOPTION_PRICE = "4000";
+                break;
+        }
+    }
 
 }
