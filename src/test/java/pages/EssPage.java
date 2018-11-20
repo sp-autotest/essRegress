@@ -410,11 +410,13 @@ public class EssPage extends Page {
     private void clickAddMedicalButton(String type){
         SelenideElement ins = $("#medIns" + type);
         ins.scrollTo();
-        ins.$(byXpath("descendant::a[contains(@class,'button--micro-padding')]"))
-                .shouldBe(visible).shouldBe(exactText(text[5][collectData.getLn()])).click();
+        SelenideElement button = ins.$(byXpath("descendant::a[contains(@class,'button--micro-padding')]"))
+                .shouldBe(visible).shouldBe(exactText(text[5][collectData.getLn()]));
+        Sleep(1);
+        button.$(byXpath("parent::div")).click();
     }
 
-    @Step("Проверка стоимости медицинской страховки")
+    @Step("Проверка наличия и стоимости медицинской страховки в корзине")
     private void checkPriceOfMedicalInsurance(String type) {
         SelenideElement box = $("#medIns" + type);
         String price = box.$(byXpath("descendant::div[@class='tile__price']")).getText().replaceAll("\\D+","");
