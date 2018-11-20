@@ -102,7 +102,13 @@ public class EprPage extends Page {
         }
         if ((test == 2)|(test == 5)|(test == 8)) checkTransport();
         if ((test == 3)|(test == 5)|(test == 8)) {
-            checkAeroexpress(flyList.get(0).from_orig, passList.size());
+            int notInfpassengersCount = 0;
+            for (Passenger p : passList){
+                if (!p.getType().equals("INF")) {
+                    notInfpassengersCount++;
+                }
+            }
+            checkAeroexpress(flyList.get(0).from_orig, notInfpassengersCount);
             checkTransfer(flyList.get(0).start);
         }
     }
