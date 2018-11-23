@@ -702,7 +702,7 @@ public class EssTest {
 
     @Description("Карта VISA;\nНаправление перелета: в одну сторону;\n" +
             "Состав бронирования авиаперелета, билеты: 1 взрослый;" +
-            "Дополнительные услуги: «Трансфер»")
+            "Дополнительные услуги: «Трансфер». Проверка отклонения AEROESS-884")
     @Test(priority = 9, description = "Раздел 9", groups = {"part9"}, dataProvider= "data9")
     public void section9(int period, int caseNumber) {
         runBrowser("chrome", "1280x1024");
