@@ -257,8 +257,7 @@ public class HotelPage extends Page {
             String cancel = el.getText().replaceAll("\\d+","").replace(".", "").trim();
             if (cancel.contains(etalon)) return;
         }
-        assertTrue("Валюта штрафа при отмене проживания не соответствует валюте бронирования" +
-                   "\nОжидалось: " + etalon, false);
+        assertTrue("Валюта штрафа при отмене проживания не соответствует валюте бронирования", false);
     }
 
     @Step("Действие {0}, Нажать Оплатить в корзине")
