@@ -121,7 +121,7 @@ public class EssTest {
 
     @Description("Карта VISA;\nНаправление перелета: туда-обратно;\n" +
             "Состав бронирования авиаперелета, билеты: 2 взрослых;" +
-            "Дополнительные услуги: «Полетная страховка», «Медицинская страховка» (классическая), «Отель»")
+            "Дополнительные услуги: «Полетная страховка», «Медицинская страховка» (классическая), «Бронирование отеля»(в т.ч.проверка условий отмены)")
     @Test(priority = 1, description = "Раздел 1", groups = {"part1"}, dataProvider= "data")
     public void section1(String browser, String resolution, String language, String currency) {
         runBrowser(browser, resolution);
@@ -391,7 +391,7 @@ public class EssTest {
 
     @Description("Карта VISA;\nНаправление перелета: туда-обратно;\n" +
             "Состав бронирования авиаперелета, билеты: 1 взрослый, 1 ребенок;" +
-            "Дополнительные услуги: «Мед.страховка», «Авто», «Аэроэкспресс», «Трансфер», «Отель»")
+            "Дополнительные услуги: «Мед.страховка», «Авто», «Аэроэкспресс», «Трансфер», «Бронирование отеля»(в т.ч.проверка условий отмены)")
     @Test(priority = 5, description = "Раздел 5", groups = {"part5"}, dataProvider= "data")
     public void section5(String browser, String resolution, String language, String currency) {
         runBrowser(browser, resolution);
@@ -474,7 +474,7 @@ public class EssTest {
 
     @Description("Карта VISA;\nНаправление перелета: в одну сторону;\n" +
             "Состав бронирования авиаперелета, билеты: 1 взрослый, 4 ребенка, 1 младенец;" +
-            "Дополнительные услуги: «Мед.страховка», «Авто», «Аэроэкспресс», «Трансфер», «Отель»")
+            "Дополнительные услуги: «Мед.страховка», «Авто», «Аэроэкспресс», «Трансфер», «Бронирование отеля»(в т.ч.проверка условий отмены)")
     @Test(priority = 6, description = "Раздел 6", groups = {"part6"}, dataProvider= "data")
     public void section6(String browser, String resolution, String language, String currency) {
         runBrowser(browser, resolution);
