@@ -244,14 +244,12 @@ public class HotelPage extends Page {
         String etalon = price.getText();
 
         if (collectData.getCur().equals("RUB")) {
-            etalon = etalon.replaceAll("\\d+","").replace(",", "");
             String nights = price.$(byXpath("descendant::div[@class='hotel-room__buy-price-subtitle h-text--nowrap']")).getText();
             etalon = etalon.replaceFirst(nights, "");
+            etalon = etalon.replaceAll("\\d+","").replace(",", "").trim();
         } else {
             etalon = etalon.substring(0, etalon.indexOf("/")).replaceAll("\\d+","").replace(",", "").trim();
         }
-        System.out.println("ВАЛЮТА ==== " + etalon);
-
         ElementsCollection canceled = $$(byXpath("//div[@class='h-fz--14 h-mt--8 h-fw--700']"));
         for (SelenideElement el : canceled) {
             String cancel = el.getText().replaceAll("\\d+","").replace(".", "").trim();
