@@ -230,12 +230,35 @@ public class HotelPage extends Page {
         price = price.replaceAll("\\D+","");
         System.out.println("Room price = " + price);
         Values.reportData[collectData.getTest()].getPrice().hotel = price;
+        checkCancelCurrency(textprice);
         rooms.get(room).$(byXpath("descendant::div[@class='hotel-room__buy-button-wrapper']")).shouldBe(visible).click();
         checkHotelFormAppear();
         checkHotelCartPrice();
         checkRentButtonName();
         saveHotelData();
         screenShot();
+    }
+
+    @Step("Проверить валюту отмены проживания")
+    private void checkCancelCurrency(SelenideElement price) {
+        String etalon = price.getText();
+
+        if (collectData.getCur().equals("RUB")) {
+            etalon = etalon.replaceAll("\\d+","").replace(",", "");
+            String nights = price.$(byXpath("descendant::div[@class='hotel-room__buy-price-subtitle h-text--nowrap']")).getText();
+            etalon = etalon.replaceFirst(nights, "");
+        } else {
+            etalon = etalon.substring(0, etalon.indexOf("/")).replaceAll("\\d+","").replace(",", "").trim();
+        }
+        System.out.println("ВАЛЮТА ==== " + etalon);
+
+        ElementsCollection canceled = $$(byXpath("//div[@class='h-fz--14 h-mt--8 h-fw--700']"));
+        for (SelenideElement el : canceled) {
+            String cancel = el.getText().replaceAll("\\d+","").replace(".", "").trim();
+            if (cancel.contains(etalon)) return;
+        }
+        assertTrue("Валюта штрафа при отмене проживания не соответствует валюте бронирования" +
+                   "\nОжидалось: " + etalon, false);
     }
 
     @Step("Действие {0}, Нажать Оплатить в корзине")
