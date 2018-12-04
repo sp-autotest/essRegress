@@ -678,7 +678,7 @@ public class TransportPage extends Page {
         String to = getTransferTo();
         String toC = dir.substring(dir.indexOf("—")+2);
         String tdate = getTransferDate();
-        String dateC = new SimpleDateFormat("dd MMMM, E", new Locale(Values.lang[collectData.getLn()][2])).format(date);
+        String dateC = new SimpleDateFormat("ddMMMM,E", new Locale(Values.lang[collectData.getLn()][2])).format(date);
         if (collectData.getLn()==6) tdate = dateC; //убрать когда выяснится формат даты трансфера в китайском языке
         String time = getTransferTime();
         String category = getTransferCategory();
@@ -702,7 +702,7 @@ public class TransportPage extends Page {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         cal.add(Calendar.DAY_OF_MONTH, 1);
-        String dateC2 = new SimpleDateFormat("dd MMMM, E", new Locale(Values.lang[collectData.getLn()][2])).format(cal.getTime());
+        String dateC2 = new SimpleDateFormat("ddMMMM,E", new Locale(Values.lang[collectData.getLn()][2])).format(cal.getTime());
         System.out.println("tdate = " + tdate);
         System.out.println("dateC2 = " + dateC2);
         if (!tdate.equals(dateC2)) {
@@ -751,7 +751,7 @@ public class TransportPage extends Page {
     }
 
     private String getTransferDate(){
-        return $(byXpath("//div[@class='text h-clearfix h-mb--28 h-fz--14']/span[1]")).getText().trim();
+        return $(byXpath("//div[@class='text h-clearfix h-mb--28 h-fz--14']/span[1]")).getText().replace(" ", "");
     }
 
     private String getTransferTime(){
