@@ -287,13 +287,18 @@ public class ResultPage extends Page {
     private void checkTransfer(SelenideElement row, Date d) {
         ElementsCollection docs = row.$$(byXpath("div[4]/a"));
         for (SelenideElement doc : docs) {
+            //получение номера ваучера со страницы с результатом оплаты
+            Values.setDOC(collectData.getTest(), Values.getDOC(collectData.getTest()) + "Трансфер:" + doc.getText() + ", ");
+        }
+        /*отключил получение номера ваучера из АРМ
+        for (SelenideElement doc : docs) {
             String transferDoc = doc.getText();
             if (transferDoc.contains(text[15][collectData.getLn()])) {
                 transferDoc = transferDoc + " " + getTransferNumber();
             }
             Values.setDOC(collectData.getTest(), Values.getDOC(collectData.getTest()) + "Трансфер:" + transferDoc + ", ");
             System.out.println(transferDoc);
-        }
+        }*/
         String from = row.$(byXpath("div[1]/div[2]")).getText();
         System.out.println("Transfer from = " + from);
         String fromC = (collectData.getLn()==0) ? "Курский, Москва" : "Kurskiy, Moscow";
