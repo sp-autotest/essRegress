@@ -676,15 +676,20 @@ public class EssTest {
         List<Flight> flightList = searchPg.step2();
         List<Passenger> passList = createPassengers(initData, collectData.getLn());
         new PassengerPage(collectData).step3(passList);
-        new PlacePage(collectData).clickPay();
+        //new PlacePage(collectData).clickPay();
+
+        PlacePage placePg = new PlacePage(collectData);  //new
+        placePg.getPNR();
+        placePg.addAdditionalServices();
+        placePg.goBackDoor();
+
         ChoosePage choosePg = new ChoosePage(collectData);
-        choosePg.step4_8();
+        //choosePg.step4_8();
         EssPage essPg = new EssPage(collectData);
         essPg.step6();//шаг 6
         essPg.checkAdditionalServices();//шаг 7 проверка выбора мест, основного блюда и десерта
         boolean timer = essPg.checkTimer();
-        if (city.equals("LAX")) essPg.step8_5();//шаг 8
-        else essPg.step8();//шаг 8
+        essPg.step8_5();//шаг 8
         essPg.step9("RANDOM");//шаг 9
         TransportPage transportPg = new TransportPage(collectData);
         transportPg.step10(test, 10);//шаг 10

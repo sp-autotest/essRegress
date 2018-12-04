@@ -85,7 +85,6 @@ public class EprPage extends Page {
         }
         if (test == 8) {
             screenShot();
-            checkFlyInsurance(passList);
             checkMedicalInsurance(passList);
             checkAllInsurancePrice();
             checkSelectPlaceService();
@@ -263,7 +262,9 @@ public class EprPage extends Page {
 
     @Step("Проверка медицинской страховки")
     private void checkMedicalInsurance(List<Passenger> passList){
-        SelenideElement row = $(byXpath("//div[@data-toggle-id='toggle-safe']/descendant::div[@role='row'][2]"));
+        int n = 2;
+        if (Values.reportData[collectData.getTest()].getPrice().iflight.equals("0")) n = 1; //если полетной страховки нет
+        SelenideElement row = $(byXpath("//div[@data-toggle-id='toggle-safe']/descendant::div[@role='row'][" + n + "]"));
         row.scrollTo();
         String insurance = row.getText();
         String price = row.$(byXpath("descendant::span[contains(@class,'__item-price')]")).getText().replaceAll("\\D+","");

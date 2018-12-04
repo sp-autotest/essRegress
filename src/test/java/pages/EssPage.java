@@ -164,13 +164,14 @@ public class EssPage extends Page {
         checkPriceOfFlyInsurance();
     }
 
-    @Step("Действие 8, Проверка отсутствия/добавления полетной страховки")
+    @Step("Действие 8, Проверка отсутствия и удаление полетной страховки")
     public void step8_5() {
         System.out.println("\t8. Check missing of Fly Insurance");
-        checkMissFlyInsuranceInCard();
-        clickAddFlyInsuranceButton();
-        checkFlyInsuranceInCard();
-        checkPriceOfFlyInsurance();
+        SelenideElement block = $("#left-column-insurance-block");
+        ElementsCollection fly = block.$$(byXpath("descendant::div[(@class='cart__item-priceondemand-item-title')" +
+                " and (text()='" + text[0][collectData.getLn()] + "')]"));
+        if (fly.size()>0) clickFlyInsuranceButton();
+        Values.reportData[collectData.getTest()].getPrice().iflight = "0";
     }
 
     @Step("Действие 8, Проверка данных в блоке «Страховка»")

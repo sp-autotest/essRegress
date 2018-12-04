@@ -5,6 +5,7 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import config.Values;
 import io.qameta.allure.Step;
+import soap.SoapRequest;
 import struct.CollectData;
 import struct.Flight;
 
@@ -117,6 +118,12 @@ public class PlacePage extends Page {
     @Step("Нажать кнопку Продолжить")
     private void clickNextButton(){
         $(byXpath("//span[@class='next__button-inner']")).click();
+    }
+
+    @Step("Добавить дополнительные авиационные услуги (SOAP)")
+    public void addAdditionalServices() {
+        System.out.println("Add aditional services");
+        new SoapRequest(collectData).addAdditionalAviaServices();
     }
 
 }
