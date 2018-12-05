@@ -370,6 +370,8 @@ public class EprPage extends Page {
         String from = group.$(byXpath("descendant::div[@ng-bind='item.details.from']")).getText();
         System.out.println("Transfer from = " + from);
         String fromC = (collectData.getLn()==0) ? "Курский, Москва" : "Kurskiy, Moscow";
+
+        /* отключено согласно задачи 3371
         assertTrue("Направление Откуда трансфера не корректно" +
                    "\nОжидалось : " + fromC + "\nФактически: " + from, from.equals(fromC));
 
@@ -378,7 +380,7 @@ public class EprPage extends Page {
         String toC = (collectData.getLn()==0) ? "Белорусский, Москва" : "Belorussky, Moscow";
         assertTrue("Направление Куда трансфера не корректно" +
                    "\nОжидалось : " + toC + "\nФактически: " + to, to.equals(toC));
-
+*/
         String date = group.$(byXpath("descendant::div[@ng-bind='item.details.date']")).getText();
         System.out.println("Transfer date = " + date);
         String dateC;

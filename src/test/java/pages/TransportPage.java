@@ -237,7 +237,7 @@ public class TransportPage extends Page {
         setTransferText();
         setTransferTime();
         screenShot();
-        compareDirection(dir);
+        //compareDirection(dir); //отключено согласно задачи 3371
     }
 
     @Step("Действие 17, Нажать кнопку «Выбрать»")
@@ -683,6 +683,8 @@ public class TransportPage extends Page {
         String time = getTransferTime();
         String category = getTransferCategory();
         String summ = getTransferSumm();
+
+        /* отключено согласно задачи 3371
         assertTrue("Направление Откуда трансфера не совпадает с выбранным" +
                    "\nОжидалось : " + fromC +
                    "\nФактически: " + from,
@@ -690,7 +692,8 @@ public class TransportPage extends Page {
         assertTrue("Направление Куда трансфера не совпадает с выбранным" +
                    "\nОжидалось : " + toC +
                    "\nФактически: " + to,
-                   toC.contains(to));
+                   toC.contains(to));*/
+
         /*
         ВРЕМЕННО до решения вопроса с датой трансфера изменена её проверка:
         проверяем разницу дат - должно быть не более 1-го дня

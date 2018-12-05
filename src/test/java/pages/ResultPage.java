@@ -302,6 +302,8 @@ public class ResultPage extends Page {
         String from = row.$(byXpath("div[1]/div[2]")).getText();
         System.out.println("Transfer from = " + from);
         String fromC = (collectData.getLn()==0) ? "Курский, Москва" : "Kurskiy, Moscow";
+
+        /*отключено согласно задачи 3371
         assertTrue("Направление Откуда трансфера не корректно" +
                 "\nОжидалось : " + fromC + "\nФактически: " + from, from.equals(fromC));
 
@@ -310,6 +312,7 @@ public class ResultPage extends Page {
         String toC = (collectData.getLn()==0) ? "Белорусский, Москва" : "Belorussky, Moscow";
         assertTrue("Направление Куда трансфера не корректно" +
                 "\nОжидалось : " + toC + "\nФактически: " + to, to.equals(toC));
+*/
 
         String date = row.$(byXpath("div[1]/div[3]")).getText();
         System.out.println("Transfer date = " + date);
