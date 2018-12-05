@@ -66,11 +66,13 @@ public class SoapRequest {
         InitialsAdditionalServices initials = new InitialsAdditionalServices(response);
         System.out.println(initials.toString());
         //4
+        /*отключено согласно задачи 3311
         soap = add.getUpdateReservationOperation();
         soap.setRequest(String.format(soap.getRequest(), token, pnr, ENTREE_PRICE, DESSERT_PRICE));
         soap.setRequest(replaceInitials(soap.getRequest(), initials));
         response = callSoapRequest(soap, soap.getAction());
         assertFalse("Ошибка в 4.SOAP \"ANCS Inventory is not available\"", response.contains("ANCS Inventory is not available"));
+        */
         //5
         soap = add.getUpdateReservationOperation1();
         soap.setRequest(String.format(soap.getRequest(), token, pnr, ADDOPTION_PRICE));

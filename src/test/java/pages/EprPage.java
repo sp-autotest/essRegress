@@ -88,8 +88,10 @@ public class EprPage extends Page {
             checkMedicalInsurance(passList);
             checkAllInsurancePrice();
             checkSelectPlaceService();
+            /* отключено согласно задачи 3311
             checkEntreeService();
             checkDessertService();
+            */
             checkTotalCount();
         }
 
@@ -471,9 +473,13 @@ public class EprPage extends Page {
                 stringIntoInt(price.imedical) +
                 stringIntoInt(price.aeroexpress) +
                 stringIntoInt(price.transfer) +
-                stringIntoInt(price.place) +
+                stringIntoInt(price.place)/* +  отключено согласно задачи 3311
                 stringIntoInt(price.entree) +
-                stringIntoInt(price.dessert);
+                stringIntoInt(price.dessert)*/;
+
+        assertTrue("Сумма «К оплате сейчас» не совпадает с суммой всех услуг" +
+                "\nОжидалось : " + total +
+                "\nФактически: " + totalCount, total == stringIntoInt(totalCount));
 
         System.out.println("-----------------------");
         System.out.println("TOTAL COUNT = " + totalCount);
@@ -484,8 +490,8 @@ public class EprPage extends Page {
         System.out.println(price.aeroexpress);
         System.out.println(price.transfer);
         System.out.println(price.place);
-        System.out.println(price.entree);
-        System.out.println(price.dessert);
+        /*System.out.println(price.entree);отключено согласно задачи 3311
+        System.out.println(price.dessert);*/
         System.out.println("-----------------------");
 
     }
@@ -520,7 +526,7 @@ public class EprPage extends Page {
                    price.equals(Values.reportData[collectData.getTest()].getPrice().entree));
     }
 
-    @Step("Проверка услуги «Основное блюдо»")
+    @Step("Проверка услуги «Десерт»")
     public void checkDessertService() {
         System.out.println("Check Dessert");
         String code = "019"; //код услуги "Десерт Шоколадная тарталетка"

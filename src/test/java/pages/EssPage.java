@@ -104,7 +104,7 @@ public class EssPage extends Page {
     public  void checkAdditionalServices() {
         System.out.println("\t7. Check Additional Services");
         checkSelectPlaceStep();
-        checkSelectFoodStep();
+        //checkSelectFoodStep(); //отключено согласно задачи 3311
     }
 
     @Step("Проверка данных в блоке «ВЫБОР МЕСТ»")
