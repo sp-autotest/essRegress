@@ -289,7 +289,11 @@ public class EprPage extends Page {
     @Step("Проверка общей стоимости всех страховок")
     private void checkAllInsurancePrice() {
         String price = $(byXpath("//div[@data-toggle-id='toggle-safe']/descendant::" +
-                "div[@class='checkout-item__left-container']")).getText().replaceAll("\\D+","");
+                "div[@class='checkout-item__left-container']")).getText();
+        if (collectData.getCur().equals("EUR") | collectData.getCur().equals("USD")) {
+            if (!price.contains(".")) price = price.replaceAll("\\D+","") + "00";
+        }
+        price = price.replaceAll("\\D+","");
         System.out.println("all insurances= " + price);
         int allPrice = stringIntoInt(Values.reportData[collectData.getTest()].getPrice().iflight) +
                 stringIntoInt(Values.reportData[collectData.getTest()].getPrice().imedical);
