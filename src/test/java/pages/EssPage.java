@@ -389,8 +389,7 @@ public class EssPage extends Page {
     private  void checkPriceOfFlyInsurance(){
         String summ = $("#left-column-insurance-block").$(byXpath("descendant::" +
                 "div[@class='cart__item-priceondemand-item-price']")).getText().trim();
-        Values.reportData[collectData.getTest()].getPrice().iflight = summ.replaceAll("\\D+","");
-        int s = stringIntoInt(Values.reportData[collectData.getTest()].getPrice().iflight);
+        int s = stringIntoInt(summ.replaceAll("\\D+",""));
         System.out.println("Summ = " + s);
         String price = $(byXpath("//div[@class='frame__heading frame__heading--icon frame__heading--icon-safe']/span")).getText();
         price = price.substring(0, price.indexOf("(")).replaceAll("\\D+","");
@@ -402,9 +401,11 @@ public class EssPage extends Page {
         System.out.println("price = " + p);
         System.out.println("ticket = " + collectData.getTicket());
         System.out.println("price * ticket = " + p*collectData.getTicket());
+        /*выключено согласно задачи 3387
         assertTrue("Общая сумма страховки не равняется сумме страховок каждого пассажира" +
-                "\nОжидалось : " + Values.reportData[collectData.getTest()].getPrice().iflight +
-                "\nФактически: " + p*collectData.getTicket(), s == p*collectData.getTicket());
+                "\nОжидалось : " + s +
+                "\nФактически: " + p*collectData.getTicket(), s == p*collectData.getTicket());*/
+        Values.reportData[collectData.getTest()].getPrice().iflight = "" + p * collectData.getTicket();
     }
 
     @Step("Нажать кнопку «Добавить в заказ»")
