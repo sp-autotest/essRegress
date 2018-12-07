@@ -735,7 +735,7 @@ public class TransportPage extends Page {
     @Step("Проверить дату/время трансфера в ESS")
     private void checkTransferDate(Date date) {
         String tdate = getTransferDate();
-        String dateC = new SimpleDateFormat("dd MMMM, E", new Locale(Values.lang[collectData.getLn()][2])).format(date);
+        String dateC = new SimpleDateFormat("ddMMMM,E", new Locale(Values.lang[collectData.getLn()][2])).format(date);
         String time = getTransferTime();
         assertTrue("Дата трансфера не совпадает с выбранной" +
                 "\nОжидалось: " + dateC +

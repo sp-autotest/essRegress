@@ -132,7 +132,7 @@ public class OfficePage extends Page{
         checkOrderIsFound(pnr);
     }
 
-    @Step("Действие 18, Открыть детализацию заказа {0}")
+    @Step("Действие 18, Открыть детализацию заказа")
     public void openOrderDetails (List<Flight> flyList, List<Passenger> passList) {
         System.out.println("\t19. Open order details");
         String pnr = Values.getPNR(collectData.getTest());
