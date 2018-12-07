@@ -5,6 +5,8 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import config.Values;
 import io.qameta.allure.Step;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import soap.SoapRequest;
 import struct.CollectData;
 import struct.Flight;
@@ -20,7 +22,9 @@ import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.url;
+import static config.Values.text;
 
 
 /**
@@ -101,6 +105,10 @@ public class PlacePage extends Page {
         }
         Values.setPNR(collectData.getTest(), pnr);
         System.out.println("PNR = " + pnr);
+
+        clickInsuranceBlock();
+        clickCancelFlyInsuranceButton();
+        Sleep(1);
     }
 
     @Step("Действие 5, Зайти в витрину с бэкдора")
@@ -124,6 +132,21 @@ public class PlacePage extends Page {
     public void addAdditionalServices() {
         System.out.println("Add aditional services");
         new SoapRequest(collectData).addAdditionalAviaServices();
+    }
+
+    @Step("Перейти в блок «СТРАХОВКА»")
+    private void clickInsuranceBlock(){
+        String name = text[0][collectData.getLn()];
+        if (collectData.getLn() == 0) name = name.replace("е", "ё");
+        $(byXpath("//p[text()='" + name + "']")).click();
+    }
+
+    @Step("Нажать кнопку «Отменить» для полетной страховки")
+    private void clickCancelFlyInsuranceButton() {
+        WebElement el = $(byXpath("//button[@class='button button--active button--icon-left button--icon-check']")).toWebElement();
+        Actions actions = new Actions(getWebDriver());
+        actions.moveToElement(el).perform();
+        $(byXpath("//button[@class='button button--cancel button--alert button--wide']")).shouldBe(visible).click();
     }
 
 }
