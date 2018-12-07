@@ -298,8 +298,9 @@ public class EprPage extends Page {
         System.out.println("all insurances= " + price);
         int allPrice = stringIntoInt(Values.reportData[collectData.getTest()].getPrice().iflight) +
                 stringIntoInt(Values.reportData[collectData.getTest()].getPrice().imedical);
+        /* отключено согласно задачи 3391
         assertTrue("Общая стоимость всех страховок некорректна" +
-                   "\nОжидалось : " + allPrice + "\nФактически: " + price, stringIntoInt(price) == allPrice);
+                   "\nОжидалось : " + allPrice + "\nФактически: " + price, stringIntoInt(price) == allPrice);*/
     }
 
     @Step("Проверка данных транспортной услуги")
