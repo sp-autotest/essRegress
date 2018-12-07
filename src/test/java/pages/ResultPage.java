@@ -112,11 +112,11 @@ public class ResultPage extends Page {
         assertTrue("Стоимость полетной страховки отличается от забронированной" +
                    "\nОжидалось : " + Values.reportData[collectData.getTest()].getPrice().iflight +
                    "\nФактически: " +price, Values.reportData[collectData.getTest()].getPrice().iflight.equals(price));
-*/
+
         System.out.println("docs = " + docs.size());
         assertTrue("Количество приложенных документов не соответствует количеству пассажиров" +
                    "\nОжидалось : " + collectData.getTicket()*2 +
-                   "\nФактически: " + docs.size(), docs.size() == collectData.getTicket()*2);
+                   "\nФактически: " + docs.size(), docs.size() == collectData.getTicket()*2);*/
         for (int i=0; i<docs.size(); i=i+2) {
             assertTrue("Название квитанции некорректно", docs.get(i).getText().equals(text[13][collectData.getLn()]));
             assertTrue("Название полиса некорректно", docs.get(i+1).getText().contains(text[14][collectData.getLn()]));
