@@ -40,11 +40,11 @@ public class ChoosePage extends Page {
     }
 
     @Step("Действие 4, добавить доп. услуги")
-    public void step4_8() {
+    public void step4_backdoor() {
         checkChoosePage();
         System.out.println("[" + collectData.getTest() + "] URL = " + url());
         if ((!collectData.getCur().equals("RUB"))&(Values.currencyChange.equals("soap"))) changeCurrency();
-        addAdditionalServices();
+        //addAdditionalServices();
         String backdoor;
         if (env.equals("RC")) backdoor = Values.backdoor_host;
         else backdoor = Values.backdoor_host.replace("ws.ess", "ws-nf.ess");
