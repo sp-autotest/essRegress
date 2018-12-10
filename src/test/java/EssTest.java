@@ -156,13 +156,13 @@ public class EssTest {
         List<Passenger> passList = createPassengers(initData, collectData.getLn());
         new PassengerPage(collectData).step3(passList);
         //new PlacePage(collectData).clickPay();
-/*
+
         PlacePage placePg = new PlacePage(collectData);  //new
         placePg.getPNR();
         placePg.goBackDoor();
-*/
+
         ChoosePage choosePg = new ChoosePage(collectData);
-        choosePg.step4_backdoor();
+        //choosePg.step4_backdoor();
         EssPage essPg = new EssPage(collectData);
         essPg.step6();//шаг 6
 
@@ -238,13 +238,13 @@ public class EssTest {
         List<Passenger> passList = createPassengers(initData, collectData.getLn());
         new PassengerPage(collectData).step3(passList);
         //new PlacePage(collectData).clickPay();
-/*
+
         PlacePage placePg = new PlacePage(collectData);  //new
         placePg.getPNR();//шаг 4
         placePg.goBackDoor();//шаг 5
-*/
+
         ChoosePage choosePg = new ChoosePage(collectData);
-        choosePg.step4_backdoor();
+//        choosePg.step4_backdoor();
         EssPage essPg = new EssPage(collectData);
         essPg.step6();//шаг 6
         boolean timer = essPg.checkTimer();
@@ -303,13 +303,13 @@ public class EssTest {
         List<Passenger> passList = createPassengers(initData, collectData.getLn());
         new PassengerPage(collectData).step3(passList);
         //new PlacePage(collectData).clickPay();//шаг 5
-/*
+
         PlacePage placePg = new PlacePage(collectData);  //new
         placePg.getPNR();//шаг 4
         placePg.goBackDoor();//шаг 5
-*/
+
         ChoosePage choosePg = new ChoosePage(collectData);
-        choosePg.step4_backdoor();//шаг 6
+//        choosePg.step4_backdoor();//шаг 6
 
         EssPage essPg = new EssPage(collectData);
         essPg.step6();//шаг 6
@@ -369,13 +369,13 @@ public class EssTest {
         List<Passenger> passList = createPassengers(initData, collectData.getLn());
         new PassengerPage(collectData).step3(passList);
         //new PlacePage(collectData).clickPay();
-/*
+
         PlacePage placePg = new PlacePage(collectData);  //new
         placePg.getPNR();//шаг 4
         placePg.goBackDoor();//шаг 5
-*/
+
         ChoosePage choosePg = new ChoosePage(collectData);
-        choosePg.step4_backdoor();
+//        choosePg.step4_backdoor();
 
         EssPage essPg = new EssPage(collectData);
         essPg.step6();//шаг 6
@@ -433,13 +433,13 @@ public class EssTest {
         List<Passenger> passList = createPassengers(initData, collectData.getLn());
         new PassengerPage(collectData).step3(passList);
         //new PlacePage(collectData).clickPay();
-/*
+
         PlacePage placePg = new PlacePage(collectData);  //new
         placePg.getPNR();//шаг 4
         placePg.goBackDoor();//шаг 5
-*/
+
         ChoosePage choosePg = new ChoosePage(collectData);
-        choosePg.step4_backdoor();
+//        choosePg.step4_backdoor();
 
         EssPage essPg = new EssPage(collectData);
         essPg.step6();//шаг 6
@@ -518,13 +518,13 @@ public class EssTest {
         List<Passenger> passList = createPassengers(initData, collectData.getLn());
         new PassengerPage(collectData).step3(passList);
         //new PlacePage(collectData).clickPay();
-/*
+
         PlacePage placePg = new PlacePage(collectData);  //new
         placePg.getPNR();//шаг 4
         placePg.goBackDoor();//шаг 5
-*/
+
         ChoosePage choosePg = new ChoosePage(collectData);
-        choosePg.step4_backdoor();
+//        choosePg.step4_backdoor();
 
         EssPage essPg = new EssPage(collectData);
         essPg.step6();//шаг 6

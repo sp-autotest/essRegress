@@ -212,7 +212,7 @@ public class EssPage extends Page {
         screenShot();
         checkPriceOfMedicalInsurance(type);
         checkMedicalButtonName(type);
-        //checkTotalAndInsurensPrices();  //отключено согласно 3415
+        checkTotalAndInsurensPrices();
         screenShot();
     }
 
@@ -381,8 +381,10 @@ public class EssPage extends Page {
 
     @Step("Нажать кнопку «Добавить в заказ» для полетной страховки")
     public void clickAddFlyInsuranceButton(){
+        System.out.println("Add fly insurance");
         SelenideElement ins = $("#flight_insurance_select_button");
         ins.scrollTo().click();
+        Sleep(3);
     }
 
     @Step("Проверка общей суммы полетной страховки")
@@ -488,6 +490,7 @@ public class EssPage extends Page {
 
     @Step("Нажать кнопку Отменить в полетной страховке")
     public void clickFlyInsuranceButton() {
+        System.out.println("Delete fly insurance");
         WebElement el = $("#flight_insurance_select_button").toWebElement();
         Actions actions = new Actions(getWebDriver());
         actions.moveToElement(el).perform();
