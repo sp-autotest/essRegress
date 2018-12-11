@@ -256,11 +256,10 @@ public class EprPage extends Page {
             assertTrue("Полетная страховка не содержит пассажира " + fullName, insurance.contains(fullName));
         }
         System.out.println(Values.reportData[collectData.getTest()].getPrice().iflight);
-        /* выключено согласно задачи 3391
         assertTrue("Стоимость полетной страховки отличается от забронированной" +
                    "\nОжидалось : " + Values.reportData[collectData.getTest()].getPrice().iflight +
                    "\nФактически: " + iprice,
-                   iprice.equals(Values.reportData[collectData.getTest()].getPrice().iflight));*/
+                   iprice.equals(Values.reportData[collectData.getTest()].getPrice().iflight));
     }
 
     @Step("Проверка медицинской страховки")
