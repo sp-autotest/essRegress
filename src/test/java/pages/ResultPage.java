@@ -101,7 +101,6 @@ public class ResultPage extends Page {
         }
         String passengers = row.$(byXpath("child::div[2]")).scrollTo().getText().replaceAll("\\D+","");
         System.out.println("passengers = " + passengers);
-       /*отключено согласно задачи 3393
        assertTrue("Количество пассажиров в полетной страховке отличается от количества билетов" +
                 "\nОжидалось : " + collectData.getTicket() + "\nФактически: " + passengers, collectData.getTicket() == stringIntoInt(passengers));
 
@@ -116,7 +115,7 @@ public class ResultPage extends Page {
         System.out.println("docs = " + docs.size());
         assertTrue("Количество приложенных документов не соответствует количеству пассажиров" +
                    "\nОжидалось : " + collectData.getTicket()*2 +
-                   "\nФактически: " + docs.size(), docs.size() == collectData.getTicket()*2);*/
+                   "\nФактически: " + docs.size(), docs.size() == collectData.getTicket()*2);
         for (int i=0; i<docs.size(); i=i+2) {
             assertTrue("Название квитанции некорректно", docs.get(i).getText().equals(text[13][collectData.getLn()]));
             assertTrue("Название полиса некорректно", docs.get(i+1).getText().contains(text[14][collectData.getLn()]));
