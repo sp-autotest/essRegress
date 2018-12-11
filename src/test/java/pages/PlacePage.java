@@ -105,10 +105,6 @@ public class PlacePage extends Page {
         }
         Values.setPNR(collectData.getTest(), pnr);
         System.out.println("PNR = " + pnr);
-
-        clickInsuranceBlock();
-        clickCancelFlyInsuranceButton();
-        Sleep(1);
     }
 
     @Step("Действие 5, Зайти в витрину с бэкдора")
