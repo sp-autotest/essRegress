@@ -52,7 +52,7 @@ public class EssPage extends Page {
         checkDateTime();
         checkPrice();
         checkFlightInsurance();
-        //checkMedicalInsurance();  //временно отключено 19.10.18
+        checkMedicalInsurance();
         checkCart();
         checkNextButton();
         checkTransport();
