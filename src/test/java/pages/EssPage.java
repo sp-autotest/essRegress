@@ -403,10 +403,9 @@ public class EssPage extends Page {
         System.out.println("price = " + p);
         System.out.println("ticket = " + collectData.getTicket());
         System.out.println("price * ticket = " + p*collectData.getTicket());
-        /*выключено согласно задачи 3387
         assertTrue("Общая сумма страховки не равняется сумме страховок каждого пассажира" +
                 "\nОжидалось : " + s +
-                "\nФактически: " + p*collectData.getTicket(), s == p*collectData.getTicket());*/
+                "\nФактически: " + p*collectData.getTicket(), s == p*collectData.getTicket());
         Values.reportData[collectData.getTest()].getPrice().iflight = "" + p * collectData.getTicket();
     }
 
