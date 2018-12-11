@@ -380,7 +380,7 @@ public class EssPage extends Page {
     }
 
     @Step("Нажать кнопку «Добавить в заказ» для полетной страховки")
-    public void clickAddFlyInsuranceButton(){
+    private void clickAddFlyInsuranceButton(){
         System.out.println("Add fly insurance");
         SelenideElement ins = $("#flight_insurance_select_button");
         ins.scrollTo().click();
@@ -485,10 +485,8 @@ public class EssPage extends Page {
                    flyPrice.equals(Values.reportData[collectData.getTest()].getPrice().total));
     }
 
-
-
     @Step("Нажать кнопку Отменить в полетной страховке")
-    public void clickFlyInsuranceButton() {
+    private void clickFlyInsuranceButton() {
         System.out.println("Delete fly insurance");
         WebElement el = $("#flight_insurance_select_button").toWebElement();
         Actions actions = new Actions(getWebDriver());

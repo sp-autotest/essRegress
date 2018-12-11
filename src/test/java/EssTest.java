@@ -169,9 +169,7 @@ public class EssTest {
         boolean timer = essPg.checkTimer();
         essPg.step7(flightList);//шаг 7
         essPg.step8();//шаг 8
-        essPg.clickFlyInsuranceButton();//удалить полетную страховку , согласно 3415
         essPg.step9("COMMON_SPORT");
-        essPg.clickAddFlyInsuranceButton();//добавить полетную страховку , согласно 3415
         TransportPage transportPg = new TransportPage(collectData);
         transportPg.step10(test, 10);//шаг 10
         transportPg.checkAeroexpressPassengersList();//шаг 11
@@ -250,9 +248,7 @@ public class EssTest {
         boolean timer = essPg.checkTimer();
         essPg.step7(flightList);//шаг 7
         essPg.step8();//шаг 8
-        essPg.clickFlyInsuranceButton();//удалить полетную страховку , согласно 3415
         essPg.step9("TEAM_SPORTS");//шаг 9
-        essPg.clickAddFlyInsuranceButton();//добавить полетную страховку , согласно 3415
         TransportPage transportPg = new TransportPage(collectData);
         transportPg.step10(test, 10);
         transportPg.step11();
