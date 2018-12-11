@@ -112,6 +112,9 @@ public class EprPage extends Page {
             checkAeroexpress(flyList.get(0).from_orig, notInfpassengersCount);
             checkTransfer(flyList.get(0).start);
         }
+        if (test == 4) {
+            deleteFlyInsurance();
+        }
     }
 
     @Step("Действие 13, проверка даты/времени на EPR")
@@ -543,6 +546,15 @@ public class EprPage extends Page {
                    "\nОжидалось : " + Values.reportData[collectData.getTest()].getPrice().dessert +
                    "\nФактически: " + price,
                    price.equals(Values.reportData[collectData.getTest()].getPrice().dessert));
+    }
+
+    @Step("Удаление полетной страховки")
+    public void deleteFlyInsurance() {
+        System.out.println("Delete fly insurance");
+        if ($(byXpath("//h2[text()='"+ text[0][collectData.getLn()] +"']")).exists()) {
+            $(byXpath("//h2[text()='"+ text[0][collectData.getLn()] +"']")).scrollTo();
+            $(byXpath("//a[@ng-if='order.insurance.selected']")).click();
+        }
     }
 
 }
