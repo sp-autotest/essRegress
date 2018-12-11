@@ -52,7 +52,7 @@ public class ResultPage extends Page {
             //services.get(2).scrollTo();
             n = n + "04";
         }
-        if (test == 1) checkHotel(services.get(2));
+        if (test == 1) checkHotel(services.get(2), n);
         if (test == 2) checkTransport(services.get(2));
         if (test == 4) {
             n = n + "01";
@@ -83,7 +83,7 @@ public class ResultPage extends Page {
         checkAeroexpress(services.get(2), flight.from_orig);
         checkTransport(services.get(3).scrollTo());
         checkTransfer(services.get(4), flight.start);
-        checkHotel(services.get(5).scrollTo());
+        checkHotel(services.get(5).scrollTo(), "2906");
     }
 
     private void checkPageAppear(){
@@ -197,13 +197,22 @@ public class ResultPage extends Page {
     }
 
     @Step("Проверка услуги проживания")
-    private void checkHotel(SelenideElement row){
+    private void checkHotel(SelenideElement row, String n){
         ElementsCollection docs = row.$$(byXpath("child::div[5]/div/a"));
         for (SelenideElement doc : docs) {
             Values.setDOC(collectData.getTest(), Values.getDOC(collectData.getTest()) + "Отель:" + doc.getText() + ", ");
         }
         String name = row.$(byXpath("child::div[1]")).getText();
         System.out.println("Hotel = " + name);
+
+        //проверка названия отеля сделана неблокирующей, согласно задачи 3441
+        if (!Values.reportData[collectData.getTest()].getHotel().name.equals(name)){
+            String text = "Ошибка: [" + n + "] Название отеля на странице результатов оплаты отличается от забронированного, " +
+                    "ожидалось: " + Values.reportData[collectData.getTest()].getHotel().name + ", фактически: " + name;
+            Values.addERR(collectData.getTest(), text);
+            logDoc(text);
+            screenShot();
+        }
 
         /* временно отключена проверка названия отеля, 16.11.18
         assertTrue("Название отеля отличается от забронированного" +
