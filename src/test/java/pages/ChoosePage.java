@@ -66,6 +66,16 @@ public class ChoosePage extends Page {
         checkEprPageAppear();
     }
 
+    @Step("Проверка редиректа на стенд")
+    public boolean checkChoosePageAppear() {
+        for (int i=0; i<100; i++) {
+            if ($(byXpath("//h1[text()='Вход в тестовую среду системы ЕПР']")).exists()) return true;
+            if ($(byXpath("//div[@class='text text--inline']")).exists()) return false;
+            Sleep(1);
+        }
+        return false;
+    }
+
     @Step("Подождать страницу выбора стенда")
     private void checkChoosePage(){
         $("h1").shouldBe(text("Вход в тестовую среду системы ЕПР"));

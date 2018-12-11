@@ -155,17 +155,16 @@ public class EssTest {
         List<Flight> flightList = searchPg.step2();
         List<Passenger> passList = createPassengers(initData, collectData.getLn());
         new PassengerPage(collectData).step3(passList);
-        //new PlacePage(collectData).clickPay();
-
-        PlacePage placePg = new PlacePage(collectData);  //new
-        placePg.getPNR();
-        placePg.goBackDoor();
-
         ChoosePage choosePg = new ChoosePage(collectData);
-        //choosePg.step4_backdoor();
+        if(choosePg.checkChoosePageAppear()) { //если редирект на стенд
+            choosePg.step4_backdoor();  //взять пнр и зайти в бэкдор со стенда
+        } else {
+            PlacePage placePg = new PlacePage(collectData);  //иначе взять пнр и зайти в бэкдор с выбора места
+            placePg.getPNR();
+            placePg.goBackDoor();
+        }
         EssPage essPg = new EssPage(collectData);
         essPg.step6();//шаг 6
-
         boolean timer = essPg.checkTimer();
         essPg.step7(flightList);//шаг 7
         essPg.step8();//шаг 8
@@ -235,14 +234,14 @@ public class EssTest {
         List<Flight> flightList = searchPg.step2();
         List<Passenger> passList = createPassengers(initData, collectData.getLn());
         new PassengerPage(collectData).step3(passList);
-        //new PlacePage(collectData).clickPay();
-
-        PlacePage placePg = new PlacePage(collectData);  //new
-        placePg.getPNR();//шаг 4
-        placePg.goBackDoor();//шаг 5
-
         ChoosePage choosePg = new ChoosePage(collectData);
-//        choosePg.step4_backdoor();
+        if(choosePg.checkChoosePageAppear()) { //если редирект на стенд
+            choosePg.step4_backdoor();  //взять пнр и зайти в бэкдор со стенда
+        } else {
+            PlacePage placePg = new PlacePage(collectData);  //иначе взять пнр и зайти в бэкдор с выбора места
+            placePg.getPNR();
+            placePg.goBackDoor();
+        }
         EssPage essPg = new EssPage(collectData);
         essPg.step6();//шаг 6
         boolean timer = essPg.checkTimer();
@@ -298,15 +297,14 @@ public class EssTest {
         List<Flight> flightList = searchPg.step2();
         List<Passenger> passList = createPassengers(initData, collectData.getLn());
         new PassengerPage(collectData).step3(passList);
-        //new PlacePage(collectData).clickPay();//шаг 5
-
-        PlacePage placePg = new PlacePage(collectData);  //new
-        placePg.getPNR();//шаг 4
-        placePg.goBackDoor();//шаг 5
-
         ChoosePage choosePg = new ChoosePage(collectData);
-//        choosePg.step4_backdoor();//шаг 6
-
+        if(choosePg.checkChoosePageAppear()) { //если редирект на стенд
+            choosePg.step4_backdoor();  //взять пнр и зайти в бэкдор со стенда
+        } else {
+            PlacePage placePg = new PlacePage(collectData);  //иначе взять пнр и зайти в бэкдор с выбора места
+            placePg.getPNR();
+            placePg.goBackDoor();
+        }
         EssPage essPg = new EssPage(collectData);
         essPg.step6();//шаг 6
         boolean timer = essPg.checkTimer();
@@ -364,15 +362,14 @@ public class EssTest {
         List<Flight> flightList = searchPg.step2();
         List<Passenger> passList = createPassengers(initData, collectData.getLn());
         new PassengerPage(collectData).step3(passList);
-        //new PlacePage(collectData).clickPay();
-
-        PlacePage placePg = new PlacePage(collectData);  //new
-        placePg.getPNR();//шаг 4
-        placePg.goBackDoor();//шаг 5
-
         ChoosePage choosePg = new ChoosePage(collectData);
-//        choosePg.step4_backdoor();
-
+        if(choosePg.checkChoosePageAppear()) { //если редирект на стенд
+            choosePg.step4_backdoor();  //взять пнр и зайти в бэкдор со стенда
+        } else {
+            PlacePage placePg = new PlacePage(collectData);  //иначе взять пнр и зайти в бэкдор с выбора места
+            placePg.getPNR();
+            placePg.goBackDoor();
+        }
         EssPage essPg = new EssPage(collectData);
         essPg.step6();//шаг 6
         boolean timer = essPg.checkTimer();
@@ -428,15 +425,14 @@ public class EssTest {
         List<Flight> flightList = searchPg.step2();
         List<Passenger> passList = createPassengers(initData, collectData.getLn());
         new PassengerPage(collectData).step3(passList);
-        //new PlacePage(collectData).clickPay();
-
-        PlacePage placePg = new PlacePage(collectData);  //new
-        placePg.getPNR();//шаг 4
-        placePg.goBackDoor();//шаг 5
-
         ChoosePage choosePg = new ChoosePage(collectData);
-//        choosePg.step4_backdoor();
-
+        if(choosePg.checkChoosePageAppear()) { //если редирект на стенд
+            choosePg.step4_backdoor();  //взять пнр и зайти в бэкдор со стенда
+        } else {
+            PlacePage placePg = new PlacePage(collectData);  //иначе взять пнр и зайти в бэкдор с выбора места
+            placePg.getPNR();
+            placePg.goBackDoor();
+        }
         EssPage essPg = new EssPage(collectData);
         essPg.step6();//шаг 6
         boolean timer = essPg.checkTimer();
@@ -513,15 +509,14 @@ public class EssTest {
         List<Flight> flightList = searchPg.step2();
         List<Passenger> passList = createPassengers(initData, collectData.getLn());
         new PassengerPage(collectData).step3(passList);
-        //new PlacePage(collectData).clickPay();
-
-        PlacePage placePg = new PlacePage(collectData);  //new
-        placePg.getPNR();//шаг 4
-        placePg.goBackDoor();//шаг 5
-
         ChoosePage choosePg = new ChoosePage(collectData);
-//        choosePg.step4_backdoor();
-
+        if(choosePg.checkChoosePageAppear()) { //если редирект на стенд
+            choosePg.step4_backdoor();  //взять пнр и зайти в бэкдор со стенда
+        } else {
+            PlacePage placePg = new PlacePage(collectData);  //иначе взять пнр и зайти в бэкдор с выбора места
+            placePg.getPNR();
+            placePg.goBackDoor();
+        }
         EssPage essPg = new EssPage(collectData);
         essPg.step6();//шаг 6
         boolean timer = essPg.checkTimer();
@@ -606,9 +601,14 @@ public class EssTest {
             p.toString();
         }
         new PassengerPage(collectData).step3(passList);
-        new PlacePage(collectData).clickPay();
         ChoosePage choosePg = new ChoosePage(collectData);
-        choosePg.step4();
+        if(choosePg.checkChoosePageAppear()) { //если редирект на стенд
+            choosePg.step4_backdoor();  //взять пнр и зайти в бэкдор со стенда
+        } else {
+            PlacePage placePg = new PlacePage(collectData);  //иначе взять пнр и зайти в бэкдор с выбора места
+            placePg.getPNR();
+            placePg.goBackDoor();
+        }
         EssPage essPg = new EssPage(collectData);
         essPg.step6();
         boolean timer = essPg.checkTimer();
@@ -749,9 +749,14 @@ public class EssTest {
 
         List<Passenger> passList = createPassengers(initData, collectData.getLn());
         new PassengerPage(collectData).step3(passList);
-        new PlacePage(collectData).clickPay();
         ChoosePage choosePg = new ChoosePage(collectData);
-        choosePg.step4();
+        if(choosePg.checkChoosePageAppear()) { //если редирект на стенд
+            choosePg.step4_backdoor();  //взять пнр и зайти в бэкдор со стенда
+        } else {
+            PlacePage placePg = new PlacePage(collectData);  //иначе взять пнр и зайти в бэкдор с выбора места
+            placePg.getPNR();
+            placePg.goBackDoor();
+        }
         EssPage essPg = new EssPage(collectData);
         essPg.checkDateOnESS(flightList);//шаг 5
 
