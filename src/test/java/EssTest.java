@@ -410,7 +410,7 @@ public class EssTest {
 
         InitialData initData = new InitialData(
                 "MOW",//город "откуда"
-                "JFK",//город "куда"
+                "NYC",//город "куда"
                 null,//город "пересадка" для сложных маршрутов
                 addMonthAndDays(new Date(),1,0),//дата "туда": плюс 1 месяц от текущей
                 addMonthAndDays(new Date(),1,2),//дата "назад": плюс 1 месяц и 2 дня от текущей

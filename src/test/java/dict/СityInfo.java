@@ -15,6 +15,7 @@ public class СityInfo {
         map.put("LAX", new CityData("Лос-Анджелесе (Калифорния)","Los Angeles (CA)", "USD"));
         map.put("BJS",  new CityData("Пекине", "Pekin", "CNY"));
         map.put("MOW",  new CityData("Москве", "Moscow", "RUB"));
+        map.put("NYC",  new CityData("Нью-Йорке", "New York", "USD"));
     }
 
     public String getCity(String city, int ln) {

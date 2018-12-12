@@ -360,6 +360,7 @@ public class EssPage extends Page {
         String min = t[1].replaceAll("\\D+","");
         duration = t[0].replaceAll("\\D+","") + min;
         if (min.equals("0")) duration = duration + "0";
+        if (duration.length()<3) duration = duration + "00";
         System.out.println("duration = " + duration);
         assertTrue("Длительность авиаперелета не совпадает с забронированной" +
                    "\nОжидалось : " + flightList.get(i-1).duration +

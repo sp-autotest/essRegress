@@ -796,10 +796,10 @@ public class TransportPage extends Page {
         String price = $(byXpath("//p[contains(@class,'text--title-h3')]")).getText();
         while (i<10){
             Sleep(1);
-            if ($(byXpath("//p[contains(@class,'text--title-h3')]")).exists()) {
+            /*if ($(byXpath("//p[contains(@class,'text--title-h3')]")).exists()) {
                 newPrice = $(byXpath("//p[contains(@class,'text--title-h3')]")).getText();
                 if (!price.equals(newPrice)) break;
-            }
+            }*/
             i++;
         }
     }
