@@ -290,12 +290,29 @@ public class SearchPage extends Page {
         ElementsCollection dur = $$(byXpath("//div[@class='flight__date']"));
         for (int i=1; i<dur.size(); i=i+2) {
             temp = dur.get(i).$(byXpath("descendant::span[last()]")).getText();//вместо last() было 2
-            long occurrencesCount = temp.chars().filter(ch -> ch == ':').count();//велосипед:
-            if (temp.contains("：")) occurrencesCount++;                         //в японском и китайском двоеточия разные
-            if (occurrencesCount>2) temp = temp.substring(0,temp.length()-3);    //отбрасываем секунды, если они есть
-            temp = temp.replaceAll("\\D+","");
-            if (temp.length()<3) temp = temp + "00";
-            duration = duration + temp + " ";
+            String d = "";
+            String[] arr;
+            boolean hours = false;
+            if (collectData.getLn() > 1){
+                arr = temp.split(":");
+            }else {
+                arr = temp.split(" ");
+            }
+            for(int a=0; a<arr.length; a++) {
+                String part = arr[a].replaceAll("\\D+","");
+                if (part.length() > 0) {
+                    if (!hours) {
+                        d = d + part;
+                        hours = true;
+                    }else {
+                        if(part.length() == 1) d = d + "0";
+                        d = d + part;
+                        break;
+                    }
+                }
+            }
+            if (d.length()<3) d = d + "00";
+            duration = duration + d + " ";
         }
     }
 
