@@ -359,8 +359,8 @@ public class EssPage extends Page {
         String[] t = time.split(" ");
         String hour = t[0].replaceAll("\\D+","");
         String min = t[1].replaceAll("\\D+","");
-        if ((hour.length() == 1) & (min.length() == 1)) duration = hour + min + "00";
-        if ((hour.length() == 2) & (min.length() == 1)) duration = hour + "0" + min;
+        if (min.length() == 1) min = "0" + min;
+        duration = hour + min;
         System.out.println("duration = " + duration);
         assertTrue("Длительность авиаперелета не совпадает с забронированной" +
                    "\nОжидалось : " + flightList.get(i-1).duration +
