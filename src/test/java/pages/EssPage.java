@@ -357,10 +357,10 @@ public class EssPage extends Page {
         String time = flights.get(i-1).$(byXpath("descendant::div[@class='h-color--gray h-mt--4']")).getText();
         time = time.substring(time.indexOf("("), time.indexOf(")")-1);
         String[] t = time.split(" ");
+        String hour = t[0].replaceAll("\\D+","");
         String min = t[1].replaceAll("\\D+","");
-        if (min.length() == 1) min = "0" + min;
-        duration = t[0].replaceAll("\\D+","") + min;
-        if (duration.length()<3) duration = duration + "00";
+        if ((hour.length() == 1) & (min.length() == 1)) duration = hour + min + "00";
+        if ((hour.length() == 2) & (min.length() == 1)) duration = hour + "0" + min;
         System.out.println("duration = " + duration);
         assertTrue("Длительность авиаперелета не совпадает с забронированной" +
                    "\nОжидалось : " + flightList.get(i-1).duration +
