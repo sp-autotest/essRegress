@@ -256,11 +256,11 @@ public class SearchPage extends Page {
                     continue;
                 }
                 f = new Flight();
-                f.from_orig = flights.get(i).$(byXpath("descendant::div[@class='time-destination__from']/div[@class='time-destination__airport']")).getText();
+                f.from_orig = flights.get(i).$(byXpath("descendant::div[@class='time-destination__from']/span[@class='time-destination__airport']")).getText();
                 f.from = f.from_orig;
                 if (f.from.equals("SVO")|f.from.equals("VKO")) f.from = "MOW";
                 if (f.from.equals("JFK")) f.from = "NYC";
-                f.to_orig = flights.get(i).$(byXpath("descendant::div[@class='time-destination__to']/div[@class='time-destination__airport']")).getText();
+                f.to_orig = flights.get(i).$(byXpath("descendant::div[@class='time-destination__to']/span[@class='time-destination__airport']")).getText();
                 f.to = f.to_orig;
                 if (f.to.equals("SVO")|f.to.equals("VKO")) f.to = "MOW";
                 if (f.to.equals("JFK")) f.to = "NYC";
@@ -269,10 +269,10 @@ public class SearchPage extends Page {
                 JavascriptExecutor executor = (JavascriptExecutor) getWebDriver();
                 f.number = (String) executor.executeScript("return arguments[0].textContent;", num.toWebElement());
                 d = (m==0) ? initData.getDateThere() : initData.getDateBack();
-                d = d + " " + flights.get(i).$(byXpath("descendant::div[@class='time-destination__from']/div[@class='time-destination__time']")).getText();
+                d = d + " " + flights.get(i).$(byXpath("descendant::div[@class='time-destination__from']/span[@class='time-destination__time']")).getText();
                 f.start = string2Date(d, "ddMMyyyy HH:mm");
                 d = (m==0) ? initData.getDateThere() : initData.getDateBack();
-                d = d + " " + flights.get(i).$(byXpath("descendant::div[@class='time-destination__to']/div[@class='time-destination__time']")).getText();
+                d = d + " " + flights.get(i).$(byXpath("descendant::div[@class='time-destination__to']/div[@class='time-destination__time']/span")).getText();
                 f.end = string2Date(d, "ddMMyyyy HH:mm");
                 f.duration = duration.substring(0, duration.indexOf(" "));
                 duration = duration.substring(duration.indexOf(" ")+1);
