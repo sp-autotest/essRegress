@@ -222,11 +222,12 @@ public class SearchPage extends Page {
     @Step("Нажать \"Купить\"")
     private void clickBuyButton() {
         saveDuration();
-        ElementsCollection buttons = $$(byXpath("//a[contains(@class,'button--bordered')][@aria-disabled='false']"));
+        ElementsCollection buttons = $$(byXpath("//button[contains(@class,'button button--bordered button--outline')]" +
+                "[@aria-disabled='false']"));
         if (buttons.size()>0) {
             buttons.get(0).shouldBe(visible).click();
         } else {
-            $(byXpath("//a[contains(@class,'button--bordered')]")).shouldBe(visible).click();
+            $(byXpath("//button[contains(@class,'button button--bordered button--outline')]")).shouldBe(visible).click();
         }
     }
 
