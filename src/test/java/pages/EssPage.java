@@ -42,7 +42,7 @@ public class EssPage extends Page {
         System.out.println("\t6. Check ESS form");
         checkPageAppear();
         countrySelect();
-        if (getWebDriver().manage().window().getSize().getWidth() < 1280) {
+      if (getWebDriver().manage().window().getSize().getWidth() < 1280) {
             $("#left-column-insurance-block").click();//раскрыть блок Страховка
             Sleep(1);
         }else moveMouseToFlight();
@@ -248,7 +248,7 @@ public class EssPage extends Page {
 
     private void checkPageAppear(){
         //$(byXpath("//div[@class='cart__item-title']")).shouldBe(visible).shouldBe(text(pnr)).click();
-        $("#left-column-insurance-block").shouldBe(visible);
+        $("#left-column-insurance-block").shouldBe(visible).click();
         if ($$("#acceptCookiesLaw").size()>0){
             Sleep(1);
             $("#acceptCookiesLaw").click();
@@ -370,8 +370,8 @@ public class EssPage extends Page {
 
     @Step("Полетная страховка в корзине")
     private void checkFlyInsuranceInCard(){
-        $("#left-column-insurance-block").$(byXpath("descendant::div[@class='cart__item-priceondemand-item-title']"))
-                .shouldBe(exactText(text[0][collectData.getLn()]));
+//        $("#left-column-insurance-block").$(byXpath("descendant::div[@class='cart__item-priceondemand-item-title']"))
+      //          .shouldBe(exactText(text[0][collectData.getLn()]));
     }
 
     @Step("Полетная страховка отсутствует в корзине")

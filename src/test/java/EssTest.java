@@ -156,7 +156,7 @@ public class EssTest {
         List<Passenger> passList = createPassengers(initData, collectData.getLn());
         new PassengerPage(collectData).step3(passList);
         ChoosePage choosePg = new ChoosePage(collectData);
-        if(choosePg.checkChoosePageAppear()) { //если редирект на стенд
+      if(choosePg.checkChoosePageAppear()) { //если редирект на стенд
             choosePg.step4_backdoor();  //взять пнр и зайти в бэкдор со стенда
         } else {
             PlacePage placePg = new PlacePage(collectData);  //иначе взять пнр и зайти в бэкдор с выбора места

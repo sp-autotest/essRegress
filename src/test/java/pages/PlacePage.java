@@ -90,19 +90,9 @@ public class PlacePage extends Page {
     @Step("Действие 4, Извлечь PNR")
     public void getPNR(){
         String pnr;
-        for (int i=0; i<30; i++) {
-            if ($$(byXpath("//div[@class='text text--inline']")).size()>0) {
-                Sleep(1);
-                if ($$(byXpath("//div[@class='text text--inline']")).size() > 0) break;
-            }
-        }
-        if ($$(byXpath("//h1[text()='Вход в тестовую среду системы ЕПР']")).size()>0) {
-            int start = url().indexOf("&PNR") + 5;
-            pnr = url().substring(start, start + 6);
-        } else {
-            String text = $(byXpath("//div[contains(@class, 'cart__item-title--uppercase')]")).getText();
-            pnr = text.substring(text.length() - 6);
-        }
+        String urlWithPnr = url();
+        int indexOfPnr = urlWithPnr.lastIndexOf("pnr_locator=")+"pnr_locator=".length();
+        pnr=urlWithPnr.substring(indexOfPnr,indexOfPnr+ 6);
         Values.setPNR(collectData.getTest(), pnr);
         System.out.println("PNR = " + pnr);
     }
