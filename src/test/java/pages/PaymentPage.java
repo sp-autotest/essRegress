@@ -55,7 +55,7 @@ public class PaymentPage extends Page {
     @Step("Проверка стоимости на оплату")
     private void checkTotalPrice1(String n) {
         String priceTotal = Values.reportData[collectData.getTest()].getPrice().total;
-        String price = $(byXpath("//div[@class='cart__item-price ng-binding']")).getText().replaceAll("\\D+","");
+        String price = $(byXpath("//a[@id=\"cardButton\"]/span")).getText().replaceAll("\\D+","");
         System.out.println(price);
         if (!priceTotal.equals(price)){
             String text = "Ошибка: [" + n + "] Стоимость на странице оплаты картой не корректна, " +
