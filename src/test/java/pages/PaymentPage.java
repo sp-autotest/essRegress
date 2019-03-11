@@ -65,7 +65,7 @@ public class PaymentPage extends Page {
             screenShot();
         }//неблокирующая проверка
         //assertTrue("Стоимость «К ОПЛАТЕ ВСЕГО» некорректна", price.equals(Values.price.total));
-        String button = $(byXpath("//span[contains(@ng-bind-html,'payAmountText')]")).getText().replaceAll("\\D+","");
+        String button = $(byXpath("//a[@id='cardButton']/span")).getText().replaceAll("\\D+","");
         System.out.println(button);
         if (!priceTotal.equals(button)){
             String text = "Ошибка: [" + n + "] Стоимость на кнопке страницы оплаты картой не корректна, " +
@@ -80,7 +80,7 @@ public class PaymentPage extends Page {
     @Step("Проверка стоимости на оплату")
     private void checkTotalPrice2(boolean equalCityAndCurrency) {
         String priceTotal = Values.reportData[collectData.getTest()].getPrice().total;
-        String price = $(byXpath("//div[@class='cart__item-price ng-binding']")).getText().replaceAll("\\D+","");
+        String price = $(byXpath("//a[@id=\"cardButton\"]/span")).getText().replaceAll("\\D+","");
         System.out.println(priceTotal);
         System.out.println(price);
         System.out.println("Валюта услуги равна валюте бронирования? " + equalCityAndCurrency);

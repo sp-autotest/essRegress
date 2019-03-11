@@ -293,7 +293,7 @@ public class TransportPage extends Page {
         }
         if ($$(byXpath("//div[@class='auto-card']")).size() == 0){
             //устанавливаем время выдачи на 10 утра
-            $(byName("stationReceive")).scrollTo();
+             $(byName("stationReceive")).scrollTo();
             SelenideElement el = $("#ecTimeReceive");
             el.click();
             SelenideElement hour = $(byXpath("//div[@class='timepicker-popup__hours']/a"));
@@ -662,8 +662,8 @@ public class TransportPage extends Page {
             transport.click();//раскрыть блок Транспорт
             Sleep(1);
         }
-        SelenideElement transfer = transport.$(byXpath("descendant::div[contains(text(),'"+ Values.text[27][collectData.getLn()] +"')]")).shouldBe(visible);
-        String leftPrice = transfer.$(byXpath("parent::div/div[@class='cart__item-priceondemand-item-price']")).getText().replaceAll("\\D+","");
+        SelenideElement transfer = $(byXpath("//div[@id=\"left-column-transport\"]//div[@class=\"cart__item-priceondemand-item-title h-opacity--full\" and text()=\"Трансфер\"]//../div[@class=\"cart__item-priceondemand-item-price\"]")).shouldBe(visible);
+        String leftPrice = transfer.getText().replaceAll("\\D+","");
         System.out.println("Transfer price = " + leftPrice);
         assertTrue("Сумма трансфера в корзине не совпадает с рассчитанной" +
                    "\nОжидалось : " + Values.reportData[collectData.getTest()].getPrice().transfer +

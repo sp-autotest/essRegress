@@ -45,7 +45,7 @@ public class HotelPage extends Page {
     @Step("Форма дополнительных услуг «Проживание» открылась")
     private void checkHotelFormAppear() {
         String header = format(text[17][collectData.getLn()], Values.city.getCity(initData.getCityTo(), collectData.getLn()));
-        $(byXpath("//h1[contains(text(),'" + header + "')]")).shouldBe(visible);
+        $(byXpath("//h1[contains(text(),'" + header + "')]")).waitUntil(visible, 100000, 100);
         System.out.println("Accommodation form appeared");
     }
 

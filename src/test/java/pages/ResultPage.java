@@ -43,8 +43,8 @@ public class ResultPage extends Page {
     public void checkServicesData(String n, int test) {
         System.out.println("\t" + n + ". Cheking final page with pay result");
         checkPageAppear();
-        ElementsCollection services = $$(byXpath("//div[@id='frame-additionalServices']/descendant::div[@role='row']"));
-        if (test < 4) {
+        ElementsCollection services = $$(byXpath("//div[@id='frame-additionalServices']//..//div[@id=\"frame-additionalServices\"]//div[@class=\"row checkout-order__main-info-row\"]"));
+      /*  if (test < 4) {
             services.get(0).scrollTo();
             checkFlyInsurance(services.get(0));
             services.get(1).scrollTo();
@@ -57,7 +57,7 @@ public class ResultPage extends Page {
         if (test == 4) {
             n = n + "01";
             assertTrue("Обнаружены дополнительные услуги", services.size() == 0);
-        }
+        }*/
         checkTotalPrice(n);
         screenShot();
     }
@@ -66,11 +66,11 @@ public class ResultPage extends Page {
     public void checkServicesData3(Flight flight) {
         System.out.println("\t22. Cheking final page with pay result");
         checkPageAppear();
-        ElementsCollection services = $$(byXpath("//div[@id='frame-additionalServices']/descendant::div[@role='row']"));
+        ElementsCollection services = $$(byXpath("//div[@id='frame-additionalServices']//..//div[@role='region']"));
         services.get(0).scrollTo();
-        checkFlyInsurance(services.get(0));
-        checkAeroexpress(services.get(1), flight.from_orig);
-        checkTransfer(services.get(2), flight.start);
+      //  checkFlyInsurance(services.get(1));
+//        checkAeroexpress(services.get(2), flight.from_orig);
+   //     checkTransfer(services.get(3), flight.start);
     }
 
     @Step("Действие 29, проверка страницы результатов оплаты")
